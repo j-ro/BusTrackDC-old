@@ -9,4 +9,6 @@ Built using:
 
 Please feel free to download, fork, or help this app improve. Please direct all bug reports or feature requests to the issue tracker.
 
+Source available at https://github.com/j-ro/WheresTheBusDC
+
 Version 1.0
