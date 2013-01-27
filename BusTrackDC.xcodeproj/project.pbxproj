@@ -50,6 +50,8 @@
 		5FD8AD6716B4982C00492455 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 5FD8AD6616B4982C00492455 /* Default.png */; };
 		5FD8AD6916B4983200492455 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5FD8AD6816B4983200492455 /* Default@2x.png */; };
 		5FD8AD6B16B4983700492455 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5FD8AD6A16B4983700492455 /* Default-568h@2x.png */; };
+		5FD8AD7716B4CE4A00492455 /* icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = 5FD8AD7516B4CE4A00492455 /* icon-72.png */; };
+		5FD8AD7816B4CE4A00492455 /* icon-72@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5FD8AD7616B4CE4A00492455 /* icon-72@2x.png */; };
 		D4A0D8761607E02300AEF8BB /* Default-568h@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = D4A0D8751607E02300AEF8BB /* Default-568h@2x~iphone.png */; };
 		F840E1F1165FE0F500CFE078 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = F840E1F0165FE0F500CFE078 /* config.xml */; };
 /* End PBXBuildFile section */
@@ -122,6 +124,8 @@
 		5FD8AD6616B4982C00492455 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		5FD8AD6816B4983200492455 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		5FD8AD6A16B4983700492455 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		5FD8AD7516B4CE4A00492455 /* icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-72.png"; sourceTree = "<group>"; };
+		5FD8AD7616B4CE4A00492455 /* icon-72@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-72@2x.png"; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* BusTrackDC-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "BusTrackDC-Info.plist"; path = "../BusTrackDC-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 		D4A0D8751607E02300AEF8BB /* Default-568h@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x~iphone.png"; sourceTree = "<group>"; };
 		F840E1F0165FE0F500CFE078 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = WheresTheBusDC/config.xml; sourceTree = "<group>"; };
@@ -194,6 +198,8 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				5FD8AD7516B4CE4A00492455 /* icon-72.png */,
+				5FD8AD7616B4CE4A00492455 /* icon-72@2x.png */,
 				5FD8AD6A16B4983700492455 /* Default-568h@2x.png */,
 				5FD8AD6816B4983200492455 /* Default@2x.png */,
 				5FD8AD6616B4982C00492455 /* Default.png */,
@@ -419,6 +425,8 @@
 				5FD8AD6716B4982C00492455 /* Default.png in Resources */,
 				5FD8AD6916B4983200492455 /* Default@2x.png in Resources */,
 				5FD8AD6B16B4983700492455 /* Default-568h@2x.png in Resources */,
+				5FD8AD7716B4CE4A00492455 /* icon-72.png in Resources */,
+				5FD8AD7816B4CE4A00492455 /* icon-72@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -527,6 +535,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = NO;
 				CLANG_WARN_OBJCPP_ARC_ABI = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Jason Rosenbaum";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WheresTheBusDC/BusTrackDC-Prefix.pch";
@@ -535,6 +544,7 @@
 				INFOPLIST_FILE = "WheresTheBusDC/BusTrackDC-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = BusTrackDC;
+				PROVISIONING_PROFILE = "9ABF83ED-F351-4D6E-AAF8-62D7CEDBFD28";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
