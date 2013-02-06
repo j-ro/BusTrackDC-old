@@ -41,6 +41,7 @@
 		30A0434814DC770100060A13 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 30A0434314DC770100060A13 /* Localizable.strings */; };
 		30A0434914DC770100060A13 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 30A0434614DC770100060A13 /* Localizable.strings */; };
 		30E5649213A7FCAF007403D8 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30E5649113A7FCAF007403D8 /* CoreMedia.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		5F2F8B9916C2E2D5006DEED9 /* ConnAndKWashingtonDC.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 5F2F8B9816C2E2D5006DEED9 /* ConnAndKWashingtonDC.gpx */; };
 		5F9E0EE316A8BC0C005E80EA /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F9E0EE216A8BC0C005E80EA /* MapKit.framework */; };
 		5F9E0EEA16A8BDCB005E80EA /* AsyncImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F9E0EE516A8BDCB005E80EA /* AsyncImageView.m */; };
 		5F9E0EEB16A8BDCB005E80EA /* CDVAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F9E0EE716A8BDCB005E80EA /* CDVAnnotation.m */; };
@@ -112,6 +113,7 @@
 		30A0434714DC770100060A13 /* se */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = se; path = Localizable.strings; sourceTree = "<group>"; };
 		30E5649113A7FCAF007403D8 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		32CA4F630368D1EE00C91783 /* BusTrackDC-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BusTrackDC-Prefix.pch"; sourceTree = "<group>"; };
+		5F2F8B9816C2E2D5006DEED9 /* ConnAndKWashingtonDC.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = ConnAndKWashingtonDC.gpx; sourceTree = "<group>"; };
 		5F9E0EE216A8BC0C005E80EA /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		5F9E0EE416A8BDCB005E80EA /* AsyncImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncImageView.h; sourceTree = "<group>"; };
 		5F9E0EE516A8BDCB005E80EA /* AsyncImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncImageView.m; sourceTree = "<group>"; };
@@ -198,6 +200,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				5F2F8B9816C2E2D5006DEED9 /* ConnAndKWashingtonDC.gpx */,
 				5FD8AD7516B4CE4A00492455 /* icon-72.png */,
 				5FD8AD7616B4CE4A00492455 /* icon-72@2x.png */,
 				5FD8AD6A16B4983700492455 /* Default-568h@2x.png */,
@@ -427,6 +430,7 @@
 				5FD8AD6B16B4983700492455 /* Default-568h@2x.png in Resources */,
 				5FD8AD7716B4CE4A00492455 /* icon-72.png in Resources */,
 				5FD8AD7816B4CE4A00492455 /* icon-72@2x.png in Resources */,
+				5F2F8B9916C2E2D5006DEED9 /* ConnAndKWashingtonDC.gpx in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

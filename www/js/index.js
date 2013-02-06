@@ -53,7 +53,7 @@ calculateRadius = function(viewportLat, viewportLon, latitudeDelta, longitudeDel
 getStops = function(latitude,longitude,radius) {
 	//console.log('getstops start, lat=' + latitude + ' long=' + longitude + ' radius=' + radius);
 		
-	$.getJSON('http://api.wmata.com/Bus.svc/json/JStops?lat=' + latitude + '&lon=' + longitude + '&radius=' + radius + '&api_key=fjsbn7qfp2znukapggjfure9&callback=?', function(data) {
+	$.getJSON('http://api.wmata.com/Bus.svc/json/JStops?lat=' + latitude + '&lon=' + longitude + '&radius=' + radius + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
 		//console.log('ajax call done');
 		
 		if (data.toString() == "<h1>504 Gateway Timeout</h1>") {
@@ -76,7 +76,7 @@ getStops = function(latitude,longitude,radius) {
 getStopsForRoute = function(routeID) {
 	//console.log('getstops start');
 		
-	$.getJSON('http://api.wmata.com/Bus.svc/json/JRouteDetails?routeID=' + routeID + '&api_key=fjsbn7qfp2znukapggjfure9&callback=?', function(data) {
+	$.getJSON('http://api.wmata.com/Bus.svc/json/JRouteDetails?routeID=' + routeID + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
 		//console.log('ajax call done');
 		
 		if (data.toString() == "<h1>504 Gateway Timeout</h1>") {
@@ -219,7 +219,7 @@ function annotationTap(text) {
 	
 	// only get this stuff if the annotation tapped is a stop, rather than part of a route map
 	if (text != '(null)') {
-		$.getJSON('http://api.wmata.com/NextBusService.svc/json/JPredictions?StopID=' + stopID + '&api_key=fjsbn7qfp2znukapggjfure9&callback=?', function(data2, self4) {
+		$.getJSON('http://api.wmata.com/NextBusService.svc/json/JPredictions?StopID=' + stopID + '&api_key=' + wmata_api_key + '&callback=?', function(data2, self4) {
 			//console.log('predictions=' + data2.Predictions.length);
 			//sorted = data2.Predictions.sort(function(a,b) {return b - a; });
 			
