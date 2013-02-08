@@ -225,7 +225,7 @@
 	self.mapView.showsUserLocation = NO;
     
     // animates hiding action
-    [UIView animateWithDuration:0.1 animations:^{
+    [UIView animateWithDuration:0.2 animations:^{
         self.childView.alpha = 0;
     } completion: ^(BOOL finished) {
         self.childView.hidden = YES;
