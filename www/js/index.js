@@ -557,7 +557,7 @@ onCurrentLocationSuccess = function(position) {
 			currentLongitude = currentLon;
 			
 			// if the map doesn't move much, no need to redraw the pins...
-			if (((Math.abs(previousLat - currentLat)*4) > latitudeDelta) || ((Math.abs(previousLon - currentLon)*4) > longitudeDelta)) {
+			if (((Math.abs(previousLat - currentLat)*8) > latitudeDelta) || ((Math.abs(previousLon - currentLon)*8) > longitudeDelta)) {
 				if ($('#refresh_location').length) {
 					//console.log('TRUE! ' + previousLat + ' - ' + currentLat + ' = ' + (Math.abs(previousLat - currentLat)*2) + ' with latitudeDelta = ' + latitudeDelta + ' and ' + previousLon + ' - ' + currentLon + ' = ' + (Math.abs(previousLon - currentLon)*2) + ' with longitudeDelta = ' + longitudeDelta);
 					
