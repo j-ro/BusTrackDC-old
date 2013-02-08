@@ -662,6 +662,10 @@ function onDeviceReady() {
 	// show the map
 	showMap();
 	
+	//set the dark linen after the map is shown, so we don't see it on load (can also use darklinen-bg.png if you want...)
+	$('#gps_map').css('background-image','url("img/lightlinen-bg.png")');
+	$('#gps_map').css('background-repeat','repeat-x repeat-y');
+
 	currentLatitude = mapOptions.lat;
 	currentLongitude = mapOptions.lon;
 	
@@ -809,6 +813,7 @@ createPinShadow = function() {
 
 
 
+/*
 //on page load...
 $('#route_detail').live('pageshow', function() {	
 	$('#map_canvas2').gmap('destroy');
@@ -861,3 +866,4 @@ $('#route_detail').live('pageshow', function() {
     
     
 });
+*/

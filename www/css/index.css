@@ -48,6 +48,8 @@ background-color:#E4E4E4;
     width:100%;
 }
 
+
+
 /* Portrait layout (default) */
 .app {
     background:url(../img/logo.png) no-repeat center top; /* 170px x 200px */
@@ -167,4 +169,19 @@ h1 {
 .ui-icon-currloc {
 	background-image: url("../img/currloc-icon.png");
 	background-size: 18px 18px;
+}
+
+/* change jquery mobile transition speed */
+.in {
+	-webkit-animation-timing-function: ease-out;
+	-webkit-animation-duration: 150ms;
+	-moz-animation-timing-function: ease-out;
+	-moz-animation-duration: 150ms;
+}
+
+.out {
+	-webkit-animation-timing-function: ease-in;
+	-webkit-animation-duration: 125ms;
+	-moz-animation-timing-function: ease-in;
+	-moz-animation-duration: 125ms;
 }
