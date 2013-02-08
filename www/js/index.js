@@ -440,7 +440,7 @@ markerStops = function(data) {
 					// weed out undefined routes
 					if (i3 != 'undefined'){
 						//console.log('i3= ' + i3);
-						routeList = routeList + '<li data-theme="d"><a href="#" data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>' + data.directionText[i3][0] + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p><span class="ui-li-count">' + i3 + '</span></li>';
+						routeList = routeList + '<li data-theme="d"><a href="#" data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p><span class="ui-li-count">' + i3 + '</span></li>';
 					actualRouteList.push(i3);
 					potentialVsActual = potentialRouteList.diff(actualRouteList);
 					}

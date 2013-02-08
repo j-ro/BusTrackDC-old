@@ -171,6 +171,12 @@ h1 {
 	background-size: 18px 18px;
 }
 
+
+.ui-btn-text {
+	width: 115%;
+}
+
+
 /* change jquery mobile transition speed */
 .in {
 	-webkit-animation-timing-function: ease-out;
@@ -185,3 +191,5 @@ h1 {
 	-moz-animation-timing-function: ease-in;
 	-moz-animation-duration: 125ms;
 }
+
+
