@@ -195,7 +195,17 @@
 	{
 		[self createView];
 	}
-	self.childView.hidden = NO;
+    
+    // animates showing action
+    self.childView.hidden = NO;
+    [UIView animateWithDuration:0.3 animations:^{
+        
+        self.childView.alpha = 1;
+    } completion: ^(BOOL finished) {
+        
+    }];
+    
+	//self.childView.hidden = NO; //uncomment to go back to default behavior
 	self.mapView.showsUserLocation = YES;
     
     // this closes annotation callouts and deselcts them when the map is shown, a hacky way to close annotations after the jQuery popup closes
@@ -213,7 +223,15 @@
 	}
 	// disable location services, if we no longer need it.
 	self.mapView.showsUserLocation = NO;
-	self.childView.hidden = YES;
+    
+    // animates hiding action
+    [UIView animateWithDuration:0.3 animations:^{
+        self.childView.alpha = 0;
+    } completion: ^(BOOL finished) {
+        self.childView.hidden = YES;
+    }];
+    
+	//self.childView.hidden = YES; // unmcomment to go back to default behavior
 }
 
 - (MKAnnotationView *) mapView:(MKMapView *)theMapView viewForAnnotation:(id <MKAnnotation>) annotation {
