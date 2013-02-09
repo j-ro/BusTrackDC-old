@@ -217,6 +217,9 @@ function annotationTap(text) {
 	stopID = text;
 	var self2 = this;
 	
+
+	
+	
 	// only get this stuff if the annotation tapped is a stop, rather than part of a route map
 	if (text != '(null)') {
 		$.getJSON('http://api.wmata.com/NextBusService.svc/json/JPredictions?StopID=' + stopID + '&api_key=' + wmata_api_key + '&callback=?', function(data2, self4) {
@@ -292,6 +295,32 @@ function annotationTap(text) {
 		    
 		    $( "#infowindow" ).popup( "open" );
 		    
+		    $('#favorite').button();
+		    
+		    // make the favorite button work
+		    $('#favorite').click(function() {
+		    	//console.log('click!');
+		    	favoriteTap($('.stopTitle').prop('id'));
+		    });
+		    
+		    // deal with favorite button UI
+			if (window.localStorage.getItem("favorites")) {
+				//console.log('true');
+				var favorites = JSON.parse(window.localStorage.getItem("favorites"));
+				
+				var favoriteMatches = jQuery.grep(favorites, function(obj) {
+					//console.log(data.Stops[i].StopID + ' == ' + obj.subTitle + '?');
+					return parseInt(obj.id) == stopID;
+				});
+				
+				//console.log(favorites);
+				if (favoriteMatches.length) {		
+					$( "#favorite" ).buttonMarkup({theme: 'e'});
+				} else {
+					$( "#favorite" ).buttonMarkup({theme: 'b'});
+				}	
+			}
+		    
 		    // pass some variables to the next page if a button is clicked
 		    $('.route-detail-btn').tap(function() {
 		    	//console.log('clicked!');
@@ -317,13 +346,13 @@ function annotationTap(text) {
 		    	routeClicked = $(this).attr('id');
 		    	$('.footer_title').html('Route ' + routeClicked);
 		    	
-		    	$('#button_container').html('<a href="#" data-role="button" data-icon="arrow-l" data-iconpos="notext" data-mini="true" data-inline="true" id="back_btn">Back</a>').trigger( "create" );
+		    	$('#button_container').html('<a href="#" data-role="button" data-icon="arrow-l" data-iconpos="notext" data-mini="true" data-inline="true" id="back_btn">Back</a> <a href="#" data-role="button" data-icon="star" data-iconpos="notext" data-mini="true" id="favorites_menu" data-inline="true">Favorites Menu</a>').trigger( "create" );
 		    	
 		    	$('#back_btn').tap(function() {
 		    		window.plugins.mapKit.clearMapPins();
 			    	//console.log('back clicked!');
 			    	$('.footer_title').html("BusTrackDC");
-			    	$('#button_container').html('<a href="#" data-role="button" data-icon="currloc" data-iconpos="notext" data-mini="true" id="refresh_location" data-inline="true">Refresh Location</a>').trigger( "create" );
+			    	$('#button_container').html('<a href="#" data-role="button" data-icon="currloc" data-iconpos="notext" data-mini="true" id="refresh_location" data-inline="true">Refresh Location</a> <a href="#" data-role="button" data-icon="star" data-iconpos="notext" data-mini="true" id="favorites_menu" data-inline="true">Favorites Menu</a>').trigger( "create" );
 			    	
 			    	 // recreate the refresh functionality after we programatically create it
 			    	 $('#refresh_location').tap(function() {
@@ -472,7 +501,7 @@ markerStops = function(data) {
 			//console.log('potential routes for stop ' + stopIDfocus + ': ' + potentialRouteList + ' and actual routes: ' + actualRouteList);
 			//console.log(stopName);
 			// add in title
-			routeList = '<li data-role="list-divider" class="stopTitle">' + stopName + '</li>' + routeList;
+			routeList = '<li data-role="list-divider" class="stopTitle" id="' + stopID + '"><a data-role="button" data-icon="star" data-iconpos="notext" id="favorite">Favorite</a><span class="stopName">' + stopName + '</span></li>' + routeList;
 			//console.log(routeList);
 			
         }
@@ -606,6 +635,65 @@ function onCurrentLocationError(error) {
 }
 
 
+// function to store a favorite if the favorite button is tapped
+function favoriteTap(favorite) { // = _.debounce(function (favorite) {
+	//console.log('click!');
+	
+	if (window.localStorage.getItem("favorites")) {
+		//console.log('there is storage');
+		var favorites = JSON.parse(window.localStorage.getItem("favorites"));
+		
+		var favoriteMatches = jQuery.grep(favorites, function(obj) {
+			//console.log(data.Stops[i].StopID + ' == ' + obj.subTitle + '?');
+			return parseInt(obj.id) == favorite;
+		});
+		
+		//something messed up here...
+		
+		//console.log(favorites);
+		if (favoriteMatches.length) {
+			//console.log('match! remove');
+			favorites = favorites.filter(function(el){ return el.id != favorite; });
+			window.localStorage.setItem("favorites", JSON.stringify(favorites));
+			$( "#favorite" ).buttonMarkup({theme: 'b'});
+		} else {
+			//console.log('no match! add');
+			
+			favorites.push({
+				id: favorite,
+				name: $('#' + favorite + ' .stopName').html()
+			});
+			
+			window.localStorage.setItem("favorites", JSON.stringify(favorites));
+			
+			$( "#favorite" ).buttonMarkup({theme: 'e'});
+		}
+		
+		
+		//console.log(favorites);
+		
+		
+		
+		
+	} else {
+		//console.log('no storage');
+		//console.log(favorite);
+		
+		var favorites = [];
+		
+		favorites.push({
+			id: favorite,
+			name: $('#' + favorite + ' .stopName').html()
+		});
+		
+		window.localStorage.setItem("favorites", JSON.stringify(favorites));
+		
+		$( "#favorite" ).buttonMarkup({theme: 'e'});
+	}
+
+}; //, 3000, true);
+
+
 //our initial show map function
 function showMap() {
 	
@@ -702,6 +790,9 @@ function onDeviceReady() {
 		    	window.plugins.mapKit.showMap(); 
 		    }
 		});
+		
+		
+
 		
 		//$(document).bind("mobileinit", function(){
 			/*

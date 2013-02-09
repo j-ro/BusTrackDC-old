@@ -133,7 +133,7 @@ h1 {
 }
 */
 
-#refresh_location, #back_btn {
+#refresh_location, #back_btn, #favorites_menu {
 	float: left;
 	margin-top: 0.1em !important;
 }
@@ -144,6 +144,19 @@ h1 {
 
 .stopTitle {
 	text-transform: lowercase;
+}
+
+#favorite {
+	float: left;
+	margin-left: -5px;
+	margin-top: 0px;
+	margin-right: 7px;
+}
+
+.stopName {
+	display: block;
+	height: 25px;
+	margin-top: 3px;
 }
 
 .route-detail-btn {

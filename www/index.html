@@ -5,29 +5,29 @@
         <meta name="viewport" content="width=default-width; user-scalable=no;" />
         <meta http-equiv="Content-type" content="text/html; charset=utf-8">
             
-            <title>BusTrackDC</title>
-            
-            <!-- iPad/iPhone specific css below, add after your main css >
-             <link rel="stylesheet" media="only screen and (max-device-width: 1024px)" href="ipad.css" type="text/css" />
-             <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="iphone.css" type="text/css" />
-             -->
-             
-            <link rel="stylesheet" href="js/jquery.mobile-1.2.0/jquery.mobile-1.2.0.min.css" />
-	        <link rel="stylesheet" href="css/index.css" />
-             
-            <script type="text/javascript" src="cordova-2.3.0.js"></script>
-            <script type="text/javascript" charset="utf-8" src="js/MapKit.js"></script>
-	        
-	        <script type="text/javascript" src="js/jquery-1.8.2.min.js"></script>
-	        <script type="text/javascript" src="js/jquery.mobile-1.2.0/jquery.mobile-1.2.0.min.js"></script>
-	        <script type="text/javascript" src="js/underscore-min.js"></script>
-               
-            <script type="text/javascript" charset="utf-8" src="js/config.js"></script>       
-            <script type="text/javascript" charset="utf-8" src="js/index.js"></script>
-            
-           <!--  <script src="http://debug.phonegap.com/target/target-script-min.js#jasonrosenbaumbusapp"></script>  -->
+        <title>BusTrackDC</title>
+        
+        <!-- iPad/iPhone specific css below, add after your main css >
+         <link rel="stylesheet" media="only screen and (max-device-width: 1024px)" href="ipad.css" type="text/css" />
+         <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="iphone.css" type="text/css" />
+         -->
+         
+        <link rel="stylesheet" href="js/jquery.mobile-1.2.0/jquery.mobile-1.2.0.min.css" />
+        <link rel="stylesheet" href="css/index.css" />
+         
+        <script type="text/javascript" src="cordova-2.3.0.js"></script>
+        <script type="text/javascript" charset="utf-8" src="js/MapKit.js"></script>
+        
+        <script type="text/javascript" src="js/jquery-1.8.2.min.js"></script>
+        <script type="text/javascript" src="js/jquery.mobile-1.2.0/jquery.mobile-1.2.0.min.js"></script>
+        <script type="text/javascript" src="js/underscore-min.js"></script>
+           
+        <script type="text/javascript" charset="utf-8" src="js/config.js"></script>       
+        <script type="text/javascript" charset="utf-8" src="js/index.js"></script>
+        
+        <!-- <script src="http://debug.phonegap.com/target/target-script-min.js#jasonrosenbaumbusapp"></script>  -->
 
-            </head>
+    </head>
     <body onload="onBodyLoad()">
         
         <div data-role="page" id="gps_map">
@@ -37,6 +37,8 @@
                 
                	<div id="button_container">
                		<a href="#" data-role="button" data-icon="currloc" data-iconpos="notext" data-mini="true" id="refresh_location" data-inline="true">Refresh Location</a>
+               		
+               		<a href="#" data-role="button" data-icon="star" data-iconpos="notext" data-mini="true" id="favorites_menu" data-inline="true">Favorites Menu</a>
                 </div>
 
                 <h1 class="footer_title">BusTrackDC</h1>
@@ -46,6 +48,7 @@
             <!-- a placeholder, hidden, to be overwritten when the popup is created -->
             <div id="popup-div">
             	<div data-role="popup" id="infowindow">
+            		<!-- <a href="#" data-role="button" data-icon="star" data-iconpos="notext" id="favorite" class="ui-btn-left">Favorite</a> -->
             		<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right" id="close-btn">Close</a>
             		<ul data-role="listview" data-inset="true" id="infowindow-routes">
             			<li><a href="#">List to be overwritten</a></li>
