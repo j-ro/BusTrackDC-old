@@ -20,6 +20,11 @@
     -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
 }
 
+html {
+	background-image: url("../img/lightlinen-bg.png");
+	background-repeat: repeat !important;
+}
+
 body {
     -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
     -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
@@ -45,7 +50,10 @@ background-color:#E4E4E4;
     height:100%;
     margin:0px;
     padding:0px;
-    width:100%;
+    width:320;
+    overflow: hidden;
+    background-image: url("../img/lightlinen-bg.png");
+	background-repeat: repeat !important;
 }
 
 
@@ -84,6 +92,15 @@ h1 {
     text-align:center;
 }
 */
+
+#gps_map {
+	background-repeat: repeat !important;
+	
+}
+
+.ui-popup-screen {
+	height: 110%;
+}
 
 .event {
     border-radius:4px;
@@ -133,7 +150,7 @@ h1 {
 }
 */
 
-#refresh_location, #back_btn, #favorites_menu {
+#refresh_location, #back_btn, #favorites_menu_btn {
 	float: left;
 	margin-top: 0.1em !important;
 }
@@ -142,8 +159,10 @@ h1 {
 	float: right;
 }
 
-.stopTitle {
+.stopTitle, .favoriteMenuStopTitle {
 	text-transform: lowercase;
+	text-overflow: ellipsis;
+	min-width: 250px;
 }
 
 #favorite {
@@ -155,27 +174,31 @@ h1 {
 
 .stopName {
 	display: block;
-	height: 25px;
-	margin-top: 3px;
+	height: 24px;
+	margin-top: 4px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 89%;
+	overflow: hidden;
 }
 
-.route-detail-btn {
+#infowindow .route-detail-btn {
 	padding-bottom: 0.1em !important;
 }
 
 /*target the count bubbles and left align them, by default they are right aligned*/
-.ui-li-has-count .ui-li-count {
+#infowindow .ui-li-has-count .ui-li-count {
     left  : 10px !important;
     right : auto !important;
 }
 
-.ui-li-desc {
+#infowindow .ui-li-desc {
 	padding-left: 12px !important;
 }
 
 /*target the link in which the count bubbles reside and add some padding so the bubbles and link text don't overlap*/
 /*notice this is only applied to list-items that actually have count bubbles*/
-.ui-li-has-count .ui-btn-inner a.ui-link-inherit {
+#infowindow .ui-li-has-count .ui-btn-inner a.ui-link-inherit {
     padding-left : 35px !important;
 }
 
@@ -185,8 +208,16 @@ h1 {
 }
 
 
-.ui-btn-text {
+#infowindow .ui-btn-text {
 	width: 115%;
+}
+
+#infowindow .ui-li > .ui-btn-inner {
+	overflow: hidden;
+}
+
+#favorites_menu_content, #favorites_menu_header {
+	display: none;
 }
 
 

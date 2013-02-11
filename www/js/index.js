@@ -16,6 +16,7 @@ function cbMapCallback(lat,lon) {
 }
 
 
+
 // calculate the radius of the viewport in meters
 calculateRadius = function(viewportLat, viewportLon, latitudeDelta, longitudeDelta, callback) {
 	//console.log('start calc radius with viewportLat=' + viewportLat + ' viewportLon=' + viewportLon + ' latitudeDelta=' + latitudeDelta + ' longitudeDelta=' + longitudeDelta);
@@ -226,7 +227,7 @@ function annotationTap(text) {
 			//console.log('predictions=' + data2.Predictions.length);
 			//sorted = data2.Predictions.sort(function(a,b) {return b - a; });
 			
-			
+			$.mobile.loading( 'hide' );
 			// thanks to Vlad Lyga for this part: http://stackoverflow.com/questions/14308149/how-do-i-merge-two-json-objects-in-javascript-jquery
 			predictions = data2;
 			
@@ -305,8 +306,11 @@ function annotationTap(text) {
 		    
 		    // deal with favorite button UI
 			if (window.localStorage.getItem("favorites")) {
+			//if (favoritesStorage) {
 				//console.log('true');
+				
 				var favorites = JSON.parse(window.localStorage.getItem("favorites"));
+				//favorites = JSON.parse(favoritesStorage);
 				
 				var favoriteMatches = jQuery.grep(favorites, function(obj) {
 					//console.log(data.Stops[i].StopID + ' == ' + obj.subTitle + '?');
@@ -324,9 +328,20 @@ function annotationTap(text) {
 		    // pass some variables to the next page if a button is clicked
 		    $('.route-detail-btn').tap(function() {
 		    	//console.log('clicked!');
-			    $( "#infowindow" ).popup( "close" )
+		    	if ($('#favorites_menu_content').css('display') != 'none') {
+		    		$( "#favorites_menu_btn" ).buttonMarkup({theme: 'd'});
+		    		
+		    		window.plugins.mapKit.showMap();
+		    		$('#favorites_menu_content').hide();
+		    		$('#favorites_menu_header').hide();
+		    	}
+		    	
+			    $( "#infowindow" ).popup( "close" );
+			    
 		    	window.plugins.mapKit.clearMapPins();
 		    	pins.length = 0;
+		    	
+		    	
 		    	
 		    	/*
 	if (!currentLatitude) {
@@ -346,13 +361,20 @@ function annotationTap(text) {
 		    	routeClicked = $(this).attr('id');
 		    	$('.footer_title').html('Route ' + routeClicked);
 		    	
-		    	$('#button_container').html('<a href="#" data-role="button" data-icon="arrow-l" data-iconpos="notext" data-mini="true" data-inline="true" id="back_btn">Back</a> <a href="#" data-role="button" data-icon="star" data-iconpos="notext" data-mini="true" id="favorites_menu" data-inline="true">Favorites Menu</a>').trigger( "create" );
+		    	$('#button_container').html('<a data-role="button" data-icon="arrow-l" data-iconpos="notext" data-mini="true" data-inline="true" id="back_btn">Back</a> <a data-role="button" data-icon="star" data-iconpos="notext" data-mini="true" id="favorites_menu_btn" data-inline="true">Favorites Menu</a>').trigger( "create" );
+		    	
+		    	favoritesMenuBtnTap();
 		    	
 		    	$('#back_btn').tap(function() {
 		    		window.plugins.mapKit.clearMapPins();
+		    		
+		    		
+		    		
 			    	//console.log('back clicked!');
 			    	$('.footer_title').html("BusTrackDC");
-			    	$('#button_container').html('<a href="#" data-role="button" data-icon="currloc" data-iconpos="notext" data-mini="true" id="refresh_location" data-inline="true">Refresh Location</a> <a href="#" data-role="button" data-icon="star" data-iconpos="notext" data-mini="true" id="favorites_menu" data-inline="true">Favorites Menu</a>').trigger( "create" );
+			    	$('#button_container').html('<a data-role="button" data-icon="currloc" data-iconpos="notext" data-mini="true" id="refresh_location" data-inline="true">Refresh Location</a> <a data-role="button" data-icon="star" data-iconpos="notext" data-mini="true" id="favorites_menu_btn" data-inline="true">Favorites Menu</a>').trigger( "create" );
+			    	
+			    	favoritesMenuBtnTap();
 			    	
 			    	 // recreate the refresh functionality after we programatically create it
 			    	 $('#refresh_location').tap(function() {
@@ -469,7 +491,7 @@ markerStops = function(data) {
 					// weed out undefined routes
 					if (i3 != 'undefined'){
 						//console.log('i3= ' + i3);
-						routeList = routeList + '<li data-theme="d"><a href="#" data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p><span class="ui-li-count">' + i3 + '</span></li>';
+						routeList = routeList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p><span class="ui-li-count">' + i3 + '</span></li>';
 					actualRouteList.push(i3);
 					potentialVsActual = potentialRouteList.diff(actualRouteList);
 					}
@@ -479,7 +501,7 @@ markerStops = function(data) {
 				$.each(potentialVsActual, function(i4, object4) {
 					// check for the routes with a lowercase c or v in their name, they are variation routes and should be ignored
 					if (/([cv])/.exec(potentialVsActual[i4]) == null) {
-						routeList = routeList + '<li data-theme="d"><a href="#" data-transition="slide" class="route-detail-btn" id="' + potentialVsActual[i4] + '"><p>no prediction available</p><span class="ui-li-count">' + potentialVsActual[i4] + '</span></a></li>';
+						routeList = routeList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + potentialVsActual[i4] + '"><p>no prediction available</p><span class="ui-li-count">' + potentialVsActual[i4] + '</span></a></li>';
 					}
 					
 				});
@@ -489,7 +511,7 @@ markerStops = function(data) {
 				$.each(potentialRouteList, function(i4, object4) {
 					// check for the routes with a lowercase c or v in their name, they are variation routes and should be ignored
 					if (/([cv])/.exec(potentialRouteList[i4]) == null) {			
-						routeList = routeList + '<li data-theme="d"><a href="#" data-transition="slide" class="route-detail-btn" id="' + potentialRouteList[i4] + '"><p>no prediction available</p><span class="ui-li-count">' + potentialRouteList[i4] + '</span></a></li>';
+						routeList = routeList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + potentialRouteList[i4] + '"><p>no prediction available</p><span class="ui-li-count">' + potentialRouteList[i4] + '</span></a></li>';
 					}
 				});
 				
@@ -636,28 +658,35 @@ function onCurrentLocationError(error) {
 
 
 // function to store a favorite if the favorite button is tapped
-function favoriteTap(favorite) { // = _.debounce(function (favorite) {
-	//console.log('click!');
+function favoriteTap(favorite) { 
+	console.log('click ' + favorite);
 	
 	if (window.localStorage.getItem("favorites")) {
-		//console.log('there is storage');
+	//if (favoritesStorage) {
+		console.log('there is storage');
+		
 		var favorites = JSON.parse(window.localStorage.getItem("favorites"));
+		//var favorites = JSON.parse(favoritesStorage);
 		
 		var favoriteMatches = jQuery.grep(favorites, function(obj) {
 			//console.log(data.Stops[i].StopID + ' == ' + obj.subTitle + '?');
 			return parseInt(obj.id) == favorite;
 		});
 		
-		//something messed up here...
-		
-		//console.log(favorites);
+		console.log(favorites);
 		if (favoriteMatches.length) {
-			//console.log('match! remove');
-			favorites = favorites.filter(function(el){ return el.id != favorite; });
-			window.localStorage.setItem("favorites", JSON.stringify(favorites));
+			console.log('match! remove');
 			$( "#favorite" ).buttonMarkup({theme: 'b'});
+			
+			favorites = favorites.filter(function(el){ return el.id != favorite; });
+			
+			window.localStorage.setItem("favorites", JSON.stringify(favorites));
+			//favoritesStorage = JSON.stringify(favorites);
+			
+			console.log(favorites);
 		} else {
-			//console.log('no match! add');
+			console.log('no match! add');
+			$( "#favorite" ).buttonMarkup({theme: 'e'});
 			
 			favorites.push({
 				id: favorite,
@@ -665,19 +694,23 @@ function favoriteTap(favorite) { // = _.debounce(function (favorite) {
 			});
 			
 			window.localStorage.setItem("favorites", JSON.stringify(favorites));
+			//favoritesStorage = JSON.stringify(favorites);
 			
-			$( "#favorite" ).buttonMarkup({theme: 'e'});
+			console.log(favorites);
+			
 		}
 		
 		
-		//console.log(favorites);
+		
 		
 		
 		
 		
 	} else {
-		//console.log('no storage');
-		//console.log(favorite);
+		console.log('no storage');
+		console.log(favorite);
+		
+		$( "#favorite" ).buttonMarkup({theme: 'e'});
 		
 		var favorites = [];
 		
@@ -687,11 +720,64 @@ function favoriteTap(favorite) { // = _.debounce(function (favorite) {
 		});
 		
 		window.localStorage.setItem("favorites", JSON.stringify(favorites));
+		//favoritesStorage = JSON.stringify(favorites);
 		
-		$( "#favorite" ).buttonMarkup({theme: 'e'});
+		
 	}
 
-}; //, 3000, true);
+};
+
+
+
+function favoritesMenuBtnTap() {
+	//this should get to be its own function so I don't have to copy and paste so much...
+	$('#favorites_menu_btn').click(function() {
+		//console.log('click!');
+		if ($('#favorites_menu_content').css('display') == 'none') {
+			//console.log('true!');
+			$( "#favorites_menu_btn" ).buttonMarkup({theme: 'e'});
+			
+			hideMap();
+			$('#favorites_menu_content').show();
+			$('#favorites_menu_header').show();
+			
+			var favorites = JSON.parse(window.localStorage.getItem("favorites"));
+			//var favorites = JSON.parse(favoritesStorage);
+			
+			favoritesListHTML = '';
+			
+			$.each(favorites, function(i, object) {
+				favoritesListHTML = favoritesListHTML + '<li><a data-transition="slide" class="favorite-stop-detail-btn" id="' + object.id + '"><h1 class="favoriteMenuStopTitle">' + object.name +'</h1><p>#'+ object.id + '</p></a></li>';
+			});
+			
+			//console.log(favoritesListHTML);
+			$('#favorites_menu').html(favoritesListHTML).listview('refresh');
+			
+			$('.favorite-stop-detail-btn').click(function() {
+				//console.log($(this).prop('id'));
+				
+				$.mobile.loading( 'show', {
+					text: 'Loading',
+					textVisible: false,
+					theme: 'a',
+					html: ""
+				});
+				annotationTap($(this).prop('id'));
+			});
+			
+			
+		} else {
+			$( "#favorites_menu_btn" ).buttonMarkup({theme: 'd'});
+			
+			//console.log('false!');
+			window.plugins.mapKit.showMap();
+			$('#favorites_menu_content').hide();
+			$('#favorites_menu_header').hide();
+			
+		}
+		
+	});
+}
 
 
 //our initial show map function
@@ -743,6 +829,17 @@ function zoomIn() {
 
 /* When this function is called, PhoneGap has been initialized and is ready to roll */
 function onDeviceReady() {
+	
+	
+	
+	//used for locally simulating local storage, comment out when not needed for debugging
+	//favoritesStorage = '';
+	
+	// prevent some things from being scrollable
+	$(document).delegate('.ui-footer', 'touchmove', false);
+	
+	//('#infowindow').popup({ history: false });
+
 	//console.log(device.model);
 	// initialize a global pin array to store all pins onscreen
 	pins = [];
@@ -752,7 +849,8 @@ function onDeviceReady() {
 	
 	//set the dark linen after the map is shown, so we don't see it on load (can also use darklinen-bg.png if you want...)
 	$('#gps_map').css('background-image','url("img/lightlinen-bg.png")');
-	$('#gps_map').css('background-repeat','repeat-x repeat-y');
+	$('#gps_map').css('background-repeat-x','repeat');
+	$('#gps_map').css('background-repeat-y','repeat');
 
 	currentLatitude = mapOptions.lat;
 	currentLongitude = mapOptions.lon;
@@ -779,6 +877,14 @@ function onDeviceReady() {
 	    $('#refresh_location').tap(function() {
 	    	//console.log('click!');
 	    	
+	    	if ($('#favorites_menu_content').css('display') != 'none') {
+				//console.log('true!');
+				$( "#favorites_menu_btn" ).buttonMarkup({theme: 'd'});
+				
+				$('#favorites_menu_content').hide();
+				$('#favorites_menu_header').hide();
+			}
+	    	
 	    	// when the refresh button is pressed, restore the map view -- hopefully this can be removed later
 	    	window.plugins.mapKit.showMap();
 	    	navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError);
@@ -787,12 +893,20 @@ function onDeviceReady() {
 	    // when the popup closes, restore the map view -- hopefully this can be removed later
 	    $( "#infowindow" ).bind({
 		    popupafterclose: function(event, ui) { 
-		    	window.plugins.mapKit.showMap(); 
+		    	if ($('#favorites_menu_content').css('display') == 'none') {
+		    		window.plugins.mapKit.showMap();
+		    	}/*
+ else {
+			    	$("#favorites_menu_btn").unbind("click");
+			    	
+			    	favoritesMenuBtnTap();
+		    	}
+*/
+				//history.back();
 		    }
 		});
 		
-		
-
+		favoritesMenuBtnTap();
 		
 		//$(document).bind("mobileinit", function(){
 			/*
@@ -829,132 +943,3 @@ geo.onMapMove = function(currentLat,currentLon,latitudeDelta,longitudeDelta) {
 
 
 /***********************************************************************************************/
-
-
-/*
-var app = {
-    // Application Constructor
-    initialize: function() {
-        this.bindEvents();
-    },
-    // Bind Event Listeners
-    //
-    // Bind any events that are required on startup. Common events are:
-    // 'load', 'deviceready', 'offline', and 'online'.
-    bindEvents: function() {
-        document.addEventListener('deviceready', this.onDeviceReady, false);
-    },
-    // deviceready Event Handler
-    //
-    // The scope of 'this' is the event. In order to call the 'receivedEvent'
-    // function, we must explicity call 'app.receivedEvent(...);'
-    onDeviceReady: function() {
-        app.receivedEvent('deviceready');
-    },
-    // Update DOM on a Received Event
-    receivedEvent: function(id) {
-        
-    }
-};
-*/
-
-
-
-
-
-// helper function for debugging
-logStops = function(data) {
-	$.each(data.Stops, function(i, object) {
-	    $.each(object, function(property, value) {
-	        console.log(property + "=" + value);
-	    });
-	});
-}
-
-// create a new color pin image and shadow
-createPinImage = function (color) {
-	pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + color,
-        new google.maps.Size(21, 34),
-        new google.maps.Point(0,0),
-        new google.maps.Point(10, 34));
-   
-   return pinImage;
-}
-
-createPinShadow = function() {
-	pinShadow = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_shadow",
-        new google.maps.Size(40, 37),
-        new google.maps.Point(0, 0),
-        new google.maps.Point(12, 35));
-   return pinShadow;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-//on page load...
-$('#route_detail').live('pageshow', function() {	
-	$('#map_canvas2').gmap('destroy');
-	
-	//console.log('route detail show!');
-	// set height and width of the map for fullscreen
-	height = $('body').height();
-	width = $('body').width();
-	$('#map_canvas2').css({height: height}); 
-	
-	
-	
-	
- 	
- 	// get the last map center location and set zoom level and marker stops
-    getLastLocation = function(callback) {
-    	
-	    $('#map_canvas2').gmap({'center': mapCenter, 'zoom': 14, 'disableDefaultUI':true, 'callback': function(map) {
-			var self = this;
-			//$('#map_canvas2').gmap('clear', 'markers');
-			getStopsForRoute(routeClicked);
-
-		}});
-		
-		//console.log('refresh');
-		$('#map_canvas2').gmap('refresh');
-		
-		
-		
-		if (callback && typeof(callback) === "function") {
-			callback();
-		}
-	};
-	
-	
-	getLastLocation(function() {
-		
-		$('#map_canvas2').gmap().bind('init', function(event, map) { 
-	        
-	        map2 = $('#map_canvas2').gmap('get', 'map');
-	        //console.log('get map');
-	        map2.setCenter(mapCenter);  
-	        //console.log('set center');                                                                                                                                                                                                
-	    });
-		
-	});
-	
-	
-
-    
-    
-});
-*/

@@ -2,7 +2,7 @@
 <html>
     <head>
         <!-- Change this if you want to allow scaling -->
-        <meta name="viewport" content="width=default-width; user-scalable=no;" />
+        <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,maximum-scale=1,user-scalable=yes,width=320" />
         <meta http-equiv="Content-type" content="text/html; charset=utf-8">
             
         <title>BusTrackDC</title>
@@ -25,20 +25,30 @@
         <script type="text/javascript" charset="utf-8" src="js/config.js"></script>       
         <script type="text/javascript" charset="utf-8" src="js/index.js"></script>
         
-        <!-- <script src="http://debug.phonegap.com/target/target-script-min.js#jasonrosenbaumbusapp"></script>  -->
+       <!--  <script src="http://debug.phonegap.com/target/target-script-min.js#jasonrosenbaumbusapp"></script>  -->
 
     </head>
     <body onload="onBodyLoad()">
         
         <div data-role="page" id="gps_map">
+        
+        	<div data-role="header" id="favorites_menu_header"> 
+				<h1>Favorite Stops</h1> 
+			</div>
+        
+        	<div data-role="content" id="favorites_menu_content">
+	        	<ul data-role="listview" data-filter="true" id="favorites_menu">
+	        		<li><a href="#">List to be overwritten</a></li>
+	        	</ul>
+        	</div>
             
             
             <div data-role="footer" class="ui-bar" data-position="fixed" data-theme="c" data-tap-toggle="false">
                 
                	<div id="button_container">
-               		<a href="#" data-role="button" data-icon="currloc" data-iconpos="notext" data-mini="true" id="refresh_location" data-inline="true">Refresh Location</a>
+               		<a data-role="button" data-icon="currloc" data-iconpos="notext" data-mini="true" id="refresh_location" data-inline="true">Refresh Location</a>
                		
-               		<a href="#" data-role="button" data-icon="star" data-iconpos="notext" data-mini="true" id="favorites_menu" data-inline="true">Favorites Menu</a>
+               		<a data-role="button" data-icon="star" data-iconpos="notext" data-mini="true" id="favorites_menu_btn" data-inline="true">Favorites Menu</a>
                 </div>
 
                 <h1 class="footer_title">BusTrackDC</h1>
@@ -47,7 +57,7 @@
             
             <!-- a placeholder, hidden, to be overwritten when the popup is created -->
             <div id="popup-div">
-            	<div data-role="popup" id="infowindow">
+            	<div data-role="popup" id="infowindow" data-overlay-theme="a">
             		<!-- <a href="#" data-role="button" data-icon="star" data-iconpos="notext" id="favorite" class="ui-btn-left">Favorite</a> -->
             		<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right" id="close-btn">Close</a>
             		<ul data-role="listview" data-inset="true" id="infowindow-routes">
