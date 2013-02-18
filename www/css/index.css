@@ -20,6 +20,11 @@
     -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
 }
 
+html {
+	background-image: url("../img/lightlinen-bg.png");
+	background-repeat: repeat !important;
+}
+
 body {
     -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
     -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
@@ -45,32 +50,13 @@ background-color:#E4E4E4;
     height:100%;
     margin:0px;
     padding:0px;
-    width:100%;
+    width:320;
+    overflow: hidden;
+    background-image: url("../img/lightlinen-bg.png");
+	background-repeat: repeat !important;
 }
 
-/* Portrait layout (default) */
-.app {
-    background:url(../img/logo.png) no-repeat center top; /* 170px x 200px */
-    position:absolute;             /* position in the center of the screen */
-    left:50%;
-    top:50%;
-    height:50px;                   /* text area height */
-    width:225px;                   /* text area width */
-    text-align:center;
-    padding:180px 0px 0px 0px;     /* image height is 200px (bottom 20px are overlapped with text) */
-    margin:-115px 0px 0px -112px;  /* offset vertical: half of image height and text area height */
-                                   /* offset horizontal: half of text area width */
-}
 
-/* Landscape layout (with min-width) */
-@media screen and (min-aspect-ratio: 1/1) and (min-width:400px) {
-    .app {
-        background-position:left center;
-        padding:75px 0px 75px 170px;  /* padding-top + padding-bottom + text area = image height */
-        margin:-90px 0px 0px -198px;  /* offset vertical: half of image height */
-                                      /* offset horizontal: half of image width and text area width */
-    }
-}
 
 /*
 h1 {
@@ -83,46 +69,21 @@ h1 {
 }
 */
 
-.event {
-    border-radius:4px;
-    -webkit-border-radius:4px;
-    color:#FFFFFF;
-    font-size:12px;
-    margin:0px 30px;
-    padding:2px 0px;
+#gps_map {
+	background-repeat: repeat !important;
+	
 }
 
-.event.listening {
-    background-color:#333333;
-    display:block;
+.ui-popup-screen {
+	height: 110%;
 }
 
-.event.received {
-    background-color:#4B946A;
-    display:none;
-}
-
-@keyframes fade {
-    from { opacity: 1.0; }
-    50% { opacity: 0.4; }
-    to { opacity: 1.0; }
-}
- 
-@-webkit-keyframes fade {
-    from { opacity: 1.0; }
-    50% { opacity: 0.4; }
-    to { opacity: 1.0; }
-}
- 
-.blink {
-    animation:fade 3000ms infinite;
-    -webkit-animation:fade 3000ms infinite;
-}
-
+/*
 .ui-footer h1 {
 	margin-top: 8px;
 	padding-right: 1em !important;
 }
+*/
 
 /*
 .ui-footer .ui-btn {
@@ -131,7 +92,8 @@ h1 {
 }
 */
 
-#refresh_location, #back_btn {
+/*
+.refresh_location, .back_btn, .favorites_menu_btn {
 	float: left;
 	margin-top: 0.1em !important;
 }
@@ -139,28 +101,72 @@ h1 {
 .footer_title {
 	float: right;
 }
+*/
 
-.stopTitle {
-	text-transform: lowercase;
+.center {
+	display: block;
+	text-align: center;
+	margin-top: 50px;
 }
 
-.route-detail-btn {
+
+.ui-footer .ui-controlgroup  {
+	margin-left: 8px;
+}
+
+
+
+.ui-header .ui-btn {
+	margin-top: 3px;
+}
+
+
+.ui-header .ui-icon {
+	top: 49% !important;
+}
+
+.ui-header .ui-btn-text, .ui-footer .ui-btn-text {
+	top: -1px;
+}
+
+.stopTitle, .favoriteMenuStopTitle {
+	text-transform: lowercase;
+	text-overflow: ellipsis;
+	min-width: 250px;
+}
+
+#favorite {
+	margin-top: 1px;
+	margin-right: 4px;
+}
+
+.stopName {
+	display: block;
+	height: 24px;
+	margin-top: 4px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 89%;
+	overflow: hidden;
+}
+
+#infowindow .route-detail-btn {
 	padding-bottom: 0.1em !important;
 }
 
 /*target the count bubbles and left align them, by default they are right aligned*/
-.ui-li-has-count .ui-li-count {
+#infowindow .ui-li-has-count .ui-li-count {
     left  : 10px !important;
     right : auto !important;
 }
 
-.ui-li-desc {
+#infowindow .ui-li-desc {
 	padding-left: 12px !important;
 }
 
 /*target the link in which the count bubbles reside and add some padding so the bubbles and link text don't overlap*/
 /*notice this is only applied to list-items that actually have count bubbles*/
-.ui-li-has-count .ui-btn-inner a.ui-link-inherit {
+#infowindow .ui-li-has-count .ui-btn-inner a.ui-link-inherit {
     padding-left : 35px !important;
 }
 
@@ -168,3 +174,83 @@ h1 {
 	background-image: url("../img/currloc-icon.png");
 	background-size: 18px 18px;
 }
+
+
+#infowindow .ui-btn-text {
+	width: 115%;
+}
+
+#infowindow .ui-li > .ui-btn-inner {
+	overflow: hidden;
+}
+
+.drag-handle {
+	display: none;
+	background-image: url("../img/sort.png");
+	background-repeat: no-repeat;
+	background-size: 30px 30px;
+	height: 30px;
+	width: 30px;
+	position: absolute;
+	top: 44%;
+	margin-top: -9px;
+	right: 10px;
+	text-indent: -99999em;
+}
+
+.delete-handle {
+	display: none;
+	background-image: url("../img/delete.png");
+	background-repeat: no-repeat;
+	background-size: 25px 25px;
+	height: 25px;
+	width: 25px;
+	position: absolute;
+	top: 47%;
+	margin-top: -9px;
+	right: 50px;
+	text-indent: -99999em;
+}
+
+/*
+.drag-handle:before {
+content: "";
+  position: absolute;
+  left: 0;
+  top: 0.21em;
+  bottom: 0.21em;
+  width: 1em;
+  background: linear-gradient(
+    top, 
+    black, black 20%, 
+    white 20%, white 40%, 
+    black 40%, black 60%, 
+    white 60%, white 80%, 
+    black 80%, black 100%
+  );
+}
+*/
+
+/*
+#favorites_menu_content, #favorites_menu_header {
+	display: none;
+}
+*/
+
+
+/* change jquery mobile transition speed */
+.in {
+	-webkit-animation-timing-function: ease-out;
+	-webkit-animation-duration: 150ms;
+	-moz-animation-timing-function: ease-out;
+	-moz-animation-duration: 150ms;
+}
+
+.out {
+	-webkit-animation-timing-function: ease-in;
+	-webkit-animation-duration: 125ms;
+	-moz-animation-timing-function: ease-in;
+	-moz-animation-duration: 125ms;
+}
+
+

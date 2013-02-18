@@ -1,1 +1,1 @@
-wmata_api_key = 'put_your_api_key_here'; // get an API key at http://developer.wmata.com/
+wmata_api_key = 'your_api_key_here'; // get an API key at http://developer.wmata.com/
