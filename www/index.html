@@ -19,52 +19,118 @@
         <script type="text/javascript" charset="utf-8" src="js/MapKit.js"></script>
         
         <script type="text/javascript" src="js/jquery-1.8.2.min.js"></script>
-        <script type="text/javascript" src="js/jquery.mobile-1.2.0/jquery.mobile-1.2.0.min.js"></script>
         <script type="text/javascript" src="js/underscore-min.js"></script>
-           
+        <script type="text/javascript" src="js/jquery-ui-1.10.1.custom.min.js"></script>
+        <script type="text/javascript" src="js/jquery.ui.touch-punch.min.js"></script>
+        
         <script type="text/javascript" charset="utf-8" src="js/config.js"></script>       
         <script type="text/javascript" charset="utf-8" src="js/index.js"></script>
+        <script type="text/javascript" src="js/jquery.mobile-1.2.0/jquery.mobile-1.2.0.min.js"></script>
+       
+           
         
-       <!--  <script src="http://debug.phonegap.com/target/target-script-min.js#jasonrosenbaumbusapp"></script>  -->
+        
+        <!-- <script src="http://debug.phonegap.com/target/target-script-min.js#jasonrosenbaumbusapp"></script>  -->
 
     </head>
     <body onload="onBodyLoad()">
         
-        <div data-role="page" id="gps_map">
+        <div data-role="page" id="gps_map" data-add-back-btn="true">
         
-        	<div data-role="header" id="favorites_menu_header"> 
-				<h1>Favorite Stops</h1> 
+        	<div data-role="header" data-position="fixed" data-theme="c" data-tap-toggle="false" data-id="persistant">
+			    
+                <h1>BusTrackDC</h1>
+                
+            </div>
+            
+            <div data-role="footer" data-position="fixed" data-theme="c" data-tap-toggle="false" data-id="persistant">
+                <div data-role="controlgroup" data-type="horizontal">
+
+			     	<a href="#" data-role="button" data-icon="currloc" data-iconpos="notext" class="refresh_location">Refresh Location</a>
+               		<a href="#favorite_menu_page" data-role="button" data-icon="star" class="favorites_menu_btn">Favorites</a>
+              
+			    </div>
+			    
+            </div>
+
+        </div><!-- /page -->
+        
+        <div data-role="page" id="infowindow" data-add-back-btn="true">
+        
+        	<div data-role="header" data-position="fixed" data-theme="c" data-tap-toggle="false" data-id="persistant">
+			    
+                <h1>Predictions</h1>
+                
+                <a data-icon="plus" data-iconpos="notext" id="favorite" class="ui-btn-right">Add to favorites</a>
+                
+            </div>
+
+    		<div data-role="content">
+	    		<ul data-role="listview" id="infowindow-routes">
+	    			<h2 class="center">No predictions available</h2>
+	    		</ul>
+    		</div>
+    		
+    		<div data-role="footer" data-position="fixed" data-theme="c" data-tap-toggle="false" data-id="persistant">
+        		
+        		<div data-role="controlgroup" data-type="horizontal">
+
+	        		<a href="#gps_map" data-role="button" data-icon="currloc" data-iconpos="notext">Current Location</a>
+               		<a href="#favorite_menu_page" data-role="button" data-icon="star" class="favorites_menu_btn">Favorites</a>
+              
+			    </div>
+			     
 			</div>
+
+        </div><!-- /page -->
         
+        <div data-role="page" id="route_map" data-add-back-btn="true">
+        
+        	<div data-role="header" data-position="fixed" data-theme="c" data-tap-toggle="false" data-id="persistant">
+			    
+                <h1 id="route_map_title">Route Map</h1>
+                
+            </div>
+        
+        	<div data-role="footer" data-position="fixed" data-theme="c" data-tap-toggle="false" data-id="persistant">
+                <div data-role="controlgroup" data-type="horizontal">
+
+			     	<a href="#gps_map" data-role="button" data-icon="currloc" data-iconpos="notext">Current Location</a>
+               		<a href="#favorite_menu_page" data-role="button" data-icon="star" class="favorites_menu_btn">Favorites</a>
+              
+			    </div>  
+            </div>
+            
+        </div><!-- /page -->
+        
+        
+        <div data-role="page" id="favorite_menu_page" data-add-back-btn="true">
+        
+        	<div data-role="header" data-position="fixed" data-theme="c" data-tap-toggle="false" data-id="persistant">
+			    
+                <h1>Favorites</h1>
+                
+                <a id="edit" class="ui-btn-right">Edit</a>
+                
+            </div>
+        	
         	<div data-role="content" id="favorites_menu_content">
-	        	<ul data-role="listview" data-filter="true" id="favorites_menu">
-	        		<li><a href="#">List to be overwritten</a></li>
+	        	<ul data-role="listview" data-filter="true" data-filter-placeholder="Search..." id="favorites_menu">
+	        		<h2 class="center">You haven't added any<br/>favorite stops yet!</h2>
+	        		<h2 class="center">Click the star icon<br/>when viewing a stop to<br/>add it as a favorite.</h2>
 	        	</ul>
         	</div>
-            
-            
-            <div data-role="footer" class="ui-bar" data-position="fixed" data-theme="c" data-tap-toggle="false">
-                
-               	<div id="button_container">
-               		<a data-role="button" data-icon="currloc" data-iconpos="notext" data-mini="true" id="refresh_location" data-inline="true">Refresh Location</a>
-               		
-               		<a data-role="button" data-icon="star" data-iconpos="notext" data-mini="true" id="favorites_menu_btn" data-inline="true">Favorites Menu</a>
-                </div>
+        	
+        	<div data-role="footer" data-position="fixed" data-theme="c" data-tap-toggle="false" data-id="persistant">
+                <div data-role="controlgroup" data-type="horizontal">
 
-                <h1 class="footer_title">BusTrackDC</h1>
+			     	<a href="#gps_map" data-role="button" data-icon="currloc" data-iconpos="notext">Current Location</a>
+               		<a href="#favorite_menu_page" data-role="button" data-icon="star" class="ui-disabled">Favorites</a> 
+              
+			    </div>
                 
             </div>
-            
-            <!-- a placeholder, hidden, to be overwritten when the popup is created -->
-            <div id="popup-div">
-            	<div data-role="popup" id="infowindow" data-overlay-theme="a">
-            		<!-- <a href="#" data-role="button" data-icon="star" data-iconpos="notext" id="favorite" class="ui-btn-left">Favorite</a> -->
-            		<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right" id="close-btn">Close</a>
-            		<ul data-role="listview" data-inset="true" id="infowindow-routes">
-            			<li><a href="#">List to be overwritten</a></li>
-            		</ul>
-            	</div>
-            </div>
+
         </div><!-- /page -->
 
     </body>
