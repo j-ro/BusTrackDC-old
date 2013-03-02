@@ -61,12 +61,7 @@ calculateRadius = function(viewportLat, viewportLon, latitudeDelta, longitudeDel
 getStops = function(latitude,longitude,radius) {
 	//console.log('getstops start, lat=' + latitude + ' long=' + longitude + ' radius=' + radius);
 	
-	$.mobile.loading( 'show', {
-		text: 'Loading',
-		textVisible: false,
-		theme: 'a',
-		html: ""
-	});
+	$.mobile.loading( 'show' );
 	
 	getStopsJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JStops?lat=' + latitude + '&lon=' + longitude + '&radius=' + radius + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
 		//console.log('ajax call done');
@@ -703,52 +698,7 @@ onCurrentLocationSuccess = function(position) {
    
     
     
-    // timeout needed to prevent UI lock -- the onMapMove function is called a lot during initialization, so we want to bypass that
-    window.setTimeout(function() {
-    
-	    geo = window.geo || {};
-	    
-	    // save some data on the previous location so we can see how much we move...
-	    geo.beforeMapMove = function(currentLat,currentLon,latitudeDelta,longitudeDelta) {
-			previousLat = currentLat;
-			previousLon = currentLon;
-	    }
-	    
-	    // whenever the map moves, get the new location and radius and show nearby stops
-		geo.onMapMove = function(currentLat,currentLon,latitudeDelta,longitudeDelta) {
-		
-			
-			currentLatitude = currentLat;
-			currentLongitude = currentLon;
-			
-			// if the map doesn't move much, no need to redraw the pins...
-			if (((Math.abs(previousLat - currentLat)*8) > latitudeDelta) || ((Math.abs(previousLon - currentLon)*8) > longitudeDelta)) {
-				if ($('.refresh_location').length) {
-					//console.log('TRUE! ' + previousLat + ' - ' + currentLat + ' = ' + (Math.abs(previousLat - currentLat)*2) + ' with latitudeDelta = ' + latitudeDelta + ' and ' + previousLon + ' - ' + currentLon + ' = ' + (Math.abs(previousLon - currentLon)*2) + ' with longitudeDelta = ' + longitudeDelta);
-					
-					//console.log('TRUE');
-					
-					calculateRadius(currentLat, currentLon, latitudeDelta, longitudeDelta, function(viewportLat, viewportLon, radius) {
-						// prevent huge radii in the viewport from crashing the app
-						//console.log(radius);
-						if (radius < 2000) {
-							getStops(viewportLat, viewportLon, radius);
-						}
-						
-					});
-				} else {
-					//console.log('FALSE');
-				}
-			} else {
-				//console.log('FALSE! ' + previousLat + ' - ' + currentLat + ' = ' + (Math.abs(previousLat - currentLat)*2) + ' with latitudeDelta = ' + latitudeDelta + ' and ' + previousLon + ' - ' + currentLon + ' = ' + (Math.abs(previousLon - currentLon)*2) + ' with longitudeDelta = ' + longitudeDelta);
-			}
-			
-		};
-		
-		// use underscore.js to reate limit and debounce this function that gets called a ton of times when a user scrolls
-		delay = 500;
-		geo.onMapMove = _.debounce(geo.onMapMove, delay); // this is too long, set it long on startup but thereafter set it short
-	}, 3000);
+   
 
 
 	
@@ -941,7 +891,7 @@ $('#gps_map').css('background-image','url("img/lightlinen-bg.png")');
 	navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError);
 	
 	// this needs to be in deviceReady so as not to make weird this website needs access to your location notices in the app...
-	$(document).on('pagebeforeshow', '#gps_map', function() {
+	$(document).on('pageinit', '#gps_map', function() {
 		
 		if (deviceReadyFlag = true) {
 			navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError);
@@ -1192,10 +1142,71 @@ $(document).on('pageinit', '#route_map', function() {
 
 //page show functions
 $(document).on('pagebeforeshow', '#gps_map', function() {
+
 	//console.log(window.history);
 	if (mapVisible == false) {
 		showMap();
 	}
+
+	if (typeof(currentLatitude) === 'undefined') {
+		console.log('true');
+	} else {
+		console.log(currentLatitude);
+		console.log(currentLongitude);
+		if (pins.length == 0) {
+			getStops(currentLatitude, currentLongitude, '800');
+		}
+		
+	}
+	
+
+	
+	 // timeout needed to prevent UI lock -- the onMapMove function is called a lot during initialization, so we want to bypass that
+    window.setTimeout(function() {
+    
+	    geo = window.geo || {};
+	    
+	    // save some data on the previous location so we can see how much we move...
+	    geo.beforeMapMove = function(currentLat,currentLon,latitudeDelta,longitudeDelta) {
+			previousLat = currentLat;
+			previousLon = currentLon;
+	    }
+	    
+	    // whenever the map moves, get the new location and radius and show nearby stops
+		geo.onMapMove = function(currentLat,currentLon,latitudeDelta,longitudeDelta) {
+		
+			
+			currentLatitude = currentLat;
+			currentLongitude = currentLon;
+			
+			// if the map doesn't move much, no need to redraw the pins...
+			if (((Math.abs(previousLat - currentLat)*8) > latitudeDelta) || ((Math.abs(previousLon - currentLon)*8) > longitudeDelta)) {
+				if ($('.refresh_location').length) {
+					//console.log('TRUE! ' + previousLat + ' - ' + currentLat + ' = ' + (Math.abs(previousLat - currentLat)*2) + ' with latitudeDelta = ' + latitudeDelta + ' and ' + previousLon + ' - ' + currentLon + ' = ' + (Math.abs(previousLon - currentLon)*2) + ' with longitudeDelta = ' + longitudeDelta);
+					
+					//console.log('TRUE');
+					
+					calculateRadius(currentLat, currentLon, latitudeDelta, longitudeDelta, function(viewportLat, viewportLon, radius) {
+						// prevent huge radii in the viewport from crashing the app
+						//console.log(radius);
+						if (radius < 2000) {
+							getStops(viewportLat, viewportLon, radius);
+						}
+						
+					});
+				} else {
+					//console.log('FALSE');
+				}
+			} else {
+				//console.log('FALSE! ' + previousLat + ' - ' + currentLat + ' = ' + (Math.abs(previousLat - currentLat)*2) + ' with latitudeDelta = ' + latitudeDelta + ' and ' + previousLon + ' - ' + currentLon + ' = ' + (Math.abs(previousLon - currentLon)*2) + ' with longitudeDelta = ' + longitudeDelta);
+			}
+			
+		};
+		
+		// use underscore.js to reate limit and debounce this function that gets called a ton of times when a user scrolls
+		delay = 500;
+		geo.onMapMove = _.debounce(geo.onMapMove, delay); // this is too long, set it long on startup but thereafter set it short
+	}, 3000);
 	
 	/*
 if (deviceReadyFlag = true) {
