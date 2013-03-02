@@ -18,6 +18,10 @@ window.addEventListener('load', function() {
     new FastClick(document.body);
 }, false);
 
+/* pull to refresh stuff */
+
+
+
 function cbMapCallback(lat,lon) {
     alert('youve clicked ' + lat + ',' + lon);
 }
@@ -406,6 +410,7 @@ function annotationTap(text) {
 		    //console.log(routeList);
 		    $('#infowindow-routes').html(routeList);
 		    
+		    
 		    // pass some variables to the next page if a button is clicked
 		    $('.route-detail-btn').click(function() {
 		    
@@ -415,37 +420,7 @@ function annotationTap(text) {
 		    	$('#route_map_title').html('Route ' + routeClicked);
 		    
 		    	$.mobile.changePage( "#route_map", { transition: "fade" } );
-		    	
-		    	//console.log('clicked!');
-		/*
-		    	if ($('#favorites_menu_content').css('display') != 'none') {
-		    		$( "#favorites_menu_btn" ).buttonMarkup({theme: 'd'});
-		    		
-		    		window.plugins.mapKit.showMap();
-		    		$('#favorites_menu_content').hide();
-		    		$('#favorites_menu_header').hide();
-		    	}
-		*/
-		    	
-			    //$( "#infowindow" ).popup( "close" );
-			    
-		    	
-		    	
-		    	
-		    	
-		    	/*
-		if (!currentLatitude) {
-		    		oldLatitude = mapOptions.lat;
-		    	} else {
-		    		oldLatitude = currentLatitude;
-		    	}
-		    	
-		    	if (!currentLongitude) {
-		    		oldLongitude = mapOptions.lon;
-		    	} else {
-		    		oldLongitude = currentLongitude;
-		    	}
-		*/
+
 		    	
 		    	
 		    	
@@ -456,10 +431,9 @@ function annotationTap(text) {
 		    //console.log('show page');
 		    // show the page
 		    annotationTapJSON.abort();
+		    
 		    $.mobile.changePage( "#infowindow", { transition: "fade"} );
-		    
-		    
-		    
+		    $('#infowindow-routes').listview('refresh');
 		    
 		    	
 	    });
@@ -989,7 +963,14 @@ $(document).on('pageinit', '#infowindow', function() {
     	favoriteTap($('.stopTitle').prop('id'));
     });
     
-   
+    
+    
+    $(".iscroll-wrapper", this).bind( "iscroll_onpulldown" , function() { 
+    	refreshStopID = parseInt($('.stopTitle').attr('id'));
+    	annotationTap(refreshStopID); 
+    });
+    
+    //$('#infowindow-routes').scrollz();
     
     //favoritesMenuBtnTap();
     
