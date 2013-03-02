@@ -903,7 +903,7 @@ $('#gps_map').css('background-image','url("img/lightlinen-bg.png")');
 	navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError);
 	
 	// this needs to be in deviceReady so as not to make weird this website needs access to your location notices in the app...
-	$('#gps_map').live('pagebeforeshow',function (event) {
+	$(document).on('pagebeforeshow', '#gps_map', function() {
 		
 		if (deviceReadyFlag = true) {
 			navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError);
@@ -963,10 +963,9 @@ $(document).bind("mobileinit", function(){
 });
 */
 
-
-$('#gps_map').live('pageinit',function (event) {
+$(document).on('pageinit', '#gps_map', function() {
 	
-	//console.log('init!');
+	console.log('init!');
 
 	mapVisible = true;
 	document.addEventListener("deviceready", onDeviceReady);
@@ -994,7 +993,7 @@ if ($('#favorites_menu_content').css('display') != 'none') {
 });
 
 
-$('#infowindow').live('pageinit',function (event) {	
+$(document).on('pageinit', '#infowindow', function() {	
 	
 	// make the favorite button work
     $('#favorite').click(function() {
@@ -1008,7 +1007,7 @@ $('#infowindow').live('pageinit',function (event) {
     
 });
 
-$('#favorite_menu_page').live('pageinit', function(event) {
+$(document).on('pageinit', '#favorite_menu_page', function() {
 	editFlag = false;
 	
 	$('#edit').click(function() {
@@ -1146,13 +1145,13 @@ $('#favorite_menu_page').live('pageinit', function(event) {
 
 /*
 
-$('#route_map').live('pageinit',function (event) {
+$(document).on('pageinit', '#route_map', function() {
 	favoritesMenuBtnTap();
 });
 */
 
 //page show functions
-$('#gps_map').live('pagebeforeshow',function (event) {
+$(document).on('pagebeforeshow', '#gps_map', function() {
 	//console.log(window.history);
 	if (mapVisible == false) {
 		showMap();
@@ -1168,7 +1167,7 @@ if (deviceReadyFlag = true) {
 
 
 
-$('#favorite_menu_page').live('pagebeforeshow',function (event) {
+$(document).on('pagebeforeshow', '#favorite_menu_page', function() {
 	
 	//console.log(window.localStorage.getItem("favorites"));
 	
@@ -1231,7 +1230,7 @@ $('#favorite_menu_page').live('pagebeforeshow',function (event) {
 
 });
 
-$('#infowindow').live('pagebeforeshow',function (event) {
+$(document).on('pagebeforeshow', '#infowindow', function() {
 	
 	//console.log(window.history);
 	
@@ -1275,7 +1274,7 @@ $('#infowindow').live('pagebeforeshow',function (event) {
 	
 });
 
-$('#infowindow').live('pageshow',function (event) {
+$(document).on('pageshow', '#infowindow', function() {
 
 	
 	 // hide the map when we show the jQuery stuff, hopefully this can be eliminated in the future...
@@ -1285,7 +1284,7 @@ $('#infowindow').live('pageshow',function (event) {
 });
 
 
-$('#route_map').live('pagebeforeshow',function (event) {
+$(document).on('pagebeforeshow', '#route_map', function() {
   	
   	//console.log(window.history);
   	
@@ -1305,21 +1304,21 @@ $('#route_map').live('pagebeforeshow',function (event) {
 
 
 //on page hide functions
-$('#route_map').live('pagebeforehide', function (event) {
+$(document).on('pagebeforehide', '#route_map', function() {
 	window.plugins.mapKit.clearMapPins();
 	//console.log('getstopsjson abort!');
 	getStopsForRouteJSON.abort();
 });
 
 //on page hide functions
-$('#gps_map').live('pagebeforehide', function (event) {
+$(document).on('pagebeforehide', '#gps_map', function() {
 	
 	//annotationTapJSON.abort();
 	//getStopsJSON.abort();
 
 });
 
-$('#favorite_menu_page').live('pagebeforehide', function(event) {
+$(document).on('pagebeforehide', '#favorite_menu_page', function() {
 	$( "#edit" ).buttonMarkup({theme: 'd'});
 	$('#edit .ui-btn-text').html('Edit');
 	$('.ui-li-has-arrow .ui-btn-inner a.ui-link-inherit').css('padding-right','inherit');
