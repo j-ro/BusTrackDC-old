@@ -13,6 +13,11 @@ function onBodyLoad() {
 }
 */
 
+//fastclick.js instantiation to get rid of 300ms delay on click events...
+window.addEventListener('load', function() {
+    new FastClick(document.body);
+}, false);
+
 function cbMapCallback(lat,lon) {
     alert('youve clicked ' + lat + ',' + lon);
 }
@@ -95,14 +100,19 @@ getStopsForRoute = function(routeID) {
 		html: ""
 	});
 	*/
+	getStopsForRouteFlag = false;
 		
 	getStopsForRouteJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JRouteDetails?routeID=' + routeID + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
 		//console.log('ajax call done');
+		console.log('getstopsforroute hide');
+		getStopsForRouteFlag = true;
 		$.mobile.loading( 'hide' );
 		
 		if (data.toString() == "<h1>504 Gateway Timeout</h1>") {
 			console.log(data);
 		} else {
+			//console.log('getstopsforroute callback hide');
+			//$.mobile.loading( 'hide' );
 			stopsForRoute = data;
 			
 			//console.log(stopsForRoute);
@@ -273,6 +283,8 @@ markerStopPoints = function(data) {
 	//console.log(inRangeLongitude + ',' + inRangeLatitude);
 	window.plugins.mapKit.addMapPins(pins0);
 	window.plugins.mapKit.addMapPins(pins1);
+	//console.log('markerstoppoints hide');
+	//$.mobile.loading( 'hide' );
 	//console.log(inRangeLongitude + ',' + inRangeLatitude);
 	
 	var pinLength = pins0.length;
@@ -1329,12 +1341,17 @@ $(document).on('pagebeforeshow', '#route_map', function() {
 });
 
 $(document).on('pageshow', '#route_map', function() {
-	$.mobile.loading( 'show', {
-		text: 'Loading',
-		textVisible: false,
-		theme: 'a',
-		html: ""
-	});
+	console.log(getStopsForRouteFlag);
+	
+	if (getStopsForRouteFlag == false) {
+		$.mobile.loading( 'show', {
+			text: 'Loading',
+			textVisible: false,
+			theme: 'a',
+			html: ""
+		});
+	}
+	
 });
 
 
