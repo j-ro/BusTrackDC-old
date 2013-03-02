@@ -55,9 +55,17 @@ calculateRadius = function(viewportLat, viewportLon, latitudeDelta, longitudeDel
 // get a list of stops nearby
 getStops = function(latitude,longitude,radius) {
 	//console.log('getstops start, lat=' + latitude + ' long=' + longitude + ' radius=' + radius);
-		
+	
+	$.mobile.loading( 'show', {
+		text: 'Loading',
+		textVisible: false,
+		theme: 'a',
+		html: ""
+	});
+	
 	getStopsJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JStops?lat=' + latitude + '&lon=' + longitude + '&radius=' + radius + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
 		//console.log('ajax call done');
+		$.mobile.loading( 'hide' );
 		
 		if (data.toString() == "<h1>504 Gateway Timeout</h1>") {
 			console.log(data);
@@ -78,9 +86,19 @@ getStops = function(latitude,longitude,radius) {
 
 getStopsForRoute = function(routeID) {
 	//console.log('getstops start');
+	
+	/* it's unclear why this one doesn't work, but all the other ones right before AJAX calls do. Anyway, we load this on on the pageshow event for the #route_map page instead.
+	$.mobile.loading( 'show', {
+		text: 'Loading',
+		textVisible: false,
+		theme: 'a',
+		html: ""
+	});
+	*/
 		
 	getStopsForRouteJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JRouteDetails?routeID=' + routeID + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
 		//console.log('ajax call done');
+		$.mobile.loading( 'hide' );
 		
 		if (data.toString() == "<h1>504 Gateway Timeout</h1>") {
 			console.log(data);
@@ -306,6 +324,12 @@ function annotationTap(text) {
 	
 	// only get this stuff if the annotation tapped is a stop, rather than part of a route map
 	if (text != '(null)') {
+		$.mobile.loading( 'show', {
+			text: 'Loading',
+			textVisible: false,
+			theme: 'a',
+			html: ""
+		});
 		annotationTapJSON = $.getJSON('http://api.wmata.com/NextBusService.svc/json/JPredictions?StopID=' + stopID + '&api_key=' + wmata_api_key + '&callback=?', function(data2, self4) {
 			//console.log('predictions=' + data2.Predictions.length);
 			//sorted = data2.Predictions.sort(function(a,b) {return b - a; });
@@ -965,7 +989,7 @@ $(document).bind("mobileinit", function(){
 
 $(document).on('pageinit', '#gps_map', function() {
 	
-	console.log('init!');
+	//console.log('init!');
 
 	mapVisible = true;
 	document.addEventListener("deviceready", onDeviceReady);
@@ -1070,12 +1094,14 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 			$('.favorite-stop-detail-btn').click(function() {
 				console.log($(this).data('stopid'));
 				
-				$.mobile.loading( 'show', {
+				/*
+$.mobile.loading( 'show', {
 					text: 'Loading',
 					textVisible: false,
 					theme: 'a',
 					html: ""
 				});
+*/
 		
 				// store a variable on this stop's name in case we need to retrieve it later...
 				notInRangeStopID = $(this).data('stopid');
@@ -1297,8 +1323,18 @@ $(document).on('pagebeforeshow', '#route_map', function() {
 	}
 	
 	geo.onMapMove = '';
+	
 	//console.log(routeClicked);
 	getStopsForRoute(routeClicked);
+});
+
+$(document).on('pageshow', '#route_map', function() {
+	$.mobile.loading( 'show', {
+		text: 'Loading',
+		textVisible: false,
+		theme: 'a',
+		html: ""
+	});
 });
 
 

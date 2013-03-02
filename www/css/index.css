@@ -237,6 +237,29 @@ content: "";
 }
 */
 
+/* move the loader to the lower right */
+
+.ui-loader {
+	bottom: 9px !important;
+	right: 9px !important;
+	top: inherit !important;
+	left: inherit !important;
+}
+
+.ui-loader-default {
+	width: 32px !important;
+	height: 32px !important;
+}
+
+.ui-loader .ui-icon {
+	width: 30px !important;
+	height: 30px !important;
+}
+
+.ui-icon-loading {
+	background-size: 32px 32px;
+}
+
 
 /* change jquery mobile transition speed */
 .in {
