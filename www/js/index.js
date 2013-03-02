@@ -158,6 +158,7 @@ markerStopPoints = function(data) {
 				lat: data.Direction0.Stops[i].Lat,
 				lon: data.Direction0.Stops[i].Lon,
 				title: data.Direction0.Stops[i].Name,
+				subTitle: data.Direction0.Stops[i].StopID,
 				pinColor: "green",
 				selected: false,
 				index: i
@@ -223,6 +224,7 @@ markerStopPoints = function(data) {
 				lat: data.Direction1.Stops[i].Lat,
 				lon: data.Direction1.Stops[i].Lon,
 				title: data.Direction1.Stops[i].Name,
+				subTitle: data.Direction1.Stops[i].StopID,
 				pinColor: "green",
 				selected: false,
 				index: i
@@ -499,7 +501,7 @@ markerStops = function(data) {
 					{
 						lat: data.Stops[i].Lat,
 						lon: data.Stops[i].Lon,
-						title: 'Loading...',
+						title: data.Stops[i].Name,
 						subTitle: data.Stops[i].StopID,
 						pinColor: "green",
 						selected: false,
@@ -511,7 +513,7 @@ markerStops = function(data) {
 					{
 						lat: data.Stops[i].Lat,
 						lon: data.Stops[i].Lon,
-						title: 'Loading...',
+						title: data.Stops[i].Name,
 						subTitle: data.Stops[i].StopID,
 						pinColor: "green",
 						selected: false,
