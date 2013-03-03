@@ -206,26 +206,38 @@ calculateRadius = function(viewportLat, viewportLon, latitudeDelta, longitudeDel
 
 // get a list of stops nearby
 getStops = function(latitude,longitude,radius) {
-	//console.log('getstops start, lat=' + latitude + ' long=' + longitude + ' radius=' + radius);
+	console.log('getstops start, lat=' + latitude + ' long=' + longitude + ' radius=' + radius);
 	
 	$.mobile.loading( 'show' );
+
+	function getStopsConfirm(buttonIndex) {
+        if (buttonIndex == 1) {
+        	getStops(latitude,longitude,radius);
+        }
+    }
 	
 	getStopsJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JStops?lat=' + latitude + '&lon=' + longitude + '&radius=' + radius + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
 		//console.log('ajax call done');
 		$.mobile.loading( 'hide' );
 		
-		if (data.toString() == "<h1>504 Gateway Timeout</h1>") {
-			console.log(data);
-		} else {
-			stops = data;
-			//console.log(stops);
+		stops = data;
+		//console.log(stops);
 
-			// output to log
-			markerStops(stops);
-	
-			//console.log(stops.Stops[0].Lat);
-		}
+		// output to log
+		markerStops(stops);
+
+		//console.log(stops.Stops[0].Lat);
+
 		
+	}).error(function(jqXHR, textStatus, errorThrown) {
+		$.mobile.loading( 'hide' );
+		
+		navigator.notification.confirm(
+		    'An error occured fetching the data you requested.',  // message
+		    getStopsConfirm,         // callback
+		    "There was an error",            // title
+		    'Try again,Cancel'                  // buttonName
+	    ); 
 	});
 	
 }
@@ -243,37 +255,58 @@ getStopsForRoute = function(routeID) {
 	});
 	*/
 	getStopsForRouteFlag = false;
+	
+	// retry function on error
+	function getStopsForRouteConfirm(buttonIndex) {
+        if (buttonIndex == 1) {
+        	getStopsForRoute(routeID);
+        }
+    }
 		
 	getStopsForRouteJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JRouteDetails?routeID=' + routeID + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
 		//console.log('ajax call done');
-		console.log('getstopsforroute hide');
+		//console.log('getstopsforroute hide');
 		getStopsForRouteFlag = true;
 		$.mobile.loading( 'hide' );
 		
-		if (data.toString() == "<h1>504 Gateway Timeout</h1>") {
-			console.log(data);
-		} else {
-			//console.log('getstopsforroute callback hide');
-			//$.mobile.loading( 'hide' );
-			stopsForRoute = data;
-			
-			//console.log(stopsForRoute);
-			
-			mapOptions2 = {
-
-		        diameter: 1500,
-		        lat: currentLatitude,
-		        lon: currentLongitude
-
-		    };
-		    
-		    //console.log('call mapoptions');
-		    window.plugins.mapKit.setMapData(mapOptions2);
-			
-			markerStopPoints(stopsForRoute);
-			
+		//console.log('getstopsforroute callback hide');
+		//$.mobile.loading( 'hide' );
+		stopsForRoute = data;
+		
+		// custom error handling for baffling blank route maps...
+		if (stopsForRoute.Direction0 == null && stopsForRoute.Direction1 == null) {
+			navigator.notification.confirm(
+			    'The route map for this line is not available. Sorry!',  // message
+			    null,         // callback
+			    "Route map not available",            // title
+			    'OK'                  // buttonName
+		    ); 
 		}
 		
+		//console.log(stopsForRoute);
+		
+		mapOptions2 = {
+
+	        diameter: 1500,
+	        lat: currentLatitude,
+	        lon: currentLongitude
+
+	    };
+	    
+	    //console.log('call mapoptions');
+	    window.plugins.mapKit.setMapData(mapOptions2);
+		
+		markerStopPoints(stopsForRoute);
+
+	}).error(function(jqXHR, textStatus, errorThrown) {
+		$.mobile.loading( 'hide' );
+		
+		navigator.notification.confirm(
+		    'An error occured fetching the data you requested.',  // message
+		    getStopsForRouteConfirm,         // callback
+		    "There was an error",            // title
+		    'Try again,Cancel'                  // buttonName
+	    ); 
 	});
 	
 }
@@ -374,6 +407,14 @@ function annotationTap(text, latitude, longitude) {
 				theme: 'a',
 				html: ""
 			});
+			
+			// retry function on error
+			function annotationTapJSONConfirm(buttonIndex) {
+		        if (buttonIndex == 1) {
+		        	annotationTap(text, latitude, longitude);
+		        }
+		    }
+			
 			annotationTapJSON = $.getJSON('http://api.wmata.com/NextBusService.svc/json/JPredictions?StopID=' + stopID + '&api_key=' + wmata_api_key + '&callback=?', function(data2, self4) {
 				//console.log('predictions=' + data2.Predictions.length);
 				//sorted = data2.Predictions.sort(function(a,b) {return b - a; });
@@ -469,7 +510,16 @@ function annotationTap(text, latitude, longitude) {
 			    $('#infowindow-content').css('height', $('#infowindow').css('min-height'));
 			    
 			    	
-		    });
+		    }).error(function(jqXHR, textStatus, errorThrown) {
+				$.mobile.loading( 'hide' );
+				
+				navigator.notification.confirm(
+				    'An error occured fetching the data you requested.',  // message
+				    annotationTapJSONConfirm,         // callback
+				    "There was an error",            // title
+				    'Try again,Cancel'                  // buttonName
+			    ); 
+			});
 		}
 	}
 }
