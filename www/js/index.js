@@ -117,12 +117,11 @@ getStopsForRoute = function(routeID) {
 			//console.log(stopsForRoute);
 			
 			mapOptions2 = {
-		        buttonCallback: "cbMapCallback",
-		        height: window.innerHeight - 92,
+
 		        diameter: 1500,
-		        offsetTop: 43,
 		        lat: currentLatitude,
 		        lon: currentLongitude
+
 		    };
 		    
 		    //console.log('call mapoptions');
@@ -146,11 +145,11 @@ markerStopPoints = function(data) {
 	
 	var inRangeLatitude = false;
 	var inRangeLongitude = false;
-	//console.log(data);
-	//console.log('start markerStopPoints');
+
+	
 	$.each(data.Direction0.Stops, function(i, object) {
 
-		//console.log('done with pin0 ' + i);
+		console.log('done with pin0 ' + i);
 		
 		pins0.push(
 			{
@@ -163,58 +162,8 @@ markerStopPoints = function(data) {
 				index: i
 			}
 		);
-		
-		//console.log(Math.abs(data.Direction0.Stops[i].Lat - currentLatitude));
-		// calculate if the route pins we're showing are on the screen given current location. If they're are, make a variable true that we'll use later to conditionally move the map, but only making it true once (these comparison numbers are rough and may need some fine tuning) 
-		if (Math.abs(data.Direction0.Stops[i].Lat - currentLatitude) < 0.0135) {
-			//console.log('latitude in range');
-			if (!inRangeLatitude) {
-				inRangeLatitude = true;
-				//console.log('latitudeinrange variable= ' + inRangeLatitude);
-			}
-		} else {
-			//console.log('latitude not in range');
-		}
-		
-		if (Math.abs(data.Direction0.Stops[i].Lon - currentLongitude) < 0.0176) {
-			//console.log('longitude in range');
-			if (!inRangeLongitude) {
-				inRangeLongitude = true;
-				//console.log('latitudeinrange variable= ' + inRangeLongitude);
-			}
-		} else {
-			//console.log('longitude not in range');
-		}
-		
-		/*
-// create stop name UI
-        var createStopName = function() {
-			stopNameUI = '<li data-role="list-divider">' + data.Direction0.Stops[i].Name + '</li>';			
-        }
-		
-
-		// add the marker and info window on click
-	    $('#map_canvas2').gmap('addMarker', { 
-	    	'position': data.Direction0.Stops[i].Lat + ', ' + data.Direction0.Stops[i].Lon, 
-	    	'bounds': false, 
-	    	'icon': pin2,
-	    	'shadow': shadow2
-	    }, function() { //console.log('done with marker ' + i + ' at ' + data.Direction0.Stops[i].Name + ' at ' + data.Direction0.Stops[i].Lat + ',' + data.Direction0.Stops[i].Lon); 
-	    }).click(function() {
-	    	//console.log('click!');
-
-		    createStopName();
-		    
-		    $('#infowindow2-routes').html(stopNameUI).listview( 'refresh' );
-		    
-		    $( "#infowindow2" ).popup( "open" );
-	
-       });
-*/
-            
 	});
 	
-
 	$.each(data.Direction1.Stops, function(i, object) {
 		//console.log('done with pin1 ' + i);
 		
@@ -229,57 +178,10 @@ markerStopPoints = function(data) {
 				index: i
 			}
 		);
-		
-		//console.log(Math.abs(data.Direction1.Stops[i].Lat - currentLatitude) );
-		
-		
-		if (Math.abs(data.Direction1.Stops[i].Lat - currentLatitude) < 0.0135) {
-			//console.log('latitude in range');
-			if (!inRangeLatitude) {
-				inRangeLatitude = true;
-				//console.log('latitudeinrange variable= ' + inRangeLatitude);
-			}
-		} else {
-			//console.log('latitude not in range');
-		}
-		
-		if (Math.abs(data.Direction1.Stops[i].Lon - currentLongitude) < 0.0176) {
-			//console.log('longitude in range');
-			if (!inRangeLongitude) {
-				inRangeLongitude = true;
-				//console.log('latitudeinrange variable= ' + inRangeLongitude);
-			}
-		} else {
-			//console.log('longitude not in range');
-		}
-
-		
-		// create stop name UI
-       /*
- var createStopName = function() {
-			stopNameUI2 = '<li data-role="list-divider">' + data.Direction1.Stops[i].Name + '</li>';	
-		}		
-        
-
-		// add the marker and info window on click
-	    $('#map_canvas2').gmap('addMarker', { 
-	    	'position': data.Direction1.Stops[i].Lat + ', ' + data.Direction1.Stops[i].Lon, 
-	    	'bounds': false, 
-	    	'icon': pin3,
-	    	'shadow': shadow3
-	    }, function() { //console.log('done with marker ' + i + ' at ' + data.Direction1.Stops[i].Name + ' at ' + data.Direction1.Stops[i].Lat + ',' + data.Direction0.Stops[i].Lon); 
-	    }).click(function() {
-	    	//console.log('click!');
-	    	createStopName();
-		    
-		    $('#infowindow2-routes').html(stopNameUI2).listview( 'refresh' );
-		    
-		    $( "#infowindow2" ).popup( "open" );
-	
-       });
-*/
 	});
 
+
+	
 	
 	//console.log(inRangeLongitude + ',' + inRangeLatitude);
 	window.plugins.mapKit.addMapPins(pins0);
@@ -291,29 +193,7 @@ markerStopPoints = function(data) {
 	var pinLength = pins0.length;
 	//console.log(pinLength);
 	pinLength = parseInt(pinLength * 0.5);
-	
-	//console.log(pinLength);
-	//console.log(pins0[pinLength].lat);
-	
-	// if we're in viewport range, then don't move the map, otherwise move the map to the middle of the route to show the pins
-	// this does weird things if you click a route twice in a row (hitting back in between), it takes you to current location instead. For now, folks will have to scroll to their routes!
-	/*
-	if (inRangeLongitude || inRangeLatitude) {
-	} else {
-		mapOptions3 = {
-	        buttonCallback: "cbMapCallback",
-	        height: window.innerHeight - 92,
-	        diameter: 1500,
-	        offsetTop: 43,
-	        lat: pins0[pinLength].lat,
-	        lon: pins0[pinLength].lon
-	    };
-	    
-	    window.plugins.mapKit.setMapData(mapOptions3);
-	}
-	*/
-	
-	
+
 	
 }
 
@@ -324,119 +204,128 @@ function annotationDeselect() {
 };
 
 // when a pin is clicked...
-function annotationTap(text) {
-	//console.log('start annotationTap');
+function annotationTap(text, latitude, longitude) {
+	console.log('annotation tap');
+	console.log(latitude);
 	
-	self2 = this;
-	//console.log('click!');
-	stopID = text;
-	var self2 = this;
+	// if we just clicked a route map pin, we need to get the stops data loaded first to make a good infowindow, so do that then loop back to this function and show the infowindow
+	if (routeMapView == true) {
+		notInRangeStopID = text;
+		favoriteBtnClickedFlag = true;
+		getStops(latitude, longitude, '50');
+	} else {
 	
-
-	
-	
-	// only get this stuff if the annotation tapped is a stop, rather than part of a route map
-	if (text != '(null)') {
-		$.mobile.loading( 'show', {
-			text: 'Loading',
-			textVisible: false,
-			theme: 'a',
-			html: ""
-		});
-		annotationTapJSON = $.getJSON('http://api.wmata.com/NextBusService.svc/json/JPredictions?StopID=' + stopID + '&api_key=' + wmata_api_key + '&callback=?', function(data2, self4) {
-			//console.log('predictions=' + data2.Predictions.length);
-			//sorted = data2.Predictions.sort(function(a,b) {return b - a; });
-			
-			$.mobile.loading( 'hide' );
-			// thanks to Vlad Lyga for this part: http://stackoverflow.com/questions/14308149/how-do-i-merge-two-json-objects-in-javascript-jquery
-			predictions = data2;
-			
-			routeTimes = {
-				minutes: {},
-				directionText: {}
-			};
-
-	
-			for (var index in predictions.Predictions) {
-	
-		        if(!routeTimes.minutes.hasOwnProperty(predictions.Predictions[index].RouteID)) {
-	
-		            routeTimes.minutes[predictions.Predictions[index].RouteID] = [];
-		            routeTimes.directionText[predictions.Predictions[index].RouteID] = [];
-	
-		            if (predictions.Predictions[index].Minutes != 'undefined') {
-	
-		            	routeTimes.minutes[predictions.Predictions[index].RouteID].push(predictions.Predictions[index].Minutes);
-	
-		            }
-		            routeTimes.directionText[predictions.Predictions[index].RouteID].push(predictions.Predictions[index].DirectionText);
-	
-		        } else {
-	
-		        	if (predictions.Predictions[index].Minutes != 'undefined') {
-	
-		        		routeTimes.minutes[predictions.Predictions[index].RouteID].push(predictions.Predictions[index].Minutes);
-	
-		        	}
-		            routeTimes.directionText[predictions.Predictions[index].RouteID].push(predictions.Predictions[index].DirectionText);
-	
-		        }
-		    }
+		self2 = this;
+		//console.log('click!');
+		stopID = text;
+		var self2 = this;
 		
-		    // this function needs nearby stops already loaded to load all stops for the route, not just predictions, but maybe it shouldn't in case you want to see your favorite stops and they're not in range? Right now, I'll just make it load only routes with predictions, but eventually would be nice to do the second AJAX call to load this stop into memory
-		    if (stops.length) {
-		    	//console.log(stops.length);
-		    	var 
-		        	routes = stops.Stops[0].Routes,
-		        	routesVsMinutes = {};
-		    }
-		    
-		    if (stops.length) {
-			    for(var i in routes) {
-			        if (!routesVsMinutes.hasOwnProperty(routes[i])) {
-			            routesVsMinutes[routes[i]] = {Minutes: []};
-			        } 
-			        if (routeTimes[routes[i]]) {
-			            routesVsMinutes[routes[i]].Minutes = routeTimes[routes[i]];
+	
+		
+		
+		// only get this stuff if the annotation tapped is a stop, rather than part of a route map
+		if (text != '(null)') {
+			$.mobile.loading( 'show', {
+				text: 'Loading',
+				textVisible: false,
+				theme: 'a',
+				html: ""
+			});
+			annotationTapJSON = $.getJSON('http://api.wmata.com/NextBusService.svc/json/JPredictions?StopID=' + stopID + '&api_key=' + wmata_api_key + '&callback=?', function(data2, self4) {
+				//console.log('predictions=' + data2.Predictions.length);
+				//sorted = data2.Predictions.sort(function(a,b) {return b - a; });
+				
+				$.mobile.loading( 'hide' );
+				// thanks to Vlad Lyga for this part: http://stackoverflow.com/questions/14308149/how-do-i-merge-two-json-objects-in-javascript-jquery
+				predictions = data2;
+				
+				routeTimes = {
+					minutes: {},
+					directionText: {}
+				};
+	
+		
+				for (var index in predictions.Predictions) {
+		
+			        if(!routeTimes.minutes.hasOwnProperty(predictions.Predictions[index].RouteID)) {
+		
+			            routeTimes.minutes[predictions.Predictions[index].RouteID] = [];
+			            routeTimes.directionText[predictions.Predictions[index].RouteID] = [];
+		
+			            if (predictions.Predictions[index].Minutes != 'undefined') {
+		
+			            	routeTimes.minutes[predictions.Predictions[index].RouteID].push(predictions.Predictions[index].Minutes);
+		
+			            }
+			            routeTimes.directionText[predictions.Predictions[index].RouteID].push(predictions.Predictions[index].DirectionText);
+		
+			        } else {
+		
+			        	if (predictions.Predictions[index].Minutes != 'undefined') {
+		
+			        		routeTimes.minutes[predictions.Predictions[index].RouteID].push(predictions.Predictions[index].Minutes);
+		
+			        	}
+			            routeTimes.directionText[predictions.Predictions[index].RouteID].push(predictions.Predictions[index].DirectionText);
+		
 			        }
-			    } 
-			}     
-		    
-		    //stops.Stops[0].Routes = routesVsMinutes;
-		    //console.log(routeTimes);
-		    //console.log('now to creatRouteList');
-		    // create HTML for the infowindow
-		    createRouteList(routeTimes);
-		    //console.log(routeList);
-		    $('#infowindow-routes').html(routeList);
-		    
-		    
-		    // pass some variables to the next page if a button is clicked
-		    $('.route-detail-btn').click(function() {
-		    
-		    	console.log('route btn clicked');
-		
-		    	routeClicked = $(this).attr('id');
-		    	$('#route_map_title').html('Route ' + routeClicked);
-		    
-		    	$.mobile.changePage( "#route_map", { transition: "fade" } );
-
-		    	
-		    	
-		    	
+			    }
+			
+			    // this function needs nearby stops already loaded to load all stops for the route, not just predictions, but maybe it shouldn't in case you want to see your favorite stops and they're not in range? Right now, I'll just make it load only routes with predictions, but eventually would be nice to do the second AJAX call to load this stop into memory
+			    if (stops.length) {
+			    	//console.log(stops.length);
+			    	var 
+			        	routes = stops.Stops[0].Routes,
+			        	routesVsMinutes = {};
+			    }
+			    
+			    if (stops.length) {
+				    for(var i in routes) {
+				        if (!routesVsMinutes.hasOwnProperty(routes[i])) {
+				            routesVsMinutes[routes[i]] = {Minutes: []};
+				        } 
+				        if (routeTimes[routes[i]]) {
+				            routesVsMinutes[routes[i]].Minutes = routeTimes[routes[i]];
+				        }
+				    } 
+				}     
+			    
+			    //stops.Stops[0].Routes = routesVsMinutes;
+			    //console.log(routeTimes);
+			    //console.log('now to creatRouteList');
+			    // create HTML for the infowindow
+			    createRouteList(routeTimes);
+			    //console.log(routeList);
+			    $('#infowindow-routes').html(routeList);
+			    
+			    
+			    // pass some variables to the next page if a button is clicked
+			    $('.route-detail-btn').click(function() {
+			    
+			    	console.log('route btn clicked');
+			
+			    	routeClicked = $(this).attr('id');
+			    	$('#route_map_title').html('Route ' + routeClicked);
+			    
+			    	$.mobile.changePage( "#route_map", { transition: "fade" } );
+	
+			    	
+			    	
+			    	
+			    });
+			    
+			    //$( "#infowindow" ).popup( "open" );
+			    
+			    //console.log('show page');
+			    // show the page
+			    annotationTapJSON.abort();
+			    
+			    $.mobile.changePage( "#infowindow", { transition: "fade"} );
+			    $('#infowindow-routes').listview('refresh');
+			    
+			    	
 		    });
-		    
-		    //$( "#infowindow" ).popup( "open" );
-		    
-		    //console.log('show page');
-		    // show the page
-		    annotationTapJSON.abort();
-		    
-		    $.mobile.changePage( "#infowindow", { transition: "fade"} );
-		    $('#infowindow-routes').listview('refresh');
-		    
-		    	
-	    });
+		}
 	}
 }
 
@@ -576,13 +465,17 @@ markerStops = function(data) {
 		});
 		
 		//console.log('add new pins');
-		// show the new pins
-		window.plugins.mapKit.addMapPins(newPins);
+		// show the new pins, but only if this is a real stop get, and not a favorite button or route annotation being clicked
+		//if (favoriteBtnClickedFlag != true) {
+			window.plugins.mapKit.addMapPins(newPins);
+		//}
 		
-		// if we've clicked a favorite, show the predictions
+		// if we've clicked a favorite or route annotation, show the predictions
 		if (favoriteBtnClickedFlag == true) {
+			routeMapView = false;
 			annotationTap(notInRangeStopID);
 			favoriteBtnClickedFlag = false;
+			
 		}
 		
 	} else {
@@ -931,6 +824,8 @@ $(document).on('pageinit', '#gps_map', function() {
 
 	mapVisible = true;
 	document.addEventListener("deviceready", onDeviceReady);
+	
+	routeMapView = false;
 	
 	// make the refresh button work
     $('.refresh_location').click(function() {
@@ -1328,7 +1223,13 @@ $(document).on('pagebeforeshow', '#route_map', function() {
 		showMap();
 	}
 	
-	geo.onMapMove = '';
+	// for route map views, we don't want to be loading new pins all the time, so replace the home onMapMove function with this, which just updates the current lat/lon so the map view never moves
+	geo.onMapMove = function(currentLat,currentLon,latitudeDelta,longitudeDelta) {
+		currentLatitude = currentLat;
+		currentLongitude = currentLon;		
+	};
+	
+	routeMapView = true;
 	
 	//console.log(routeClicked);
 	getStopsForRoute(routeClicked);
@@ -1352,6 +1253,8 @@ $(document).on('pageshow', '#route_map', function() {
 
 //on page hide functions
 $(document).on('pagebeforehide', '#route_map', function() {
+	routeMapView = false;
+	
 	window.plugins.mapKit.clearMapPins();
 	//console.log('getstopsjson abort!');
 	getStopsForRouteJSON.abort();
