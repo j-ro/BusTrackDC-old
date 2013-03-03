@@ -18,9 +18,14 @@ window.addEventListener('load', function() {
     new FastClick(document.body);
 }, false);
 
-/* pull to refresh stuff */
+//on resume function to autorefresh bus times if the infowindow is active
 
-
+function onResume() {
+	if ($.mobile.activePage[0].id == 'infowindow') {
+		resumeStopID = parseInt($('.stopTitle').attr('id'));
+    	annotationTap(resumeStopID); 
+	}
+}
 
 function cbMapCallback(lat,lon) {
     alert('youve clicked ' + lat + ',' + lon);
@@ -707,6 +712,9 @@ function onDeviceReady() {
 	
 	deviceReadyFlag = true;
 	//console.log('deviceready');
+	
+	// add an on resume event to call an autorefresh if the app becomes active again...
+	document.addEventListener("resume", onResume, false);
 	
 	mapOptions = {
         buttonCallback: "cbMapCallback",
