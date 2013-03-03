@@ -39,7 +39,8 @@
   -webkit-transition: -webkit-transform 250ms linear;
   -moz-transition: -moz-transform 250ms linear;  
   -o-transition: -o-transform 250ms linear;   
-  transition: transform 250ms linear;   
+  transition: transform 250ms linear;
+  -webkit-transform-style: preserve-3d;   
 }
 
 /* Note that translateZ(0) triggers hardware acceleration on WebKit browsers 
@@ -49,28 +50,32 @@
   -webkit-transform: rotate(0deg) translateZ(0);
   -moz-transform: rotate(0deg);
   -o-transform: rotate(0deg);  
-  transform: rotate(0deg) translateZ(0);      
+  transform: rotate(0deg) translateZ(0);
+  -webkit-transform-style: preserve-3d;      
 }
 
 .iscroll-pullup .iscroll-pull-icon  {
   -webkit-transform: rotate(-180deg) translateZ(0);
   -moz-transform: rotate(-180deg);
   -o-transform: rotate(-180deg);  
-  transform: rotate(-180deg) translateZ(0);  
+  transform: rotate(-180deg) translateZ(0);
+  -webkit-transform-style: preserve-3d;  
 }
 
 .iscroll-pulldown.iscroll-pull-pulled .iscroll-pull-icon {
   -webkit-transform: rotate(-180deg) translateZ(0);
   -moz-transform: rotate(-180deg);
   -o-transform: rotate(-180deg);  
-  transform: rotate(-180deg) translateZ(0);  
+  transform: rotate(-180deg) translateZ(0);
+  -webkit-transform-style: preserve-3d;  
 }
 
 .iscroll-pullup.iscroll-pull-pulled .iscroll-pull-icon {
   -webkit-transform: rotate(0deg) translateZ(0);
   -moz-transform: rotate(0deg);
   -o-transform: rotate(0deg); 
-  transform: rotate(0deg) translateZ(0);  
+  transform: rotate(0deg) translateZ(0);
+  -webkit-transform-style: preserve-3d; 
 }
 
 .iscroll-pulldown.iscroll-pull-loading .iscroll-pull-icon,
@@ -87,7 +92,8 @@
   -o-animation: iscroll-pull-loading 2s infinite linear;   /* Opera 12+ only */
   transform: rotate(0deg) translateZ(0);
   transition: transform 0ms linear;
-  animation: iscroll-pull-loading 2s infinite linear;        
+  animation: iscroll-pull-loading 2s infinite linear; 
+  -webkit-transform-style: preserve-3d;      
   }
   
 @-webkit-keyframes iscroll-pull-loading {

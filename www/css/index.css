@@ -261,7 +261,13 @@ content: "";
 }
 
 /* pull to refresh */
+.iscroll-pulldown, .iscroll-pullup {
+	background: none !important;
+}
 
+.iscroll-content li  {
+     -webkit-transform: translateZ(0);
+   }
 
 
 /* change jquery mobile transition speed */

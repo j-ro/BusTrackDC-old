@@ -322,6 +322,8 @@ function annotationTap(text, latitude, longitude) {
 			    
 			    $.mobile.changePage( "#infowindow", { transition: "fade"} );
 			    $('#infowindow-routes').listview('refresh');
+			    $("#infowindow-content").iscrollview("refresh");
+			    $('#infowindow-content').css('height', $('#infowindow').css('min-height'));
 			    
 			    	
 		    });
@@ -1190,6 +1192,8 @@ $(document).on('pagebeforeshow', '#infowindow', function() {
 	
 	 // hide the map when we show the jQuery stuff, hopefully this can be eliminated in the future...
     $('#infowindow-routes').listview('refresh');
+    $("#infowindow-content").iscrollview("refresh");
+    $('#infowindow-content').css('height', $('#infowindow').css('min-height'));
     
     
     
@@ -1206,6 +1210,8 @@ $(document).on('pageshow', '#infowindow', function() {
 	
 	 // hide the map when we show the jQuery stuff, hopefully this can be eliminated in the future...
     $('#infowindow-routes').listview('refresh');
+    $("#infowindow-content").iscrollview("refresh");
+    $('#infowindow-content').css('height', $('#infowindow').css('min-height'));
 
 	
 });
