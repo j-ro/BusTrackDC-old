@@ -267,7 +267,17 @@ content: "";
 
 .iscroll-content li  {
      -webkit-transform: translateZ(0);
-   }
+}
+
+
+/* date format */
+
+.updated {
+	font-size: 10px;
+	text-align: center;
+	margin: 10px 0;
+	color: #a6a6a6;
+}
 
 
 /* change jquery mobile transition speed */

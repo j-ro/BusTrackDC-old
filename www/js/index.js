@@ -19,13 +19,151 @@ window.addEventListener('load', function() {
 }, false);
 
 //on resume function to autorefresh bus times if the infowindow is active
-
 function onResume() {
 	if ($.mobile.activePage[0].id == 'infowindow') {
 		resumeStopID = parseInt($('.stopTitle').attr('id'));
     	annotationTap(resumeStopID); 
 	}
 }
+
+
+//date functions
+function DateTime() {
+    function getDaySuffix(a) {
+        var b = "" + a,
+            c = b.length,
+            d = parseInt(b.substring(c-2, c-1)),
+            e = parseInt(b.substring(c-1));
+        if (c == 2 && d == 1) return "th";
+        switch(e) {
+            case 1:
+                return "st";
+                break;
+            case 2:
+                return "nd";
+                break;
+            case 3:
+                return "rd";
+                break;
+            default:
+                return "th";
+                break;
+        };
+    };
+
+    this.getDoY = function(a) {
+        var b = new Date(a.getFullYear(),0,1);
+    return Math.ceil((a - b) / 86400000);
+    }
+
+    this.date = arguments.length == 0 ? new Date() : new Date(arguments);
+
+    this.weekdays = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
+    this.months = new Array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
+    this.daySuf = new Array( "st", "nd", "rd", "th" );
+
+    this.day = {
+        index: {
+            week: "0" + this.date.getDay(),
+            month: (this.date.getDate() < 10) ? "0" + this.date.getDate() : this.date.getDate()
+        },
+        name: this.weekdays[this.date.getDay()],
+        of: {
+            week: ((this.date.getDay() < 10) ? "0" + this.date.getDay() : this.date.getDay()) + getDaySuffix(this.date.getDay()),
+            month: ((this.date.getDate() < 10) ? "0" + this.date.getDate() : this.date.getDate()) + getDaySuffix(this.date.getDate())
+        }
+    }
+
+    this.month = {
+        index: (this.date.getMonth() + 1) < 10 ? "0" + (this.date.getMonth() + 1) : this.date.getMonth() + 1,
+        name: this.months[this.date.getMonth()]
+    };
+
+    this.year = this.date.getFullYear();
+
+    this.time = {
+        hour: {
+            meridiem: (this.date.getHours() > 12) ? (this.date.getHours() - 12) < 10 ? "0" + (this.date.getHours() - 12) : this.date.getHours() - 12 : (this.date.getHours() < 10) ? "0" + this.date.getHours() : this.date.getHours(),
+            military: (this.date.getHours() < 10) ? "0" + this.date.getHours() : this.date.getHours(),
+            noLeadZero: {
+                meridiem: (this.date.getHours() > 12) ? this.date.getHours() - 12 : this.date.getHours(),
+                military: this.date.getHours()
+            }
+        },
+        minute: (this.date.getMinutes() < 10) ? "0" + this.date.getMinutes() : this.date.getMinutes(),
+        seconds: (this.date.getSeconds() < 10) ? "0" + this.date.getSeconds() : this.date.getSeconds(),
+        milliseconds: (this.date.getMilliseconds() < 100) ? (this.date.getMilliseconds() < 10) ? "00" + this.date.getMilliseconds() : "0" + this.date.getMilliseconds() : this.date.getMilliseconds(),
+        meridiem: (this.date.getHours() >= 12) ? "PM" : "AM"
+    };
+
+    this.sym = {
+        d: {
+            d: this.date.getDate(),
+            dd: (this.date.getDate() < 10) ? "0" + this.date.getDate() : this.date.getDate(),
+            ddd: this.weekdays[this.date.getDay()].substring(0, 3),
+            dddd: this.weekdays[this.date.getDay()],
+            ddddd: ((this.date.getDate() < 10) ? "0" + this.date.getDate() : this.date.getDate()) + getDaySuffix(this.date.getDate()),
+            m: this.date.getMonth() + 1,
+            mm: (this.date.getMonth() + 1) < 10 ? "0" + (this.date.getMonth() + 1) : this.date.getMonth() + 1,
+            mmm: this.months[this.date.getMonth()].substring(0, 3),
+            mmmm: this.months[this.date.getMonth()],
+            yy: (""+this.date.getFullYear()).substr(2, 2),
+            yyyy: this.date.getFullYear()
+        },
+        t: {
+            h: (this.date.getHours() > 12) ? this.date.getHours() - 12 : this.date.getHours(),
+            hh: (this.date.getHours() > 12) ? (this.date.getHours() - 12) < 10 ? "0" + (this.date.getHours() - 12) : this.date.getHours() - 12 : (this.date.getHours() < 10) ? "0" + this.date.getHours() : this.date.getHours(),
+            hhh: this.date.getHours(),
+            m: this.date.getMinutes(),
+            mm: (this.date.getMinutes() < 10) ? "0" + this.date.getMinutes() : this.date.getMinutes(),
+            s: this.date.getSeconds(),
+            ss: (this.date.getSeconds() < 10) ? "0" + this.date.getSeconds() : this.date.getSeconds(),
+            ms: this.date.getMilliseconds(),
+            mss: Math.round(this.date.getMilliseconds()/10) < 10 ? "0" + Math.round(this.date.getMilliseconds()/10) : Math.round(this.date.getMilliseconds()/10),
+            msss: (this.date.getMilliseconds() < 100) ? (this.date.getMilliseconds() < 10) ? "00" + this.date.getMilliseconds() : "0" + this.date.getMilliseconds() : this.date.getMilliseconds()
+        }
+    };
+
+    this.formats = {
+        compound: {
+            commonLogFormat: this.sym.d.dd + "/" + this.sym.d.mmm + "/" + this.sym.d.yyyy + ":" + this.sym.t.hhh + ":" + this.sym.t.mm + ":" + this.sym.t.ss,
+            exif: this.sym.d.yyyy + ":" + this.sym.d.mm + ":" + this.sym.d.dd + " " + this.sym.t.hhh + ":" + this.sym.t.mm + ":" + this.sym.t.ss,
+            /*iso1: "",
+            iso2: "",*/
+            mySQL: this.sym.d.yyyy + "-" + this.sym.d.mm + "-" + this.sym.d.dd + " " + this.sym.t.hhh + ":" + this.sym.t.mm + ":" + this.sym.t.ss,
+            postgreSQL1: this.sym.d.yyyy + "." + this.getDoY(this.date),
+            postgreSQL2: this.sym.d.yyyy + "" + this.getDoY(this.date),
+            soap: this.sym.d.yyyy + "-" + this.sym.d.mm + "-" + this.sym.d.dd + "T" + this.sym.t.hhh + ":" + this.sym.t.mm + ":" + this.sym.t.ss + "." + this.sym.t.mss,
+            //unix: "",
+            xmlrpc: this.sym.d.yyyy + "" + this.sym.d.mm + "" + this.sym.d.dd + "T" + this.sym.t.hhh + ":" + this.sym.t.mm + ":" + this.sym.t.ss,
+            xmlrpcCompact: this.sym.d.yyyy + "" + this.sym.d.mm + "" + this.sym.d.dd + "T" + this.sym.t.hhh + "" + this.sym.t.mm + "" + this.sym.t.ss,
+            wddx: this.sym.d.yyyy + "-" + this.sym.d.m + "-" + this.sym.d.d + "T" + this.sym.t.h + ":" + this.sym.t.m + ":" + this.sym.t.s
+        },
+        constants: {
+            atom: this.sym.d.yyyy + "-" + this.sym.d.mm + "-" + this.sym.d.dd + "T" + this.sym.t.hhh + ":" + this.sym.t.mm + ":" + this.sym.t.ss,
+            cookie: this.sym.d.dddd + ", " + this.sym.d.dd + "-" + this.sym.d.mmm + "-" + this.sym.d.yy + " " + this.sym.t.hhh + ":" + this.sym.t.mm + ":" + this.sym.t.ss,
+            iso8601: this.sym.d.yyyy + "-" + this.sym.d.mm + "-" + this.sym.d.dd + "T" + this.sym.t.hhh + ":" + this.sym.t.mm + ":" + this.sym.t.ss,
+            rfc822: this.sym.d.ddd + ", " + this.sym.d.dd + " " + this.sym.d.mmm + " " + this.sym.d.yy + " " + this.sym.t.hhh + ":" + this.sym.t.mm + ":" + this.sym.t.ss,
+            rfc850: this.sym.d.dddd + ", " + this.sym.d.dd + "-" + this.sym.d.mmm + "-" + this.sym.d.yy + " " + this.sym.t.hhh + ":" + this.sym.t.mm + ":" + this.sym.t.ss,
+            rfc1036: this.sym.d.ddd + ", " + this.sym.d.dd + " " + this.sym.d.mmm + " " + this.sym.d.yy + " " + this.sym.t.hhh + ":" + this.sym.t.mm + ":" + this.sym.t.ss,
+            rfc1123: this.sym.d.ddd + ", " + this.sym.d.dd + " " + this.sym.d.mmm + " " + this.sym.d.yyyy + " " + this.sym.t.hhh + ":" + this.sym.t.mm + ":" + this.sym.t.ss,
+            rfc2822: this.sym.d.ddd + ", " + this.sym.d.dd + " " + this.sym.d.mmm + " " + this.sym.d.yyyy + " " + this.sym.t.hhh + ":" + this.sym.t.mm + ":" + this.sym.t.ss,
+            rfc3339: this.sym.d.yyyy + "-" + this.sym.d.mm + "-" + this.sym.d.dd + "T" + this.sym.t.hhh + ":" + this.sym.t.mm + ":" + this.sym.t.ss,
+            rss: this.sym.d.ddd + ", " + this.sym.d.dd + " " + this.sym.d.mmm + " " + this.sym.d.yy + " " + this.sym.t.hhh + ":" + this.sym.t.mm + ":" + this.sym.t.ss,
+            w3c: this.sym.d.yyyy + "-" + this.sym.d.mm + "-" + this.sym.d.dd + "T" + this.sym.t.hhh + ":" + this.sym.t.mm + ":" + this.sym.t.ss
+        },
+        pretty: {
+            a: this.sym.t.hh + ":" + this.sym.t.mm + "." + this.sym.t.ss + this.time.meridiem + " " + this.sym.d.dddd + " " + this.sym.d.ddddd + " of " + this.sym.d.mmmm + ", " + this.sym.d.yyyy,
+            b: this.sym.t.hh + ":" + this.sym.t.mm + " " + this.sym.d.dddd + " " + this.sym.d.ddddd + " of " + this.sym.d.mmmm + ", " + this.sym.d.yyyy
+        },
+        busTrackDateTime: {
+            a: ((this.sym.t.h == 0) ? '12' : this.sym.t.h) + ":" + this.sym.t.mm + " " + this.time.meridiem,
+            b: this.sym.d.m + "/" + this.sym.d.d + "/" + this.sym.d.yy + ' ' + ((this.sym.t.h == 0) ? '12' : this.sym.t.h) + ":" + this.sym.t.mm + " " + this.time.meridiem
+        }
+    };
+};
+
+
 
 function cbMapCallback(lat,lon) {
     alert('youve clicked ' + lat + ',' + lon);
@@ -463,8 +601,8 @@ markerStops = function(data) {
 				
 				//console.log('potential routes for stop ' + stopIDfocus + ': ' + potentialRouteList + ' and actual routes: ' + actualRouteList);
 				//console.log(stopName);
-	
-				routeList = '<li data-role="list-divider" class="stopTitle" id="' + stopID + '" data-lat=' + stopLat + '" data-lon=' + stopLon + '"><span class="stopName">' + stopName + '</span></li>' + routeList;
+				var dt = new DateTime();
+				routeList = '<li data-role="list-divider" class="stopTitle" id="' + stopID + '" data-lat=' + stopLat + '" data-lon=' + stopLon + '"><span class="stopName">' + stopName + '</span></li>' + routeList + '<div class="updated">Updated ' + dt.formats.busTrackDateTime.b + ' - Pull to refresh</div>';
 				//console.log(routeList);
 				
 	        }
@@ -529,8 +667,8 @@ markerStops = function(data) {
 			
 			//console.log('potential routes for stop ' + stopIDfocus + ': ' + potentialRouteList + ' and actual routes: ' + actualRouteList);
 			//console.log(stopName);
-
-			routeList = '<li data-role="list-divider" class="stopTitle" id="' + stopID + '" data-lat=' + notInRangeStopLat + '" data-lon=' + notInRangeStopLon + '"><span class="stopName">' + notInRangeStopName + '</span></li>' + routeList;
+			var dt = new DateTime();
+			routeList = '<li data-role="list-divider" class="stopTitle" id="' + stopID + '" data-lat=' + notInRangeStopLat + '" data-lon=' + notInRangeStopLon + '"><span class="stopName">' + notInRangeStopName + '</span></li>' + routeList + '<div class="updated">Updated ' + dt.formats.busTrackDateTime.b + ' - Pull to refresh</div>';
 			//console.log(routeList);
 			
         }
@@ -739,30 +877,12 @@ function onDeviceReady() {
 	//console.log(device.model);
 	// initialize a global pin array to store all pins onscreen
 	pins = [];
-	
-	// show the map
-	//showMap();
-   
-	
-	//set the dark linen after the map is shown, so we don't see it on load (can also use darklinen-bg.png if you want...)
-	/*
-$('#gps_map').css('background-image','url("img/lightlinen-bg.png")');
-	$('#gps_map').css('background-repeat-x','repeat');
-	$('#gps_map').css('background-repeat-y','repeat');
-*/
 
 	currentLatitude = mapOptions.lat;
 	currentLongitude = mapOptions.lon;
 	
 	currlocsuccess = 0;
-		
-	// set default page transition to slide
-/*
-	$("div[data-role=page]").bind("pagebeforeshow", function (e, data) {
-    	$.mobile.silentScroll(0);
-    	$.mobile.changePage.defaults.transition = 'fade';
-    });
-*/
+
     
     // get current position (which also shows nearby stops)
 	navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError);
@@ -777,56 +897,10 @@ $('#gps_map').css('background-image','url("img/lightlinen-bg.png")');
 	});
 	
 	
-	   
-	    
-	    // when the popup closes, restore the map view -- hopefully this can be removed later
-	    /*
-$( "#infowindow" ).bind({
-		    popupafterclose: function(event, ui) { 
-		    	if ($('#favorites_menu_content').css('display') == 'none') {
-		    		window.plugins.mapKit.showMap();
-		    	}/*
- else {
-			    	$("#favorites_menu_btn").unbind("click");
-			    	
-			    	favoritesMenuBtnTap();
-		    	}
-*//*
-				//history.back();
-		    }
-		});
-*/
-		
-		
-		
-		//$(document).bind("mobileinit", function(){
-			/*
-			$.mobile.touchOverflowEnabled = true;
-			$.mobile.buttonMarkup.hoverDelay = 100;
-			console.log('init!');
-*/
-		//});
-		
-		
-	
-	    
-	    /*
-$('#close-btn').tap(function() {
-		    window.plugins.mapKit.showMap();
-	    });
-*/
 
-	//});
     
 }
 
-// initialization functions
-/*
-$(document).bind("mobileinit", function(){
-  $.mobile.silentScroll(0);
-    	$.mobile.changePage.defaults.transition = 'fade';
-});
-*/
 
 $(document).on('pageinit', '#gps_map', function() {
 	
