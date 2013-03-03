@@ -163,6 +163,24 @@ function DateTime() {
     };
 };
 
+// title case function
+function toTitleCase(str) {
+    var arr = str.split(/\s|_/);
+    for(var i=0,l=arr.length; i<l; i++) {
+        arr[i] = arr[i].substr(0,1).toUpperCase() + 
+                 (arr[i].length > 1 ? arr[i].substr(1).toLowerCase() : "");
+    }
+    
+    arr = arr.join(" ");
+    
+    //fully capitalize NW, SW, SE, and NE
+    arr = arr + ' ';
+    arr = arr.replace(/ Nw /g,' NW ').replace(/ Sw /g,' SW ').replace(/ Ne /g,' NE ').replace(/ Se /g,' SE ') + ' ';
+    arr = arr.trim();
+    
+    return arr;
+}
+
 
 
 function cbMapCallback(lat,lon) {
@@ -331,7 +349,7 @@ markerStopPoints = function(data) {
 			{
 				lat: data.Direction0.Stops[i].Lat,
 				lon: data.Direction0.Stops[i].Lon,
-				title: data.Direction0.Stops[i].Name,
+				title: toTitleCase(data.Direction0.Stops[i].Name),
 				subTitle: data.Direction0.Stops[i].StopID,
 				pinColor: "green",
 				selected: false,
@@ -347,7 +365,7 @@ markerStopPoints = function(data) {
 			{
 				lat: data.Direction1.Stops[i].Lat,
 				lon: data.Direction1.Stops[i].Lon,
-				title: data.Direction1.Stops[i].Name,
+				title: toTitleCase(data.Direction1.Stops[i].Name),
 				subTitle: data.Direction1.Stops[i].StopID,
 				pinColor: "green",
 				selected: false,
@@ -554,7 +572,7 @@ markerStops = function(data) {
 					{
 						lat: data.Stops[i].Lat,
 						lon: data.Stops[i].Lon,
-						title: data.Stops[i].Name,
+						title: toTitleCase(data.Stops[i].Name),
 						subTitle: data.Stops[i].StopID,
 						pinColor: "green",
 						selected: false,
@@ -566,7 +584,7 @@ markerStops = function(data) {
 					{
 						lat: data.Stops[i].Lat,
 						lon: data.Stops[i].Lon,
-						title: data.Stops[i].Name,
+						title: toTitleCase(data.Stops[i].Name),
 						subTitle: data.Stops[i].StopID,
 						pinColor: "green",
 						selected: false,
@@ -652,7 +670,7 @@ markerStops = function(data) {
 				//console.log('potential routes for stop ' + stopIDfocus + ': ' + potentialRouteList + ' and actual routes: ' + actualRouteList);
 				//console.log(stopName);
 				var dt = new DateTime();
-				routeList = '<li data-role="list-divider" class="stopTitle" id="' + stopID + '" data-lat=' + stopLat + '" data-lon=' + stopLon + '"><span class="stopName">' + stopName + '</span></li>' + routeList + '<div class="updated">Updated ' + dt.formats.busTrackDateTime.b + ' - Pull to refresh</div>';
+				routeList = '<li data-role="list-divider" class="stopTitle" id="' + stopID + '" data-lat=' + stopLat + '" data-lon=' + stopLon + '"><span class="stopName">' + toTitleCase(stopName) + '</span></li>' + routeList + '<div class="updated">Updated ' + dt.formats.busTrackDateTime.b + ' - Pull to refresh</div>';
 				//console.log(routeList);
 				
 	        }
@@ -1252,7 +1270,7 @@ $(document).on('pagebeforeshow', '#favorite_menu_page', function() {
 		favoritesListHTML = '';
 		
 		$.each(favorites, function(i, object) {
-			favoritesListHTML = favoritesListHTML + '<li id="' + object.id + '"><a data-transition="slide" class="favorite-stop-detail-btn" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><h1 class="favoriteMenuStopTitle">' + object.name +'</h1><p>#'+ object.id + '</p><p class="delete-handle">Delete</p><p class="drag-handle">Sort</p></a></li>';
+			favoritesListHTML = favoritesListHTML + '<li id="' + object.id + '"><a data-transition="slide" class="favorite-stop-detail-btn" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><h1 class="favoriteMenuStopTitle">' + toTitleCase(object.name) +'</h1><p>#'+ object.id + '</p><p class="delete-handle">Delete</p><p class="drag-handle">Sort</p></a></li>';
 		});
 		
 		

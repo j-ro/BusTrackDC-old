@@ -130,7 +130,6 @@ h1 {
 }
 
 .stopTitle, .favoriteMenuStopTitle {
-	text-transform: lowercase;
 	text-overflow: ellipsis;
 	min-width: 250px;
 }
