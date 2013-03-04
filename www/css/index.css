@@ -275,7 +275,7 @@ content: "";
 	font-size: 10px;
 	text-align: center;
 	margin: 10px 0;
-	color: #a6a6a6;
+	color: #a6a6a6 !important;
 }
 
 
