@@ -271,11 +271,12 @@ content: "";
 
 /* date format */
 
-.updated {
+.updated, .updated a.ui-link {
 	font-size: 10px;
 	text-align: center;
 	margin: 10px 0;
 	color: #a6a6a6 !important;
+	font-weight: normal !important;
 }
 
 
