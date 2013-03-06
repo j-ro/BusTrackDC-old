@@ -427,7 +427,7 @@ markerStopPoints = function(data) {
 	
 	$.each(data.Direction0.Stops, function(i, object) {
 
-		console.log('done with pin0 ' + i);
+		//console.log('done with pin0 ' + i);
 		
 		pins0.push(
 			{
@@ -483,8 +483,8 @@ function annotationDeselect() {
 
 // when a pin is clicked...
 function annotationTap(text, latitude, longitude) {
-	console.log('annotation tap');
-	console.log(latitude);
+	//console.log('annotation tap');
+	//console.log(latitude);
 	
 	// if we just clicked a route map pin, we need to get the stops data loaded first to make a good infowindow, so do that then loop back to this function and show the infowindow
 	if (routeMapView == true) {
@@ -588,7 +588,7 @@ function annotationTap(text, latitude, longitude) {
 			    // pass some variables to the next page if a button is clicked
 			    $('.route-detail-btn').click(function() {
 			    
-			    	console.log('route btn clicked');
+			    	//console.log('route btn clicked');
 			
 			    	routeClicked = $(this).attr('id');
 			    	$('#route_map_title').html('Route ' + routeClicked);
@@ -682,7 +682,7 @@ markerStops = function(data) {
 	
 	        // loop through all routes in this stop and create a string from all of them
 	        createRouteList = function(data) {
-	        	console.log('createRouteList start');
+	        	//console.log('createRouteList start');
 				routeList = '';
 				routeList.replace(routeList, '');
 				potentialRouteList = [];
@@ -880,7 +880,7 @@ function onCurrentLocationError(error) {
 	//console.log('currloc error');
     navigator.notification.alert(
 	    'Please allow BusTrackDC to access your current location by going to Settings > Privacy > Location Services and allowing BusTrackDC to use your current location.',  // message
-	    console.log('currlocerror'),         // callback
+	    //console.log('currlocerror'),         // callback
 	    "Couldn't find current location",            // title
 	    'OK'                  // buttonName
 	);
@@ -1168,7 +1168,7 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 			
 			// rebind the click handler
 			$('.favorite-stop-detail-btn').click(function() {
-				console.log($(this).data('stopid'));
+				//console.log($(this).data('stopid'));
 				
 				/*
 $.mobile.loading( 'show', {
@@ -1225,7 +1225,7 @@ $.mobile.loading( 'show', {
 		    	//console.log($(this).parent().data('stopid'));
 		    	var favorites = JSON.parse(window.localStorage.getItem("favorites"));
 		    	
-		    	console.log(favorites);
+		    	//console.log(favorites);
 		    	
 		    	var deletedElementID = $(this).parent().data('stopid');
 		    	
@@ -1233,7 +1233,7 @@ $.mobile.loading( 'show', {
 		    	
 		    	$('#favorites_menu #' + deletedElementID).remove();
 		    	
-		    	console.log(favorites);
+		    	//console.log(favorites);
 			
 		    	window.localStorage.setItem("favorites", JSON.stringify(favorites));
 		    });
@@ -1267,10 +1267,10 @@ $(document).on('pagebeforeshow', '#gps_map', function() {
 	}
 
 	if (typeof(currentLatitude) === 'undefined') {
-		console.log('true');
+		//console.log('true');
 	} else {
-		console.log(currentLatitude);
-		console.log(currentLongitude);
+		//console.log(currentLatitude);
+		//console.log(currentLongitude);
 		if (pins.length == 0) {
 			getStops(currentLatitude, currentLongitude, '800');
 		}
@@ -1369,7 +1369,7 @@ $(document).on('pagebeforeshow', '#favorite_menu_page', function() {
 		$('#favorites_menu').html(favoritesListHTML).listview('refresh');
 		
 		$('.favorite-stop-detail-btn').click(function() {
-			console.log($(this).data('stopid'));
+			//console.log($(this).data('stopid'));
 			
 			$.mobile.loading( 'show', {
 				text: 'Loading',
@@ -1422,7 +1422,7 @@ $(document).on('pagebeforeshow', '#infowindow', function() {
 			
 		});
 		
-		console.log(favoriteMatches);
+		//console.log(favoriteMatches);
 		if (favoriteMatches.length) {		
 			$( "#favorite" ).buttonMarkup({theme: 'e'});
 		} else {
@@ -1482,7 +1482,7 @@ $(document).on('pagebeforeshow', '#route_map', function() {
 });
 
 $(document).on('pageshow', '#route_map', function() {
-	console.log(getStopsForRouteFlag);
+	//console.log(getStopsForRouteFlag);
 	
 	if (getStopsForRouteFlag == false) {
 		$.mobile.loading( 'show', {
