@@ -13,6 +13,176 @@ function onBodyLoad() {
 }
 */
 
+//fastclick.js instantiation to get rid of 300ms delay on click events...
+window.addEventListener('load', function() {
+    new FastClick(document.body);
+}, false);
+
+//on resume function to autorefresh bus times if the infowindow is active
+function onResume() {
+	if ($.mobile.activePage[0].id == 'infowindow') {
+		resumeStopID = parseInt($('.stopTitle').attr('id'));
+    	annotationTap(resumeStopID); 
+	}
+}
+
+
+//date functions
+function DateTime() {
+    function getDaySuffix(a) {
+        var b = "" + a,
+            c = b.length,
+            d = parseInt(b.substring(c-2, c-1)),
+            e = parseInt(b.substring(c-1));
+        if (c == 2 && d == 1) return "th";
+        switch(e) {
+            case 1:
+                return "st";
+                break;
+            case 2:
+                return "nd";
+                break;
+            case 3:
+                return "rd";
+                break;
+            default:
+                return "th";
+                break;
+        };
+    };
+
+    this.getDoY = function(a) {
+        var b = new Date(a.getFullYear(),0,1);
+    return Math.ceil((a - b) / 86400000);
+    }
+
+    this.date = arguments.length == 0 ? new Date() : new Date(arguments);
+
+    this.weekdays = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
+    this.months = new Array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
+    this.daySuf = new Array( "st", "nd", "rd", "th" );
+
+    this.day = {
+        index: {
+            week: "0" + this.date.getDay(),
+            month: (this.date.getDate() < 10) ? "0" + this.date.getDate() : this.date.getDate()
+        },
+        name: this.weekdays[this.date.getDay()],
+        of: {
+            week: ((this.date.getDay() < 10) ? "0" + this.date.getDay() : this.date.getDay()) + getDaySuffix(this.date.getDay()),
+            month: ((this.date.getDate() < 10) ? "0" + this.date.getDate() : this.date.getDate()) + getDaySuffix(this.date.getDate())
+        }
+    }
+
+    this.month = {
+        index: (this.date.getMonth() + 1) < 10 ? "0" + (this.date.getMonth() + 1) : this.date.getMonth() + 1,
+        name: this.months[this.date.getMonth()]
+    };
+
+    this.year = this.date.getFullYear();
+
+    this.time = {
+        hour: {
+            meridiem: (this.date.getHours() > 12) ? (this.date.getHours() - 12) < 10 ? "0" + (this.date.getHours() - 12) : this.date.getHours() - 12 : (this.date.getHours() < 10) ? "0" + this.date.getHours() : this.date.getHours(),
+            military: (this.date.getHours() < 10) ? "0" + this.date.getHours() : this.date.getHours(),
+            noLeadZero: {
+                meridiem: (this.date.getHours() > 12) ? this.date.getHours() - 12 : this.date.getHours(),
+                military: this.date.getHours()
+            }
+        },
+        minute: (this.date.getMinutes() < 10) ? "0" + this.date.getMinutes() : this.date.getMinutes(),
+        seconds: (this.date.getSeconds() < 10) ? "0" + this.date.getSeconds() : this.date.getSeconds(),
+        milliseconds: (this.date.getMilliseconds() < 100) ? (this.date.getMilliseconds() < 10) ? "00" + this.date.getMilliseconds() : "0" + this.date.getMilliseconds() : this.date.getMilliseconds(),
+        meridiem: (this.date.getHours() >= 12) ? "PM" : "AM"
+    };
+
+    this.sym = {
+        d: {
+            d: this.date.getDate(),
+            dd: (this.date.getDate() < 10) ? "0" + this.date.getDate() : this.date.getDate(),
+            ddd: this.weekdays[this.date.getDay()].substring(0, 3),
+            dddd: this.weekdays[this.date.getDay()],
+            ddddd: ((this.date.getDate() < 10) ? "0" + this.date.getDate() : this.date.getDate()) + getDaySuffix(this.date.getDate()),
+            m: this.date.getMonth() + 1,
+            mm: (this.date.getMonth() + 1) < 10 ? "0" + (this.date.getMonth() + 1) : this.date.getMonth() + 1,
+            mmm: this.months[this.date.getMonth()].substring(0, 3),
+            mmmm: this.months[this.date.getMonth()],
+            yy: (""+this.date.getFullYear()).substr(2, 2),
+            yyyy: this.date.getFullYear()
+        },
+        t: {
+            h: (this.date.getHours() > 12) ? this.date.getHours() - 12 : this.date.getHours(),
+            hh: (this.date.getHours() > 12) ? (this.date.getHours() - 12) < 10 ? "0" + (this.date.getHours() - 12) : this.date.getHours() - 12 : (this.date.getHours() < 10) ? "0" + this.date.getHours() : this.date.getHours(),
+            hhh: this.date.getHours(),
+            m: this.date.getMinutes(),
+            mm: (this.date.getMinutes() < 10) ? "0" + this.date.getMinutes() : this.date.getMinutes(),
+            s: this.date.getSeconds(),
+            ss: (this.date.getSeconds() < 10) ? "0" + this.date.getSeconds() : this.date.getSeconds(),
+            ms: this.date.getMilliseconds(),
+            mss: Math.round(this.date.getMilliseconds()/10) < 10 ? "0" + Math.round(this.date.getMilliseconds()/10) : Math.round(this.date.getMilliseconds()/10),
+            msss: (this.date.getMilliseconds() < 100) ? (this.date.getMilliseconds() < 10) ? "00" + this.date.getMilliseconds() : "0" + this.date.getMilliseconds() : this.date.getMilliseconds()
+        }
+    };
+
+    this.formats = {
+        compound: {
+            commonLogFormat: this.sym.d.dd + "/" + this.sym.d.mmm + "/" + this.sym.d.yyyy + ":" + this.sym.t.hhh + ":" + this.sym.t.mm + ":" + this.sym.t.ss,
+            exif: this.sym.d.yyyy + ":" + this.sym.d.mm + ":" + this.sym.d.dd + " " + this.sym.t.hhh + ":" + this.sym.t.mm + ":" + this.sym.t.ss,
+            /*iso1: "",
+            iso2: "",*/
+            mySQL: this.sym.d.yyyy + "-" + this.sym.d.mm + "-" + this.sym.d.dd + " " + this.sym.t.hhh + ":" + this.sym.t.mm + ":" + this.sym.t.ss,
+            postgreSQL1: this.sym.d.yyyy + "." + this.getDoY(this.date),
+            postgreSQL2: this.sym.d.yyyy + "" + this.getDoY(this.date),
+            soap: this.sym.d.yyyy + "-" + this.sym.d.mm + "-" + this.sym.d.dd + "T" + this.sym.t.hhh + ":" + this.sym.t.mm + ":" + this.sym.t.ss + "." + this.sym.t.mss,
+            //unix: "",
+            xmlrpc: this.sym.d.yyyy + "" + this.sym.d.mm + "" + this.sym.d.dd + "T" + this.sym.t.hhh + ":" + this.sym.t.mm + ":" + this.sym.t.ss,
+            xmlrpcCompact: this.sym.d.yyyy + "" + this.sym.d.mm + "" + this.sym.d.dd + "T" + this.sym.t.hhh + "" + this.sym.t.mm + "" + this.sym.t.ss,
+            wddx: this.sym.d.yyyy + "-" + this.sym.d.m + "-" + this.sym.d.d + "T" + this.sym.t.h + ":" + this.sym.t.m + ":" + this.sym.t.s
+        },
+        constants: {
+            atom: this.sym.d.yyyy + "-" + this.sym.d.mm + "-" + this.sym.d.dd + "T" + this.sym.t.hhh + ":" + this.sym.t.mm + ":" + this.sym.t.ss,
+            cookie: this.sym.d.dddd + ", " + this.sym.d.dd + "-" + this.sym.d.mmm + "-" + this.sym.d.yy + " " + this.sym.t.hhh + ":" + this.sym.t.mm + ":" + this.sym.t.ss,
+            iso8601: this.sym.d.yyyy + "-" + this.sym.d.mm + "-" + this.sym.d.dd + "T" + this.sym.t.hhh + ":" + this.sym.t.mm + ":" + this.sym.t.ss,
+            rfc822: this.sym.d.ddd + ", " + this.sym.d.dd + " " + this.sym.d.mmm + " " + this.sym.d.yy + " " + this.sym.t.hhh + ":" + this.sym.t.mm + ":" + this.sym.t.ss,
+            rfc850: this.sym.d.dddd + ", " + this.sym.d.dd + "-" + this.sym.d.mmm + "-" + this.sym.d.yy + " " + this.sym.t.hhh + ":" + this.sym.t.mm + ":" + this.sym.t.ss,
+            rfc1036: this.sym.d.ddd + ", " + this.sym.d.dd + " " + this.sym.d.mmm + " " + this.sym.d.yy + " " + this.sym.t.hhh + ":" + this.sym.t.mm + ":" + this.sym.t.ss,
+            rfc1123: this.sym.d.ddd + ", " + this.sym.d.dd + " " + this.sym.d.mmm + " " + this.sym.d.yyyy + " " + this.sym.t.hhh + ":" + this.sym.t.mm + ":" + this.sym.t.ss,
+            rfc2822: this.sym.d.ddd + ", " + this.sym.d.dd + " " + this.sym.d.mmm + " " + this.sym.d.yyyy + " " + this.sym.t.hhh + ":" + this.sym.t.mm + ":" + this.sym.t.ss,
+            rfc3339: this.sym.d.yyyy + "-" + this.sym.d.mm + "-" + this.sym.d.dd + "T" + this.sym.t.hhh + ":" + this.sym.t.mm + ":" + this.sym.t.ss,
+            rss: this.sym.d.ddd + ", " + this.sym.d.dd + " " + this.sym.d.mmm + " " + this.sym.d.yy + " " + this.sym.t.hhh + ":" + this.sym.t.mm + ":" + this.sym.t.ss,
+            w3c: this.sym.d.yyyy + "-" + this.sym.d.mm + "-" + this.sym.d.dd + "T" + this.sym.t.hhh + ":" + this.sym.t.mm + ":" + this.sym.t.ss
+        },
+        pretty: {
+            a: this.sym.t.hh + ":" + this.sym.t.mm + "." + this.sym.t.ss + this.time.meridiem + " " + this.sym.d.dddd + " " + this.sym.d.ddddd + " of " + this.sym.d.mmmm + ", " + this.sym.d.yyyy,
+            b: this.sym.t.hh + ":" + this.sym.t.mm + " " + this.sym.d.dddd + " " + this.sym.d.ddddd + " of " + this.sym.d.mmmm + ", " + this.sym.d.yyyy
+        },
+        busTrackDateTime: {
+            a: ((this.sym.t.h == 0) ? '12' : this.sym.t.h) + ":" + this.sym.t.mm + " " + this.time.meridiem,
+            b: this.sym.d.m + "/" + this.sym.d.d + "/" + this.sym.d.yy + ' ' + ((this.sym.t.h == 0) ? '12' : this.sym.t.h) + ":" + this.sym.t.mm + " " + this.time.meridiem
+        }
+    };
+};
+
+// title case function
+function toTitleCase(str) {
+    var arr = str.split(/\s|_/);
+    for(var i=0,l=arr.length; i<l; i++) {
+        arr[i] = arr[i].substr(0,1).toUpperCase() + 
+                 (arr[i].length > 1 ? arr[i].substr(1).toLowerCase() : "");
+    }
+    
+    arr = arr.join(" ");
+    
+    //fully capitalize NW, SW, SE, and NE
+    arr = arr + ' ';
+    arr = arr.replace(/ Nw /g,' NW ').replace(/ Sw /g,' SW ').replace(/ Ne /g,' NE ').replace(/ Se /g,' SE ') + ' ';
+    arr = arr.trim();
+    
+    return arr;
+}
+
+
+
 function cbMapCallback(lat,lon) {
     alert('youve clicked ' + lat + ',' + lon);
 }
@@ -52,25 +222,124 @@ calculateRadius = function(viewportLat, viewportLon, latitudeDelta, longitudeDel
 }
 
 
+// get all routes for route search -- way to slow on jQuery mobile do to huge listview, so commenting out for now...
+
+getRoutes = function() {
+	$.mobile.loading( 'show' );
+	
+	function getRoutesConfirm(buttonIndex) {
+        if (buttonIndex == 1) {
+        	getRoutes();
+        }
+    }
+    
+    routeListFlag = false;
+	
+	getRoutesJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JRoutes?api_key=' + wmata_api_key + '&callback=?', function(data) {
+		//console.log('ajax call done');
+		
+		
+		routes = data;
+		//console.log(routes);
+
+		// output to log
+		buildRouteMenu(routes);
+
+		//console.log(stops.Stops[0].Lat);
+
+		
+	}).error(function(jqXHR, textStatus, errorThrown) {
+		$.mobile.loading( 'hide' );
+		
+		$('#route_list_menu').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>');
+		$('#route_list_menu').listview('refresh');
+		
+		navigator.notification.confirm(
+		    'An error occured fetching the data you requested.',  // message
+		    getRoutesConfirm,         // callback
+		    "There was an error",            // title
+		    'Try again,Cancel'                  // buttonName
+	    ); 
+	});
+}
+
+
+
+buildRouteMenu = function(data) {
+	//console.log('build start');
+	//console.log(data);
+	
+	$('#route_list_content').html('<h2 class="center">Type in the search box above<br/>to search for routes.</h2>');
+	
+	$('<ul/>',{'data-role':'listview','data-filter-reveal':true,'data-filter':true, 'data-filter-placeholder':'Search...'}).prependTo( '#route_list_content' );
+	
+	//routeMenuHTML = '<ul data-role="listview" data-filter="true" data-filter-placeholder="Search..." id="route_list_menu" data-filter-reveal="true">';
+
+	$.each(data.Routes, function(i, object) {
+		//filter out WMATA's weird half-routes
+		if (/([cv])/.exec(object.RouteID) == null) {
+			$('<li/>').html('<a href="#" data-routeid="' + object.RouteID + '" class="route_menu_btn">' + object.RouteID + '</a>').prependTo( '#route_list_content ul' );
+			//routeMenuHTML = routeMenuHTML + '<li><a href="#" data-routeid="' + object.RouteID + '" class="route_manu_btn">' + object.RouteID + '</a></li>';
+		}
+		
+	});
+	
+	//routeMenuHTML = routeMenuHTML + '</ul>';
+	
+	//console.log(routeMenuHTML);
+	
+	//$('#route_list_content').html(routeMenuHTML);
+	//$('#route_list_menu').listview('refresh');
+	$('#route_list_content').trigger('create');
+	//$('#route_list_content ul').listview('refresh');
+	routeListFlag = true;
+	$.mobile.loading( 'hide' );
+	
+	$('#route_list_content .route_menu_btn').click(function() {
+		routeClicked = $(this).data('routeid');
+		$('#route_map_title').html('Route ' + routeClicked);
+			    
+		$.mobile.changePage( "#route_map", { transition: "fade" } );
+	});
+	
+}
+
+
+
 // get a list of stops nearby
 getStops = function(latitude,longitude,radius) {
 	//console.log('getstops start, lat=' + latitude + ' long=' + longitude + ' radius=' + radius);
-		
+	
+	$.mobile.loading( 'show' );
+
+	function getStopsConfirm(buttonIndex) {
+        if (buttonIndex == 1) {
+        	getStops(latitude,longitude,radius);
+        }
+    }
+	
 	getStopsJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JStops?lat=' + latitude + '&lon=' + longitude + '&radius=' + radius + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
 		//console.log('ajax call done');
+		$.mobile.loading( 'hide' );
 		
-		if (data.toString() == "<h1>504 Gateway Timeout</h1>") {
-			console.log(data);
-		} else {
-			stops = data;
-			//console.log(stops);
+		stops = data;
+		//console.log(stops);
 
-			// output to log
-			markerStops(stops);
-	
-			//console.log(stops.Stops[0].Lat);
-		}
+		// output to log
+		markerStops(stops);
+
+		//console.log(stops.Stops[0].Lat);
+
 		
+	}).error(function(jqXHR, textStatus, errorThrown) {
+		$.mobile.loading( 'hide' );
+		
+		navigator.notification.confirm(
+		    'An error occured fetching the data you requested.',  // message
+		    getStopsConfirm,         // callback
+		    "There was an error",            // title
+		    'Try again,Cancel'                  // buttonName
+	    ); 
 	});
 	
 }
@@ -78,33 +347,68 @@ getStops = function(latitude,longitude,radius) {
 
 getStopsForRoute = function(routeID) {
 	//console.log('getstops start');
+	
+	/* it's unclear why this one doesn't work, but all the other ones right before AJAX calls do. Anyway, we load this on on the pageshow event for the #route_map page instead.
+	$.mobile.loading( 'show', {
+		text: 'Loading',
+		textVisible: false,
+		theme: 'a',
+		html: ""
+	});
+	*/
+	getStopsForRouteFlag = false;
+	
+	// retry function on error
+	function getStopsForRouteConfirm(buttonIndex) {
+        if (buttonIndex == 1) {
+        	getStopsForRoute(routeID);
+        }
+    }
 		
 	getStopsForRouteJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JRouteDetails?routeID=' + routeID + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
 		//console.log('ajax call done');
+		//console.log('getstopsforroute hide');
+		getStopsForRouteFlag = true;
+		$.mobile.loading( 'hide' );
 		
-		if (data.toString() == "<h1>504 Gateway Timeout</h1>") {
-			console.log(data);
-		} else {
-			stopsForRoute = data;
-			
-			//console.log(stopsForRoute);
-			
-			mapOptions2 = {
-		        buttonCallback: "cbMapCallback",
-		        height: window.innerHeight - 92,
-		        diameter: 1500,
-		        offsetTop: 43,
-		        lat: currentLatitude,
-		        lon: currentLongitude
-		    };
-		    
-		    //console.log('call mapoptions');
-		    window.plugins.mapKit.setMapData(mapOptions2);
-			
-			markerStopPoints(stopsForRoute);
-			
+		//console.log('getstopsforroute callback hide');
+		//$.mobile.loading( 'hide' );
+		stopsForRoute = data;
+		
+		// custom error handling for baffling blank route maps...
+		if (stopsForRoute.Direction0 == null && stopsForRoute.Direction1 == null) {
+			navigator.notification.confirm(
+			    'The route map for this line is not available. Sorry!',  // message
+			    null,         // callback
+			    "Route map not available",            // title
+			    'OK'                  // buttonName
+		    ); 
 		}
 		
+		//console.log(stopsForRoute);
+		
+		mapOptions2 = {
+
+	        diameter: 1500,
+	        lat: currentLatitude,
+	        lon: currentLongitude
+
+	    };
+	    
+	    //console.log('call mapoptions');
+	    window.plugins.mapKit.setMapData(mapOptions2);
+		
+		markerStopPoints(stopsForRoute);
+
+	}).error(function(jqXHR, textStatus, errorThrown) {
+		$.mobile.loading( 'hide' );
+		
+		navigator.notification.confirm(
+		    'An error occured fetching the data you requested.',  // message
+		    getStopsForRouteConfirm,         // callback
+		    "There was an error",            // title
+		    'Try again,Cancel'                  // buttonName
+	    ); 
 	});
 	
 }
@@ -119,74 +423,25 @@ markerStopPoints = function(data) {
 	
 	var inRangeLatitude = false;
 	var inRangeLongitude = false;
-	//console.log(data);
-	//console.log('start markerStopPoints');
+
+	
 	$.each(data.Direction0.Stops, function(i, object) {
 
-		//console.log('done with pin0 ' + i);
+		console.log('done with pin0 ' + i);
 		
 		pins0.push(
 			{
 				lat: data.Direction0.Stops[i].Lat,
 				lon: data.Direction0.Stops[i].Lon,
-				title: data.Direction0.Stops[i].Name,
+				title: toTitleCase(data.Direction0.Stops[i].Name),
+				subTitle: data.Direction0.Stops[i].StopID,
 				pinColor: "green",
 				selected: false,
 				index: i
 			}
 		);
-		
-		//console.log(Math.abs(data.Direction0.Stops[i].Lat - currentLatitude));
-		// calculate if the route pins we're showing are on the screen given current location. If they're are, make a variable true that we'll use later to conditionally move the map, but only making it true once (these comparison numbers are rough and may need some fine tuning) 
-		if (Math.abs(data.Direction0.Stops[i].Lat - currentLatitude) < 0.0135) {
-			//console.log('latitude in range');
-			if (!inRangeLatitude) {
-				inRangeLatitude = true;
-				//console.log('latitudeinrange variable= ' + inRangeLatitude);
-			}
-		} else {
-			//console.log('latitude not in range');
-		}
-		
-		if (Math.abs(data.Direction0.Stops[i].Lon - currentLongitude) < 0.0176) {
-			//console.log('longitude in range');
-			if (!inRangeLongitude) {
-				inRangeLongitude = true;
-				//console.log('latitudeinrange variable= ' + inRangeLongitude);
-			}
-		} else {
-			//console.log('longitude not in range');
-		}
-		
-		/*
-// create stop name UI
-        var createStopName = function() {
-			stopNameUI = '<li data-role="list-divider">' + data.Direction0.Stops[i].Name + '</li>';			
-        }
-		
-
-		// add the marker and info window on click
-	    $('#map_canvas2').gmap('addMarker', { 
-	    	'position': data.Direction0.Stops[i].Lat + ', ' + data.Direction0.Stops[i].Lon, 
-	    	'bounds': false, 
-	    	'icon': pin2,
-	    	'shadow': shadow2
-	    }, function() { //console.log('done with marker ' + i + ' at ' + data.Direction0.Stops[i].Name + ' at ' + data.Direction0.Stops[i].Lat + ',' + data.Direction0.Stops[i].Lon); 
-	    }).click(function() {
-	    	//console.log('click!');
-
-		    createStopName();
-		    
-		    $('#infowindow2-routes').html(stopNameUI).listview( 'refresh' );
-		    
-		    $( "#infowindow2" ).popup( "open" );
-	
-       });
-*/
-            
 	});
 	
-
 	$.each(data.Direction1.Stops, function(i, object) {
 		//console.log('done with pin1 ' + i);
 		
@@ -194,95 +449,29 @@ markerStopPoints = function(data) {
 			{
 				lat: data.Direction1.Stops[i].Lat,
 				lon: data.Direction1.Stops[i].Lon,
-				title: data.Direction1.Stops[i].Name,
+				title: toTitleCase(data.Direction1.Stops[i].Name),
+				subTitle: data.Direction1.Stops[i].StopID,
 				pinColor: "green",
 				selected: false,
 				index: i
 			}
 		);
-		
-		//console.log(Math.abs(data.Direction1.Stops[i].Lat - currentLatitude) );
-		
-		
-		if (Math.abs(data.Direction1.Stops[i].Lat - currentLatitude) < 0.0135) {
-			//console.log('latitude in range');
-			if (!inRangeLatitude) {
-				inRangeLatitude = true;
-				//console.log('latitudeinrange variable= ' + inRangeLatitude);
-			}
-		} else {
-			//console.log('latitude not in range');
-		}
-		
-		if (Math.abs(data.Direction1.Stops[i].Lon - currentLongitude) < 0.0176) {
-			//console.log('longitude in range');
-			if (!inRangeLongitude) {
-				inRangeLongitude = true;
-				//console.log('latitudeinrange variable= ' + inRangeLongitude);
-			}
-		} else {
-			//console.log('longitude not in range');
-		}
-
-		
-		// create stop name UI
-       /*
- var createStopName = function() {
-			stopNameUI2 = '<li data-role="list-divider">' + data.Direction1.Stops[i].Name + '</li>';	
-		}		
-        
-
-		// add the marker and info window on click
-	    $('#map_canvas2').gmap('addMarker', { 
-	    	'position': data.Direction1.Stops[i].Lat + ', ' + data.Direction1.Stops[i].Lon, 
-	    	'bounds': false, 
-	    	'icon': pin3,
-	    	'shadow': shadow3
-	    }, function() { //console.log('done with marker ' + i + ' at ' + data.Direction1.Stops[i].Name + ' at ' + data.Direction1.Stops[i].Lat + ',' + data.Direction0.Stops[i].Lon); 
-	    }).click(function() {
-	    	//console.log('click!');
-	    	createStopName();
-		    
-		    $('#infowindow2-routes').html(stopNameUI2).listview( 'refresh' );
-		    
-		    $( "#infowindow2" ).popup( "open" );
-	
-       });
-*/
 	});
 
+
+	
 	
 	//console.log(inRangeLongitude + ',' + inRangeLatitude);
 	window.plugins.mapKit.addMapPins(pins0);
 	window.plugins.mapKit.addMapPins(pins1);
+	//console.log('markerstoppoints hide');
+	//$.mobile.loading( 'hide' );
 	//console.log(inRangeLongitude + ',' + inRangeLatitude);
 	
 	var pinLength = pins0.length;
 	//console.log(pinLength);
 	pinLength = parseInt(pinLength * 0.5);
-	
-	//console.log(pinLength);
-	//console.log(pins0[pinLength].lat);
-	
-	// if we're in viewport range, then don't move the map, otherwise move the map to the middle of the route to show the pins
-	// this does weird things if you click a route twice in a row (hitting back in between), it takes you to current location instead. For now, folks will have to scroll to their routes!
-	/*
-	if (inRangeLongitude || inRangeLatitude) {
-	} else {
-		mapOptions3 = {
-	        buttonCallback: "cbMapCallback",
-	        height: window.innerHeight - 92,
-	        diameter: 1500,
-	        offsetTop: 43,
-	        lat: pins0[pinLength].lat,
-	        lon: pins0[pinLength].lon
-	    };
-	    
-	    window.plugins.mapKit.setMapData(mapOptions3);
-	}
-	*/
-	
-	
+
 	
 }
 
@@ -293,143 +482,147 @@ function annotationDeselect() {
 };
 
 // when a pin is clicked...
-function annotationTap(text) {
-	//console.log('start annotationTap');
+function annotationTap(text, latitude, longitude) {
+	console.log('annotation tap');
+	console.log(latitude);
 	
-	self2 = this;
-	//console.log('click!');
-	stopID = text;
-	var self2 = this;
+	// if we just clicked a route map pin, we need to get the stops data loaded first to make a good infowindow, so do that then loop back to this function and show the infowindow
+	if (routeMapView == true) {
+		notInRangeStopID = text;
+		favoriteBtnClickedFlag = true;
+		getStops(latitude, longitude, '50');
+	} else {
 	
-
+		self2 = this;
+		//console.log('click!');
+		stopID = text;
+		var self2 = this;
+		
 	
-	
-	// only get this stuff if the annotation tapped is a stop, rather than part of a route map
-	if (text != '(null)') {
-		annotationTapJSON = $.getJSON('http://api.wmata.com/NextBusService.svc/json/JPredictions?StopID=' + stopID + '&api_key=' + wmata_api_key + '&callback=?', function(data2, self4) {
-			//console.log('predictions=' + data2.Predictions.length);
-			//sorted = data2.Predictions.sort(function(a,b) {return b - a; });
+		
+		
+		// only get this stuff if the annotation tapped is a stop, rather than part of a route map
+		if (text != '(null)') {
+			$.mobile.loading( 'show', {
+				text: 'Loading',
+				textVisible: false,
+				theme: 'a',
+				html: ""
+			});
 			
-			$.mobile.loading( 'hide' );
-			// thanks to Vlad Lyga for this part: http://stackoverflow.com/questions/14308149/how-do-i-merge-two-json-objects-in-javascript-jquery
-			predictions = data2;
-			
-			routeTimes = {
-				minutes: {},
-				directionText: {}
-			};
-
-	
-			for (var index in predictions.Predictions) {
-	
-		        if(!routeTimes.minutes.hasOwnProperty(predictions.Predictions[index].RouteID)) {
-	
-		            routeTimes.minutes[predictions.Predictions[index].RouteID] = [];
-		            routeTimes.directionText[predictions.Predictions[index].RouteID] = [];
-	
-		            if (predictions.Predictions[index].Minutes != 'undefined') {
-	
-		            	routeTimes.minutes[predictions.Predictions[index].RouteID].push(predictions.Predictions[index].Minutes);
-	
-		            }
-		            routeTimes.directionText[predictions.Predictions[index].RouteID].push(predictions.Predictions[index].DirectionText);
-	
-		        } else {
-	
-		        	if (predictions.Predictions[index].Minutes != 'undefined') {
-	
-		        		routeTimes.minutes[predictions.Predictions[index].RouteID].push(predictions.Predictions[index].Minutes);
-	
-		        	}
-		            routeTimes.directionText[predictions.Predictions[index].RouteID].push(predictions.Predictions[index].DirectionText);
-	
+			// retry function on error
+			function annotationTapJSONConfirm(buttonIndex) {
+		        if (buttonIndex == 1) {
+		        	annotationTap(text, latitude, longitude);
 		        }
 		    }
+			
+			annotationTapJSON = $.getJSON('http://api.wmata.com/NextBusService.svc/json/JPredictions?StopID=' + stopID + '&api_key=' + wmata_api_key + '&callback=?', function(data2, self4) {
+				//console.log('predictions=' + data2.Predictions.length);
+				//sorted = data2.Predictions.sort(function(a,b) {return b - a; });
+				
+				$.mobile.loading( 'hide' );
+				// thanks to Vlad Lyga for this part: http://stackoverflow.com/questions/14308149/how-do-i-merge-two-json-objects-in-javascript-jquery
+				predictions = data2;
+				
+				routeTimes = {
+					minutes: {},
+					directionText: {}
+				};
+	
 		
-		    // this function needs nearby stops already loaded to load all stops for the route, not just predictions, but maybe it shouldn't in case you want to see your favorite stops and they're not in range? Right now, I'll just make it load only routes with predictions, but eventually would be nice to do the second AJAX call to load this stop into memory
-		    if (stops.length) {
-		    	//console.log(stops.length);
-		    	var 
-		        	routes = stops.Stops[0].Routes,
-		        	routesVsMinutes = {};
-		    }
-		    
-		    if (stops.length) {
-			    for(var i in routes) {
-			        if (!routesVsMinutes.hasOwnProperty(routes[i])) {
-			            routesVsMinutes[routes[i]] = {Minutes: []};
-			        } 
-			        if (routeTimes[routes[i]]) {
-			            routesVsMinutes[routes[i]].Minutes = routeTimes[routes[i]];
+				for (var index in predictions.Predictions) {
+		
+			        if(!routeTimes.minutes.hasOwnProperty(predictions.Predictions[index].RouteID)) {
+		
+			            routeTimes.minutes[predictions.Predictions[index].RouteID] = [];
+			            routeTimes.directionText[predictions.Predictions[index].RouteID] = [];
+		
+			            if (predictions.Predictions[index].Minutes != 'undefined') {
+		
+			            	routeTimes.minutes[predictions.Predictions[index].RouteID].push(predictions.Predictions[index].Minutes);
+		
+			            }
+			            routeTimes.directionText[predictions.Predictions[index].RouteID].push(predictions.Predictions[index].DirectionText);
+		
+			        } else {
+		
+			        	if (predictions.Predictions[index].Minutes != 'undefined') {
+		
+			        		routeTimes.minutes[predictions.Predictions[index].RouteID].push(predictions.Predictions[index].Minutes);
+		
+			        	}
+			            routeTimes.directionText[predictions.Predictions[index].RouteID].push(predictions.Predictions[index].DirectionText);
+		
 			        }
-			    } 
-			}     
-		    
-		    //stops.Stops[0].Routes = routesVsMinutes;
-		    //console.log(routeTimes);
-		    //console.log('now to creatRouteList');
-		    // create HTML for the infowindow
-		    createRouteList(routeTimes);
-		    //console.log(routeList);
-		    $('#infowindow-routes').html(routeList);
-		    
-		    // pass some variables to the next page if a button is clicked
-		    $('.route-detail-btn').click(function() {
-		    
-		    	console.log('route btn clicked');
-		
-		    	routeClicked = $(this).attr('id');
-		    	$('#route_map_title').html('Route ' + routeClicked);
-		    
-		    	$.mobile.changePage( "#route_map", { transition: "fade" } );
-		    	
-		    	//console.log('clicked!');
-		/*
-		    	if ($('#favorites_menu_content').css('display') != 'none') {
-		    		$( "#favorites_menu_btn" ).buttonMarkup({theme: 'd'});
-		    		
-		    		window.plugins.mapKit.showMap();
-		    		$('#favorites_menu_content').hide();
-		    		$('#favorites_menu_header').hide();
-		    	}
-		*/
-		    	
-			    //$( "#infowindow" ).popup( "close" );
+			    }
+			
+			    // this function needs nearby stops already loaded to load all stops for the route, not just predictions, but maybe it shouldn't in case you want to see your favorite stops and they're not in range? Right now, I'll just make it load only routes with predictions, but eventually would be nice to do the second AJAX call to load this stop into memory
+			    if (stops.length) {
+			    	//console.log(stops.length);
+			    	var 
+			        	routes = stops.Stops[0].Routes,
+			        	routesVsMinutes = {};
+			    }
 			    
-		    	
-		    	
-		    	
-		    	
-		    	/*
-		if (!currentLatitude) {
-		    		oldLatitude = mapOptions.lat;
-		    	} else {
-		    		oldLatitude = currentLatitude;
-		    	}
-		    	
-		    	if (!currentLongitude) {
-		    		oldLongitude = mapOptions.lon;
-		    	} else {
-		    		oldLongitude = currentLongitude;
-		    	}
-		*/
-		    	
-		    	
-		    	
-		    });
-		    
-		    //$( "#infowindow" ).popup( "open" );
-		    
-		    //console.log('show page');
-		    // show the page
-		    annotationTapJSON.abort();
-		    $.mobile.changePage( "#infowindow", { transition: "fade"} );
-		    
-		    
-		    
-		    
-		    	
-	    });
+			    if (stops.length) {
+				    for(var i in routes) {
+				        if (!routesVsMinutes.hasOwnProperty(routes[i])) {
+				            routesVsMinutes[routes[i]] = {Minutes: []};
+				        } 
+				        if (routeTimes[routes[i]]) {
+				            routesVsMinutes[routes[i]].Minutes = routeTimes[routes[i]];
+				        }
+				    } 
+				}     
+			    
+			    //stops.Stops[0].Routes = routesVsMinutes;
+			    //console.log(routeTimes);
+			    //console.log('now to creatRouteList');
+			    // create HTML for the infowindow
+			    createRouteList(routeTimes);
+			    //console.log(routeList);
+			    $('#infowindow-routes').html(routeList);
+			    
+			    
+			    // pass some variables to the next page if a button is clicked
+			    $('.route-detail-btn').click(function() {
+			    
+			    	console.log('route btn clicked');
+			
+			    	routeClicked = $(this).attr('id');
+			    	$('#route_map_title').html('Route ' + routeClicked);
+			    
+			    	$.mobile.changePage( "#route_map", { transition: "fade" } );
+	
+			    	
+			    	
+			    	
+			    });
+			    
+			    //$( "#infowindow" ).popup( "open" );
+			    
+			    //console.log('show page');
+			    // show the page
+			    annotationTapJSON.abort();
+			    
+			    $.mobile.changePage( "#infowindow", { transition: "fade"} );
+			    $('#infowindow-routes').listview('refresh');
+			    $("#infowindow-content").iscrollview("refresh");
+			    $('#infowindow-content').css('height', $('#infowindow').css('min-height'));
+			    
+			    	
+		    }).error(function(jqXHR, textStatus, errorThrown) {
+				$.mobile.loading( 'hide' );
+				
+				navigator.notification.confirm(
+				    'An error occured fetching the data you requested.',  // message
+				    annotationTapJSONConfirm,         // callback
+				    "There was an error",            // title
+				    'Try again,Cancel'                  // buttonName
+			    ); 
+			});
+		}
 	}
 }
 
@@ -463,7 +656,7 @@ markerStops = function(data) {
 					{
 						lat: data.Stops[i].Lat,
 						lon: data.Stops[i].Lon,
-						title: 'Loading...',
+						title: toTitleCase(data.Stops[i].Name),
 						subTitle: data.Stops[i].StopID,
 						pinColor: "green",
 						selected: false,
@@ -475,7 +668,7 @@ markerStops = function(data) {
 					{
 						lat: data.Stops[i].Lat,
 						lon: data.Stops[i].Lon,
-						title: 'Loading...',
+						title: toTitleCase(data.Stops[i].Name),
 						subTitle: data.Stops[i].StopID,
 						pinColor: "green",
 						selected: false,
@@ -560,8 +753,8 @@ markerStops = function(data) {
 				
 				//console.log('potential routes for stop ' + stopIDfocus + ': ' + potentialRouteList + ' and actual routes: ' + actualRouteList);
 				//console.log(stopName);
-	
-				routeList = '<li data-role="list-divider" class="stopTitle" id="' + stopID + '" data-lat=' + stopLat + '" data-lon=' + stopLon + '"><span class="stopName">' + stopName + '</span></li>' + routeList;
+				var dt = new DateTime();
+				routeList = '<li data-role="list-divider" class="stopTitle" id="' + stopID + '" data-lat=' + stopLat + '" data-lon=' + stopLon + '"><span class="stopName">' + toTitleCase(stopName) + '</span></li>' + routeList + '<div class="updated">Updated ' + dt.formats.busTrackDateTime.b + ' - Pull to refresh</div>';
 				//console.log(routeList);
 				
 	        }
@@ -569,13 +762,17 @@ markerStops = function(data) {
 		});
 		
 		//console.log('add new pins');
-		// show the new pins
-		window.plugins.mapKit.addMapPins(newPins);
+		// show the new pins, but only if this is a real stop get, and not a favorite button or route annotation being clicked
+		//if (favoriteBtnClickedFlag != true) {
+			window.plugins.mapKit.addMapPins(newPins);
+		//}
 		
-		// if we've clicked a favorite, show the predictions
+		// if we've clicked a favorite or route annotation, show the predictions
 		if (favoriteBtnClickedFlag == true) {
+			routeMapView = false;
 			annotationTap(notInRangeStopID);
 			favoriteBtnClickedFlag = false;
+			
 		}
 		
 	} else {
@@ -622,8 +819,8 @@ markerStops = function(data) {
 			
 			//console.log('potential routes for stop ' + stopIDfocus + ': ' + potentialRouteList + ' and actual routes: ' + actualRouteList);
 			//console.log(stopName);
-
-			routeList = '<li data-role="list-divider" class="stopTitle" id="' + stopID + '" data-lat=' + notInRangeStopLat + '" data-lon=' + notInRangeStopLon + '"><span class="stopName">' + notInRangeStopName + '</span></li>' + routeList;
+			var dt = new DateTime();
+			routeList = '<li data-role="list-divider" class="stopTitle" id="' + stopID + '" data-lat=' + notInRangeStopLat + '" data-lon=' + notInRangeStopLon + '"><span class="stopName">' + notInRangeStopName + '</span></li>' + routeList + '<div class="updated">Updated ' + dt.formats.busTrackDateTime.b + ' - Pull to refresh</div>';
 			//console.log(routeList);
 			
         }
@@ -665,52 +862,7 @@ onCurrentLocationSuccess = function(position) {
    
     
     
-    // timeout needed to prevent UI lock -- the onMapMove function is called a lot during initialization, so we want to bypass that
-    window.setTimeout(function() {
-    
-	    geo = window.geo || {};
-	    
-	    // save some data on the previous location so we can see how much we move...
-	    geo.beforeMapMove = function(currentLat,currentLon,latitudeDelta,longitudeDelta) {
-			previousLat = currentLat;
-			previousLon = currentLon;
-	    }
-	    
-	    // whenever the map moves, get the new location and radius and show nearby stops
-		geo.onMapMove = function(currentLat,currentLon,latitudeDelta,longitudeDelta) {
-		
-			
-			currentLatitude = currentLat;
-			currentLongitude = currentLon;
-			
-			// if the map doesn't move much, no need to redraw the pins...
-			if (((Math.abs(previousLat - currentLat)*8) > latitudeDelta) || ((Math.abs(previousLon - currentLon)*8) > longitudeDelta)) {
-				if ($('.refresh_location').length) {
-					//console.log('TRUE! ' + previousLat + ' - ' + currentLat + ' = ' + (Math.abs(previousLat - currentLat)*2) + ' with latitudeDelta = ' + latitudeDelta + ' and ' + previousLon + ' - ' + currentLon + ' = ' + (Math.abs(previousLon - currentLon)*2) + ' with longitudeDelta = ' + longitudeDelta);
-					
-					//console.log('TRUE');
-					
-					calculateRadius(currentLat, currentLon, latitudeDelta, longitudeDelta, function(viewportLat, viewportLon, radius) {
-						// prevent huge radii in the viewport from crashing the app
-						//console.log(radius);
-						if (radius < 2000) {
-							getStops(viewportLat, viewportLon, radius);
-						}
-						
-					});
-				} else {
-					//console.log('FALSE');
-				}
-			} else {
-				//console.log('FALSE! ' + previousLat + ' - ' + currentLat + ' = ' + (Math.abs(previousLat - currentLat)*2) + ' with latitudeDelta = ' + latitudeDelta + ' and ' + previousLon + ' - ' + currentLon + ' = ' + (Math.abs(previousLon - currentLon)*2) + ' with longitudeDelta = ' + longitudeDelta);
-			}
-			
-		};
-		
-		// use underscore.js to reate limit and debounce this function that gets called a ton of times when a user scrolls
-		delay = 500;
-		geo.onMapMove = _.debounce(geo.onMapMove, delay); // this is too long, set it long on startup but thereafter set it short
-	}, 3000);
+   
 
 
 	
@@ -851,6 +1003,9 @@ function onDeviceReady() {
 	deviceReadyFlag = true;
 	//console.log('deviceready');
 	
+	// add an on resume event to call an autorefresh if the app becomes active again...
+	document.addEventListener("resume", onResume, false);
+	
 	mapOptions = {
         buttonCallback: "cbMapCallback",
         height: window.innerHeight - 92,
@@ -874,36 +1029,18 @@ function onDeviceReady() {
 	//console.log(device.model);
 	// initialize a global pin array to store all pins onscreen
 	pins = [];
-	
-	// show the map
-	//showMap();
-   
-	
-	//set the dark linen after the map is shown, so we don't see it on load (can also use darklinen-bg.png if you want...)
-	/*
-$('#gps_map').css('background-image','url("img/lightlinen-bg.png")');
-	$('#gps_map').css('background-repeat-x','repeat');
-	$('#gps_map').css('background-repeat-y','repeat');
-*/
 
 	currentLatitude = mapOptions.lat;
 	currentLongitude = mapOptions.lon;
 	
 	currlocsuccess = 0;
-		
-	// set default page transition to slide
-/*
-	$("div[data-role=page]").bind("pagebeforeshow", function (e, data) {
-    	$.mobile.silentScroll(0);
-    	$.mobile.changePage.defaults.transition = 'fade';
-    });
-*/
+
     
     // get current position (which also shows nearby stops)
 	navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError);
 	
 	// this needs to be in deviceReady so as not to make weird this website needs access to your location notices in the app...
-	$('#gps_map').live('pagebeforeshow',function (event) {
+	$(document).on('pageinit', '#gps_map', function() {
 		
 		if (deviceReadyFlag = true) {
 			navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError);
@@ -912,64 +1049,19 @@ $('#gps_map').css('background-image','url("img/lightlinen-bg.png")');
 	});
 	
 	
-	   
-	    
-	    // when the popup closes, restore the map view -- hopefully this can be removed later
-	    /*
-$( "#infowindow" ).bind({
-		    popupafterclose: function(event, ui) { 
-		    	if ($('#favorites_menu_content').css('display') == 'none') {
-		    		window.plugins.mapKit.showMap();
-		    	}/*
- else {
-			    	$("#favorites_menu_btn").unbind("click");
-			    	
-			    	favoritesMenuBtnTap();
-		    	}
-*//*
-				//history.back();
-		    }
-		});
-*/
-		
-		
-		
-		//$(document).bind("mobileinit", function(){
-			/*
-			$.mobile.touchOverflowEnabled = true;
-			$.mobile.buttonMarkup.hoverDelay = 100;
-			console.log('init!');
-*/
-		//});
-		
-		
-	
-	    
-	    /*
-$('#close-btn').tap(function() {
-		    window.plugins.mapKit.showMap();
-	    });
-*/
 
-	//});
     
 }
 
-// initialization functions
-/*
-$(document).bind("mobileinit", function(){
-  $.mobile.silentScroll(0);
-    	$.mobile.changePage.defaults.transition = 'fade';
-});
-*/
 
-
-$('#gps_map').live('pageinit',function (event) {
+$(document).on('pageinit', '#gps_map', function() {
 	
 	//console.log('init!');
 
 	mapVisible = true;
 	document.addEventListener("deviceready", onDeviceReady);
+	
+	routeMapView = false;
 	
 	// make the refresh button work
     $('.refresh_location').click(function() {
@@ -994,7 +1086,7 @@ if ($('#favorites_menu_content').css('display') != 'none') {
 });
 
 
-$('#infowindow').live('pageinit',function (event) {	
+$(document).on('pageinit', '#infowindow', function() {	
 	
 	// make the favorite button work
     $('#favorite').click(function() {
@@ -1002,13 +1094,20 @@ $('#infowindow').live('pageinit',function (event) {
     	favoriteTap($('.stopTitle').prop('id'));
     });
     
-   
+    
+    
+    $(".iscroll-wrapper", this).bind( "iscroll_onpulldown" , function() { 
+    	refreshStopID = parseInt($('.stopTitle').attr('id'));
+    	annotationTap(refreshStopID); 
+    });
+    
+    //$('#infowindow-routes').scrollz();
     
     //favoritesMenuBtnTap();
     
 });
 
-$('#favorite_menu_page').live('pageinit', function(event) {
+$(document).on('pageinit', '#favorite_menu_page', function() {
 	editFlag = false;
 	
 	$('#edit').click(function() {
@@ -1071,12 +1170,14 @@ $('#favorite_menu_page').live('pageinit', function(event) {
 			$('.favorite-stop-detail-btn').click(function() {
 				console.log($(this).data('stopid'));
 				
-				$.mobile.loading( 'show', {
+				/*
+$.mobile.loading( 'show', {
 					text: 'Loading',
 					textVisible: false,
 					theme: 'a',
 					html: ""
 				});
+*/
 		
 				// store a variable on this stop's name in case we need to retrieve it later...
 				notInRangeStopID = $(this).data('stopid');
@@ -1144,19 +1245,86 @@ $('#favorite_menu_page').live('pageinit', function(event) {
 	});
 });
 
-/*
 
-$('#route_map').live('pageinit',function (event) {
-	favoritesMenuBtnTap();
+
+$(document).on('pageinit', '#route_list', function() {
+
+	$('#route_list_content').html('<h2 class="center">Loading...</h2>');
+	//$('#route_list_content').listview('refresh');
+	
+	$.mobile.loading( 'show' );
+
+	getRoutes();
 });
-*/
+
 
 //page show functions
-$('#gps_map').live('pagebeforeshow',function (event) {
+$(document).on('pagebeforeshow', '#gps_map', function() {
+
 	//console.log(window.history);
 	if (mapVisible == false) {
 		showMap();
 	}
+
+	if (typeof(currentLatitude) === 'undefined') {
+		console.log('true');
+	} else {
+		console.log(currentLatitude);
+		console.log(currentLongitude);
+		if (pins.length == 0) {
+			getStops(currentLatitude, currentLongitude, '800');
+		}
+		
+	}
+	
+
+	
+	 // timeout needed to prevent UI lock -- the onMapMove function is called a lot during initialization, so we want to bypass that
+    window.setTimeout(function() {
+    
+	    geo = window.geo || {};
+	    
+	    // save some data on the previous location so we can see how much we move...
+	    geo.beforeMapMove = function(currentLat,currentLon,latitudeDelta,longitudeDelta) {
+			previousLat = currentLat;
+			previousLon = currentLon;
+	    }
+	    
+	    // whenever the map moves, get the new location and radius and show nearby stops
+		geo.onMapMove = function(currentLat,currentLon,latitudeDelta,longitudeDelta) {
+		
+			
+			currentLatitude = currentLat;
+			currentLongitude = currentLon;
+			
+			// if the map doesn't move much, no need to redraw the pins...
+			if (((Math.abs(previousLat - currentLat)*8) > latitudeDelta) || ((Math.abs(previousLon - currentLon)*8) > longitudeDelta)) {
+				if ($('.refresh_location').length) {
+					//console.log('TRUE! ' + previousLat + ' - ' + currentLat + ' = ' + (Math.abs(previousLat - currentLat)*2) + ' with latitudeDelta = ' + latitudeDelta + ' and ' + previousLon + ' - ' + currentLon + ' = ' + (Math.abs(previousLon - currentLon)*2) + ' with longitudeDelta = ' + longitudeDelta);
+					
+					//console.log('TRUE');
+					
+					calculateRadius(currentLat, currentLon, latitudeDelta, longitudeDelta, function(viewportLat, viewportLon, radius) {
+						// prevent huge radii in the viewport from crashing the app
+						//console.log(radius);
+						if (radius < 2000) {
+							getStops(viewportLat, viewportLon, radius);
+						}
+						
+					});
+				} else {
+					//console.log('FALSE');
+				}
+			} else {
+				//console.log('FALSE! ' + previousLat + ' - ' + currentLat + ' = ' + (Math.abs(previousLat - currentLat)*2) + ' with latitudeDelta = ' + latitudeDelta + ' and ' + previousLon + ' - ' + currentLon + ' = ' + (Math.abs(previousLon - currentLon)*2) + ' with longitudeDelta = ' + longitudeDelta);
+			}
+			
+		};
+		
+		// use underscore.js to reate limit and debounce this function that gets called a ton of times when a user scrolls
+		delay = 500;
+		geo.onMapMove = _.debounce(geo.onMapMove, delay); // this is too long, set it long on startup but thereafter set it short
+	}, 3000);
 	
 	/*
 if (deviceReadyFlag = true) {
@@ -1168,7 +1336,7 @@ if (deviceReadyFlag = true) {
 
 
 
-$('#favorite_menu_page').live('pagebeforeshow',function (event) {
+$(document).on('pagebeforeshow', '#favorite_menu_page', function() {
 	
 	//console.log(window.localStorage.getItem("favorites"));
 	
@@ -1192,7 +1360,7 @@ $('#favorite_menu_page').live('pagebeforeshow',function (event) {
 		favoritesListHTML = '';
 		
 		$.each(favorites, function(i, object) {
-			favoritesListHTML = favoritesListHTML + '<li id="' + object.id + '"><a data-transition="slide" class="favorite-stop-detail-btn" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><h1 class="favoriteMenuStopTitle">' + object.name +'</h1><p>#'+ object.id + '</p><p class="delete-handle">Delete</p><p class="drag-handle">Sort</p></a></li>';
+			favoritesListHTML = favoritesListHTML + '<li id="' + object.id + '"><a data-transition="slide" class="favorite-stop-detail-btn" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><h1 class="favoriteMenuStopTitle">' + toTitleCase(object.name) +'</h1><p>#'+ object.id + '</p><p class="delete-handle">Delete</p><p class="drag-handle">Sort</p></a></li>';
 		});
 		
 		
@@ -1231,7 +1399,7 @@ $('#favorite_menu_page').live('pagebeforeshow',function (event) {
 
 });
 
-$('#infowindow').live('pagebeforeshow',function (event) {
+$(document).on('pagebeforeshow', '#infowindow', function() {
 	
 	//console.log(window.history);
 	
@@ -1264,6 +1432,8 @@ $('#infowindow').live('pagebeforeshow',function (event) {
 	
 	 // hide the map when we show the jQuery stuff, hopefully this can be eliminated in the future...
     $('#infowindow-routes').listview('refresh');
+    $("#infowindow-content").iscrollview("refresh");
+    $('#infowindow-content').css('height', $('#infowindow').css('min-height'));
     
     
     
@@ -1275,17 +1445,19 @@ $('#infowindow').live('pagebeforeshow',function (event) {
 	
 });
 
-$('#infowindow').live('pageshow',function (event) {
+$(document).on('pageshow', '#infowindow', function() {
 
 	
 	 // hide the map when we show the jQuery stuff, hopefully this can be eliminated in the future...
     $('#infowindow-routes').listview('refresh');
+    $("#infowindow-content").iscrollview("refresh");
+    $('#infowindow-content').css('height', $('#infowindow').css('min-height'));
 
 	
 });
 
 
-$('#route_map').live('pagebeforeshow',function (event) {
+$(document).on('pagebeforeshow', '#route_map', function() {
   	
   	//console.log(window.history);
   	
@@ -1297,29 +1469,67 @@ $('#route_map').live('pagebeforeshow',function (event) {
 		showMap();
 	}
 	
-	geo.onMapMove = '';
+	// for route map views, we don't want to be loading new pins all the time, so replace the home onMapMove function with this, which just updates the current lat/lon so the map view never moves
+	geo.onMapMove = function(currentLat,currentLon,latitudeDelta,longitudeDelta) {
+		currentLatitude = currentLat;
+		currentLongitude = currentLon;		
+	};
+	
+	routeMapView = true;
+	
 	//console.log(routeClicked);
 	getStopsForRoute(routeClicked);
+});
+
+$(document).on('pageshow', '#route_map', function() {
+	console.log(getStopsForRouteFlag);
+	
+	if (getStopsForRouteFlag == false) {
+		$.mobile.loading( 'show', {
+			text: 'Loading',
+			textVisible: false,
+			theme: 'a',
+			html: ""
+		});
+	}
+	
+});
+
+
+// way to slow on jQuery mobile do to huge listview, so commenting out for now...
+$(document).on('pagebeforeshow', '#route_list', function() {
+	
+	//console.log(window.localStorage.getItem("favorites"));
+	
+	if (mapVisible == true) {
+		hideMap();
+	}
+	
+
+	
+	//getRoutes();
 });
 
 
 
 //on page hide functions
-$('#route_map').live('pagebeforehide', function (event) {
+$(document).on('pagebeforehide', '#route_map', function() {
+	routeMapView = false;
+	
 	window.plugins.mapKit.clearMapPins();
 	//console.log('getstopsjson abort!');
 	getStopsForRouteJSON.abort();
 });
 
 //on page hide functions
-$('#gps_map').live('pagebeforehide', function (event) {
+$(document).on('pagebeforehide', '#gps_map', function() {
 	
 	//annotationTapJSON.abort();
 	//getStopsJSON.abort();
 
 });
 
-$('#favorite_menu_page').live('pagebeforehide', function(event) {
+$(document).on('pagebeforehide', '#favorite_menu_page', function() {
 	$( "#edit" ).buttonMarkup({theme: 'd'});
 	$('#edit .ui-btn-text').html('Edit');
 	$('.ui-li-has-arrow .ui-btn-inner a.ui-link-inherit').css('padding-right','inherit');

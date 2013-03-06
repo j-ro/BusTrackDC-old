@@ -305,8 +305,12 @@
 
 //when a pin is selected or deselected, do something
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
-    //NSLog(@"Selected: %@",[view.annotation subtitle]);
-    NSString *annotationTapFunctionString = [NSString stringWithFormat:@"%s%@%s", "annotationTap('", [view.annotation subtitle], "')"];
+    NSString *latitude = [[NSString alloc] initWithFormat:@"%f",view.annotation.coordinate.latitude];
+    NSString *longitude = [[NSString alloc] initWithFormat:@"%f",view.annotation.coordinate.longitude];
+    
+    NSLog(@"Selected: %@%@%@",[view.annotation subtitle], latitude, longitude);
+    
+    NSString *annotationTapFunctionString = [NSString stringWithFormat:@"%s%@%s%@%s%@%s", "annotationTap('", [view.annotation subtitle], "','", latitude, "','", longitude, "')"];
     [self.webView stringByEvaluatingJavaScriptFromString:annotationTapFunctionString];
 }
 
