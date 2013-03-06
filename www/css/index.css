@@ -259,6 +259,10 @@ content: "";
 	background-size: 32px 32px;
 }
 
+#route_list_content h2 {
+	font-size: 14px;
+}
+
 /* pull to refresh */
 .iscroll-pulldown, .iscroll-pullup {
 	background: none !important;

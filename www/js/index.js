@@ -223,7 +223,7 @@ calculateRadius = function(viewportLat, viewportLon, latitudeDelta, longitudeDel
 
 
 // get all routes for route search -- way to slow on jQuery mobile do to huge listview, so commenting out for now...
-/*
+
 getRoutes = function() {
 	$.mobile.loading( 'show' );
 	
@@ -268,26 +268,42 @@ getRoutes = function() {
 buildRouteMenu = function(data) {
 	//console.log('build start');
 	//console.log(data);
-	routeMenuHTML = '';
+	
+	$('#route_list_content').html('<h2 class="center">Type in the search box above<br/>to search for routes.</h2>');
+	
+	$('<ul/>',{'data-role':'listview','data-filter-reveal':true,'data-filter':true, 'data-filter-placeholder':'Search...'}).prependTo( '#route_list_content' );
+	
+	//routeMenuHTML = '<ul data-role="listview" data-filter="true" data-filter-placeholder="Search..." id="route_list_menu" data-filter-reveal="true">';
 
 	$.each(data.Routes, function(i, object) {
 		//filter out WMATA's weird half-routes
 		if (/([cv])/.exec(object.RouteID) == null) {
-			routeMenuHTML = routeMenuHTML + '<li><a href="#" data-routeid="' + object.RouteID + '" class="route_manu_btn">' + object.RouteID + '</a></li>';
+			$('<li/>').html('<a href="#" data-routeid="' + object.RouteID + '" class="route_menu_btn">' + object.RouteID + '</a>').prependTo( '#route_list_content ul' );
+			//routeMenuHTML = routeMenuHTML + '<li><a href="#" data-routeid="' + object.RouteID + '" class="route_manu_btn">' + object.RouteID + '</a></li>';
 		}
 		
 	});
 	
+	//routeMenuHTML = routeMenuHTML + '</ul>';
+	
 	//console.log(routeMenuHTML);
 	
-	$('#route_list_menu').html(routeMenuHTML);
-	$('#route_list_menu').listview('refresh');
+	//$('#route_list_content').html(routeMenuHTML);
+	//$('#route_list_menu').listview('refresh');
+	$('#route_list_content').trigger('create');
+	//$('#route_list_content ul').listview('refresh');
 	routeListFlag = true;
 	$.mobile.loading( 'hide' );
 	
+	$('#route_list_content .route_menu_btn').click(function() {
+		routeClicked = $(this).data('routeid');
+		$('#route_map_title').html('Route ' + routeClicked);
+			    
+		$.mobile.changePage( "#route_map", { transition: "fade" } );
+	});
 	
 }
-*/
+
 
 
 // get a list of stops nearby
@@ -1229,12 +1245,18 @@ $.mobile.loading( 'show', {
 	});
 });
 
-/*
 
-$(document).on('pageinit', '#route_map', function() {
-	favoritesMenuBtnTap();
+
+$(document).on('pageinit', '#route_list', function() {
+
+	$('#route_list_content').html('<h2 class="center">Loading...</h2>');
+	//$('#route_list_content').listview('refresh');
+	
+	$.mobile.loading( 'show' );
+
+	getRoutes();
 });
-*/
+
 
 //page show functions
 $(document).on('pagebeforeshow', '#gps_map', function() {
@@ -1473,8 +1495,8 @@ $(document).on('pageshow', '#route_map', function() {
 	
 });
 
+
 // way to slow on jQuery mobile do to huge listview, so commenting out for now...
-/*
 $(document).on('pagebeforeshow', '#route_list', function() {
 	
 	//console.log(window.localStorage.getItem("favorites"));
@@ -1483,30 +1505,10 @@ $(document).on('pagebeforeshow', '#route_list', function() {
 		hideMap();
 	}
 	
-	$('#route_list_menu').html('<h2 class="center">Loading...</h2>');
-	$('#route_list_menu').listview('refresh');
+
 	
-	$.mobile.loading( 'show' );
-	
-	getRoutes();
+	//getRoutes();
 });
-
-
-$(document).on('pageshow', '#route_list', function() {
-	console.log(routeListFlag);
-	if (routeListFlag == false) {
-		$.mobile.loading( 'show' );
-	}
-	
-});
-
-
-
-$(document).on('pagebeforehide', '#route_list', function() {
-	
-	getRoutesJSON.abort();
-});
-*/
 
 
 
