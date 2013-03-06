@@ -53,6 +53,7 @@
                 <div data-role="controlgroup" data-type="horizontal">
 
 			     	<a href="#" data-role="button" data-icon="currloc" data-iconpos="notext" class="refresh_location">Refresh Location</a>
+			     	<!-- <a href="#route_list" data-role="button" data-icon="bars">Routes</a>  -->
                		<a href="#favorite_menu_page" data-role="button" data-icon="star" class="favorites_menu_btn">Favorites</a>
               
 			    </div>
@@ -85,6 +86,7 @@
         		<div data-role="controlgroup" data-type="horizontal">
 
 	        		<a href="#gps_map" data-role="button" data-icon="home" data-iconpos="notext">Current Location</a>
+	        		<!-- <a href="#route_list" data-role="button" data-icon="bars">Routes</a>  -->
                		<a href="#favorite_menu_page" data-role="button" data-icon="star" class="favorites_menu_btn">Favorites</a>
               
 			    </div>
@@ -105,12 +107,42 @@
                 <div data-role="controlgroup" data-type="horizontal">
 
 			     	<a href="#gps_map" data-role="button" data-icon="home" data-iconpos="notext">Current Location</a>
+			     	<!-- <a href="#route_list" data-role="button" data-icon="bars">Routes</a>  -->
                		<a href="#favorite_menu_page" data-role="button" data-icon="star" class="favorites_menu_btn">Favorites</a>
               
 			    </div>  
             </div>
             
         </div><!-- /page -->
+        
+        <!-- a good idea to have a route list available, but the listview is way too long and jQuery Mobile can't handle it...
+	    <div data-role="page" id="route_list" data-add-back-btn="true">
+        
+        	<div data-role="header" data-position="fixed" data-theme="c" data-tap-toggle="false" data-id="persistant">
+			    
+                <h1>Routes</h1>
+                
+            </div>
+        	
+        	<div data-role="content" id="route_list_content">
+	        	<ul data-role="listview" data-filter="true" data-filter-placeholder="Search..." id="route_list_menu">
+	        		<h2 class="center">Loading...</h2>
+	        	</ul>
+        	</div>
+        	
+        	<div data-role="footer" data-position="fixed" data-theme="c" data-tap-toggle="false" data-id="persistant">
+                <div data-role="controlgroup" data-type="horizontal">
+
+			     	<a href="#gps_map" data-role="button" data-icon="home" data-iconpos="notext">Current Location</a>
+			     	<a href="#route_list" data-role="button" data-icon="bars" class="ui-disabled">Routes</a> 
+               		<a href="#favorite_menu_page" data-role="button" data-icon="star">Favorites</a>
+              
+			    </div>
+                
+            </div>
+
+        </div>
+        --><!-- /page -->
         
         
         <div data-role="page" id="favorite_menu_page" data-add-back-btn="true">
@@ -134,6 +166,7 @@
                 <div data-role="controlgroup" data-type="horizontal">
 
 			     	<a href="#gps_map" data-role="button" data-icon="home" data-iconpos="notext">Current Location</a>
+			     	<!-- <a href="#route_list" data-role="button" data-icon="bars">Routes</a> --> 
                		<a href="#favorite_menu_page" data-role="button" data-icon="star" class="ui-disabled">Favorites</a> 
               
 			    </div>

@@ -222,9 +222,77 @@ calculateRadius = function(viewportLat, viewportLon, latitudeDelta, longitudeDel
 }
 
 
+// get all routes for route search -- way to slow on jQuery mobile do to huge listview, so commenting out for now...
+/*
+getRoutes = function() {
+	$.mobile.loading( 'show' );
+	
+	function getRoutesConfirm(buttonIndex) {
+        if (buttonIndex == 1) {
+        	getRoutes();
+        }
+    }
+    
+    routeListFlag = false;
+	
+	getRoutesJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JRoutes?api_key=' + wmata_api_key + '&callback=?', function(data) {
+		//console.log('ajax call done');
+		
+		
+		routes = data;
+		//console.log(routes);
+
+		// output to log
+		buildRouteMenu(routes);
+
+		//console.log(stops.Stops[0].Lat);
+
+		
+	}).error(function(jqXHR, textStatus, errorThrown) {
+		$.mobile.loading( 'hide' );
+		
+		$('#route_list_menu').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>');
+		$('#route_list_menu').listview('refresh');
+		
+		navigator.notification.confirm(
+		    'An error occured fetching the data you requested.',  // message
+		    getRoutesConfirm,         // callback
+		    "There was an error",            // title
+		    'Try again,Cancel'                  // buttonName
+	    ); 
+	});
+}
+
+
+
+buildRouteMenu = function(data) {
+	//console.log('build start');
+	//console.log(data);
+	routeMenuHTML = '';
+
+	$.each(data.Routes, function(i, object) {
+		//filter out WMATA's weird half-routes
+		if (/([cv])/.exec(object.RouteID) == null) {
+			routeMenuHTML = routeMenuHTML + '<li><a href="#" data-routeid="' + object.RouteID + '" class="route_manu_btn">' + object.RouteID + '</a></li>';
+		}
+		
+	});
+	
+	//console.log(routeMenuHTML);
+	
+	$('#route_list_menu').html(routeMenuHTML);
+	$('#route_list_menu').listview('refresh');
+	routeListFlag = true;
+	$.mobile.loading( 'hide' );
+	
+	
+}
+*/
+
+
 // get a list of stops nearby
 getStops = function(latitude,longitude,radius) {
-	console.log('getstops start, lat=' + latitude + ' long=' + longitude + ' radius=' + radius);
+	//console.log('getstops start, lat=' + latitude + ' long=' + longitude + ' radius=' + radius);
 	
 	$.mobile.loading( 'show' );
 
@@ -1404,6 +1472,41 @@ $(document).on('pageshow', '#route_map', function() {
 	}
 	
 });
+
+// way to slow on jQuery mobile do to huge listview, so commenting out for now...
+/*
+$(document).on('pagebeforeshow', '#route_list', function() {
+	
+	//console.log(window.localStorage.getItem("favorites"));
+	
+	if (mapVisible == true) {
+		hideMap();
+	}
+	
+	$('#route_list_menu').html('<h2 class="center">Loading...</h2>');
+	$('#route_list_menu').listview('refresh');
+	
+	$.mobile.loading( 'show' );
+	
+	getRoutes();
+});
+
+
+$(document).on('pageshow', '#route_list', function() {
+	console.log(routeListFlag);
+	if (routeListFlag == false) {
+		$.mobile.loading( 'show' );
+	}
+	
+});
+
+
+
+$(document).on('pagebeforehide', '#route_list', function() {
+	
+	getRoutesJSON.abort();
+});
+*/
 
 
 
