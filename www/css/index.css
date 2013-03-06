@@ -130,7 +130,6 @@ h1 {
 }
 
 .stopTitle, .favoriteMenuStopTitle {
-	text-transform: lowercase;
 	text-overflow: ellipsis;
 	min-width: 250px;
 }
@@ -237,6 +236,53 @@ content: "";
 }
 */
 
+/* move the loader to the lower right */
+
+.ui-loader {
+	bottom: 9px !important;
+	right: 9px !important;
+	top: inherit !important;
+	left: inherit !important;
+}
+
+.ui-loader-default {
+	width: 32px !important;
+	height: 32px !important;
+}
+
+.ui-loader .ui-icon {
+	width: 30px !important;
+	height: 30px !important;
+}
+
+.ui-icon-loading {
+	background-size: 32px 32px;
+}
+
+#route_list_content h2 {
+	font-size: 14px;
+}
+
+/* pull to refresh */
+.iscroll-pulldown, .iscroll-pullup {
+	background: none !important;
+}
+
+.iscroll-content li  {
+     -webkit-transform: translateZ(0);
+}
+
+
+/* date format */
+
+.updated, .updated a.ui-link {
+	font-size: 10px;
+	text-align: center;
+	margin: 10px 0;
+	color: #a6a6a6 !important;
+	font-weight: normal !important;
+}
+
 
 /* change jquery mobile transition speed */
 .in {
@@ -252,5 +298,3 @@ content: "";
 	-moz-animation-timing-function: ease-in;
 	-moz-animation-duration: 125ms;
 }
-
-

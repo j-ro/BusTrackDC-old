@@ -37,16 +37,16 @@
 		3088BBC2154F3926009F9C59 /* Default~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 3088BBBC154F3926009F9C59 /* Default~iphone.png */; };
 		308D05371370CCF300D202BF /* icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = 308D052E1370CCF300D202BF /* icon-72.png */; };
 		308D05381370CCF300D202BF /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 308D052F1370CCF300D202BF /* icon.png */; };
-		308D05391370CCF300D202BF /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 308D05301370CCF300D202BF /* icon@2x.png */; };
 		30A0434814DC770100060A13 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 30A0434314DC770100060A13 /* Localizable.strings */; };
 		30A0434914DC770100060A13 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 30A0434614DC770100060A13 /* Localizable.strings */; };
 		30E5649213A7FCAF007403D8 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30E5649113A7FCAF007403D8 /* CoreMedia.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		5F2F8B9916C2E2D5006DEED9 /* ConnAndKWashingtonDC.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 5F2F8B9816C2E2D5006DEED9 /* ConnAndKWashingtonDC.gpx */; };
+		5F572C0016D2BA060059714F /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5FD8AD6216B4950600492455 /* icon.png */; };
+		5F572C0116D2BA180059714F /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 308D05301370CCF300D202BF /* icon@2x.png */; };
 		5F9E0EE316A8BC0C005E80EA /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F9E0EE216A8BC0C005E80EA /* MapKit.framework */; };
 		5F9E0EEA16A8BDCB005E80EA /* AsyncImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F9E0EE516A8BDCB005E80EA /* AsyncImageView.m */; };
 		5F9E0EEB16A8BDCB005E80EA /* CDVAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F9E0EE716A8BDCB005E80EA /* CDVAnnotation.m */; };
 		5F9E0EEC16A8BDCB005E80EA /* MapKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F9E0EE916A8BDCB005E80EA /* MapKit.m */; };
-		5FD8AD6316B4950600492455 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5FD8AD6216B4950600492455 /* icon.png */; };
 		5FD8AD6516B4953100492455 /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5FD8AD6416B4953100492455 /* icon@2x.png */; };
 		5FD8AD6716B4982C00492455 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 5FD8AD6616B4982C00492455 /* Default.png */; };
 		5FD8AD6916B4983200492455 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5FD8AD6816B4983200492455 /* Default@2x.png */; };
@@ -409,7 +409,6 @@
 				301BF570109A69640062928A /* www in Resources */,
 				308D05371370CCF300D202BF /* icon-72.png in Resources */,
 				308D05381370CCF300D202BF /* icon.png in Resources */,
-				308D05391370CCF300D202BF /* icon@2x.png in Resources */,
 				3072F99713A8081B00425683 /* Capture.bundle in Resources */,
 				1F766FE113BBADB100FB74C0 /* Localizable.strings in Resources */,
 				1F766FE213BBADB100FB74C0 /* Localizable.strings in Resources */,
@@ -423,7 +422,6 @@
 				3088BBC1154F3926009F9C59 /* Default@2x~iphone.png in Resources */,
 				3088BBC2154F3926009F9C59 /* Default~iphone.png in Resources */,
 				D4A0D8761607E02300AEF8BB /* Default-568h@2x~iphone.png in Resources */,
-				5FD8AD6316B4950600492455 /* icon.png in Resources */,
 				5FD8AD6516B4953100492455 /* icon@2x.png in Resources */,
 				5FD8AD6716B4982C00492455 /* Default.png in Resources */,
 				5FD8AD6916B4983200492455 /* Default@2x.png in Resources */,
@@ -431,6 +429,8 @@
 				5FD8AD7716B4CE4A00492455 /* icon-72.png in Resources */,
 				5FD8AD7816B4CE4A00492455 /* icon-72@2x.png in Resources */,
 				5F2F8B9916C2E2D5006DEED9 /* ConnAndKWashingtonDC.gpx in Resources */,
+				5F572C0016D2BA060059714F /* icon.png in Resources */,
+				5F572C0116D2BA180059714F /* icon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
