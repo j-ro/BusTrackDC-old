@@ -54,6 +54,7 @@
         <plugin name="Globalization" value="CDVGlobalization" />
         <plugin name="InAppBrowser" value="CDVInAppBrowser" />
         <plugin name="MapKitView" value="MapKitView" />
+        <plugin name="googleAnalyticsPlugin" value="GoogleAnalyticsPlugin" />
     </plugins>
 
     <access origin="*" />

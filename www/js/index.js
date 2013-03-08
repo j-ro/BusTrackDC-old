@@ -999,6 +999,9 @@ function zoomIn() {
 
 
 function onDeviceReady() {
+
+	window.GA.trackerWithTrackingId("UA-39138450-1");
+    window.GA.trackView("/index");
 	
 	deviceReadyFlag = true;
 	//console.log('deviceready');
