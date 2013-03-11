@@ -245,7 +245,8 @@
 
 	MKPinAnnotationView *annView = (MKPinAnnotationView *)[theMapView dequeueReusableAnnotationViewWithIdentifier:identifier];
 
-	if (annView!=nil) return annView;
+    //commented out to fix pin color issues. Uncomment to get back original functionality, whatever that is...
+	//if (annView!=nil) return annView;
 
 	annView=[[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
 

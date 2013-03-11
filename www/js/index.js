@@ -462,6 +462,8 @@ markerStopPoints = function(data) {
 	
 	
 	//console.log(inRangeLongitude + ',' + inRangeLatitude);
+	console.log(pins0);
+	console.log(pins1);
 	window.plugins.mapKit.addMapPins(pins0);
 	window.plugins.mapKit.addMapPins(pins1);
 	//console.log('markerstoppoints hide');
@@ -472,6 +474,45 @@ markerStopPoints = function(data) {
 	//console.log(pinLength);
 	pinLength = parseInt(pinLength * 0.5);
 
+	
+}
+
+
+// get a list of stops nearby
+getRailStops = function(latitude,longitude,radius) {
+	//console.log('getstops start, lat=' + latitude + ' long=' + longitude + ' radius=' + radius);
+	
+	$.mobile.loading( 'show' );
+
+	function getRailStopsConfirm(buttonIndex) {
+        if (buttonIndex == 1) {
+        	getRailStops(latitude,longitude,radius);
+        }
+    }
+	
+	getRailStopsJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JStationEntrances?lat=' + latitude + '&lon=' + longitude + '&radius=' + radius + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
+		//console.log('ajax call done');
+		$.mobile.loading( 'hide' );
+		
+		railStops = data;
+		console.log(railStops);
+
+		// output to log
+		markerRailStops(railStops);
+
+		//console.log(stops.Stops[0].Lat);
+
+		
+	}).error(function(jqXHR, textStatus, errorThrown) {
+		$.mobile.loading( 'hide' );
+		
+		navigator.notification.confirm(
+		    'An error occured fetching the data you requested.',  // message
+		    getRailStopsConfirm,         // callback
+		    "There was an error",            // title
+		    'Try again,Cancel'                  // buttonName
+	    ); 
+	});
 	
 }
 
@@ -764,6 +805,7 @@ markerStops = function(data) {
 		//console.log('add new pins');
 		// show the new pins, but only if this is a real stop get, and not a favorite button or route annotation being clicked
 		//if (favoriteBtnClickedFlag != true) {
+			console.log(newPins);
 			window.plugins.mapKit.addMapPins(newPins);
 		//}
 		
@@ -824,6 +866,213 @@ markerStops = function(data) {
 			//console.log(routeList);
 			
         }
+	}
+	
+}
+
+
+
+// make a stop marker and info window
+markerRailStops = function(data) {
+	// make a new pins array to store new pins being added
+	newRailPins = [];
+	newRailPins.length = 0;
+	
+	//console.log('start markerStops');
+	if (data.Entrances.length) {
+		$.each(data.Entrances, function(i, object) {
+	
+			// our match function to see if a pin already exists in the global pin array
+			railMatches = jQuery.grep(pins, function(obj) {
+				//console.log(data.Stops[i].StopID + ' == ' + obj.subTitle + '?');
+				return parseInt(obj.subTitle) == data.Entrances[i].ID;
+			});
+			
+			if (railMatches.length == 0) {
+				
+				//console.log('no matches');
+				//console.log(matches);
+				
+				// if this is a new pin, add it to the global pin array AND the new pin array
+				pins.push(
+					{
+						lat: data.Entrances[i].Lat,
+						lon: data.Entrances[i].Lon,
+						title: data.Entrances[i].Name,
+						subTitle: data.Entrances[i].ID,
+						pinColor: "red",
+						selected: false,
+						index: i
+					}
+				);
+				
+				newRailPins.push(
+					{
+						lat: data.Entrances[i].Lat,
+						lon: data.Entrances[i].Lon,
+						title: data.Entrances[i].Name,
+						subTitle: data.Entrances[i].ID,
+						pinColor: "red",
+						selected: false,
+						index: i
+					}
+				);
+			
+			}
+			
+	
+	
+	        // loop through all routes in this stop and create a string from all of them
+	        /*
+createRouteList = function(data) {
+	        	//console.log('createRouteList start');
+				routeList = '';
+				routeList.replace(routeList, '');
+				potentialRouteList = [];
+				potentialRouteList.length = 0;
+				actualRouteList = [];
+				potentialVsActual = [];
+				
+				// create a list of all possible routes at this stop
+				$.each(stops.Stops, function(i2, object2) {
+					if (stopID == stops.Stops[i2].StopID) {
+						stopIDfocus = stops.Stops[i2].StopID;
+						stopName = stops.Stops[i2].Name;
+						potentialRouteList = stops.Stops[i2].Routes;
+						stopLat = stops.Stops[i2].Lat;
+						stopLon = stops.Stops[i2].Lon;
+						//potentialRouteList.push(routeID);
+					}
+					
+				});
+				
+				
+				//potentialRouteList.length = 0;
+				
+				
+				// make a diff method for determining the difference in arrays
+				Array.prototype.diff = function(a) {
+				    return this.filter(function(i) {return !(a.indexOf(i) > -1);});
+				};
+				
+				// make HTML for infowindow for actual buses that are coming
+				if (predictions.Predictions.length) {
+					//console.log('true');
+					//console.log(data);
+					dataWorld = data;
+					$.each(data.minutes, function(i3, object) {
+						
+						// weed out undefined routes
+						if (i3 != 'undefined'){
+							//console.log('i3= ' + i3);
+							routeList = routeList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p><span class="ui-li-count">' + i3 + '</span></li>';
+						actualRouteList.push(i3);
+						potentialVsActual = potentialRouteList.diff(actualRouteList);
+						}
+					});
+					
+					// then after, loop through routes with no predictions and add to the end
+					$.each(potentialVsActual, function(i4, object4) {
+						// check for the routes with a lowercase c or v in their name, they are variation routes and should be ignored
+						if (/([cv])/.exec(potentialVsActual[i4]) == null) {
+							routeList = routeList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + potentialVsActual[i4] + '"><p>no prediction available</p><span class="ui-li-count">' + potentialVsActual[i4] + '</span></a></li>';
+						}
+						
+					});
+				} else {
+					
+					// if there are no predictions at all, just do the stops
+					$.each(potentialRouteList, function(i4, object4) {
+						// check for the routes with a lowercase c or v in their name, they are variation routes and should be ignored
+						if (/([cv])/.exec(potentialRouteList[i4]) == null) {			
+							routeList = routeList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + potentialRouteList[i4] + '"><p>no prediction available</p><span class="ui-li-count">' + potentialRouteList[i4] + '</span></a></li>';
+						}
+					});
+					
+					actualRouteList.length = 0;
+					potentialVsActual.length = 0;
+	
+				}
+				
+				//console.log('potential routes for stop ' + stopIDfocus + ': ' + potentialRouteList + ' and actual routes: ' + actualRouteList);
+				//console.log(stopName);
+				var dt = new DateTime();
+				routeList = '<li data-role="list-divider" class="stopTitle" id="' + stopID + '" data-lat=' + stopLat + '" data-lon=' + stopLon + '"><span class="stopName">' + toTitleCase(stopName) + '</span></li>' + routeList + '<div class="updated">Updated ' + dt.formats.busTrackDateTime.b + ' - Pull to refresh</div>';
+				//console.log(routeList);
+				
+	        }
+*/
+	
+		});
+		
+		//console.log('add new pins');
+		// show the new pins, but only if this is a real stop get, and not a favorite button or route annotation being clicked
+		//if (favoriteBtnClickedFlag != true) {
+			console.log(newRailPins);
+			window.plugins.mapKit.addMapPins(newRailPins);
+		//}
+		
+		// if we've clicked a favorite or route annotation, show the predictions
+		/*
+if (favoriteBtnClickedFlag == true) {
+			routeMapView = false;
+			annotationTap(notInRangeStopID);
+			favoriteBtnClickedFlag = false;
+			
+		}
+*/
+		
+	} else {
+		
+		// loop through all routes in this stop and create a string from all of them (this is a version for no stops in range)
+       /*
+ createRouteList = function(data) {
+        	//console.log('createRouteList start');
+			routeList = '';
+			routeList.replace(routeList, '');
+			potentialRouteList = [];
+			potentialRouteList.length = 0;
+			actualRouteList = [];
+			potentialVsActual = [];
+			
+			//potentialRouteList.length = 0;
+			
+			
+			// make a diff method for determining the difference in arrays
+			Array.prototype.diff = function(a) {
+			    return this.filter(function(i) {return !(a.indexOf(i) > -1);});
+			};
+			
+			// make HTML for infowindow for actual buses that are coming
+			if (predictions.Predictions.length) {
+				//console.log('true');
+				//console.log(data);
+				dataWorld = data;
+				$.each(data.minutes, function(i3, object) {
+					
+					// weed out undefined routes
+					if (i3 != 'undefined'){
+						//console.log('i3= ' + i3);
+						routeList = routeList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p><span class="ui-li-count">' + i3 + '</span></li>';
+					actualRouteList.push(i3);
+					potentialVsActual = potentialRouteList.diff(actualRouteList);
+					}
+				});
+				
+			} else {
+				
+				routeList = routeList + '<h2 class="center">No predictions available</h2>';
+
+			}
+			
+			//console.log('potential routes for stop ' + stopIDfocus + ': ' + potentialRouteList + ' and actual routes: ' + actualRouteList);
+			//console.log(stopName);
+			var dt = new DateTime();
+			routeList = '<li data-role="list-divider" class="stopTitle" id="' + stopID + '" data-lat=' + notInRangeStopLat + '" data-lon=' + notInRangeStopLon + '"><span class="stopName">' + notInRangeStopName + '</span></li>' + routeList + '<div class="updated">Updated ' + dt.formats.busTrackDateTime.b + ' - Pull to refresh</div>';
+			//console.log(routeList);
+			
+        }
+*/
 	}
 	
 }
@@ -1276,6 +1525,7 @@ $(document).on('pagebeforeshow', '#gps_map', function() {
 		//console.log(currentLongitude);
 		if (pins.length == 0) {
 			getStops(currentLatitude, currentLongitude, '800');
+			getRailStops(currentLatitude, currentLongitude, '800');
 		}
 		
 	}
@@ -1312,6 +1562,7 @@ $(document).on('pagebeforeshow', '#gps_map', function() {
 						//console.log(radius);
 						if (radius < 2000) {
 							getStops(viewportLat, viewportLon, radius);
+							getRailStops(viewportLat, viewportLon, radius);
 						}
 						
 					});
