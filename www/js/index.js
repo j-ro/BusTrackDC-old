@@ -225,7 +225,7 @@ calculateRadius = function(viewportLat, viewportLon, latitudeDelta, longitudeDel
 // get all routes for route search -- way to slow on jQuery mobile do to huge listview, so commenting out for now...
 
 getRoutes = function() {
-	$.mobile.loading( 'show' );
+	//$.mobile.loading( 'show' );
 	
 	function getRoutesConfirm(buttonIndex) {
         if (buttonIndex == 1) {
@@ -234,10 +234,21 @@ getRoutes = function() {
     }
     
     routeListFlag = false;
+    
+    ajaxCount++;
+    if (ajaxCount > 0) {
+    	$.mobile.loading( 'show' );
+    }
 	
 	getRoutesJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JRoutes?api_key=' + wmata_api_key + '&callback=?', function(data) {
+	
+		ajaxCount--;
+	    if (ajaxCount == 0) {
+	    	$.mobile.loading( 'hide' );
+	    }
+	
 		//console.log('ajax call done');
-		
+
 		
 		routes = data;
 		//console.log(routes);
@@ -249,7 +260,12 @@ getRoutes = function() {
 
 		
 	}).error(function(jqXHR, textStatus, errorThrown) {
-		$.mobile.loading( 'hide' );
+		//$.mobile.loading( 'hide' );
+		
+		ajaxCount--;
+	    if (ajaxCount == 0) {
+	    	$.mobile.loading( 'hide' );
+	    }
 		
 		$('#route_list_menu').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>');
 		$('#route_list_menu').listview('refresh');
@@ -293,7 +309,7 @@ buildRouteMenu = function(data) {
 	$('#route_list_content').trigger('create');
 	//$('#route_list_content ul').listview('refresh');
 	routeListFlag = true;
-	$.mobile.loading( 'hide' );
+	//$.mobile.loading( 'hide' );
 	
 	$('#route_list_content .route_menu_btn').click(function() {
 		routeClicked = $(this).data('routeid');
@@ -310,17 +326,31 @@ buildRouteMenu = function(data) {
 getStops = function(latitude,longitude,radius) {
 	//console.log('getstops start, lat=' + latitude + ' long=' + longitude + ' radius=' + radius);
 	
-	$.mobile.loading( 'show' );
+	//$.mobile.loading( 'show' );
+	
+	//console.log($.ajax());
 
 	function getStopsConfirm(buttonIndex) {
         if (buttonIndex == 1) {
         	getStops(latitude,longitude,radius);
         }
     }
+    
+    ajaxCount++;
+    if (ajaxCount > 0) {
+    	$.mobile.loading( 'show' );
+    }
 	
 	getStopsJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JStops?lat=' + latitude + '&lon=' + longitude + '&radius=' + radius + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
 		//console.log('ajax call done');
-		$.mobile.loading( 'hide' );
+		//$.mobile.loading( 'hide' );
+		
+		//console.log($.ajax());
+		
+		ajaxCount--;
+	    if (ajaxCount == 0) {
+	    	$.mobile.loading( 'hide' );
+	    }
 		
 		stops = data;
 		//console.log(stops);
@@ -332,7 +362,12 @@ getStops = function(latitude,longitude,radius) {
 
 		
 	}).error(function(jqXHR, textStatus, errorThrown) {
-		$.mobile.loading( 'hide' );
+		//$.mobile.loading( 'hide' );
+		
+		ajaxCount--;
+	    if (ajaxCount == 0) {
+	    	$.mobile.loading( 'hide' );
+	    }
 		
 		navigator.notification.confirm(
 		    'An error occured fetching the data you requested.',  // message
@@ -364,12 +399,23 @@ getStopsForRoute = function(routeID) {
         	getStopsForRoute(routeID);
         }
     }
+    
+    ajaxCount++;
+    if (ajaxCount > 0) {
+    	$.mobile.loading( 'show' );
+    }
 		
 	getStopsForRouteJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JRouteDetails?routeID=' + routeID + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
+		
+		ajaxCount--;
+	    if (ajaxCount == 0) {
+	    	$.mobile.loading( 'hide' );
+	    }
+	
 		//console.log('ajax call done');
 		//console.log('getstopsforroute hide');
 		getStopsForRouteFlag = true;
-		$.mobile.loading( 'hide' );
+		//$.mobile.loading( 'hide' );
 		
 		//console.log('getstopsforroute callback hide');
 		//$.mobile.loading( 'hide' );
@@ -401,7 +447,12 @@ getStopsForRoute = function(routeID) {
 		markerStopPoints(stopsForRoute);
 
 	}).error(function(jqXHR, textStatus, errorThrown) {
-		$.mobile.loading( 'hide' );
+		//$.mobile.loading( 'hide' );
+		
+		ajaxCount--;
+	    if (ajaxCount == 0) {
+	    	$.mobile.loading( 'hide' );
+	    }
 		
 		navigator.notification.confirm(
 		    'An error occured fetching the data you requested.',  // message
@@ -451,7 +502,7 @@ markerStopPoints = function(data) {
 				lon: data.Direction1.Stops[i].Lon,
 				title: toTitleCase(data.Direction1.Stops[i].Name),
 				subTitle: data.Direction1.Stops[i].StopID,
-				pinColor: "green",
+				pinColor: "005534",
 				selected: false,
 				index: i
 			}
@@ -462,8 +513,8 @@ markerStopPoints = function(data) {
 	
 	
 	//console.log(inRangeLongitude + ',' + inRangeLatitude);
-	console.log(pins0);
-	console.log(pins1);
+	//console.log(pins0);
+	//console.log(pins1);
 	window.plugins.mapKit.addMapPins(pins0);
 	window.plugins.mapKit.addMapPins(pins1);
 	//console.log('markerstoppoints hide');
@@ -482,20 +533,31 @@ markerStopPoints = function(data) {
 getRailStops = function(latitude,longitude,radius) {
 	//console.log('getstops start, lat=' + latitude + ' long=' + longitude + ' radius=' + radius);
 	
-	$.mobile.loading( 'show' );
+	//$.mobile.loading( 'show' );
 
 	function getRailStopsConfirm(buttonIndex) {
         if (buttonIndex == 1) {
         	getRailStops(latitude,longitude,radius);
         }
     }
+    
+    ajaxCount++;
+    if (ajaxCount > 0) {
+    	$.mobile.loading( 'show' );
+    }
 	
 	getRailStopsJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JStationEntrances?lat=' + latitude + '&lon=' + longitude + '&radius=' + radius + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
+	
+		ajaxCount--;
+	    if (ajaxCount == 0) {
+	    	$.mobile.loading( 'hide' );
+	    }
+	    
 		//console.log('ajax call done');
-		$.mobile.loading( 'hide' );
+		//$.mobile.loading( 'hide' );
 		
 		railStops = data;
-		console.log(railStops);
+		//console.log(railStops);
 
 		// output to log
 		markerRailStops(railStops);
@@ -504,7 +566,12 @@ getRailStops = function(latitude,longitude,radius) {
 
 		
 	}).error(function(jqXHR, textStatus, errorThrown) {
-		$.mobile.loading( 'hide' );
+		//$.mobile.loading( 'hide' );
+		
+		ajaxCount--;
+	    if (ajaxCount == 0) {
+	    	$.mobile.loading( 'hide' );
+	    }
 		
 		navigator.notification.confirm(
 		    'An error occured fetching the data you requested.',  // message
@@ -544,12 +611,14 @@ function annotationTap(text, latitude, longitude) {
 		
 		// only get this stuff if the annotation tapped is a stop, rather than part of a route map
 		if (text != '(null)') {
-			$.mobile.loading( 'show', {
+			/*
+$.mobile.loading( 'show', {
 				text: 'Loading',
 				textVisible: false,
 				theme: 'a',
 				html: ""
 			});
+*/
 			
 			// retry function on error
 			function annotationTapJSONConfirm(buttonIndex) {
@@ -557,12 +626,23 @@ function annotationTap(text, latitude, longitude) {
 		        	annotationTap(text, latitude, longitude);
 		        }
 		    }
+		    
+		    ajaxCount++;
+		    if (ajaxCount > 0) {
+			    $.mobile.loading( 'show' );
+			}
 			
 			annotationTapJSON = $.getJSON('http://api.wmata.com/NextBusService.svc/json/JPredictions?StopID=' + stopID + '&api_key=' + wmata_api_key + '&callback=?', function(data2, self4) {
+				
+				ajaxCount--;
+				if (ajaxCount == 0) {
+					$.mobile.loading( 'hide' );
+				}
+			
 				//console.log('predictions=' + data2.Predictions.length);
 				//sorted = data2.Predictions.sort(function(a,b) {return b - a; });
 				
-				$.mobile.loading( 'hide' );
+				//$.mobile.loading( 'hide' );
 				// thanks to Vlad Lyga for this part: http://stackoverflow.com/questions/14308149/how-do-i-merge-two-json-objects-in-javascript-jquery
 				predictions = data2;
 				
@@ -654,7 +734,12 @@ function annotationTap(text, latitude, longitude) {
 			    
 			    	
 		    }).error(function(jqXHR, textStatus, errorThrown) {
-				$.mobile.loading( 'hide' );
+				//$.mobile.loading( 'hide' );
+				
+				ajaxCount--;
+				if (ajaxCount == 0) {
+					$.mobile.loading( 'hide' );
+				}
 				
 				navigator.notification.confirm(
 				    'An error occured fetching the data you requested.',  // message
@@ -805,7 +890,7 @@ markerStops = function(data) {
 		//console.log('add new pins');
 		// show the new pins, but only if this is a real stop get, and not a favorite button or route annotation being clicked
 		//if (favoriteBtnClickedFlag != true) {
-			console.log(newPins);
+			//console.log(newPins);
 			window.plugins.mapKit.addMapPins(newPins);
 		//}
 		
@@ -1008,7 +1093,7 @@ createRouteList = function(data) {
 		//console.log('add new pins');
 		// show the new pins, but only if this is a real stop get, and not a favorite button or route annotation being clicked
 		//if (favoriteBtnClickedFlag != true) {
-			console.log(newRailPins);
+			//console.log(newRailPins);
 			window.plugins.mapKit.addMapPins(newRailPins);
 		//}
 		
@@ -1305,8 +1390,16 @@ function onDeviceReady() {
     
 }
 
+/*
+$.ajaxPrefilter(function (options){options.global = true;});
+$(document).ajaxStart(function(){ console.log('ajax start'); $.mobile.loading( 'show' ); });
+$(document).ajaxStop(function(){ console.log('ajax stop'); $.mobile.loading( 'hide' ); });
+*/
+
 
 $(document).on('pageinit', '#gps_map', function() {
+
+	ajaxCount = 0;
 	
 	//console.log('init!');
 
@@ -1504,7 +1597,7 @@ $(document).on('pageinit', '#route_list', function() {
 	$('#route_list_content').html('<h2 class="center">Loading...</h2>');
 	//$('#route_list_content').listview('refresh');
 	
-	$.mobile.loading( 'show' );
+	//$.mobile.loading( 'show' );
 
 	getRoutes();
 });
@@ -1625,12 +1718,14 @@ $(document).on('pagebeforeshow', '#favorite_menu_page', function() {
 		$('.favorite-stop-detail-btn').click(function() {
 			//console.log($(this).data('stopid'));
 			
-			$.mobile.loading( 'show', {
+			/*
+$.mobile.loading( 'show', {
 				text: 'Loading',
 				textVisible: false,
 				theme: 'a',
 				html: ""
 			});
+*/
 	
 			// store a variable on this stop's name in case we need to retrieve it later...
 			notInRangeStopID = $(this).data('stopid');
@@ -1739,12 +1834,9 @@ $(document).on('pageshow', '#route_map', function() {
 	//console.log(getStopsForRouteFlag);
 	
 	if (getStopsForRouteFlag == false) {
-		$.mobile.loading( 'show', {
-			text: 'Loading',
-			textVisible: false,
-			theme: 'a',
-			html: ""
-		});
+		if (ajaxCount > 0) {
+    		$.mobile.loading( 'show' );
+    	}
 	}
 	
 });

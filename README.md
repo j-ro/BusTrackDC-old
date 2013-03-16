@@ -9,6 +9,7 @@ Built using:
 * jQuery UI Touch Punch
 * FastClick
 * iScroll and jQuery Mobile iScrollView
+* ZSPinAnnotation
 * xCode
 
 Please feel free to download, fork, or help this app improve. You'll need to add your own WMATA api key to config.js in the /www/js/ directory to compile a working version. (Get a free key at http://developer.wmata.com/)

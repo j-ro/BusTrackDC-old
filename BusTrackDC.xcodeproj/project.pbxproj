@@ -56,6 +56,13 @@
 		5FD8AD6B16B4983700492455 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5FD8AD6A16B4983700492455 /* Default-568h@2x.png */; };
 		5FD8AD7716B4CE4A00492455 /* icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = 5FD8AD7516B4CE4A00492455 /* icon-72.png */; };
 		5FD8AD7816B4CE4A00492455 /* icon-72@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5FD8AD7616B4CE4A00492455 /* icon-72@2x.png */; };
+		5FDF28A416F3B6E300400820 /* color.png in Resources */ = {isa = PBXBuildFile; fileRef = 5FDF289C16F3B6E300400820 /* color.png */; };
+		5FDF28A516F3B6E300400820 /* color@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5FDF289D16F3B6E300400820 /* color@2x.png */; };
+		5FDF28A616F3B6E300400820 /* shading.png in Resources */ = {isa = PBXBuildFile; fileRef = 5FDF289E16F3B6E300400820 /* shading.png */; };
+		5FDF28A716F3B6E300400820 /* shading@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5FDF289F16F3B6E300400820 /* shading@2x.png */; };
+		5FDF28A816F3B6E300400820 /* stick.png in Resources */ = {isa = PBXBuildFile; fileRef = 5FDF28A016F3B6E300400820 /* stick.png */; };
+		5FDF28A916F3B6E300400820 /* stick@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5FDF28A116F3B6E300400820 /* stick@2x.png */; };
+		5FDF28AA16F3B6E300400820 /* ZSPinAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FDF28A316F3B6E300400820 /* ZSPinAnnotation.m */; };
 		D4A0D8761607E02300AEF8BB /* Default-568h@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = D4A0D8751607E02300AEF8BB /* Default-568h@2x~iphone.png */; };
 		F840E1F1165FE0F500CFE078 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = F840E1F0165FE0F500CFE078 /* config.xml */; };
 /* End PBXBuildFile section */
@@ -140,6 +147,14 @@
 		5FD8AD6A16B4983700492455 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		5FD8AD7516B4CE4A00492455 /* icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-72.png"; sourceTree = "<group>"; };
 		5FD8AD7616B4CE4A00492455 /* icon-72@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-72@2x.png"; sourceTree = "<group>"; };
+		5FDF289C16F3B6E300400820 /* color.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = color.png; sourceTree = "<group>"; };
+		5FDF289D16F3B6E300400820 /* color@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "color@2x.png"; sourceTree = "<group>"; };
+		5FDF289E16F3B6E300400820 /* shading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shading.png; sourceTree = "<group>"; };
+		5FDF289F16F3B6E300400820 /* shading@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shading@2x.png"; sourceTree = "<group>"; };
+		5FDF28A016F3B6E300400820 /* stick.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stick.png; sourceTree = "<group>"; };
+		5FDF28A116F3B6E300400820 /* stick@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "stick@2x.png"; sourceTree = "<group>"; };
+		5FDF28A216F3B6E300400820 /* ZSPinAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZSPinAnnotation.h; sourceTree = "<group>"; };
+		5FDF28A316F3B6E300400820 /* ZSPinAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZSPinAnnotation.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* BusTrackDC-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "BusTrackDC-Info.plist"; path = "../BusTrackDC-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 		D4A0D8751607E02300AEF8BB /* Default-568h@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x~iphone.png"; sourceTree = "<group>"; };
 		F840E1F0165FE0F500CFE078 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = WheresTheBusDC/config.xml; sourceTree = "<group>"; };
@@ -214,6 +229,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				5FDF289A16F3B6AD00400820 /* ZSPinAnnotation */,
 				5F31139616EA451300D94FC1 /* CoreData.framework */,
 				5F2F8B9816C2E2D5006DEED9 /* ConnAndKWashingtonDC.gpx */,
 				5FD8AD7516B4CE4A00492455 /* icon-72.png */,
@@ -370,6 +386,29 @@
 			path = GoogleSDK;
 			sourceTree = "<group>";
 		};
+		5FDF289A16F3B6AD00400820 /* ZSPinAnnotation */ = {
+			isa = PBXGroup;
+			children = (
+				5FDF289B16F3B6E300400820 /* images */,
+				5FDF28A216F3B6E300400820 /* ZSPinAnnotation.h */,
+				5FDF28A316F3B6E300400820 /* ZSPinAnnotation.m */,
+			);
+			path = ZSPinAnnotation;
+			sourceTree = "<group>";
+		};
+		5FDF289B16F3B6E300400820 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				5FDF289D16F3B6E300400820 /* color@2x.png */,
+				5FDF289C16F3B6E300400820 /* color.png */,
+				5FDF289E16F3B6E300400820 /* shading.png */,
+				5FDF289F16F3B6E300400820 /* shading@2x.png */,
+				5FDF28A016F3B6E300400820 /* stick.png */,
+				5FDF28A116F3B6E300400820 /* stick@2x.png */,
+			);
+			path = images;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -470,6 +509,12 @@
 				5F2F8B9916C2E2D5006DEED9 /* ConnAndKWashingtonDC.gpx in Resources */,
 				5F572C0016D2BA060059714F /* icon.png in Resources */,
 				5F572C0116D2BA180059714F /* icon@2x.png in Resources */,
+				5FDF28A416F3B6E300400820 /* color.png in Resources */,
+				5FDF28A516F3B6E300400820 /* color@2x.png in Resources */,
+				5FDF28A616F3B6E300400820 /* shading.png in Resources */,
+				5FDF28A716F3B6E300400820 /* shading@2x.png in Resources */,
+				5FDF28A816F3B6E300400820 /* stick.png in Resources */,
+				5FDF28A916F3B6E300400820 /* stick@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -504,6 +549,7 @@
 				5F9E0EEB16A8BDCB005E80EA /* CDVAnnotation.m in Sources */,
 				5F9E0EEC16A8BDCB005E80EA /* MapKit.m in Sources */,
 				5F3113A216EA45AC00D94FC1 /* GoogleAnalyticsPlugin.m in Sources */,
+				5FDF28AA16F3B6E300400820 /* ZSPinAnnotation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
