@@ -2,7 +2,7 @@ An iOS app to find out when your bus is coming to a stop near you, using WMATA p
 
 Built using:
 
-* Cordova
+* Cordova/PhoneGap
 * HTML/CSS/Javascript
 * jQuery/jQuery UI/jQuery Mobile
 * Underscore.js
