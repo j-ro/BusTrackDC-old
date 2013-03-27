@@ -1123,7 +1123,9 @@ markerRailStops = function(data) {
 	newRailPins.length = 0;
 	
 	//console.log('start markerStops');
+	//console.log(data.Entrances.length);
 	if (data.Entrances.length) {
+		//console.log('start loop');
 		$.each(data.Entrances, function(i, object) {
 	
 			
@@ -1425,66 +1427,19 @@ $.each(potentialRouteList, function(i4, object4) {
 		//}
 		
 		// if we've clicked a favorite or route annotation, show the predictions
-		/*
-if (favoriteBtnClickedFlag == true) {
+		//console.log(favoriteBtnClickedFlag);
+		if (favoriteBtnClickedFlag == true) {
 			routeMapView = false;
 			annotationTap(notInRangeStopID);
 			favoriteBtnClickedFlag = false;
 			
 		}
-*/
+
 		
 	} else {
 		
 		// loop through all routes in this stop and create a string from all of them (this is a version for no stops in range)
-       /*
- createRouteList = function(data) {
-        	//console.log('createRouteList start');
-			routeList = '';
-			routeList.replace(routeList, '');
-			potentialRouteList = [];
-			potentialRouteList.length = 0;
-			actualRouteList = [];
-			potentialVsActual = [];
-			
-			//potentialRouteList.length = 0;
-			
-			
-			// make a diff method for determining the difference in arrays
-			Array.prototype.diff = function(a) {
-			    return this.filter(function(i) {return !(a.indexOf(i) > -1);});
-			};
-			
-			// make HTML for infowindow for actual buses that are coming
-			if (predictions.Predictions.length) {
-				//console.log('true');
-				//console.log(data);
-				dataWorld = data;
-				$.each(data.minutes, function(i3, object) {
-					
-					// weed out undefined routes
-					if (i3 != 'undefined'){
-						//console.log('i3= ' + i3);
-						routeList = routeList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p><span class="ui-li-count">' + i3 + '</span></li>';
-					actualRouteList.push(i3);
-					potentialVsActual = potentialRouteList.diff(actualRouteList);
-					}
-				});
-				
-			} else {
-				
-				routeList = routeList + '<h2 class="center">No predictions available</h2>';
 
-			}
-			
-			//console.log('potential routes for stop ' + stopIDfocus + ': ' + potentialRouteList + ' and actual routes: ' + actualRouteList);
-			//console.log(stopName);
-			var dt = new DateTime();
-			routeList = '<li data-role="list-divider" class="stopTitle" id="' + stopID + '" data-lat=' + notInRangeStopLat + '" data-lon=' + notInRangeStopLon + '"><span class="stopName">' + notInRangeStopName + '</span></li>' + routeList + '<div class="updated">Updated ' + dt.formats.busTrackDateTime.b + ' - Pull to refresh</div>';
-			//console.log(routeList);
-			
-        }
-*/
 	}
 	
 }
@@ -1552,7 +1507,7 @@ function favoriteTap(favorite) {
 		
 		var favoriteMatches = jQuery.grep(favorites, function(obj) {
 			//console.log(data.Stops[i].StopID + ' == ' + obj.subTitle + '?');
-			return parseInt(obj.id) == favorite;
+			return obj.id == favorite;
 		});
 		
 		//console.log(favorites);
@@ -1853,7 +1808,11 @@ $.mobile.loading( 'show', {
 		
 				// if we click a favorite, get the stop and populate the stops array really quick, so we can view all the data about the predictions
 				favoriteBtnClickedFlag = true;
-				getStops(notInRangeStopLat, notInRangeStopLon, '50');
+				if (isNaN(notInRangeStopID)) {
+					getRailStops(notInRangeStopLat, notInRangeStopLon, '500');
+				} else {
+					getStops(notInRangeStopLat, notInRangeStopLon, '50');
+				}
 	
 			});
 			
@@ -2029,7 +1988,11 @@ $(document).on('pagebeforeshow', '#favorite_menu_page', function() {
 		favoritesListHTML = '';
 		
 		$.each(favorites, function(i, object) {
-			favoritesListHTML = favoritesListHTML + '<li id="' + object.id + '"><a data-transition="slide" class="favorite-stop-detail-btn" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><h1 class="favoriteMenuStopTitle">' + toTitleCase(object.name) +'</h1><p>WMATA Bus Stop #'+ object.id + '</p><p class="delete-handle">Delete</p><p class="drag-handle">Sort</p></a></li>';
+			if (isNaN(object.id)) {
+				favoritesListHTML = favoritesListHTML + '<li id="' + object.id + '"><a data-transition="slide" class="favorite-stop-detail-btn" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><h1 class="favoriteMenuStopTitle">' + toTitleCase(object.name) +'</h1><p>Metro Rail Station #'+ object.id + '</p><p class="delete-handle">Delete</p><p class="drag-handle">Sort</p></a></li>';
+			} else {
+				favoritesListHTML = favoritesListHTML + '<li id="' + object.id + '"><a data-transition="slide" class="favorite-stop-detail-btn" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><h1 class="favoriteMenuStopTitle">' + toTitleCase(object.name) +'</h1><p>WMATA Bus Stop #'+ object.id + '</p><p class="delete-handle">Delete</p><p class="drag-handle">Sort</p></a></li>';
+			}
 		});
 		
 		
@@ -2057,7 +2020,12 @@ $.mobile.loading( 'show', {
 	
 			// if we click a favorite, get the stop and populate the stops array really quick, so we can view all the data about the predictions
 			favoriteBtnClickedFlag = true;
-			getStops(notInRangeStopLat, notInRangeStopLon, '50');
+			if (isNaN(notInRangeStopID)) {
+				getRailStops(notInRangeStopLat, notInRangeStopLon, '500');
+			} else {
+				getStops(notInRangeStopLat, notInRangeStopLon, '50');
+			}
+			
 
 		});
 		
@@ -2086,9 +2054,9 @@ $(document).on('pagebeforeshow', '#infowindow', function() {
 		var favoriteMatches = jQuery.grep(favorites, function(obj) {
 			//console.log(data.Stops[i].StopID + ' == ' + obj.subTitle + '?');
 			if (stopID) {
-				return parseInt(obj.id) == stopID;
+				return obj.id == stopID;
 			} else {
-				return parseInt(obj.id) == notInRangeStopID;
+				return obj.id == notInRangeStopID;
 			}
 			
 		});
