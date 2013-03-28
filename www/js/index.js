@@ -252,9 +252,39 @@ getRoutes = function() {
 		
 		routes = data;
 		//console.log(routes);
+		
+		getRailRoutesJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JLines?api_key=' + wmata_api_key + '&callback=?', function(data) {
+		
+			ajaxCount--;
+		    if (ajaxCount == 0) {
+		    	$.mobile.loading( 'hide' );
+		    }
+		    
+		    railRoutes = data;
 
-		// output to log
-		buildRouteMenu(routes);
+			// output to log
+			buildRouteMenu(routes, railRoutes);
+		
+		}).error(function(jqXHR, textStatus, errorThrown) {
+			//$.mobile.loading( 'hide' );
+			
+			ajaxCount--;
+		    if (ajaxCount == 0) {
+		    	$.mobile.loading( 'hide' );
+		    }
+			
+			$('#route_list_menu').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>');
+			$('#route_list_menu').listview('refresh');
+			
+			if (errorThrown != 'abort') {
+				navigator.notification.confirm(
+				    'An error occured fetching the data you requested.',  // message
+				    getRoutesConfirm,         // callback
+				    "There was an error",            // title
+				    'Try again,Cancel'                  // buttonName
+			    ); 
+			}
+		});
 
 		//console.log(stops.Stops[0].Lat);
 
@@ -283,9 +313,10 @@ getRoutes = function() {
 
 
 
-buildRouteMenu = function(data) {
-	//console.log('build start');
-	//console.log(data);
+buildRouteMenu = function(dataBus, dataRail) {
+	console.log('build start');
+	console.log(dataBus);
+	console.log(dataRail);
 	
 	$('#route_list_content').html('<h2 class="center">Type in the search box above<br/>to search for routes.</h2>');
 	
@@ -293,10 +324,17 @@ buildRouteMenu = function(data) {
 	
 	//routeMenuHTML = '<ul data-role="listview" data-filter="true" data-filter-placeholder="Search..." id="route_list_menu" data-filter-reveal="true">';
 
-	$.each(data.Routes, function(i, object) {
+	$.each(dataRail.Lines, function(i, object) {
+		console.log(object.LineCode);
+		$('<li/>').html('<a href="#" data-routeid="' + object.LineCode + '" class="route_menu_btn">' + object.DisplayName + ' Rail Line</a>').prependTo( '#route_list_content ul' );
+		//routeMenuHTML = routeMenuHTML + '<li><a href="#" data-routeid="' + object.RouteID + '" class="route_manu_btn">' + object.RouteID + '</a></li>';
+	
+	});
+
+	$.each(dataBus.Routes, function(i, object) {
 		//filter out WMATA's weird half-routes
 		if (/([cv])/.exec(object.RouteID) == null) {
-			$('<li/>').html('<a href="#" data-routeid="' + object.RouteID + '" class="route_menu_btn">' + object.RouteID + '</a>').prependTo( '#route_list_content ul' );
+			$('<li/>').html('<a href="#" data-routeid="' + object.RouteID + '" class="route_menu_btn">' + object.RouteID + ' Bus Line</a>').prependTo( '#route_list_content ul' );
 			//routeMenuHTML = routeMenuHTML + '<li><a href="#" data-routeid="' + object.RouteID + '" class="route_manu_btn">' + object.RouteID + '</a></li>';
 		}
 		
@@ -315,7 +353,25 @@ buildRouteMenu = function(data) {
 	
 	$('#route_list_content .route_menu_btn').click(function() {
 		routeClicked = $(this).data('routeid');
-		$('#route_map_title').html('Route ' + routeClicked);
+		
+		if (isNaN(routeClicked)) {
+			
+			if (routeClicked == 'RD') {
+		    	routeTitle = 'Red';
+	    	} else if (routeClicked == 'BL') {
+		    	routeTitle = 'Blue';
+	    	} else if (routeClicked == 'OR') {
+		    	routeTitle = 'Orange';
+	    	} else if (routeClicked == 'YL') {
+		    	routeTitle = 'Yellow';
+	    	} else if (routeClicked == 'GR') {
+		    	routeTitle = 'Green';
+	    	}
+	    	
+	    	$('#route_map_title').html(routeTitle + ' Line');
+		} else {
+			$('#route_map_title').html('Route ' + routeClicked);
+		}
 			    
 		$.mobile.changePage( "#route_map", { transition: "fade" } );
 	});
