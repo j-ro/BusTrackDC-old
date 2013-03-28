@@ -298,3 +298,51 @@ content: "";
 	-moz-animation-timing-function: ease-in;
 	-moz-animation-duration: 125ms;
 }
+
+
+/* rail button colors */
+
+#OR .ui-li-count {
+	background-image: -webkit-gradient(linear,left top,left bottom,from( #ffc155 ),to( #ffedb2 ));
+	background-image: -webkit-linear-gradient(#ffc155, #ffedb2);
+	background-image: -moz-linear-gradient( #ffc155,#ffedb2 );
+	background-image: -ms-linear-gradient( #ffc155,#ffedb2 );
+	background-image: -o-linear-gradient( #ffc155,#ffedb2 );
+	background-image: linear-gradient( #ffc155,#ffedb2 );
+}
+
+#BL .ui-li-count {
+	background-image: -webkit-gradient(linear,left top,left bottom,from( #76afff ),to( #bbdfff ));
+	background-image: -webkit-linear-gradient(#76afff, #bbdfff);
+	background-image: -moz-linear-gradient( #76afff,#bbdfff );
+	background-image: -ms-linear-gradient( #76afff,#bbdfff );
+	background-image: -o-linear-gradient( #76afff,#bbdfff );
+	background-image: linear-gradient( #76afff,#bbdfff );
+}
+
+#RD .ui-li-count {
+	background-image: -webkit-gradient(linear,left top,left bottom,from( #ff8080 ),to( #ffbbbb ));
+	background-image: -webkit-linear-gradient(#ff8080, #ffbbbb);
+	background-image: -moz-linear-gradient( #ff8080,#ffbbbb );
+	background-image: -ms-linear-gradient( #ff8080,#ffbbbb );
+	background-image: -o-linear-gradient( #ff8080,#ffbbbb );
+	background-image: linear-gradient( #ff8080,#ffbbbb );
+}
+
+#YL .ui-li-count {
+	background-image: -webkit-gradient(linear,left top,left bottom,from( #fffa6a ),to( #ffffcc ));
+	background-image: -webkit-linear-gradient(#fffa6a, #ffffcc);
+	background-image: -moz-linear-gradient( #fffa6a,#ffffcc );
+	background-image: -ms-linear-gradient( #fffa6a,#ffffcc );
+	background-image: -o-linear-gradient( #fffa6a,#ffffcc );
+	background-image: linear-gradient( #fffa6a,#ffffcc );
+}
+
+#GR .ui-li-count {
+	background-image: -webkit-gradient(linear,left top,left bottom,from( #91d197 ),to( #d3f9d3 ));
+	background-image: -webkit-linear-gradient(#91d197, #d3f9d3);
+	background-image: -moz-linear-gradient( #91d197,#d3f9d3 );
+	background-image: -ms-linear-gradient( #91d197,#d3f9d3 );
+	background-image: -o-linear-gradient( #91d197,#d3f9d3 );
+	background-image: linear-gradient( #91d197,#d3f9d3 );
+}

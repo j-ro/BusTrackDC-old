@@ -1332,20 +1332,17 @@ $.each(potentialVsActual, function(i4, object4) {
 									
 								});
 */
-		/*					} else { */
+							} else { 
 								
 								// if there are no predictions at all, just do the stops
-								/*
-$.each(potentialRouteList, function(i4, object4) {
-									// check for the routes with a lowercase c or v in their name, they are variation routes and should be ignored
-									if (/([cv])/.exec(potentialRouteList[i4]) == null) {			
-										routeList = routeList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + potentialRouteList[i4] + '"><p>no prediction available</p><span class="ui-li-count">' + potentialRouteList[i4] + '</span></a></li>';
-									}
+								
+								$.each(potentialRailRouteList, function(i4, object4) {			
+									railRouteList = railRouteList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + object4 + '"><p>no prediction available</p><p><em>(this usually means this station is closed)</em></p><span class="ui-li-count">' + object4 + '</span></a></li>';
 								});
 								
 								actualRouteList.length = 0;
 								potentialVsActual.length = 0;
-*/
+
 				
 							}
 							
