@@ -1,4 +1,4 @@
-An iOS app to find out when your bus is coming to a stop near you, using WMATA prediction data.
+An iOS app to find out when your bus or train is coming to a stop near you, using WMATA prediction data.
 
 Built using:
 
