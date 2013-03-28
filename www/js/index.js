@@ -592,6 +592,137 @@ getRailStops = function(latitude,longitude,radius) {
 }
 
 
+getRailStopsForRoute = function(routeID) {
+	//console.log('getstops start');
+	
+	/* it's unclear why this one doesn't work, but all the other ones right before AJAX calls do. Anyway, we load this on on the pageshow event for the #route_map page instead.
+	$.mobile.loading( 'show', {
+		text: 'Loading',
+		textVisible: false,
+		theme: 'a',
+		html: ""
+	});
+	*/
+	getStopsForRouteFlag = false;
+	
+	// retry function on error
+	function getRailStopsForRouteConfirm(buttonIndex) {
+        if (buttonIndex == 1) {
+        	getRailStopsForRoute(routeID);
+        }
+    }
+    
+    ajaxCount++;
+    if (ajaxCount > 0) {
+    	$.mobile.loading( 'show' );
+    }
+		
+	getRailStopsForRouteJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JStations?LineCode=' + routeID + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
+		
+		ajaxCount--;
+	    if (ajaxCount == 0) {
+	    	$.mobile.loading( 'hide' );
+	    }
+	
+		//console.log('ajax call done');
+		//console.log('getstopsforroute hide');
+		getStopsForRouteFlag = true;
+		//$.mobile.loading( 'hide' );
+		
+		//console.log('getstopsforroute callback hide');
+		//$.mobile.loading( 'hide' );
+		railStopsForRoute = data;
+		
+		//console.log(stopsForRoute);
+		
+		mapOptions2 = {
+
+	        diameter: 1500,
+	        lat: currentLatitude,
+	        lon: currentLongitude
+
+	    };
+	    
+	    //console.log('call mapoptions');
+	    window.plugins.mapKit.setMapData(mapOptions2);
+		
+		markerRailStopPoints(railStopsForRoute);
+
+	}).error(function(jqXHR, textStatus, errorThrown) {
+		//$.mobile.loading( 'hide' );
+		
+		ajaxCount--;
+	    if (ajaxCount == 0) {
+	    	$.mobile.loading( 'hide' );
+	    }
+		
+		if (errorThrown != 'abort') {
+			navigator.notification.confirm(
+			    'An error occured fetching the data you requested.',  // message
+			    getRailStopsForRouteConfirm,         // callback
+			    "There was an error",            // title
+			    'Try again,Cancel'                  // buttonName
+		    ); 
+		}
+	});
+	
+}
+
+
+
+// make markers for each stop on a route (different functions for coming and going to do different colors)
+markerRailStopPoints = function(data) {
+	//console.log('start markerStopPoints');
+	var pins0 = [];
+	var pins1 = [];
+	
+	var inRangeLatitude = false;
+	var inRangeLongitude = false;
+
+	
+	$.each(data.Stations, function(i, object) {
+
+		//console.log('done with pin0 ' + i);
+		
+		if (object.StationTogether1 != "") {
+			var stationCode = object.Code + ',' + object.StationTogether1;
+		} else {
+			var stationCode = object.Code;
+		}
+		
+		pins0.push(
+			{
+				lat: object.Lat,
+				lon: object.Lon,
+				title: object.Name,
+				subTitle: 'Metro Rail Station #' + stationCode,
+				pinColor: "red",
+				selected: false,
+				index: i
+			}
+		);
+	});
+
+
+	
+	
+	//console.log(inRangeLongitude + ',' + inRangeLatitude);
+	//console.log(pins0);
+	//console.log(pins1);
+	window.plugins.mapKit.addMapPins(pins0);
+	//console.log('markerstoppoints hide');
+	//$.mobile.loading( 'hide' );
+	//console.log(inRangeLongitude + ',' + inRangeLatitude);
+	
+	var pinLength = pins0.length;
+	//console.log(pinLength);
+	pinLength = parseInt(pinLength * 0.5);
+
+	
+}
+
+
+
 //when a pin is deselected, kill any ajax calls
 function annotationDeselect() {
 	annotationTapJSON.abort();
@@ -611,7 +742,12 @@ function annotationTap(text, latitude, longitude) {
 	if (routeMapView == true) {
 		notInRangeStopID = text.toString();
 		favoriteBtnClickedFlag = true;
-		getStops(latitude, longitude, '50');
+			if (isNaN(text)) {
+				getRailStops(latitude, longitude, '500');
+			} else {
+				getStops(latitude, longitude, '50');
+			}
+				
 	} else {
 	
 		// if this is a rail stop, do that function
@@ -1129,7 +1265,7 @@ markerRailStops = function(data) {
 		$.each(data.Entrances, function(i, object) {
 	
 			
-			// the pins are not unique! AAAAAAHHHHHH Now I need more complex data structures in these damn pins...
+			// rail matching query
 			railMatches = jQuery.grep(pins, function(obj) {
 				// our match function to see if a pin already exists in the global pin array
 				return obj.index == data.Entrances[i].ID;
@@ -1365,9 +1501,25 @@ $.each(potentialVsActual, function(i4, object4) {
 					    $('.route-detail-btn').click(function() {
 					    
 					    	//console.log('route btn clicked');
+					    	//console.log($(this).attr('id'));
 					
-					    	routeClicked = $(this).data('line');
-					    	$('#route_map_title').html('Route ' + routeClicked);
+					    	routeClicked = $(this).attr('id');
+					    	
+					    	//console.log(routeClicked);
+					    	
+					    	if (routeClicked == 'RD') {
+						    	routeTitle = 'Red';
+					    	} else if (routeClicked == 'BL') {
+						    	routeTitle = 'Blue';
+					    	} else if (routeClicked == 'OR') {
+						    	routeTitle = 'Orange';
+					    	} else if (routeClicked == 'YL') {
+						    	routeTitle = 'Yellow';
+					    	} else if (routeClicked == 'GR') {
+						    	routeTitle = 'Green';
+					    	}
+					    	
+					    	$('#route_map_title').html(routeTitle + ' Line');
 					    
 					    	$.mobile.changePage( "#route_map", { transition: "fade" } );
 			
@@ -2114,7 +2266,13 @@ $(document).on('pagebeforeshow', '#route_map', function() {
 	routeMapView = true;
 	
 	//console.log(routeClicked);
-	getStopsForRoute(routeClicked);
+	
+	if (routeClicked == 'RD' || routeClicked == 'BL' || routeClicked == 'OR' || routeClicked == 'YL' || routeClicked == 'GR') {
+		getRailStopsForRoute(routeClicked);
+	} else {
+		getStopsForRoute(routeClicked);
+	}
+	
 });
 
 $(document).on('pageshow', '#route_map', function() {
@@ -2151,7 +2309,14 @@ $(document).on('pagebeforehide', '#route_map', function() {
 	
 	window.plugins.mapKit.clearMapPins();
 	//console.log('getstopsjson abort!');
-	getStopsForRouteJSON.abort();
+	if (typeof(getStopsForRouteJSON) != 'undefined') {
+		getStopsForRouteJSON.abort();
+	}
+	
+	if (typeof(getRailStopsForRouteJSON) != 'undefined') {
+		getRailStopsForRouteJSON.abort();
+	}
+	
 });
 
 $(document).on('pagebeforehide', '#infowindow', function() {
