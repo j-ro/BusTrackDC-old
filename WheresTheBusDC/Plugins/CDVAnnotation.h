@@ -31,6 +31,8 @@
 @property (nonatomic, copy) NSString *pinColor;
 @property (nonatomic, assign) BOOL selected;
 
+//@property (nonatomic, copy) UIColor *pinRGB;
+
 - (void)notifyCalloutInfo:(MKPlacemark *)placemark;
 - (id)initWithCoordinate:(CLLocationCoordinate2D)coordinate index:(NSInteger)index title:(NSString*)title subTitle:(NSString*)subTitle imageURL:(NSString*)imageURL;
 

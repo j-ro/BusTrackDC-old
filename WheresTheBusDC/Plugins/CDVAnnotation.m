@@ -17,6 +17,7 @@
 @synthesize	imageURL = _imageURL;
 @synthesize	coordinate = _coordinate;
 @synthesize	pinColor;
+//@synthesize	pinRGB;
 @synthesize selected;
 
 - (id)initWithCoordinate:(CLLocationCoordinate2D)coordinate index:(NSInteger)index title:(NSString*)title subTitle:(NSString*)subTitle imageURL:(NSString*)imageURL {

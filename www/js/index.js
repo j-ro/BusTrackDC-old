@@ -21,7 +21,7 @@ window.addEventListener('load', function() {
 //on resume function to autorefresh bus times if the infowindow is active
 function onResume() {
 	if ($.mobile.activePage[0].id == 'infowindow') {
-		resumeStopID = parseInt($('.stopTitle').attr('id'));
+		resumeStopID = $('.stopTitle').attr('id');
     	annotationTap(resumeStopID); 
 	}
 }
@@ -225,7 +225,7 @@ calculateRadius = function(viewportLat, viewportLon, latitudeDelta, longitudeDel
 // get all routes for route search -- way to slow on jQuery mobile do to huge listview, so commenting out for now...
 
 getRoutes = function() {
-	$.mobile.loading( 'show' );
+	//$.mobile.loading( 'show' );
 	
 	function getRoutesConfirm(buttonIndex) {
         if (buttonIndex == 1) {
@@ -234,40 +234,89 @@ getRoutes = function() {
     }
     
     routeListFlag = false;
+    
+    ajaxCount++;
+    if (ajaxCount > 0) {
+    	$.mobile.loading( 'show' );
+    }
 	
 	getRoutesJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JRoutes?api_key=' + wmata_api_key + '&callback=?', function(data) {
+	
+		ajaxCount--;
+	    if (ajaxCount == 0) {
+	    	$.mobile.loading( 'hide' );
+	    }
+	
 		//console.log('ajax call done');
-		
+
 		
 		routes = data;
 		//console.log(routes);
+		
+		getRailRoutesJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JLines?api_key=' + wmata_api_key + '&callback=?', function(data) {
+		
+			ajaxCount--;
+		    if (ajaxCount == 0) {
+		    	$.mobile.loading( 'hide' );
+		    }
+		    
+		    railRoutes = data;
 
-		// output to log
-		buildRouteMenu(routes);
+			// output to log
+			buildRouteMenu(routes, railRoutes);
+		
+		}).error(function(jqXHR, textStatus, errorThrown) {
+			//$.mobile.loading( 'hide' );
+			
+			ajaxCount--;
+		    if (ajaxCount == 0) {
+		    	$.mobile.loading( 'hide' );
+		    }
+			
+			$('#route_list_menu').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>');
+			$('#route_list_menu').listview('refresh');
+			
+			if (errorThrown != 'abort') {
+				navigator.notification.confirm(
+				    'An error occured fetching the data you requested.',  // message
+				    getRoutesConfirm,         // callback
+				    "There was an error",            // title
+				    'Try again,Cancel'                  // buttonName
+			    ); 
+			}
+		});
 
 		//console.log(stops.Stops[0].Lat);
 
 		
 	}).error(function(jqXHR, textStatus, errorThrown) {
-		$.mobile.loading( 'hide' );
+		//$.mobile.loading( 'hide' );
+		
+		ajaxCount--;
+	    if (ajaxCount == 0) {
+	    	$.mobile.loading( 'hide' );
+	    }
 		
 		$('#route_list_menu').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>');
 		$('#route_list_menu').listview('refresh');
 		
-		navigator.notification.confirm(
-		    'An error occured fetching the data you requested.',  // message
-		    getRoutesConfirm,         // callback
-		    "There was an error",            // title
-		    'Try again,Cancel'                  // buttonName
-	    ); 
+		if (errorThrown != 'abort') {
+			navigator.notification.confirm(
+			    'An error occured fetching the data you requested.',  // message
+			    getRoutesConfirm,         // callback
+			    "There was an error",            // title
+			    'Try again,Cancel'                  // buttonName
+		    ); 
+		}
 	});
 }
 
 
 
-buildRouteMenu = function(data) {
-	//console.log('build start');
-	//console.log(data);
+buildRouteMenu = function(dataBus, dataRail) {
+	console.log('build start');
+	console.log(dataBus);
+	console.log(dataRail);
 	
 	$('#route_list_content').html('<h2 class="center">Type in the search box above<br/>to search for routes.</h2>');
 	
@@ -275,10 +324,17 @@ buildRouteMenu = function(data) {
 	
 	//routeMenuHTML = '<ul data-role="listview" data-filter="true" data-filter-placeholder="Search..." id="route_list_menu" data-filter-reveal="true">';
 
-	$.each(data.Routes, function(i, object) {
+	$.each(dataRail.Lines, function(i, object) {
+		console.log(object.LineCode);
+		$('<li/>').html('<a href="#" data-routeid="' + object.LineCode + '" class="route_menu_btn">' + object.DisplayName + ' Rail Line</a>').prependTo( '#route_list_content ul' );
+		//routeMenuHTML = routeMenuHTML + '<li><a href="#" data-routeid="' + object.RouteID + '" class="route_manu_btn">' + object.RouteID + '</a></li>';
+	
+	});
+
+	$.each(dataBus.Routes, function(i, object) {
 		//filter out WMATA's weird half-routes
 		if (/([cv])/.exec(object.RouteID) == null) {
-			$('<li/>').html('<a href="#" data-routeid="' + object.RouteID + '" class="route_menu_btn">' + object.RouteID + '</a>').prependTo( '#route_list_content ul' );
+			$('<li/>').html('<a href="#" data-routeid="' + object.RouteID + '" class="route_menu_btn">' + object.RouteID + ' Bus Line</a>').prependTo( '#route_list_content ul' );
 			//routeMenuHTML = routeMenuHTML + '<li><a href="#" data-routeid="' + object.RouteID + '" class="route_manu_btn">' + object.RouteID + '</a></li>';
 		}
 		
@@ -293,11 +349,29 @@ buildRouteMenu = function(data) {
 	$('#route_list_content').trigger('create');
 	//$('#route_list_content ul').listview('refresh');
 	routeListFlag = true;
-	$.mobile.loading( 'hide' );
+	//$.mobile.loading( 'hide' );
 	
 	$('#route_list_content .route_menu_btn').click(function() {
 		routeClicked = $(this).data('routeid');
-		$('#route_map_title').html('Route ' + routeClicked);
+		
+		if (isNaN(routeClicked)) {
+			
+			if (routeClicked == 'RD') {
+		    	routeTitle = 'Red';
+	    	} else if (routeClicked == 'BL') {
+		    	routeTitle = 'Blue';
+	    	} else if (routeClicked == 'OR') {
+		    	routeTitle = 'Orange';
+	    	} else if (routeClicked == 'YL') {
+		    	routeTitle = 'Yellow';
+	    	} else if (routeClicked == 'GR') {
+		    	routeTitle = 'Green';
+	    	}
+	    	
+	    	$('#route_map_title').html(routeTitle + ' Line');
+		} else {
+			$('#route_map_title').html('Route ' + routeClicked);
+		}
 			    
 		$.mobile.changePage( "#route_map", { transition: "fade" } );
 	});
@@ -310,17 +384,31 @@ buildRouteMenu = function(data) {
 getStops = function(latitude,longitude,radius) {
 	//console.log('getstops start, lat=' + latitude + ' long=' + longitude + ' radius=' + radius);
 	
-	$.mobile.loading( 'show' );
+	//$.mobile.loading( 'show' );
+	
+	//console.log($.ajax());
 
 	function getStopsConfirm(buttonIndex) {
         if (buttonIndex == 1) {
         	getStops(latitude,longitude,radius);
         }
     }
+    
+    ajaxCount++;
+    if (ajaxCount > 0) {
+    	$.mobile.loading( 'show' );
+    }
 	
 	getStopsJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JStops?lat=' + latitude + '&lon=' + longitude + '&radius=' + radius + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
 		//console.log('ajax call done');
-		$.mobile.loading( 'hide' );
+		//$.mobile.loading( 'hide' );
+		
+		//console.log($.ajax());
+		
+		ajaxCount--;
+	    if (ajaxCount == 0) {
+	    	$.mobile.loading( 'hide' );
+	    }
 		
 		stops = data;
 		//console.log(stops);
@@ -332,14 +420,21 @@ getStops = function(latitude,longitude,radius) {
 
 		
 	}).error(function(jqXHR, textStatus, errorThrown) {
-		$.mobile.loading( 'hide' );
+		//$.mobile.loading( 'hide' );
 		
-		navigator.notification.confirm(
-		    'An error occured fetching the data you requested.',  // message
-		    getStopsConfirm,         // callback
-		    "There was an error",            // title
-		    'Try again,Cancel'                  // buttonName
-	    ); 
+		ajaxCount--;
+	    if (ajaxCount == 0) {
+	    	$.mobile.loading( 'hide' );
+	    }
+		
+		if (errorThrown != 'abort') {
+			navigator.notification.confirm(
+			    'An error occured fetching the data you requested.',  // message
+			    getStopsConfirm,         // callback
+			    "There was an error",            // title
+			    'Try again,Cancel'                  // buttonName
+		    ); 
+		}
 	});
 	
 }
@@ -364,12 +459,23 @@ getStopsForRoute = function(routeID) {
         	getStopsForRoute(routeID);
         }
     }
+    
+    ajaxCount++;
+    if (ajaxCount > 0) {
+    	$.mobile.loading( 'show' );
+    }
 		
 	getStopsForRouteJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JRouteDetails?routeID=' + routeID + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
+		
+		ajaxCount--;
+	    if (ajaxCount == 0) {
+	    	$.mobile.loading( 'hide' );
+	    }
+	
 		//console.log('ajax call done');
 		//console.log('getstopsforroute hide');
 		getStopsForRouteFlag = true;
-		$.mobile.loading( 'hide' );
+		//$.mobile.loading( 'hide' );
 		
 		//console.log('getstopsforroute callback hide');
 		//$.mobile.loading( 'hide' );
@@ -401,14 +507,21 @@ getStopsForRoute = function(routeID) {
 		markerStopPoints(stopsForRoute);
 
 	}).error(function(jqXHR, textStatus, errorThrown) {
-		$.mobile.loading( 'hide' );
+		//$.mobile.loading( 'hide' );
 		
-		navigator.notification.confirm(
-		    'An error occured fetching the data you requested.',  // message
-		    getStopsForRouteConfirm,         // callback
-		    "There was an error",            // title
-		    'Try again,Cancel'                  // buttonName
-	    ); 
+		ajaxCount--;
+	    if (ajaxCount == 0) {
+	    	$.mobile.loading( 'hide' );
+	    }
+		
+		if (errorThrown != 'abort') {
+			navigator.notification.confirm(
+			    'An error occured fetching the data you requested.',  // message
+			    getStopsForRouteConfirm,         // callback
+			    "There was an error",            // title
+			    'Try again,Cancel'                  // buttonName
+		    ); 
+		}
 	});
 	
 }
@@ -434,7 +547,7 @@ markerStopPoints = function(data) {
 				lat: data.Direction0.Stops[i].Lat,
 				lon: data.Direction0.Stops[i].Lon,
 				title: toTitleCase(data.Direction0.Stops[i].Name),
-				subTitle: data.Direction0.Stops[i].StopID,
+				subTitle: 'WMATA Bus Stop #' + data.Direction0.Stops[i].StopID,
 				pinColor: "green",
 				selected: false,
 				index: i
@@ -450,8 +563,9 @@ markerStopPoints = function(data) {
 				lat: data.Direction1.Stops[i].Lat,
 				lon: data.Direction1.Stops[i].Lon,
 				title: toTitleCase(data.Direction1.Stops[i].Name),
-				subTitle: data.Direction1.Stops[i].StopID,
-				pinColor: "green",
+				subTitle: 'WMATA Bus Stop #' + data.Direction1.Stops[i].StopID,
+				//pinColor: "005534",
+				pinColor: "70f270",
 				selected: false,
 				index: i
 			}
@@ -462,6 +576,8 @@ markerStopPoints = function(data) {
 	
 	
 	//console.log(inRangeLongitude + ',' + inRangeLatitude);
+	//console.log(pins0);
+	//console.log(pins1);
 	window.plugins.mapKit.addMapPins(pins0);
 	window.plugins.mapKit.addMapPins(pins1);
 	//console.log('markerstoppoints hide');
@@ -476,6 +592,194 @@ markerStopPoints = function(data) {
 }
 
 
+// get a list of stops nearby
+getRailStops = function(latitude,longitude,radius) {
+	//console.log('getstops start, lat=' + latitude + ' long=' + longitude + ' radius=' + radius);
+	
+	//$.mobile.loading( 'show' );
+
+	function getRailStopsConfirm(buttonIndex) {
+        if (buttonIndex == 1) {
+        	getRailStops(latitude,longitude,radius);
+        }
+    }
+    
+    ajaxCount++;
+    if (ajaxCount > 0) {
+    	$.mobile.loading( 'show' );
+    }
+	
+	getRailStopsJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JStationEntrances?lat=' + latitude + '&lon=' + longitude + '&radius=' + radius + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
+	
+		ajaxCount--;
+	    if (ajaxCount == 0) {
+	    	$.mobile.loading( 'hide' );
+	    }
+	    
+		//console.log('ajax call done');
+		//$.mobile.loading( 'hide' );
+		
+		railStops = data;
+		//console.log(railStops);
+
+		// output to log
+		markerRailStops(railStops);
+
+		//console.log(stops.Stops[0].Lat);
+
+		
+	}).error(function(jqXHR, textStatus, errorThrown) {
+		//$.mobile.loading( 'hide' );
+		
+		ajaxCount--;
+	    if (ajaxCount == 0) {
+	    	$.mobile.loading( 'hide' );
+	    }
+		
+		if (errorThrown != 'abort') {
+			navigator.notification.confirm(
+			    'An error occured fetching the data you requested.',  // message
+			    getRailStopsConfirm,         // callback
+			    "There was an error",            // title
+			    'Try again,Cancel'                  // buttonName
+		    ); 
+		}
+	});
+	
+}
+
+
+getRailStopsForRoute = function(routeID) {
+	//console.log('getstops start');
+	
+	/* it's unclear why this one doesn't work, but all the other ones right before AJAX calls do. Anyway, we load this on on the pageshow event for the #route_map page instead.
+	$.mobile.loading( 'show', {
+		text: 'Loading',
+		textVisible: false,
+		theme: 'a',
+		html: ""
+	});
+	*/
+	getStopsForRouteFlag = false;
+	
+	// retry function on error
+	function getRailStopsForRouteConfirm(buttonIndex) {
+        if (buttonIndex == 1) {
+        	getRailStopsForRoute(routeID);
+        }
+    }
+    
+    ajaxCount++;
+    if (ajaxCount > 0) {
+    	$.mobile.loading( 'show' );
+    }
+		
+	getRailStopsForRouteJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JStations?LineCode=' + routeID + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
+		
+		ajaxCount--;
+	    if (ajaxCount == 0) {
+	    	$.mobile.loading( 'hide' );
+	    }
+	
+		//console.log('ajax call done');
+		//console.log('getstopsforroute hide');
+		getStopsForRouteFlag = true;
+		//$.mobile.loading( 'hide' );
+		
+		//console.log('getstopsforroute callback hide');
+		//$.mobile.loading( 'hide' );
+		railStopsForRoute = data;
+		
+		//console.log(stopsForRoute);
+		
+		mapOptions2 = {
+
+	        diameter: 1500,
+	        lat: currentLatitude,
+	        lon: currentLongitude
+
+	    };
+	    
+	    //console.log('call mapoptions');
+	    window.plugins.mapKit.setMapData(mapOptions2);
+		
+		markerRailStopPoints(railStopsForRoute);
+
+	}).error(function(jqXHR, textStatus, errorThrown) {
+		//$.mobile.loading( 'hide' );
+		
+		ajaxCount--;
+	    if (ajaxCount == 0) {
+	    	$.mobile.loading( 'hide' );
+	    }
+		
+		if (errorThrown != 'abort') {
+			navigator.notification.confirm(
+			    'An error occured fetching the data you requested.',  // message
+			    getRailStopsForRouteConfirm,         // callback
+			    "There was an error",            // title
+			    'Try again,Cancel'                  // buttonName
+		    ); 
+		}
+	});
+	
+}
+
+
+
+// make markers for each stop on a route (different functions for coming and going to do different colors)
+markerRailStopPoints = function(data) {
+	//console.log('start markerStopPoints');
+	var pins0 = [];
+	var pins1 = [];
+	
+	var inRangeLatitude = false;
+	var inRangeLongitude = false;
+
+	
+	$.each(data.Stations, function(i, object) {
+
+		//console.log('done with pin0 ' + i);
+		
+		if (object.StationTogether1 != "") {
+			var stationCode = object.Code + ',' + object.StationTogether1;
+		} else {
+			var stationCode = object.Code;
+		}
+		
+		pins0.push(
+			{
+				lat: object.Lat,
+				lon: object.Lon,
+				title: object.Name,
+				subTitle: 'Metro Rail Station #' + stationCode,
+				pinColor: "red",
+				selected: false,
+				index: i
+			}
+		);
+	});
+
+
+	
+	
+	//console.log(inRangeLongitude + ',' + inRangeLatitude);
+	//console.log(pins0);
+	//console.log(pins1);
+	window.plugins.mapKit.addMapPins(pins0);
+	//console.log('markerstoppoints hide');
+	//$.mobile.loading( 'hide' );
+	//console.log(inRangeLongitude + ',' + inRangeLatitude);
+	
+	var pinLength = pins0.length;
+	//console.log(pinLength);
+	pinLength = parseInt(pinLength * 0.5);
+
+	
+}
+
+
+
 //when a pin is deselected, kill any ajax calls
 function annotationDeselect() {
 	annotationTapJSON.abort();
@@ -486,142 +790,314 @@ function annotationTap(text, latitude, longitude) {
 	//console.log('annotation tap');
 	//console.log(latitude);
 	
+	text = text.toString().replace(/Metro Rail Station #/,'').replace(/WMATA Bus Stop #/,'');
+	
+	
+	
+	//console.log(routeMapView);
 	// if we just clicked a route map pin, we need to get the stops data loaded first to make a good infowindow, so do that then loop back to this function and show the infowindow
 	if (routeMapView == true) {
-		notInRangeStopID = text;
+		notInRangeStopID = text.toString();
 		favoriteBtnClickedFlag = true;
-		getStops(latitude, longitude, '50');
+			if (isNaN(text)) {
+				getRailStops(latitude, longitude, '500');
+			} else {
+				getStops(latitude, longitude, '50');
+			}
+				
 	} else {
 	
-		self2 = this;
-		//console.log('click!');
-		stopID = text;
-		var self2 = this;
-		
+		// if this is a rail stop, do that function
+		if (isNaN(text)) {
 	
-		
-		
-		// only get this stuff if the annotation tapped is a stop, rather than part of a route map
-		if (text != '(null)') {
-			$.mobile.loading( 'show', {
-				text: 'Loading',
-				textVisible: false,
-				theme: 'a',
-				html: ""
-			});
+			self2 = this;
+			//console.log('click!');;
+			stopID = text;
+			//console.log(stopID);
+			var self2 = this;
 			
-			// retry function on error
-			function annotationTapJSONConfirm(buttonIndex) {
-		        if (buttonIndex == 1) {
-		        	annotationTap(text, latitude, longitude);
-		        }
-		    }
+		
 			
-			annotationTapJSON = $.getJSON('http://api.wmata.com/NextBusService.svc/json/JPredictions?StopID=' + stopID + '&api_key=' + wmata_api_key + '&callback=?', function(data2, self4) {
-				//console.log('predictions=' + data2.Predictions.length);
-				//sorted = data2.Predictions.sort(function(a,b) {return b - a; });
+			
+			// only get this stuff if the annotation tapped is a stop, rather than part of a route map
+			if (text != '(null)') {
+				/*
+	$.mobile.loading( 'show', {
+					text: 'Loading',
+					textVisible: false,
+					theme: 'a',
+					html: ""
+				});
+	*/
 				
-				$.mobile.loading( 'hide' );
-				// thanks to Vlad Lyga for this part: http://stackoverflow.com/questions/14308149/how-do-i-merge-two-json-objects-in-javascript-jquery
-				predictions = data2;
-				
-				routeTimes = {
-					minutes: {},
-					directionText: {}
-				};
-	
-		
-				for (var index in predictions.Predictions) {
-		
-			        if(!routeTimes.minutes.hasOwnProperty(predictions.Predictions[index].RouteID)) {
-		
-			            routeTimes.minutes[predictions.Predictions[index].RouteID] = [];
-			            routeTimes.directionText[predictions.Predictions[index].RouteID] = [];
-		
-			            if (predictions.Predictions[index].Minutes != 'undefined') {
-		
-			            	routeTimes.minutes[predictions.Predictions[index].RouteID].push(predictions.Predictions[index].Minutes);
-		
-			            }
-			            routeTimes.directionText[predictions.Predictions[index].RouteID].push(predictions.Predictions[index].DirectionText);
-		
-			        } else {
-		
-			        	if (predictions.Predictions[index].Minutes != 'undefined') {
-		
-			        		routeTimes.minutes[predictions.Predictions[index].RouteID].push(predictions.Predictions[index].Minutes);
-		
-			        	}
-			            routeTimes.directionText[predictions.Predictions[index].RouteID].push(predictions.Predictions[index].DirectionText);
-		
+				// retry function on error
+				function annotationTapJSONConfirm(buttonIndex) {
+			        if (buttonIndex == 1) {
+			        	annotationTap(text, latitude, longitude);
 			        }
 			    }
+			    
+			    console.log('rail!')
+			    
+			    
+			    ajaxCount++;
+			    if (ajaxCount > 0) {
+				    $.mobile.loading( 'show' );
+				}
+				//console.log('http://api.wmata.com/StationPrediction.svc/json/GetPrediction/' + stopID + '?api_key=' + wmata_api_key + '&callback=?');
+				
+				annotationTapJSON = $.getJSON('http://api.wmata.com/StationPrediction.svc/json/GetPrediction/' + stopID + '?api_key=' + wmata_api_key + '&callback=?', function(data2, self4) {
+					
+					ajaxCount--;
+					if (ajaxCount == 0) {
+						$.mobile.loading( 'hide' );
+					}
+				
+					//console.log('predictions=' + data2.Predictions.length);
+					//sorted = data2.Predictions.sort(function(a,b) {return b - a; });
+					
+					//$.mobile.loading( 'hide' );
+					// thanks to Vlad Lyga for this part: http://stackoverflow.com/questions/14308149/how-do-i-merge-two-json-objects-in-javascript-jquery
+					predictions = data2;
+					
+					routeTimes = {
+						minutes: {},
+						directionText: {}
+					};
+		
 			
-			    // this function needs nearby stops already loaded to load all stops for the route, not just predictions, but maybe it shouldn't in case you want to see your favorite stops and they're not in range? Right now, I'll just make it load only routes with predictions, but eventually would be nice to do the second AJAX call to load this stop into memory
-			    if (stops.length) {
-			    	//console.log(stops.length);
-			    	var 
-			        	routes = stops.Stops[0].Routes,
-			        	routesVsMinutes = {};
+					for (var index in predictions.Trains) {
+			
+				        if(!routeTimes.minutes.hasOwnProperty(predictions.Trains[index].Line)) {
+			
+				            routeTimes.minutes[predictions.Trains[index].Line] = [];
+				            routeTimes.directionText[predictions.Trains[index].Line] = [];
+			
+				            if (predictions.Trains[index].Min != 'undefined') {
+			
+				            	routeTimes.minutes[predictions.Trains[index].Line].push(predictions.Trains[index].Min);
+			
+				            }
+				            routeTimes.directionText[predictions.Trains[index].Line].push(predictions.Trains[index].DestinationName);
+			
+				        } else {
+			
+				        	if (predictions.Trains[index].Min != 'undefined') {
+			
+				        		routeTimes.minutes[predictions.Trains[index].Line].push(predictions.Trains[index].Min);
+			
+				        	}
+				            routeTimes.directionText[predictions.Trains[index].Line].push(predictions.Trains[index].DestinationName);
+			
+				        }
+				    }
+				    
+				    //console.log(routeTimes);
+				
+				    // this function needs nearby stops already loaded to load all stops for the route, not just predictions, but maybe it shouldn't in case you want to see your favorite stops and they're not in range? Right now, I'll just make it load only routes with predictions, but eventually would be nice to do the second AJAX call to load this stop into memory
+				    
+				    /*
+if (railStops.length) {
+				    	//console.log(stops.length);
+				    	var 
+				        	railRoutes = stops.Stops[0].Routes,
+				        	routesVsMinutes = {};
+				    }
+				    
+				    if (stops.length) {
+					    for(var i in routes) {
+					        if (!routesVsMinutes.hasOwnProperty(routes[i])) {
+					            routesVsMinutes[routes[i]] = {Minutes: []};
+					        } 
+					        if (routeTimes[routes[i]]) {
+					            routesVsMinutes[routes[i]].Minutes = routeTimes[routes[i]];
+					        }
+					    } 
+					}  
+*/
+   
+				    
+				    //stops.Stops[0].Routes = routesVsMinutes;
+				    //console.log(routeTimes);
+				    //console.log('now to creatRouteList');
+				    // create HTML for the infowindow
+				    createRailRouteList(routeTimes,stopID);
+				    
+				    	
+			    }).error(function(jqXHR, textStatus, errorThrown) {
+					//$.mobile.loading( 'hide' );
+					console.log(errorThrown);
+					ajaxCount--;
+					if (ajaxCount == 0) {
+						$.mobile.loading( 'hide' );
+					}
+					
+					if (errorThrown != 'abort') {
+						navigator.notification.confirm(
+						    'An error occured fetching the data you requested.',  // message
+						    annotationTapJSONConfirm,         // callback
+						    "There was an error",            // title
+						    'Try again,Cancel'                  // buttonName
+					    ); 
+					}
+				});
+
+			}
+		} else {
+	
+			self2 = this;
+			//console.log('click!');
+			stopID = text;
+			console.log(stopID);
+			var self2 = this;
+			
+		
+			
+			
+			// only get this stuff if the annotation tapped is a stop, rather than part of a route map
+			if (text != '(null)') {
+				/*
+	$.mobile.loading( 'show', {
+					text: 'Loading',
+					textVisible: false,
+					theme: 'a',
+					html: ""
+				});
+	*/
+				
+				// retry function on error
+				function annotationTapJSONConfirm(buttonIndex) {
+			        if (buttonIndex == 1) {
+			        	annotationTap(text, latitude, longitude);
+			        }
 			    }
 			    
-			    if (stops.length) {
-				    for(var i in routes) {
-				        if (!routesVsMinutes.hasOwnProperty(routes[i])) {
-				            routesVsMinutes[routes[i]] = {Minutes: []};
-				        } 
-				        if (routeTimes[routes[i]]) {
-				            routesVsMinutes[routes[i]].Minutes = routeTimes[routes[i]];
-				        }
-				    } 
-				}     
+			    console.log('bus!');
 			    
-			    //stops.Stops[0].Routes = routesVsMinutes;
-			    //console.log(routeTimes);
-			    //console.log('now to creatRouteList');
-			    // create HTML for the infowindow
-			    createRouteList(routeTimes);
-			    //console.log(routeList);
-			    $('#infowindow-routes').html(routeList);
-			    
-			    
-			    // pass some variables to the next page if a button is clicked
-			    $('.route-detail-btn').click(function() {
-			    
-			    	//console.log('route btn clicked');
-			
-			    	routeClicked = $(this).attr('id');
-			    	$('#route_map_title').html('Route ' + routeClicked);
-			    
-			    	$.mobile.changePage( "#route_map", { transition: "fade" } );
-	
-			    	
-			    	
-			    	
-			    });
-			    
-			    //$( "#infowindow" ).popup( "open" );
-			    
-			    //console.log('show page');
-			    // show the page
-			    annotationTapJSON.abort();
-			    
-			    $.mobile.changePage( "#infowindow", { transition: "fade"} );
-			    $('#infowindow-routes').listview('refresh');
-			    $("#infowindow-content").iscrollview("refresh");
-			    $('#infowindow-content').css('height', $('#infowindow').css('min-height'));
-			    
-			    	
-		    }).error(function(jqXHR, textStatus, errorThrown) {
-				$.mobile.loading( 'hide' );
+			    ajaxCount++;
+			    if (ajaxCount > 0) {
+				    $.mobile.loading( 'show' );
+				}
 				
-				navigator.notification.confirm(
-				    'An error occured fetching the data you requested.',  // message
-				    annotationTapJSONConfirm,         // callback
-				    "There was an error",            // title
-				    'Try again,Cancel'                  // buttonName
-			    ); 
-			});
+				annotationTapJSON = $.getJSON('http://api.wmata.com/NextBusService.svc/json/JPredictions?StopID=' + stopID + '&api_key=' + wmata_api_key + '&callback=?', function(data2, self4) {
+					
+					ajaxCount--;
+					if (ajaxCount == 0) {
+						$.mobile.loading( 'hide' );
+					}
+				
+					//console.log('predictions=' + data2.Predictions.length);
+					//sorted = data2.Predictions.sort(function(a,b) {return b - a; });
+					
+					//$.mobile.loading( 'hide' );
+					// thanks to Vlad Lyga for this part: http://stackoverflow.com/questions/14308149/how-do-i-merge-two-json-objects-in-javascript-jquery
+					predictions = data2;
+					
+					routeTimes = {
+						minutes: {},
+						directionText: {}
+					};
+		
+			
+					for (var index in predictions.Predictions) {
+			
+				        if(!routeTimes.minutes.hasOwnProperty(predictions.Predictions[index].RouteID)) {
+			
+				            routeTimes.minutes[predictions.Predictions[index].RouteID] = [];
+				            routeTimes.directionText[predictions.Predictions[index].RouteID] = [];
+			
+				            if (predictions.Predictions[index].Minutes != 'undefined') {
+			
+				            	routeTimes.minutes[predictions.Predictions[index].RouteID].push(predictions.Predictions[index].Minutes);
+			
+				            }
+				            routeTimes.directionText[predictions.Predictions[index].RouteID].push(predictions.Predictions[index].DirectionText);
+			
+				        } else {
+			
+				        	if (predictions.Predictions[index].Minutes != 'undefined') {
+			
+				        		routeTimes.minutes[predictions.Predictions[index].RouteID].push(predictions.Predictions[index].Minutes);
+			
+				        	}
+				            routeTimes.directionText[predictions.Predictions[index].RouteID].push(predictions.Predictions[index].DirectionText);
+			
+				        }
+				    }
+				
+				    // this function needs nearby stops already loaded to load all stops for the route, not just predictions, but maybe it shouldn't in case you want to see your favorite stops and they're not in range? Right now, I'll just make it load only routes with predictions, but eventually would be nice to do the second AJAX call to load this stop into memory
+				    if (stops.length) {
+				    	//console.log(stops.length);
+				    	var 
+				        	routes = stops.Stops[0].Routes,
+				        	routesVsMinutes = {};
+				    }
+				    
+				    if (stops.length) {
+					    for(var i in routes) {
+					        if (!routesVsMinutes.hasOwnProperty(routes[i])) {
+					            routesVsMinutes[routes[i]] = {Minutes: []};
+					        } 
+					        if (routeTimes[routes[i]]) {
+					            routesVsMinutes[routes[i]].Minutes = routeTimes[routes[i]];
+					        }
+					    } 
+					}     
+				    
+				    //stops.Stops[0].Routes = routesVsMinutes;
+				    //console.log(routeTimes);
+				    //console.log('now to creatRouteList');
+				    // create HTML for the infowindow
+				    createRouteList(routeTimes);
+				    //console.log(routeList);
+				    $('#infowindow-routes').html(routeList);
+				    
+				    
+				    // pass some variables to the next page if a button is clicked
+				    $('.route-detail-btn').click(function() {
+				    
+				    	//console.log('route btn clicked');
+				
+				    	routeClicked = $(this).attr('id');
+				    	$('#route_map_title').html('Route ' + routeClicked);
+				    
+				    	$.mobile.changePage( "#route_map", { transition: "fade" } );
+		
+				    	
+				    	
+				    	
+				    });
+				    
+				    //$( "#infowindow" ).popup( "open" );
+				    
+				    //console.log('show page');
+				    // show the page
+				    annotationTapJSON.abort();
+				    
+				    $.mobile.changePage( "#infowindow", { transition: "fade"} );
+				    $('#infowindow-routes').listview('refresh');
+				    $("#infowindow-content").iscrollview("refresh");
+				    $('#infowindow-content').css('height', $('#infowindow').css('min-height'));
+				    
+				    	
+			    }).error(function(jqXHR, textStatus, errorThrown) {
+					//$.mobile.loading( 'hide' );
+					//console.log(errorThrown);
+					ajaxCount--;
+					if (ajaxCount == 0) {
+						$.mobile.loading( 'hide' );
+					}
+					
+					if (errorThrown != 'abort') {
+						navigator.notification.confirm(
+						    'An error occured fetching the data you requested.',  // message
+						    annotationTapJSONConfirm,         // callback
+						    "There was an error",            // title
+						    'Try again,Cancel'                  // buttonName
+					    ); 
+					}	
+				});
+			}
 		}
 	}
 }
@@ -642,8 +1118,8 @@ markerStops = function(data) {
 	
 			// our match function to see if a pin already exists in the global pin array
 			matches = jQuery.grep(pins, function(obj) {
-				//console.log(data.Stops[i].StopID + ' == ' + obj.subTitle + '?');
-				return parseInt(obj.subTitle) == data.Stops[i].StopID;
+				//console.log('WMATA Bus Stop #' + data.Stops[i].StopID + ' == ' + obj.subTitle + '?');
+				return obj.subTitle == 'WMATA Bus Stop #' + data.Stops[i].StopID;
 			});
 			
 			if (matches.length == 0) {
@@ -657,7 +1133,7 @@ markerStops = function(data) {
 						lat: data.Stops[i].Lat,
 						lon: data.Stops[i].Lon,
 						title: toTitleCase(data.Stops[i].Name),
-						subTitle: data.Stops[i].StopID,
+						subTitle: 'WMATA Bus Stop #' + data.Stops[i].StopID,
 						pinColor: "green",
 						selected: false,
 						index: i
@@ -669,7 +1145,7 @@ markerStops = function(data) {
 						lat: data.Stops[i].Lat,
 						lon: data.Stops[i].Lon,
 						title: toTitleCase(data.Stops[i].Name),
-						subTitle: data.Stops[i].StopID,
+						subTitle: 'WMATA Bus Stop #' + data.Stops[i].StopID,
 						pinColor: "green",
 						selected: false,
 						index: i
@@ -764,10 +1240,13 @@ markerStops = function(data) {
 		//console.log('add new pins');
 		// show the new pins, but only if this is a real stop get, and not a favorite button or route annotation being clicked
 		//if (favoriteBtnClickedFlag != true) {
+			//console.log(newPins);
 			window.plugins.mapKit.addMapPins(newPins);
 		//}
 		
 		// if we've clicked a favorite or route annotation, show the predictions
+		//console.log(favoriteBtnClickedFlag);
+		//console.log('notinrange=' + notInRangeStopID);
 		if (favoriteBtnClickedFlag == true) {
 			routeMapView = false;
 			annotationTap(notInRangeStopID);
@@ -830,6 +1309,349 @@ markerStops = function(data) {
 
 
 
+// make a stop marker and info window
+markerRailStops = function(data) {
+	// make a new pins array to store new pins being added
+	newRailPins = [];
+	newRailPins.length = 0;
+	
+	//console.log('start markerStops');
+	//console.log(data.Entrances.length);
+	if (data.Entrances.length) {
+		//console.log('start loop');
+		$.each(data.Entrances, function(i, object) {
+	
+			
+			// rail matching query
+			railMatches = jQuery.grep(pins, function(obj) {
+				// our match function to see if a pin already exists in the global pin array
+				return obj.index == data.Entrances[i].ID;
+			});
+			
+			if (railMatches.length == 0) {
+				
+				//console.log('no matches');
+				//console.log(matches);
+				
+				if (data.Entrances[i].StationCode2 != "") {
+					var stationCode = data.Entrances[i].StationCode1 + ',' + data.Entrances[i].StationCode2;
+				} else {
+					var stationCode = data.Entrances[i].StationCode1;
+				}
+				
+				
+				
+				// if this is a new pin, add it to the global pin array AND the new pin array
+				pins.push(
+					{
+						lat: data.Entrances[i].Lat,
+						lon: data.Entrances[i].Lon,
+						title: data.Entrances[i].Name,
+						subTitle: 'Metro Rail Station #' + stationCode,
+						pinColor: "red",
+						selected: false,
+						index: data.Entrances[i].ID
+					}
+				);
+				
+				newRailPins.push(
+					{
+						lat: data.Entrances[i].Lat,
+						lon: data.Entrances[i].Lon,
+						title: data.Entrances[i].Name,
+						subTitle: 'Metro Rail Station #' + stationCode,
+						pinColor: "red",
+						selected: false,
+						index: data.Entrances[i].ID
+					}
+				);
+			
+			}
+			
+	
+	
+	        // loop through all routes in this stop and create a string from all of them
+	        createRailRouteList = function(data, station) {
+	        	//console.log('createRouteList start');
+				railRouteList = '';
+				railRouteList.replace(railRouteList, '');
+				potentialRailRouteList = [];
+				potentialRailRouteList.length = 0;
+				actualRailRouteList = [];
+				railPotentialVsActual = [];
+				
+				station = station.split(',');
+				
+				//railRouteList = data;
+				stationList = station;
+				
+				railStationInfo = [];
+				railStationInfo.length = 0;
+				
+				railStationInfoCount = 0;
+				
+				
+				$.each(station, function(i, object) {
+					function getRailStationInfoConfirm(buttonIndex) {
+				        if (buttonIndex == 1) {
+				        	createRailRouteList(railRouteList,stationList);
+				        }
+				    }
+
+				    ajaxCount++;
+				    if (ajaxCount > 0) {
+				    	$.mobile.loading( 'show' );
+				    }
+					
+					getRailStationInfoJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JStationInfo?StationCode=' + object + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
+					
+						ajaxCount--;
+					    if (ajaxCount == 0) {
+					    	$.mobile.loading( 'hide' );
+					    }
+					    
+					    //console.log(data);
+
+						railStationInfo.push(data);
+						
+						//increment our AJAX count and see if we've got all the station info we need...
+						railStationInfoCount++;
+						
+						if (railStationInfoCount == station.length) {
+							// create a list of all possible routes at this stop
+							$.each(railStationInfo, function(i2, object2) {
+								//if (stopID == stops.Stops[i2].StopID) {
+									railStopIDfocus = object2.Code;
+									railStopName = object2.Name;
+									potentialRailRouteList.push(object2.LineCode1);
+									if (object2.LineCode2 != null) {
+										potentialRailRouteList.push(object2.LineCode2);
+									}
+									
+									//potentialRailRouteList.push(object2.LineCode3);
+									//potentialRailRouteList.push(object2.LineCode4);
+									railStopLat = object2.Lat;
+									railStopLon = object2.Lon;
+									//potentialRouteList.push(routeID);
+								//}
+								
+							});
+							
+							//console.log(potentialRailRouteList);
+							//potentialRouteList.length = 0;
+							
+							
+							// make a diff method for determining the difference in arrays
+							
+							Array.prototype.diff = function(a) {
+							    return this.filter(function(i) {return !(a.indexOf(i) > -1);});
+							};
+							
+							railDirectionTracker = [];
+							
+							// make HTML for infowindow for actual buses that are coming
+							if (predictions.Trains.length) {
+								//console.log('true');
+								//console.log(data);
+								//dataWorld = railStationInfo;
+								
+								
+								
+								$.each(predictions.Trains, function(i3, object) {
+								
+									objDestName = object.DestinationCode;
+									//console.log(objDestName);
+									
+									if (object.DestinationCode != null) {
+									
+										
+										railPredictionMatches = jQuery.grep(railDirectionTracker, function(obj) {
+											// our match function to see if a pin already exists in the global pin array
+											return obj.DestinationCode == objDestName;
+										});
+									
+										/*
+										// if the destination is already in the array, add to it, if not create from scratch
+										if (railPredictionMatches.length == 0) {
+											railDirectionTracker.push({ 
+													
+													DestinationCode: object.DestinationCode,
+													DestinationName: object.DestinationName,
+													Line: object.Line,
+													Min: object.Min
+												
+											});
+											
+										
+										} else {
+										
+											matchID = railPredictionMatches[0].DestinationCode;
+											//railDirectionTracker.objDestName = objDestName;
+											railDirectionTracker[matchID].Min = railDirectionTracker[matchID].Min + ', ' + object.Min;
+											
+										}
+*/
+										
+										if (railPredictionMatches.length == 0) {
+											railDirectionTracker.push({ 
+													
+													DestinationCode: object.DestinationCode,
+													DestinationName: object.DestinationName,
+													Line: object.Line,
+													Min: object.Min
+												
+											});
+										} else {
+											$.each(railDirectionTracker, function(i, object2) {
+												if (railDirectionTracker[i].DestinationCode == object.DestinationCode) {
+													object2.Min = object2.Min  + ', ' + object.Min;
+												}
+											});
+										}
+									}
+								});
+								
+								$.each(railDirectionTracker, function(i, object) {
+									railRouteList = railRouteList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + object.Line + '"><p>to ' + object.DestinationName + ' arrives in:</p><p><strong>' + object.Min + '</strong> minutes</p><span class="ui-li-count">' + object.Line + '</span></li>';
+								});
+								
+								// then after, loop through routes with no predictions and add to the end
+								/*
+$.each(potentialVsActual, function(i4, object4) {
+									// check for the routes with a lowercase c or v in their name, they are variation routes and should be ignored
+									if (/([cv])/.exec(potentialVsActual[i4]) == null) {
+										routeList = routeList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + potentialVsActual[i4] + '"><p>no prediction available</p><span class="ui-li-count">' + potentialVsActual[i4] + '</span></a></li>';
+									}
+									
+								});
+*/
+							} else { 
+								
+								// if there are no predictions at all, just do the stops
+								
+								$.each(potentialRailRouteList, function(i4, object4) {			
+									railRouteList = railRouteList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + object4 + '"><p>no prediction available</p><p><em>(this usually means this station is closed)</em></p><span class="ui-li-count">' + object4 + '</span></a></li>';
+								});
+								
+								actualRouteList.length = 0;
+								potentialVsActual.length = 0;
+
+				
+							}
+							
+							//console.log('potential routes for stop ' + stopIDfocus + ': ' + potentialRouteList + ' and actual routes: ' + actualRouteList);
+							//console.log(stopName);
+							console.log(stationList.join().toString());
+							var dt = new DateTime();
+							railRouteList = '<li data-role="list-divider" class="stopTitle" id="' + stationList.join().toString() + '" data-lat=' + railStopLat + '" data-lon=' + railStopLon + '"><span class="stopName">' + railStopName + '</span></li>' + railRouteList + '<div class="updated">Updated ' + dt.formats.busTrackDateTime.b + ' - Pull to refresh</div>';
+
+							//console.log(railRouteList);
+							
+						}
+						//console.log(routes);
+						
+						
+						$('#infowindow-routes').html(railRouteList);
+				    
+				    
+					    // pass some variables to the next page if a button is clicked
+					    $('.route-detail-btn').click(function() {
+					    
+					    	//console.log('route btn clicked');
+					    	//console.log($(this).attr('id'));
+					
+					    	routeClicked = $(this).attr('id');
+					    	
+					    	//console.log(routeClicked);
+					    	
+					    	if (routeClicked == 'RD') {
+						    	routeTitle = 'Red';
+					    	} else if (routeClicked == 'BL') {
+						    	routeTitle = 'Blue';
+					    	} else if (routeClicked == 'OR') {
+						    	routeTitle = 'Orange';
+					    	} else if (routeClicked == 'YL') {
+						    	routeTitle = 'Yellow';
+					    	} else if (routeClicked == 'GR') {
+						    	routeTitle = 'Green';
+					    	}
+					    	
+					    	$('#route_map_title').html(routeTitle + ' Line');
+					    
+					    	$.mobile.changePage( "#route_map", { transition: "fade" } );
+			
+					    	
+					    	
+					    	
+					    });
+					    
+					    //$( "#infowindow" ).popup( "open" );
+					    
+					    //console.log('show page');
+					    // show the page
+					    annotationTapJSON.abort();
+					    
+					    $.mobile.changePage( "#infowindow", { transition: "fade"} );
+					    $('#infowindow-routes').listview('refresh');
+					    $("#infowindow-content").iscrollview("refresh");
+					    $('#infowindow-content').css('height', $('#infowindow').css('min-height'));
+						
+						
+						
+					}).error(function(jqXHR, textStatus, errorThrown) {
+						//$.mobile.loading( 'hide' );
+						
+						ajaxCount--;
+					    if (ajaxCount == 0) {
+					    	$.mobile.loading( 'hide' );
+					    }
+						
+						if (errorThrown != 'abort') {
+							navigator.notification.confirm(
+							    'An error occured fetching the data you requested.',  // message
+							    getRailStationInfoConfirm,         // callback
+							    "There was an error",            // title
+							    'Try again,Cancel'                  // buttonName
+						    ); 
+						}
+					});
+				});
+				
+				
+				
+
+	        }
+
+	
+		});
+		
+		//console.log('add new pins');
+		// show the new pins, but only if this is a real stop get, and not a favorite button or route annotation being clicked
+		//if (favoriteBtnClickedFlag != true) {
+			//console.log(newRailPins);
+			window.plugins.mapKit.addMapPins(newRailPins);
+		//}
+		
+		// if we've clicked a favorite or route annotation, show the predictions
+		//console.log(favoriteBtnClickedFlag);
+		if (favoriteBtnClickedFlag == true) {
+			routeMapView = false;
+			annotationTap(notInRangeStopID);
+			favoriteBtnClickedFlag = false;
+			
+		}
+
+		
+	} else {
+		
+		// loop through all routes in this stop and create a string from all of them (this is a version for no stops in range)
+
+	}
+	
+}
+
+
+
 
 
 
@@ -858,16 +1680,7 @@ onCurrentLocationSuccess = function(position) {
     
     // when we first call this, we can use the current location variables directly
     getStops(currentLat, currentLong, mapOptions.diameter);
-    
-   
-    
-    
-   
-
-
-	
-	
-	
+    getRailStops(currentLat, currentLong, mapOptions.diameter);
  
 };
 
@@ -900,7 +1713,7 @@ function favoriteTap(favorite) {
 		
 		var favoriteMatches = jQuery.grep(favorites, function(obj) {
 			//console.log(data.Stops[i].StopID + ' == ' + obj.subTitle + '?');
-			return parseInt(obj.id) == favorite;
+			return obj.id == favorite;
 		});
 		
 		//console.log(favorites);
@@ -999,6 +1812,9 @@ function zoomIn() {
 
 
 function onDeviceReady() {
+
+	window.GA.trackerWithTrackingId("UA-39138450-1");
+    window.GA.trackView("/index");
 	
 	deviceReadyFlag = true;
 	//console.log('deviceready');
@@ -1053,8 +1869,18 @@ function onDeviceReady() {
     
 }
 
+/*
+$.ajaxPrefilter(function (options){options.global = true;});
+$(document).ajaxStart(function(){ console.log('ajax start'); $.mobile.loading( 'show' ); });
+$(document).ajaxStop(function(){ console.log('ajax stop'); $.mobile.loading( 'hide' ); });
+*/
+
 
 $(document).on('pageinit', '#gps_map', function() {
+
+	ajaxCount = 0;
+	
+	favoriteBtnClickedFlag = false;
 	
 	//console.log('init!');
 
@@ -1097,7 +1923,8 @@ $(document).on('pageinit', '#infowindow', function() {
     
     
     $(".iscroll-wrapper", this).bind( "iscroll_onpulldown" , function() { 
-    	refreshStopID = parseInt($('.stopTitle').attr('id'));
+    	//console.log($('.stopTitle').attr('id'));
+    	refreshStopID = $('.stopTitle').attr('id');
     	annotationTap(refreshStopID); 
     });
     
@@ -1187,7 +2014,11 @@ $.mobile.loading( 'show', {
 		
 				// if we click a favorite, get the stop and populate the stops array really quick, so we can view all the data about the predictions
 				favoriteBtnClickedFlag = true;
-				getStops(notInRangeStopLat, notInRangeStopLon, '50');
+				if (isNaN(notInRangeStopID)) {
+					getRailStops(notInRangeStopLat, notInRangeStopLon, '500');
+				} else {
+					getStops(notInRangeStopLat, notInRangeStopLon, '50');
+				}
 	
 			});
 			
@@ -1252,7 +2083,7 @@ $(document).on('pageinit', '#route_list', function() {
 	$('#route_list_content').html('<h2 class="center">Loading...</h2>');
 	//$('#route_list_content').listview('refresh');
 	
-	$.mobile.loading( 'show' );
+	//$.mobile.loading( 'show' );
 
 	getRoutes();
 });
@@ -1271,9 +2102,11 @@ $(document).on('pagebeforeshow', '#gps_map', function() {
 	} else {
 		//console.log(currentLatitude);
 		//console.log(currentLongitude);
-		if (pins.length == 0) {
+		//console.log(pins.length);
+		//if (pins.length == 0) {
 			getStops(currentLatitude, currentLongitude, '800');
-		}
+			getRailStops(currentLatitude, currentLongitude, '800');
+		//}
 		
 	}
 	
@@ -1309,6 +2142,7 @@ $(document).on('pagebeforeshow', '#gps_map', function() {
 						//console.log(radius);
 						if (radius < 2000) {
 							getStops(viewportLat, viewportLon, radius);
+							getRailStops(viewportLat, viewportLon, radius);
 						}
 						
 					});
@@ -1360,7 +2194,11 @@ $(document).on('pagebeforeshow', '#favorite_menu_page', function() {
 		favoritesListHTML = '';
 		
 		$.each(favorites, function(i, object) {
-			favoritesListHTML = favoritesListHTML + '<li id="' + object.id + '"><a data-transition="slide" class="favorite-stop-detail-btn" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><h1 class="favoriteMenuStopTitle">' + toTitleCase(object.name) +'</h1><p>#'+ object.id + '</p><p class="delete-handle">Delete</p><p class="drag-handle">Sort</p></a></li>';
+			if (isNaN(object.id)) {
+				favoritesListHTML = favoritesListHTML + '<li id="' + object.id + '"><a data-transition="slide" class="favorite-stop-detail-btn" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><h1 class="favoriteMenuStopTitle">' + toTitleCase(object.name) +'</h1><p>Metro Rail Station #'+ object.id + '</p><p class="delete-handle">Delete</p><p class="drag-handle">Sort</p></a></li>';
+			} else {
+				favoritesListHTML = favoritesListHTML + '<li id="' + object.id + '"><a data-transition="slide" class="favorite-stop-detail-btn" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><h1 class="favoriteMenuStopTitle">' + toTitleCase(object.name) +'</h1><p>WMATA Bus Stop #'+ object.id + '</p><p class="delete-handle">Delete</p><p class="drag-handle">Sort</p></a></li>';
+			}
 		});
 		
 		
@@ -1371,22 +2209,29 @@ $(document).on('pagebeforeshow', '#favorite_menu_page', function() {
 		$('.favorite-stop-detail-btn').click(function() {
 			//console.log($(this).data('stopid'));
 			
-			$.mobile.loading( 'show', {
+			/*
+$.mobile.loading( 'show', {
 				text: 'Loading',
 				textVisible: false,
 				theme: 'a',
 				html: ""
 			});
+*/
 	
 			// store a variable on this stop's name in case we need to retrieve it later...
-			notInRangeStopID = $(this).data('stopid');
+			notInRangeStopID = $(this).data('stopid'); // this will need to be edited to figure out if the stop is rail...
 			notInRangeStopName = $(this).data('stopname');
 			notInRangeStopLat = $(this).data('lat');
 			notInRangeStopLon = $(this).data('lon');
 	
 			// if we click a favorite, get the stop and populate the stops array really quick, so we can view all the data about the predictions
 			favoriteBtnClickedFlag = true;
-			getStops(notInRangeStopLat, notInRangeStopLon, '50');
+			if (isNaN(notInRangeStopID)) {
+				getRailStops(notInRangeStopLat, notInRangeStopLon, '500');
+			} else {
+				getStops(notInRangeStopLat, notInRangeStopLon, '50');
+			}
+			
 
 		});
 		
@@ -1415,9 +2260,9 @@ $(document).on('pagebeforeshow', '#infowindow', function() {
 		var favoriteMatches = jQuery.grep(favorites, function(obj) {
 			//console.log(data.Stops[i].StopID + ' == ' + obj.subTitle + '?');
 			if (stopID) {
-				return parseInt(obj.id) == stopID;
+				return obj.id == stopID;
 			} else {
-				return parseInt(obj.id) == notInRangeStopID;
+				return obj.id == notInRangeStopID;
 			}
 			
 		});
@@ -1478,19 +2323,22 @@ $(document).on('pagebeforeshow', '#route_map', function() {
 	routeMapView = true;
 	
 	//console.log(routeClicked);
-	getStopsForRoute(routeClicked);
+	
+	if (routeClicked == 'RD' || routeClicked == 'BL' || routeClicked == 'OR' || routeClicked == 'YL' || routeClicked == 'GR') {
+		getRailStopsForRoute(routeClicked);
+	} else {
+		getStopsForRoute(routeClicked);
+	}
+	
 });
 
 $(document).on('pageshow', '#route_map', function() {
 	//console.log(getStopsForRouteFlag);
 	
 	if (getStopsForRouteFlag == false) {
-		$.mobile.loading( 'show', {
-			text: 'Loading',
-			textVisible: false,
-			theme: 'a',
-			html: ""
-		});
+		if (ajaxCount > 0) {
+    		$.mobile.loading( 'show' );
+    	}
 	}
 	
 });
@@ -1518,7 +2366,18 @@ $(document).on('pagebeforehide', '#route_map', function() {
 	
 	window.plugins.mapKit.clearMapPins();
 	//console.log('getstopsjson abort!');
-	getStopsForRouteJSON.abort();
+	if (typeof(getStopsForRouteJSON) != 'undefined') {
+		getStopsForRouteJSON.abort();
+	}
+	
+	if (typeof(getRailStopsForRouteJSON) != 'undefined') {
+		getRailStopsForRouteJSON.abort();
+	}
+	
+});
+
+$(document).on('pagebeforehide', '#infowindow', function() {
+	annotationTapJSON.abort();
 });
 
 //on page hide functions
