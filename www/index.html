@@ -17,8 +17,9 @@
         <link href="js/jquery.mobile.iscrollview-pull.css" media="screen" rel="stylesheet" type="text/css" />
         <link rel="stylesheet" href="css/index.css" />
          
-        <script type="text/javascript" src="cordova-2.3.0.js"></script>
+        <script type="text/javascript" src="js/cordova-2.3.0.js"></script>
         <script type="text/javascript" charset="utf-8" src="js/MapKit.js"></script>
+        <script type="text/javascript" src="js/GoogleAnalyticsPlugin.js"></script>
         
         <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
         <script type="text/javascript" src="js/underscore-min.js"></script>
@@ -36,7 +37,7 @@
            
         
         
-        <script src="http://debug.phonegap.com/target/target-script-min.js#jasonrosenbaumbusapp"></script> 
+        <!-- <script src="http://debug.phonegap.com/target/target-script-min.js#jasonrosenbaumbusapp"></script>  -->
 
     </head>
     <body>
@@ -172,6 +173,16 @@
             </div>
 
         </div><!-- /page -->
+        
+        <script type="text/javascript">
+		 $('[data-role=page]').on('pageshow', function (event, ui) {
+		  try {
+		    _gaq.push( ['_trackPageview', event.target.id] );
+		    console.log(event.target.id);
+		  } catch(err) {
+		  }
+		});
+		</script>
 
     </body>
 </html>
