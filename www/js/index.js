@@ -564,7 +564,8 @@ markerStopPoints = function(data) {
 				lon: data.Direction1.Stops[i].Lon,
 				title: toTitleCase(data.Direction1.Stops[i].Name),
 				subTitle: 'WMATA Bus Stop #' + data.Direction1.Stops[i].StopID,
-				pinColor: "005534",
+				//pinColor: "005534",
+				pinColor: "70f270",
 				selected: false,
 				index: i
 			}
