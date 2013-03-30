@@ -1969,7 +1969,7 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 				var favorites = [];
 				
 				$.each($('#favorites_menu li'), function() {
-					var id = $(this).prop('id');
+					var id = $(this).data('id');
 					/*
 					console.log(id);
 					console.log('#favorites_menu #' + id + ' h1');
@@ -1981,9 +1981,9 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 					
 					favorites.push({
 						id: id,
-						name: $('#favorites_menu #' + id + ' h1').html(),
-						lat: $('#favorites_menu #' + id + ' .favorite-stop-detail-btn').data('lat'),
-						lon: $('#favorites_menu #' + id + ' .favorite-stop-detail-btn').data('lon')
+						name: $('#favorites_menu li[data-id="' + id + '"] h1').html(),
+						lat: $('#favorites_menu li[data-id="' + id + '"] .favorite-stop-detail-btn').data('lat'),
+						lon: $('#favorites_menu li[data-id="' + id + '"] .favorite-stop-detail-btn').data('lon')
 					});
 				});
 				
@@ -2058,11 +2058,13 @@ $.mobile.loading( 'show', {
 		    	
 		    	//console.log(favorites);
 		    	
-		    	var deletedElementID = $(this).parent().data('stopid');
+		    	deletedElementID = $(this).parent().data('stopid');
+		    	
+		    	console.log(deletedElementID);
 		    	
 		    	favorites = favorites.filter(function(el){ return el.id != deletedElementID });
 		    	
-		    	$('#favorites_menu #' + deletedElementID).remove();
+		    	$('#favorites_menu li[data-id="' + deletedElementID + '"]').remove();
 		    	
 		    	//console.log(favorites);
 			
@@ -2195,9 +2197,9 @@ $(document).on('pagebeforeshow', '#favorite_menu_page', function() {
 		
 		$.each(favorites, function(i, object) {
 			if (isNaN(object.id)) {
-				favoritesListHTML = favoritesListHTML + '<li id="' + object.id + '"><a data-transition="slide" class="favorite-stop-detail-btn" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><h1 class="favoriteMenuStopTitle">' + toTitleCase(object.name) +'</h1><p>Metro Rail Station #'+ object.id + '</p><p class="delete-handle">Delete</p><p class="drag-handle">Sort</p></a></li>';
+				favoritesListHTML = favoritesListHTML + '<li data-id="' + object.id + '"><a data-transition="slide" class="favorite-stop-detail-btn" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><h1 class="favoriteMenuStopTitle">' + object.name +'</h1><p>Metro Rail Station #'+ object.id + '</p><p class="delete-handle">Delete</p><p class="drag-handle">Sort</p></a></li>';
 			} else {
-				favoritesListHTML = favoritesListHTML + '<li id="' + object.id + '"><a data-transition="slide" class="favorite-stop-detail-btn" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><h1 class="favoriteMenuStopTitle">' + toTitleCase(object.name) +'</h1><p>WMATA Bus Stop #'+ object.id + '</p><p class="delete-handle">Delete</p><p class="drag-handle">Sort</p></a></li>';
+				favoritesListHTML = favoritesListHTML + '<li data-id="' + object.id + '"><a data-transition="slide" class="favorite-stop-detail-btn" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><h1 class="favoriteMenuStopTitle">' + object.name +'</h1><p>WMATA Bus Stop #'+ object.id + '</p><p class="delete-handle">Delete</p><p class="drag-handle">Sort</p></a></li>';
 			}
 		});
 		
