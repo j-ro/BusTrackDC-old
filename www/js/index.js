@@ -1692,8 +1692,8 @@ onCurrentLocationSuccess = function(position) {
 function onCurrentLocationError(error) {
 	//console.log('currloc error');
     navigator.notification.alert(
-	    'Please allow BusTrackDC to access your current location by going to Settings > Privacy > Location Services and allowing BusTrackDC to use your current location.',  // message
-	    //console.log('currlocerror'),         // callback
+	    'Please allow BusTrackDC to access your current location by going to Settings > Privacy > Location Services and turning on location services for BusTrackDC.',  // message
+	    console.log('currlocerror'),         // callback, this needs to be something, otherwise this doesn't work.
 	    "Couldn't find current location",            // title
 	    'OK'                  // buttonName
 	);
