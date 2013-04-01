@@ -382,7 +382,7 @@ buildRouteMenu = function(dataBus, dataRail) {
 
 // get a list of stops nearby
 getStops = function(latitude,longitude,radius) {
-	//console.log('getstops start, lat=' + latitude + ' long=' + longitude + ' radius=' + radius);
+	console.log('getstops start, lat=' + latitude + ' long=' + longitude + ' radius=' + radius);
 	
 	//$.mobile.loading( 'show' );
 	
@@ -411,7 +411,7 @@ getStops = function(latitude,longitude,radius) {
 	    }
 		
 		stops = data;
-		//console.log(stops);
+		console.log(stops);
 
 		// output to log
 		markerStops(stops);
@@ -594,7 +594,7 @@ markerStopPoints = function(data) {
 
 // get a list of stops nearby
 getRailStops = function(latitude,longitude,radius) {
-	//console.log('getstops start, lat=' + latitude + ' long=' + longitude + ' radius=' + radius);
+	console.log('getrailstops start, lat=' + latitude + ' long=' + longitude + ' radius=' + radius);
 	
 	//$.mobile.loading( 'show' );
 
@@ -620,7 +620,7 @@ getRailStops = function(latitude,longitude,radius) {
 		//$.mobile.loading( 'hide' );
 		
 		railStops = data;
-		//console.log(railStops);
+		console.log(railStops);
 
 		// output to log
 		markerRailStops(railStops);
@@ -1325,7 +1325,7 @@ markerRailStops = function(data) {
 			// rail matching query
 			railMatches = jQuery.grep(pins, function(obj) {
 				// our match function to see if a pin already exists in the global pin array
-				return obj.index == data.Entrances[i].ID;
+				return obj.index == '#' + data.Entrances[i].ID;
 			});
 			
 			if (railMatches.length == 0) {
@@ -1350,7 +1350,7 @@ markerRailStops = function(data) {
 						subTitle: 'Metro Rail Station #' + stationCode,
 						pinColor: "red",
 						selected: false,
-						index: data.Entrances[i].ID
+						index: '#' + data.Entrances[i].ID
 					}
 				);
 				
@@ -1362,7 +1362,7 @@ markerRailStops = function(data) {
 						subTitle: 'Metro Rail Station #' + stationCode,
 						pinColor: "red",
 						selected: false,
-						index: data.Entrances[i].ID
+						index: '#' + data.Entrances[i].ID
 					}
 				);
 			
