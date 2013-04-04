@@ -193,6 +193,12 @@ function cbMapCallback(lat,lon) {
 calculateRadius = function(viewportLat, viewportLon, latitudeDelta, longitudeDelta, callback) {
 	//console.log('start calc radius with viewportLat=' + viewportLat + ' viewportLon=' + viewportLon + ' latitudeDelta=' + latitudeDelta + ' longitudeDelta=' + longitudeDelta);
 	// r = radius of the earth in meters
+	
+	circulatorLat = viewportLat;
+	circulatorLon = viewportLon;
+	circulatorLatDelta = latitudeDelta;
+	circulatorLonDelta = longitudeDelta;
+	
 	var r = 6378100;  
     
 	// Convert lat or lng from decimal degrees into radians (divide by 57.2958)
@@ -846,16 +852,20 @@ getCirculatorStops = function(latitude,longitude,radius) {
 			    
 				    	window.localStorage.setItem("circulatorStops", JSON.stringify(circulatorStops));
 				    	
+				    	
 				    });
 				    
 				   
 				 });
 				 
-				// only put pins on the map if they're all done loading
-		    	if (ajaxCirculatorCount == circulatorStopsArray.length) {
-		    		//console.log('marker time!');
-			    	markerCirculatorStops(circulatorStops);
-		    	}
+				 // only put pins on the map if they're all done loading
+				 if (ajaxCirculatorCount == circulatorStopsArray.length) {
+					//console.log('marker time!');
+					markerCirculatorStops(currentLatitude,currentLongitude, .01 , .01);
+				 }
+		 
+				
+
 			    
 			    
 	    	}).error(function(jqXHR, textStatus, errorThrown) {
@@ -1921,54 +1931,74 @@ $.each(potentialVsActual, function(i4, object4) {
 
 
 // make a stop marker and info window
-markerCirculatorStops = function(data) {
+markerCirculatorStops = function(latitude,longitude,latitudeDelta,longitudeDelta) {
 	// make a new pins array to store new pins being added
 	newCirculatorPins = [];
 	newCirculatorPins.length = 0;
 	
+	var data = JSON.parse(window.localStorage.getItem("circulatorStops"));
+	
 	//console.log('start markerCircStops');
 	//console.log(data.Entrances.length);
+	
+	/*
+latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
+	latMinusDelta = parseFloat(latitude) - parseFloat(latitudeDelta);
+	lonPlusDelta = parseFloat(longitude) + parseFloat(longitudeDelta);
+	lonMinusDelta = parseFloat(longitude) - parseFloat(longitudeDelta);
+*/
+	
+	//console.log('latitude=' + latitude + ' longitude=' + longitude + ' latitude+delta=' + latPlusDelta + ' latitude-delta=' + latMinusDelta + ' longitude+delta=' + lonPlusDelta + ' longitude-delta=' + lonMinusDelta);
+	
 	if (data) {
 		//console.log('start loop');
 		$.each(data, function(i, object) {
 		
-			// rail matching query
-			circulatorMatches = jQuery.grep(pins, function(obj) {
-				// our match function to see if a pin already exists in the global pin array
-				return obj.index == '##' + object.stopId;
-			});
+			//console.log('data lat=' + object.lat + ' data lon=' + object.lon);
 			
-			if (circulatorMatches.length == 0) {
+			// make sure the pin is in view, if not, we don't want to marker it just yet
+			if ((object.lat <= (parseFloat(latitude) + parseFloat(latitudeDelta))) && (object.lat >= (parseFloat(latitude) - parseFloat(latitudeDelta))) && (object.lon <= (parseFloat(longitude) + parseFloat(longitudeDelta))) && (object.lon >= (parseFloat(longitude) - parseFloat(longitudeDelta)))) {
+				// rail matching query
+				circulatorMatches = jQuery.grep(pins, function(obj) {
+					// our match function to see if a pin already exists in the global pin array
+					return obj.index == '##' + object.stopId;
+				});
 				
-				//console.log('no matches');
-				//console.log(matches);
+				if (circulatorMatches.length == 0) {
+					
+					//console.log('no matches');
+					//console.log(matches);
+					
+					// if this is a new pin, add it to the global pin array AND the new pin array
+					pins.push(
+						{
+							lat: object.lat,
+							lon: object.lon,
+							title: object.title,
+							subTitle: 'Circulator Stop #' + object.stopId,
+							pinColor: "purple",
+							selected: false,
+							index: '##' + object.stopId
+						}
+					);
+					
+					newCirculatorPins.push(
+						{
+							lat: object.lat,
+							lon: object.lon,
+							title: object.title,
+							subTitle: 'Circulator Stop #' + object.stopId,
+							pinColor: "purple",
+							selected: false,
+							index: '##' + object.stopId
+						}
+					);
 				
-				// if this is a new pin, add it to the global pin array AND the new pin array
-				pins.push(
-					{
-						lat: object.lat,
-						lon: object.lon,
-						title: object.title,
-						subTitle: 'Circulator Stop #' + object.stopId,
-						pinColor: "purple",
-						selected: false,
-						index: '##' + object.stopId
-					}
-				);
+				}
 				
-				newCirculatorPins.push(
-					{
-						lat: object.lat,
-						lon: object.lon,
-						title: object.title,
-						subTitle: 'Circulator Stop #' + object.stopId,
-						pinColor: "purple",
-						selected: false,
-						index: '##' + object.stopId
-					}
-				);
-			
 			}
+		
+			
 		
 			
 	
@@ -2718,6 +2748,12 @@ $(document).on('pagebeforeshow', '#gps_map', function() {
 		//if (pins.length == 0) {
 			getStops(currentLatitude, currentLongitude, '800');
 			getRailStops(currentLatitude, currentLongitude, '800');
+			
+			if (ajaxCirculatorCount == circulatorStopsArray.length) {
+				//console.log('marker time!');
+				markerCirculatorStops(currentLatitude,currentLongitude, .01 , .01);
+			}
+		    	
 		//}
 		
 	}
@@ -2755,6 +2791,12 @@ $(document).on('pagebeforeshow', '#gps_map', function() {
 						if (radius < 2000) {
 							getStops(viewportLat, viewportLon, radius);
 							getRailStops(viewportLat, viewportLon, radius);
+							
+							if (ajaxCirculatorCount == circulatorStopsArray.length) {
+								//console.log('marker time!');
+								markerCirculatorStops(circulatorLat,circulatorLon,circulatorLatDelta,circulatorLonDelta);
+							}
+		    	
 						}
 						
 					});

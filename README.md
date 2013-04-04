@@ -10,7 +10,7 @@ Built using:
 * FastClick
 * iScroll and jQuery Mobile iScrollView
 * ZSPinAnnotation
-* xml2json.jx
+* xml2json.js
 * xCode
 
 Please feel free to download, fork, or help this app improve. You'll need to add your own WMATA api key to config.js in the /www/js/ directory to compile a working version. (Get a free key at http://developer.wmata.com/)
