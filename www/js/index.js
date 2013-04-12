@@ -797,19 +797,9 @@ getCirculatorStops = function(latitude,longitude,radius) {
         }
     }
     
-    ajaxCount++;
-    if (ajaxCount > 0) {
-    	$.mobile.loading( 'show' );
-    }
-	
-	getCirculatorLineListJSON = $.get('http://webservices.nextbus.com/service/publicXMLFeed?command=routeList&a=dc-circulator', function(data) {
-	
-		ajaxCount--;
-	    if (ajaxCount == 0) {
-	    	$.mobile.loading( 'hide' );
-	    }
-	    
-	    circulatorLineList = $.xml2json(data);
+    getNewCirculatorData = function() {
+    	
+		window.localStorage.setItem("circulatorStopsDatestamp", currentTime);
 	    
 	    circulatorStopsArray = [];
 	    circulatorStopsArray.length = 0;
@@ -822,15 +812,15 @@ getCirculatorStops = function(latitude,longitude,radius) {
 	    // count for how many lines we've gotten via ajax, so we know when we're done
 	    ajaxCirculatorCount = 0;
 	    
-	    $.each(circulatorLineList.route, function(i, object) {
-	    	ajaxCount++;
+	    function getCirculatorLineStops(lineTag) {
+		    ajaxCount++;
 		    if (ajaxCount > 0) {
 		    	$.mobile.loading( 'show' );
 		    }
 		    
 		    ajaxCirculatorCount++;
 		    
-	    	getCirculatorStopsJSON = $.get('http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a=dc-circulator&r=' + object.tag + '', function(data) {
+	    	getCirculatorStopsJSON = $.get('http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a=dc-circulator&r=' + lineTag + '', function(data) {
 	    		ajaxCount--;
 			    if (ajaxCount == 0) {
 			    	$.mobile.loading( 'hide' );
@@ -859,7 +849,7 @@ getCirculatorStops = function(latitude,longitude,radius) {
 				 });
 				 
 				 // only put pins on the map if they're all done loading
-				 if (ajaxCirculatorCount == circulatorStopsArray.length) {
+				 if (ajaxCirculatorCount == 6) {
 					//console.log('marker time!');
 					markerCirculatorStops(currentLatitude,currentLongitude, .01 , .01);
 				 }
@@ -885,40 +875,100 @@ getCirculatorStops = function(latitude,longitude,radius) {
 				    ); 
 				}
 			});
-	    });
-	    
-	    
-		//console.log('ajax call done');
-		//$.mobile.loading( 'hide' );
-		
-		//railStops = data;
-		//console.log(railStops);
-
-		// output to log
-		
-		//circulatorStopsJSON = JSON.parse(window.localStorage.getItem("circulatorStops"));
-		//markerCirculatorStops(circulatorStopsJSON);
-
-		//console.log(stops.Stops[0].Lat);
-
-		
-	}).error(function(jqXHR, textStatus, errorThrown) {
-		//$.mobile.loading( 'hide' );
-		
-		ajaxCount--;
-	    if (ajaxCount == 0) {
-	    	$.mobile.loading( 'hide' );
 	    }
+	    
+	    // hard coded circulator line tags taken from http://webservices.nextbus.com/service/publicXMLFeed?command=routeList&a=dc-circulator to speed this up, which works but only to a certain point...
+	    getCirculatorLineStops('yellow');
+	    getCirculatorLineStops('gtownpm');
+	    getCirculatorLineStops('green');
+	    getCirculatorLineStops('blue');
+	    getCirculatorLineStops('rosslyn');
+	    getCirculatorLineStops('potomac');
+
 		
-		if (errorThrown != 'abort') {
-			navigator.notification.confirm(
-			    'An error occured fetching the data you requested.',  // message
-			    getCirculatorStopsConfirm,         // callback
-			    "There was an error",            // title
-			    'Try again,Cancel'                  // buttonName
-		    ); 
-		}
-	});
+		/* we don't use this big AJAX-in-AJAX loop anymore because it tends to block the UI...
+getCirculatorLineListJSON = $.get('http://webservices.nextbus.com/service/publicXMLFeed?command=routeList&a=dc-circulator', function(data) {
+	
+			ajaxCount--;
+		    if (ajaxCount == 0) {
+		    	$.mobile.loading( 'hide' );
+		    }
+		    
+		    circulatorLineList = $.xml2json(data);
+		    
+		    circulatorStopsArray = [];
+		    circulatorStopsArray.length = 0;
+		    
+		    circulatorStops = [];
+		    circulatorStops.length = 0;
+		    
+		    window.localStorage.removeItem("circulatorStops");
+		    
+		    // count for how many lines we've gotten via ajax, so we know when we're done
+		    ajaxCirculatorCount = 0;
+		    
+		    $.each(circulatorLineList.route, function(i, object) {
+		    	//code to loop through each AJAX request used to go here, but no longer used.
+		    });
+		    
+		    
+			//console.log('ajax call done');
+			//$.mobile.loading( 'hide' );
+			
+			//railStops = data;
+			//console.log(railStops);
+	
+			// output to log
+			
+			//circulatorStopsJSON = JSON.parse(window.localStorage.getItem("circulatorStops"));
+			//markerCirculatorStops(circulatorStopsJSON);
+	
+			//console.log(stops.Stops[0].Lat);
+	
+			
+		}).error(function(jqXHR, textStatus, errorThrown) {
+			//$.mobile.loading( 'hide' );
+			
+			ajaxCount--;
+		    if (ajaxCount == 0) {
+		    	$.mobile.loading( 'hide' );
+		    }
+			
+			if (errorThrown != 'abort') {
+				navigator.notification.confirm(
+				    'An error occured fetching the data you requested.',  // message
+				    getCirculatorStopsConfirm,         // callback
+				    "There was an error",            // title
+				    'Try again,Cancel'                  // buttonName
+			    ); 
+			}
+		});
+*/
+	}
+    
+    var currentTime = new Date();
+    var lastWeek = new Date(currentTime.getTime() - 7 * 24 * 60 * 60 * 1000);
+    var datestamp = new Date(window.localStorage.getItem("circulatorStopsDatestamp"));
+    
+    // check for cached circulator data. If there is none, get it.
+    if (window.localStorage.getItem("circulatorStopsDatestamp") && window.localStorage.getItem("circulatorStops")) {
+    	//console.log('first if');
+    
+    	// if our circulator data is a week old, get new data
+    	if (datestamp < lastWeek ) {
+			//console.log('circulator data is old! get new data!');
+			window.localStorage.setItem("circulatorStopsDatestamp", currentTime);
+			getNewCirculatorData();
+			
+	    } else {
+	    	//console.log('circulator data is not old!');
+	    	markerCirculatorStops(currentLatitude,currentLongitude, .01 , .01);
+	    }
+	    
+    } else {
+	    //console.log('circulator data is old! get new data!');
+	    getNewCirculatorData();
+    }
 	
 }
 
