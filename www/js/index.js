@@ -1114,7 +1114,7 @@ function annotationTap(text, latitude, longitude) {
 	//console.log('annotation tap');
 	//console.log(latitude);
 	
-	text = text.toString().replace(/Metro Rail Station #/,'').replace(/WMATA Bus Stop #/,'');
+	//text = text.toString().replace(/Metro Rail Station #/,'').replace(/WMATA Bus Stop #/,'');
 	
 	
 	
@@ -1123,25 +1123,22 @@ function annotationTap(text, latitude, longitude) {
 	if (routeMapView == true) {
 		notInRangeStopID = text.toString();
 		favoriteBtnClickedFlag = true;
-			if (isNaN(text)) {
+			if ((/Metro Rail Station #/).test(text)) {
 				getRailStops(latitude, longitude, '500');
-			} else {
+			} else if ((/WMATA Bus Stop #/).test(text)) {
 				getStops(latitude, longitude, '50');
 			}
 				
 	} else {
 	
 		// if this is a rail stop, do that function
-		if (isNaN(text)) {
+		if ((/Metro Rail Station #/).test(text)) {
 	
 			self2 = this;
 			//console.log('click!');;
 			stopID = text;
 			//console.log(stopID);
 			var self2 = this;
-			
-		
-			
 			
 			// only get this stuff if the annotation tapped is a stop, rather than part of a route map
 			if (text != '(null)') {
@@ -1168,9 +1165,9 @@ function annotationTap(text, latitude, longitude) {
 			    if (ajaxCount > 0) {
 				    $.mobile.loading( 'show' );
 				}
-				//console.log('http://api.wmata.com/StationPrediction.svc/json/GetPrediction/' + stopID + '?api_key=' + wmata_api_key + '&callback=?');
+				//console.log('http://api.wmata.com/StationPrediction.svc/json/GetPrediction/' + stopID.toString().replace(/Metro Rail Station #/,'') + '?api_key=' + wmata_api_key + '&callback=?');
 				
-				annotationTapJSON = $.getJSON('http://api.wmata.com/StationPrediction.svc/json/GetPrediction/' + stopID + '?api_key=' + wmata_api_key + '&callback=?', function(data2, self4) {
+				annotationTapJSON = $.getJSON('http://api.wmata.com/StationPrediction.svc/json/GetPrediction/' + stopID.toString().replace(/Metro Rail Station #/,'') + '?api_key=' + wmata_api_key + '&callback=?', function(data2, self4) {
 					
 					ajaxCount--;
 					if (ajaxCount == 0) {
@@ -1267,7 +1264,7 @@ if (railStops.length) {
 				});
 
 			}
-		} else {
+		} else if ((/WMATA Bus Stop #/).test(text)) {
 	
 			self2 = this;
 			//console.log('click!');
@@ -1303,7 +1300,7 @@ if (railStops.length) {
 				    $.mobile.loading( 'show' );
 				}
 				
-				annotationTapJSON = $.getJSON('http://api.wmata.com/NextBusService.svc/json/JPredictions?StopID=' + stopID + '&api_key=' + wmata_api_key + '&callback=?', function(data2, self4) {
+				annotationTapJSON = $.getJSON('http://api.wmata.com/NextBusService.svc/json/JPredictions?StopID=' + stopID.toString().replace(/WMATA Bus Stop #/,'') + '&api_key=' + wmata_api_key + '&callback=?', function(data2, self4) {
 					
 					ajaxCount--;
 					if (ajaxCount == 0) {
@@ -1496,7 +1493,7 @@ markerStops = function(data) {
 				
 				// create a list of all possible routes at this stop
 				$.each(stops.Stops, function(i2, object2) {
-					if (stopID == stops.Stops[i2].StopID) {
+					if (stopID.toString().replace(/WMATA Bus Stop #/,'') == stops.Stops[i2].StopID) {
 						stopIDfocus = stops.Stops[i2].StopID;
 						stopName = stops.Stops[i2].Name;
 						potentialRouteList = stops.Stops[i2].Routes;
@@ -1707,11 +1704,11 @@ markerRailStops = function(data) {
 				potentialRailRouteList.length = 0;
 				actualRailRouteList = [];
 				railPotentialVsActual = [];
-				
-				station = station.split(',');
+				missingRailRoutes = [];
+				missingRailRoutes.length = 0;
 				
 				//railRouteList = data;
-				stationList = station;
+				stationList = station.toString().replace(/Metro Rail Station #/,'').split(',');
 				
 				railStationInfo = [];
 				railStationInfo.length = 0;
@@ -1719,7 +1716,7 @@ markerRailStops = function(data) {
 				railStationInfoCount = 0;
 				
 				
-				$.each(station, function(i, object) {
+				$.each(stationList, function(i, object) {
 					function getRailStationInfoConfirm(buttonIndex) {
 				        if (buttonIndex == 1) {
 				        	createRailRouteList(railRouteList,stationList);
@@ -1730,8 +1727,10 @@ markerRailStops = function(data) {
 				    if (ajaxCount > 0) {
 				    	$.mobile.loading( 'show' );
 				    }
-					
+				    
+					//console.log('start each');
 					getRailStationInfoJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JStationInfo?StationCode=' + object + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
+						//console.log(data);
 					
 						ajaxCount--;
 					    if (ajaxCount == 0) {
@@ -1742,10 +1741,11 @@ markerRailStops = function(data) {
 
 						railStationInfo.push(data);
 						
+						//console.log(railStationInfoCount);
 						//increment our AJAX count and see if we've got all the station info we need...
 						railStationInfoCount++;
 						
-						if (railStationInfoCount == station.length) {
+						if (railStationInfoCount == stationList.length) {
 							// create a list of all possible routes at this stop
 							$.each(railStationInfo, function(i2, object2) {
 								//if (stopID == stops.Stops[i2].StopID) {
@@ -1775,11 +1775,25 @@ markerRailStops = function(data) {
 							    return this.filter(function(i) {return !(a.indexOf(i) > -1);});
 							};
 							
-							railDirectionTracker = [];
+							//if (typeof(railDirectionTracker) === 'undefined') {
+								railDirectionTracker = [];
+								railDirectionTracker.length = 0;
+							//}
 							
+							//console.log(object);
+							
+							//search and make sure the predictions we're getting are for real trains, and not fake ones...
+							$.each(predictions.Trains, function(i, object) {
+								if (object.Line == 'RD' || object.Line == 'YL' || object.Line == 'GR' || object.Line == 'BL' || object.Line == 'OR') {
+									actualRailRouteList.push(object.Line);
+								}
+							});
+							
+							//console.log('before if');
+							//console.log(realRailTrains);
 							// make HTML for infowindow for actual buses that are coming
-							if (predictions.Trains.length) {
-								//console.log('true');
+							if (actualRailRouteList.length != 0) {
+								//console.log('realRailTrains true');
 								//console.log(data);
 								//dataWorld = railStationInfo;
 								
@@ -1791,51 +1805,54 @@ markerRailStops = function(data) {
 									//console.log(objDestName);
 									
 									if (object.DestinationCode != null) {
+										if(object.Min != '') {
+											railPredictionMatches = jQuery.grep(railDirectionTracker, function(obj) {
+												// our match function to see if a pin already exists in the global pin array
+												return obj.DestinationCode == objDestName;
+											});
+										
+											/*
+											// if the destination is already in the array, add to it, if not create from scratch
+											if (railPredictionMatches.length == 0) {
+												railDirectionTracker.push({ 
+														
+														DestinationCode: object.DestinationCode,
+														DestinationName: object.DestinationName,
+														Line: object.Line,
+														Min: object.Min
+													
+												});
+												
+											
+											} else {
+											
+												matchID = railPredictionMatches[0].DestinationCode;
+												//railDirectionTracker.objDestName = objDestName;
+												railDirectionTracker[matchID].Min = railDirectionTracker[matchID].Min + ', ' + object.Min;
+												
+											}
+	*/
+											
+											if (railPredictionMatches.length == 0) {
+												railDirectionTracker.push({ 
+														
+														DestinationCode: object.DestinationCode,
+														DestinationName: object.DestinationName,
+														Line: object.Line,
+														Min: object.Min
+													
+												});
+											} else {
+												$.each(railDirectionTracker, function(i, object2) {
+													if (railDirectionTracker[i].DestinationCode == object.DestinationCode) {
+														object2.Min = object2.Min  + ', ' + object.Min;
+													}
+												});
+											}
+										}
 									
 										
-										railPredictionMatches = jQuery.grep(railDirectionTracker, function(obj) {
-											// our match function to see if a pin already exists in the global pin array
-											return obj.DestinationCode == objDestName;
-										});
-									
-										/*
-										// if the destination is already in the array, add to it, if not create from scratch
-										if (railPredictionMatches.length == 0) {
-											railDirectionTracker.push({ 
-													
-													DestinationCode: object.DestinationCode,
-													DestinationName: object.DestinationName,
-													Line: object.Line,
-													Min: object.Min
-												
-											});
-											
 										
-										} else {
-										
-											matchID = railPredictionMatches[0].DestinationCode;
-											//railDirectionTracker.objDestName = objDestName;
-											railDirectionTracker[matchID].Min = railDirectionTracker[matchID].Min + ', ' + object.Min;
-											
-										}
-*/
-										
-										if (railPredictionMatches.length == 0) {
-											railDirectionTracker.push({ 
-													
-													DestinationCode: object.DestinationCode,
-													DestinationName: object.DestinationName,
-													Line: object.Line,
-													Min: object.Min
-												
-											});
-										} else {
-											$.each(railDirectionTracker, function(i, object2) {
-												if (railDirectionTracker[i].DestinationCode == object.DestinationCode) {
-													object2.Min = object2.Min  + ', ' + object.Min;
-												}
-											});
-										}
 									}
 								});
 								
@@ -1844,25 +1861,29 @@ markerRailStops = function(data) {
 								});
 								
 								// then after, loop through routes with no predictions and add to the end
-								/*
-$.each(potentialVsActual, function(i4, object4) {
-									// check for the routes with a lowercase c or v in their name, they are variation routes and should be ignored
-									if (/([cv])/.exec(potentialVsActual[i4]) == null) {
-										routeList = routeList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + potentialVsActual[i4] + '"><p>no prediction available</p><span class="ui-li-count">' + potentialVsActual[i4] + '</span></a></li>';
-									}
+								if (potentialRailRouteList.diff(actualRailRouteList).length != 0) {
+									missingRailRoutes = potentialRailRouteList.diff(actualRailRouteList);
 									
-								});
-*/
+									$.each(missingRailRoutes, function(i, object) {
+										// check for the routes with a lowercase c or v in their name, they are variation routes and should be ignored
+										railRouteList = railRouteList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + object + '"><p>no prediction available</p><span class="ui-li-count">' + object + '</span></a></li>';
+										
+									});
+								}
+								
+								
+								
+
 							} else { 
 								
 								// if there are no predictions at all, just do the stops
-								
+								//console.log('realRailTrains false');
 								$.each(potentialRailRouteList, function(i4, object4) {			
-									railRouteList = railRouteList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + object4 + '"><p>no prediction available</p><p><em>(this usually means this station is closed)</em></p><span class="ui-li-count">' + object4 + '</span></a></li>';
+									railRouteList = railRouteList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + object4 + '"><p>no prediction available</p><span class="ui-li-count">' + object4 + '</span></a></li>';
 								});
 								
-								actualRouteList.length = 0;
-								potentialVsActual.length = 0;
+								actualRailRouteList.length = 0;
+								railPotentialVsActual.length = 0;
 
 				
 							}
@@ -1871,11 +1892,13 @@ $.each(potentialVsActual, function(i4, object4) {
 							//console.log(stopName);
 							console.log(stationList.join().toString());
 							var dt = new DateTime();
-							railRouteList = '<li data-role="list-divider" class="stopTitle" id="' + stationList.join().toString() + '" data-lat=' + railStopLat + '" data-lon=' + railStopLon + '"><span class="stopName">' + railStopName + '</span></li>' + railRouteList + '<div class="updated">Updated ' + dt.formats.busTrackDateTime.b + ' - Pull to refresh</div>';
+							railRouteList = '<li data-role="list-divider" class="stopTitle" id="' + station + '" data-lat=' + railStopLat + '" data-lon=' + railStopLon + '"><span class="stopName">' + railStopName + '</span></li>' + railRouteList + '<div class="updated">Updated ' + dt.formats.busTrackDateTime.b + ' - Pull to refresh</div>';
 
 							//console.log(railRouteList);
 							
 						}
+						
+						//delete realRailTrains; //unset the variable for the next loop
 						//console.log(routes);
 						
 						
@@ -2054,260 +2077,85 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 	
 	
 	        // loop through all routes in this stop and create a string from all of them
-	        /*createRailRouteList = function(data, station) {
+	        createCirculatorRouteList = function(data) {
 	        	//console.log('createRouteList start');
-				railRouteList = '';
-				railRouteList.replace(railRouteList, '');
-				potentialRailRouteList = [];
-				potentialRailRouteList.length = 0;
-				actualRailRouteList = [];
-				railPotentialVsActual = [];
+				circulatorRouteList = '';
+				circultaorRouteList.replace(circultaorRouteList, '');
+				potentialCirculatorRouteList = [];
+				potentialCirculatorRouteList.length = 0;
+				actualCirculatorRouteList = [];
+				circulatorPotentialVsActual = [];
 				
-				station = station.split(',');
-				
-				//railRouteList = data;
-				stationList = station;
-				
-				railStationInfo = [];
-				railStationInfo.length = 0;
-				
-				railStationInfoCount = 0;
-				
-				
-				$.each(station, function(i, object) {
-					function getRailStationInfoConfirm(buttonIndex) {
-				        if (buttonIndex == 1) {
-				        	createRailRouteList(railRouteList,stationList);
-				        }
-				    }
-
-				    ajaxCount++;
-				    if (ajaxCount > 0) {
-				    	$.mobile.loading( 'show' );
-				    }
+				// create a list of all possible routes at this stop
+				/*
+$.each(stops.Stops, function(i2, object2) {
+					if (stopID == stops.Stops[i2].StopID) {
+						stopIDfocus = stops.Stops[i2].StopID;
+						stopName = stops.Stops[i2].Name;
+						potentialRouteList = stops.Stops[i2].Routes;
+						stopLat = stops.Stops[i2].Lat;
+						stopLon = stops.Stops[i2].Lon;
+						//potentialRouteList.push(routeID);
+					}
 					
-					getRailStationInfoJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JStationInfo?StationCode=' + object + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
-					
-						ajaxCount--;
-					    if (ajaxCount == 0) {
-					    	$.mobile.loading( 'hide' );
-					    }
-					    
-					    //console.log(data);
-
-						railStationInfo.push(data);
-						
-						//increment our AJAX count and see if we've got all the station info we need...
-						railStationInfoCount++;
-						
-						if (railStationInfoCount == station.length) {
-							// create a list of all possible routes at this stop
-							$.each(railStationInfo, function(i2, object2) {
-								//if (stopID == stops.Stops[i2].StopID) {
-									railStopIDfocus = object2.Code;
-									railStopName = object2.Name;
-									potentialRailRouteList.push(object2.LineCode1);
-									if (object2.LineCode2 != null) {
-										potentialRailRouteList.push(object2.LineCode2);
-									}
-									
-									//potentialRailRouteList.push(object2.LineCode3);
-									//potentialRailRouteList.push(object2.LineCode4);
-									railStopLat = object2.Lat;
-									railStopLon = object2.Lon;
-									//potentialRouteList.push(routeID);
-								//}
-								
-							});
-							
-							//console.log(potentialRailRouteList);
-							//potentialRouteList.length = 0;
-							
-							
-							// make a diff method for determining the difference in arrays
-							
-							Array.prototype.diff = function(a) {
-							    return this.filter(function(i) {return !(a.indexOf(i) > -1);});
-							};
-							
-							railDirectionTracker = [];
-							
-							// make HTML for infowindow for actual buses that are coming
-							if (predictions.Trains.length) {
-								//console.log('true');
-								//console.log(data);
-								//dataWorld = railStationInfo;
-								
-								
-								
-								$.each(predictions.Trains, function(i3, object) {
-								
-									objDestName = object.DestinationCode;
-									//console.log(objDestName);
-									
-									if (object.DestinationCode != null) {
-									
-										
-										railPredictionMatches = jQuery.grep(railDirectionTracker, function(obj) {
-											// our match function to see if a pin already exists in the global pin array
-											return obj.DestinationCode == objDestName;
-										});
-									
-										/*
-										// if the destination is already in the array, add to it, if not create from scratch
-										if (railPredictionMatches.length == 0) {
-											railDirectionTracker.push({ 
-													
-													DestinationCode: object.DestinationCode,
-													DestinationName: object.DestinationName,
-													Line: object.Line,
-													Min: object.Min
-												
-											});
-											
-										
-										} else {
-										
-											matchID = railPredictionMatches[0].DestinationCode;
-											//railDirectionTracker.objDestName = objDestName;
-											railDirectionTracker[matchID].Min = railDirectionTracker[matchID].Min + ', ' + object.Min;
-											
-										}
-*/
-										
-										/*
-if (railPredictionMatches.length == 0) {
-											railDirectionTracker.push({ 
-													
-													DestinationCode: object.DestinationCode,
-													DestinationName: object.DestinationName,
-													Line: object.Line,
-													Min: object.Min
-												
-											});
-										} else {
-											$.each(railDirectionTracker, function(i, object2) {
-												if (railDirectionTracker[i].DestinationCode == object.DestinationCode) {
-													object2.Min = object2.Min  + ', ' + object.Min;
-												}
-											});
-										}
-									}
-								});
-								
-								$.each(railDirectionTracker, function(i, object) {
-									railRouteList = railRouteList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + object.Line + '"><p>to ' + object.DestinationName + ' arrives in:</p><p><strong>' + object.Min + '</strong> minutes</p><span class="ui-li-count">' + object.Line + '</span></li>';
-								});
-*/
-								
-								// then after, loop through routes with no predictions and add to the end
-								/*
-$.each(potentialVsActual, function(i4, object4) {
-									// check for the routes with a lowercase c or v in their name, they are variation routes and should be ignored
-									if (/([cv])/.exec(potentialVsActual[i4]) == null) {
-										routeList = routeList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + potentialVsActual[i4] + '"><p>no prediction available</p><span class="ui-li-count">' + potentialVsActual[i4] + '</span></a></li>';
-									}
-									
-								});
-*/
-							/*
-} else { 
-								
-								// if there are no predictions at all, just do the stops
-								
-								$.each(potentialRailRouteList, function(i4, object4) {			
-									railRouteList = railRouteList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + object4 + '"><p>no prediction available</p><p><em>(this usually means this station is closed)</em></p><span class="ui-li-count">' + object4 + '</span></a></li>';
-								});
-								
-								actualRouteList.length = 0;
-								potentialVsActual.length = 0;
-
-				
-							}
-							
-							//console.log('potential routes for stop ' + stopIDfocus + ': ' + potentialRouteList + ' and actual routes: ' + actualRouteList);
-							//console.log(stopName);
-							console.log(stationList.join().toString());
-							var dt = new DateTime();
-							railRouteList = '<li data-role="list-divider" class="stopTitle" id="' + stationList.join().toString() + '" data-lat=' + railStopLat + '" data-lon=' + railStopLon + '"><span class="stopName">' + railStopName + '</span></li>' + railRouteList + '<div class="updated">Updated ' + dt.formats.busTrackDateTime.b + ' - Pull to refresh</div>';
-
-							//console.log(railRouteList);
-							
-						}
-						//console.log(routes);
-						
-						
-						$('#infowindow-routes').html(railRouteList);
-				    
-				    
-					    // pass some variables to the next page if a button is clicked
-					    $('.route-detail-btn').click(function() {
-					    
-					    	//console.log('route btn clicked');
-					    	//console.log($(this).attr('id'));
-					
-					    	routeClicked = $(this).attr('id');
-					    	
-					    	//console.log(routeClicked);
-					    	
-					    	if (routeClicked == 'RD') {
-						    	routeTitle = 'Red';
-					    	} else if (routeClicked == 'BL') {
-						    	routeTitle = 'Blue';
-					    	} else if (routeClicked == 'OR') {
-						    	routeTitle = 'Orange';
-					    	} else if (routeClicked == 'YL') {
-						    	routeTitle = 'Yellow';
-					    	} else if (routeClicked == 'GR') {
-						    	routeTitle = 'Green';
-					    	}
-					    	
-					    	$('#route_map_title').html(routeTitle + ' Line');
-					    
-					    	$.mobile.changePage( "#route_map", { transition: "fade" } );
-			
-					    	
-					    	
-					    	
-					    });
-					    
-					    //$( "#infowindow" ).popup( "open" );
-					    
-					    //console.log('show page');
-					    // show the page
-					    annotationTapJSON.abort();
-					    
-					    $.mobile.changePage( "#infowindow", { transition: "fade"} );
-					    $('#infowindow-routes').listview('refresh');
-					    $("#infowindow-content").iscrollview("refresh");
-					    $('#infowindow-content').css('height', $('#infowindow').css('min-height'));
-						
-						
-						
-					}).error(function(jqXHR, textStatus, errorThrown) {
-						//$.mobile.loading( 'hide' );
-						
-						ajaxCount--;
-					    if (ajaxCount == 0) {
-					    	$.mobile.loading( 'hide' );
-					    }
-						
-						if (errorThrown != 'abort') {
-							navigator.notification.confirm(
-							    'An error occured fetching the data you requested.',  // message
-							    getRailStationInfoConfirm,         // callback
-							    "There was an error",            // title
-							    'Try again,Cancel'                  // buttonName
-						    ); 
-						}
-					});
 				});
 */
 				
 				
+				//potentialRouteList.length = 0;
 				
-
-	       /* }*/
+				
+				// make a diff method for determining the difference in arrays
+				Array.prototype.diff = function(a) {
+				    return this.filter(function(i) {return !(a.indexOf(i) > -1);});
+				};
+				
+				// make HTML for infowindow for actual buses that are coming
+				if (predictions.Predictions.length) {
+					//console.log('true');
+					//console.log(data);
+					dataWorld = data;
+					$.each(data.minutes, function(i3, object) {
+						
+						// weed out undefined routes
+						if (i3 != 'undefined'){
+							//console.log('i3= ' + i3);
+							routeList = routeList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p><span class="ui-li-count">' + i3 + '</span></li>';
+						actualRouteList.push(i3);
+						potentialVsActual = potentialRouteList.diff(actualRouteList);
+						}
+					});
+					
+					// then after, loop through routes with no predictions and add to the end
+					$.each(potentialVsActual, function(i4, object4) {
+						// check for the routes with a lowercase c or v in their name, they are variation routes and should be ignored
+						if (/([cv])/.exec(potentialVsActual[i4]) == null) {
+							routeList = routeList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + potentialVsActual[i4] + '"><p>no prediction available</p><span class="ui-li-count">' + potentialVsActual[i4] + '</span></a></li>';
+						}
+						
+					});
+				} else {
+					
+					// if there are no predictions at all, just do the stops
+					$.each(potentialRouteList, function(i4, object4) {
+						// check for the routes with a lowercase c or v in their name, they are variation routes and should be ignored
+						if (/([cv])/.exec(potentialRouteList[i4]) == null) {			
+							routeList = routeList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + potentialRouteList[i4] + '"><p>no prediction available</p><span class="ui-li-count">' + potentialRouteList[i4] + '</span></a></li>';
+						}
+					});
+					
+					actualRouteList.length = 0;
+					potentialVsActual.length = 0;
+	
+				}
+				
+				//console.log('potential routes for stop ' + stopIDfocus + ': ' + potentialRouteList + ' and actual routes: ' + actualRouteList);
+				//console.log(stopName);
+				var dt = new DateTime();
+				routeList = '<li data-role="list-divider" class="stopTitle" id="' + stopID + '" data-lat=' + stopLat + '" data-lon=' + stopLon + '"><span class="stopName">' + toTitleCase(stopName) + '</span></li>' + routeList + '<div class="updated">Updated ' + dt.formats.busTrackDateTime.b + ' - Pull to refresh</div>';
+				//console.log(routeList);
+				
+	        }
 
 	
 		});
@@ -2707,10 +2555,16 @@ $.mobile.loading( 'show', {
 		
 				// if we click a favorite, get the stop and populate the stops array really quick, so we can view all the data about the predictions
 				favoriteBtnClickedFlag = true;
-				if (isNaN(notInRangeStopID)) {
-					getRailStops(notInRangeStopLat, notInRangeStopLon, '500');
-				} else {
+				if ((/WMATA Bus Stop #/).test(notInRangeStopID)) {
 					getStops(notInRangeStopLat, notInRangeStopLon, '50');
+				} else if ((/Metro Rail Station #/).test(notInRangeStopID)) {
+					getRailStops(notInRangeStopLat, notInRangeStopLon, '500');
+				} else if (isNaN(notInRangeStopID)) {
+					notInRangeStopID = 'Metro Rail Station #' + notInRangeStopID;
+					getRailStops('Metro Rail Station #' + notInRangeStopLat, notInRangeStopLon, '500');
+				} else {
+					notInRangeStopID = 'WMATA Bus Stop #' + notInRangeStopID;
+					getStops('WMATA Bus Stop #' + notInRangeStopLat, notInRangeStopLon, '50');
 				}
 	
 			});
@@ -2901,7 +2755,9 @@ $(document).on('pagebeforeshow', '#favorite_menu_page', function() {
 		favoritesListHTML = '';
 		
 		$.each(favorites, function(i, object) {
-			if (isNaN(object.id)) {
+			if ((/WMATA Bus Stop #/).test(object.id) || (/Metro Rail Station #/).test(object.id)) {
+				favoritesListHTML = favoritesListHTML + '<li data-id="' + object.id + '"><a data-transition="slide" class="favorite-stop-detail-btn" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><h1 class="favoriteMenuStopTitle">' + object.name +'</h1><p>'+ object.id + '</p><p class="delete-handle">Delete</p><p class="drag-handle">Sort</p></a></li>';	
+			} else if (isNaN(object.id)) { // this is to make favorites backwards compatible...
 				favoritesListHTML = favoritesListHTML + '<li data-id="' + object.id + '"><a data-transition="slide" class="favorite-stop-detail-btn" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><h1 class="favoriteMenuStopTitle">' + object.name +'</h1><p>Metro Rail Station #'+ object.id + '</p><p class="delete-handle">Delete</p><p class="drag-handle">Sort</p></a></li>';
 			} else {
 				favoritesListHTML = favoritesListHTML + '<li data-id="' + object.id + '"><a data-transition="slide" class="favorite-stop-detail-btn" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><h1 class="favoriteMenuStopTitle">' + object.name +'</h1><p>WMATA Bus Stop #'+ object.id + '</p><p class="delete-handle">Delete</p><p class="drag-handle">Sort</p></a></li>';
@@ -2933,9 +2789,15 @@ $.mobile.loading( 'show', {
 	
 			// if we click a favorite, get the stop and populate the stops array really quick, so we can view all the data about the predictions
 			favoriteBtnClickedFlag = true;
-			if (isNaN(notInRangeStopID)) {
+			if ((/WMATA Bus Stop #/).test(notInRangeStopID)) {
+				getStops(notInRangeStopLat, notInRangeStopLon, '50');
+			} else if ((/Metro Rail Station #/).test(notInRangeStopID)) {
+				getRailStops(notInRangeStopLat, notInRangeStopLon, '500');
+			} else if (isNaN(notInRangeStopID)) {
+				notInRangeStopID = 'Metro Rail Station #' + notInRangeStopID;
 				getRailStops(notInRangeStopLat, notInRangeStopLon, '500');
 			} else {
+				notInRangeStopID = 'WMATA Bus Stop #' + notInRangeStopID;
 				getStops(notInRangeStopLat, notInRangeStopLon, '50');
 			}
 			
@@ -2967,9 +2829,9 @@ $(document).on('pagebeforeshow', '#infowindow', function() {
 		var favoriteMatches = jQuery.grep(favorites, function(obj) {
 			//console.log(data.Stops[i].StopID + ' == ' + obj.subTitle + '?');
 			if (stopID) {
-				return obj.id == stopID;
+				return (obj.id == stopID || 'WMATA Bus Stop #' + obj.id == stopID || 'Metro Rail Station #' + obj.id == stopID);
 			} else {
-				return obj.id == notInRangeStopID;
+				return (obj.id == notInRangeStopID || 'WMATA Bus Stop #' + obj.id == notInRangeStopID || 'Metro Rail Station #' + obj.id == notInRangeStopID);
 			}
 			
 		});
