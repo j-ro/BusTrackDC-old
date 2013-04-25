@@ -324,7 +324,7 @@ buildRouteMenu = function(dataBus, dataRail) {
 	console.log(dataBus);
 	console.log(dataRail);
 	
-	$('#route_list_content').html('<h2 class="center">Type a bus line number or<br/>rail line name in the search box above<br/>to search for routes.</h2>');
+	$('#route_list_content').html('<h2 class="center">Type a bus line number or<br/>rail line name in the box above<br/>to search for routes.</h2>');
 	
 	$('<ul/>',{'data-role':'listview','data-filter-reveal':true,'data-filter':true, 'data-filter-placeholder':'Search...'}).prependTo( '#route_list_content' );
 	
