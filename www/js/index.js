@@ -324,7 +324,7 @@ buildRouteMenu = function(dataBus, dataRail) {
 	console.log(dataBus);
 	console.log(dataRail);
 	
-	$('#route_list_content').html('<h2 class="center">Type in the search box above<br/>to search for routes.</h2>');
+	$('#route_list_content').html('<h2 class="center">Type a bus line number or<br/>rail line name in the search box above<br/>to search for routes.</h2>');
 	
 	$('<ul/>',{'data-role':'listview','data-filter-reveal':true,'data-filter':true, 'data-filter-placeholder':'Search...'}).prependTo( '#route_list_content' );
 	
@@ -2251,7 +2251,7 @@ function favoriteTap(favorite) {
 		
 		var favoriteMatches = jQuery.grep(favorites, function(obj) {
 			//console.log(data.Stops[i].StopID + ' == ' + obj.subTitle + '?');
-			return obj.id == favorite;
+			return (obj.id == favorite || 'WMATA Bus Stop #' + obj.id == favorite || 'Metro Rail Station #' + obj.id == favorite);
 		});
 		
 		//console.log(favorites);
@@ -2259,7 +2259,7 @@ function favoriteTap(favorite) {
 			//console.log('match! remove');
 			$( "#favorite" ).buttonMarkup({theme: 'd'});
 			
-			favorites = favorites.filter(function(el){ return el.id != favorite; });
+			favorites = favorites.filter(function(el){ console.log('favorite= ' + favorite); console.log('el.id= ' + el.id); return (el.id != favorite && 'WMATA Bus Stop #' + el.id != favorite && 'Metro Rail Station #' + el.id != favorite); });
 			
 			window.localStorage.setItem("favorites", JSON.stringify(favorites));
 			//favoritesStorage = JSON.stringify(favorites);
@@ -2536,22 +2536,24 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 			
 			// rebind the click handler
 			$('.favorite-stop-detail-btn').click(function() {
-				//console.log($(this).data('stopid'));
+				
 				
 				/*
-$.mobile.loading( 'show', {
+	$.mobile.loading( 'show', {
 					text: 'Loading',
 					textVisible: false,
 					theme: 'a',
 					html: ""
 				});
-*/
+	*/
 		
 				// store a variable on this stop's name in case we need to retrieve it later...
 				notInRangeStopID = $(this).data('stopid');
 				notInRangeStopName = $(this).data('stopname');
 				notInRangeStopLat = $(this).data('lat');
 				notInRangeStopLon = $(this).data('lon');
+				
+				//console.log(notInRangeStopID + ' ' + notInRangeStopName  + ' ' + notInRangeStopLat  + ' ' + notInRangeStopLon);
 		
 				// if we click a favorite, get the stop and populate the stops array really quick, so we can view all the data about the predictions
 				favoriteBtnClickedFlag = true;
@@ -2561,10 +2563,10 @@ $.mobile.loading( 'show', {
 					getRailStops(notInRangeStopLat, notInRangeStopLon, '500');
 				} else if (isNaN(notInRangeStopID)) {
 					notInRangeStopID = 'Metro Rail Station #' + notInRangeStopID;
-					getRailStops('Metro Rail Station #' + notInRangeStopLat, notInRangeStopLon, '500');
+					getRailStops(notInRangeStopLat, notInRangeStopLon, '500');
 				} else {
 					notInRangeStopID = 'WMATA Bus Stop #' + notInRangeStopID;
-					getStops('WMATA Bus Stop #' + notInRangeStopLat, notInRangeStopLon, '50');
+					getStops(notInRangeStopLat, notInRangeStopLon, '50');
 				}
 	
 			});
