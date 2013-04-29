@@ -987,9 +987,9 @@ getCirculatorStopsForRoute = function(routeID) {
 	getStopsForRouteFlag = false;
 	
 	// retry function on error
-	function getRailStopsForRouteConfirm(buttonIndex) {
+	function getCirculatorStopsForRouteConfirm(buttonIndex) {
         if (buttonIndex == 1) {
-        	getRailStopsForRoute(routeID);
+        	getCirculatorStopsForRoute(routeID);
         }
     }
     
@@ -998,7 +998,7 @@ getCirculatorStopsForRoute = function(routeID) {
     	$.mobile.loading( 'show' );
     }
 		
-	getRailStopsForRouteJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JStations?LineCode=' + routeID + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
+	getCirculatorStopsForRouteJSON = $.get('http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a=dc-circulator&r=' + routeID, function(data) {
 		
 		ajaxCount--;
 	    if (ajaxCount == 0) {
@@ -1012,7 +1012,7 @@ getCirculatorStopsForRoute = function(routeID) {
 		
 		//console.log('getstopsforroute callback hide');
 		//$.mobile.loading( 'hide' );
-		railStopsForRoute = data;
+		circulatorStopsForRoute = $.xml2json(data);
 		
 		//console.log(stopsForRoute);
 		
@@ -1027,7 +1027,7 @@ getCirculatorStopsForRoute = function(routeID) {
 	    //console.log('call mapoptions');
 	    window.plugins.mapKit.setMapData(mapOptions2);
 		
-		markerRailStopPoints(railStopsForRoute);
+		markerCirculatorStopPoints(circulatorStopsForRoute);
 
 	}).error(function(jqXHR, textStatus, errorThrown) {
 		//$.mobile.loading( 'hide' );
@@ -1040,7 +1040,7 @@ getCirculatorStopsForRoute = function(routeID) {
 		if (errorThrown != 'abort') {
 			navigator.notification.confirm(
 			    'An error occured fetching the data you requested.',  // message
-			    getRailStopsForRouteConfirm,         // callback
+			    getCirculatorStopsForRouteConfirm,         // callback
 			    "There was an error",            // title
 			    'Try again,Cancel'                  // buttonName
 		    ); 
@@ -1059,29 +1059,46 @@ markerCirculatorStopPoints = function(data) {
 	
 	var inRangeLatitude = false;
 	var inRangeLongitude = false;
-
 	
-	$.each(data.Stations, function(i, object) {
-
-		//console.log('done with pin0 ' + i);
-		
-		if (object.StationTogether1 != "") {
-			var stationCode = object.Code + ',' + object.StationTogether1;
-		} else {
-			var stationCode = object.Code;
+	routePointData = data;
+	
+	// grab the direction tag information so we can compare it to the stops later
+	var pins0stopArray = _.pluck(data.route.direction[0].stop, 'tag');
+	var pins1stopArray = _.pluck(data.route.direction[1].stop, 'tag');
+	//console.log(pins0stopArray);
+	//console.log(pins1stopArray);
+	
+	$.each(data.route.stop, function(i, object) {
+		//console.log(object.tag);
+		//console.log('pin0= ' + $.inArray(object.tag, pins0stopArray));
+		//console.log('pin1= ' + $.inArray(object.tag, pins1stopArray));
+		if ($.inArray(object.tag, pins0stopArray) != -1) {
+			//console.log(pin0);
+			pins0.push(
+				{
+					lat: object.lat,
+					lon: object.lon,
+					title: object.shortTitle,
+					subTitle: 'Circulator Stop #' + object.stopId,
+					pinColor: "purple",
+					selected: false,
+					index: '##' + object.stopId
+				}
+			);
+		} else if ($.inArray(object.tag, pins1stopArray) != -1){
+			//console.log(pin1);
+			pins1.push(
+				{
+					lat: object.lat,
+					lon: object.lon,
+					title: object.shortTitle,
+					subTitle: 'Circulator Stop #' + object.stopId,
+					pinColor: "bd91e5",
+					selected: false,
+					index: '##' + object.stopId
+				}
+			);
 		}
-		
-		pins0.push(
-			{
-				lat: object.Lat,
-				lon: object.Lon,
-				title: object.Name,
-				subTitle: 'Metro Rail Station #' + stationCode,
-				pinColor: "red",
-				selected: false,
-				index: i
-			}
-		);
 	});
 
 
@@ -1090,7 +1107,8 @@ markerCirculatorStopPoints = function(data) {
 	//console.log(inRangeLongitude + ',' + inRangeLatitude);
 	//console.log(pins0);
 	//console.log(pins1);
-	window.plugins.mapKit.addMapPins(pins0);
+	window.plugins.mapKit.addMapPins(pins0)
+	window.plugins.mapKit.addMapPins(pins1);
 	//console.log('markerstoppoints hide');
 	//$.mobile.loading( 'hide' );
 	//console.log(inRangeLongitude + ',' + inRangeLatitude);
@@ -1127,6 +1145,8 @@ function annotationTap(text, latitude, longitude) {
 				getRailStops(latitude, longitude, '500');
 			} else if ((/WMATA Bus Stop #/).test(text)) {
 				getStops(latitude, longitude, '50');
+			} else if ((/Circulator Stop #/).test(text)) {
+				markerCirculatorStops(latitude,longitude, .01 , .01);
 			}
 				
 	} else {
@@ -1387,6 +1407,236 @@ if (railStops.length) {
 				    	
 				    	
 				    	
+				    });
+				    
+				    //$( "#infowindow" ).popup( "open" );
+				    
+				    //console.log('show page');
+				    // show the page
+				    annotationTapJSON.abort();
+				    
+				    $.mobile.changePage( "#infowindow", { transition: "fade"} );
+				    $('#infowindow-routes').listview('refresh');
+				    $("#infowindow-content").iscrollview("refresh");
+				    $('#infowindow-content').css('height', $('#infowindow').css('min-height'));
+				    
+				    	
+			    }).error(function(jqXHR, textStatus, errorThrown) {
+					//$.mobile.loading( 'hide' );
+					//console.log(errorThrown);
+					ajaxCount--;
+					if (ajaxCount == 0) {
+						$.mobile.loading( 'hide' );
+					}
+					
+					if (errorThrown != 'abort') {
+						navigator.notification.confirm(
+						    'An error occured fetching the data you requested.',  // message
+						    annotationTapJSONConfirm,         // callback
+						    "There was an error",            // title
+						    'Try again,Cancel'                  // buttonName
+					    ); 
+					}	
+				});
+			}
+			
+		}  else if ((/Circulator Stop #/).test(text)) {
+	
+			self3 = this;
+			//console.log('click!');
+			stopID = text;
+			console.log(stopID);
+			var self3 = this;
+			
+		
+			
+			
+			// only get this stuff if the annotation tapped is a stop, rather than part of a route map
+			if (text != '(null)') {
+				/*
+	$.mobile.loading( 'show', {
+					text: 'Loading',
+					textVisible: false,
+					theme: 'a',
+					html: ""
+				});
+	*/
+				
+				// retry function on error
+				function annotationTapJSONConfirm(buttonIndex) {
+			        if (buttonIndex == 1) {
+			        	annotationTap(text, latitude, longitude);
+			        }
+			    }
+			    
+			    console.log('circulator!');
+			    
+			    ajaxCount++;
+			    if (ajaxCount > 0) {
+				    $.mobile.loading( 'show' );
+				}
+				
+				annotationTapJSON = $.get('http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=dc-circulator&stopId=' + stopID.toString().replace(/Circulator Stop #/,'') + '', function(data) {
+			    
+			    
+					
+					ajaxCount--;
+					if (ajaxCount == 0) {
+						$.mobile.loading( 'hide' );
+					}
+				
+					//console.log('predictions=' + data2.Predictions.length);
+					//sorted = data2.Predictions.sort(function(a,b) {return b - a; });
+					
+					//$.mobile.loading( 'hide' );
+					// thanks to Vlad Lyga for this part: http://stackoverflow.com/questions/14308149/how-do-i-merge-two-json-objects-in-javascript-jquery
+					predictions = $.xml2json(data);
+					
+					//console.log(predictions);
+					
+					routeTimes = {
+						minutes: {},
+						directionText: {}
+					};
+		
+					// if there's more than one route at this stop...
+					if (typeof(predictions.predictions.length) != 'undefined') {
+						//console.log('true');
+						for (var index in predictions.predictions) {
+				
+					        if(!routeTimes.minutes.hasOwnProperty(predictions.predictions[index].routeTag)) {
+				
+					            routeTimes.minutes[predictions.predictions[index].routeTag] = [];
+					            routeTimes.directionText[predictions.predictions[index].routeTag] = [];
+				
+					            if (typeof(predictions.predictions[index].direction) !== 'undefined') {
+				
+					            	routeTimes.minutes[predictions.predictions[index].routeTag].push(predictions.predictions[index].direction.prediction);
+					            	
+				
+					            }
+					            
+					           
+				            	if (typeof(predictions.predictions[index].direction) !== 'undefined') {
+				            		 routeTimes.directionText[predictions.predictions[index].routeTag].push(predictions.predictions[index].direction.title + ' ' + predictions.predictions[index].routeTitle);
+				            	} else {
+				            		 routeTimes.directionText[predictions.predictions[index].routeTag].push(predictions.predictions[index].routeTitle);
+				            	}
+				
+					        } else {
+				
+					        	if (typeof(predictions.predictions[index].direction) !== 'undefined') {
+				
+					        		routeTimes.minutes[predictions.predictions[index].routeTag].push(predictions.predictions[index].direction.prediction);
+					        		
+				
+					        	}
+					        	
+					        	if (typeof(predictions.predictions[index].direction) !== 'undefined') {
+				            		 routeTimes.directionText[predictions.predictions[index].routeTag].push(predictions.predictions[index].direction.title + ' ' + predictions.predictions[index].routeTitle);
+				            	} else {
+				            		 routeTimes.directionText[predictions.predictions[index].routeTag].push(predictions.predictions[index].routeTitle);
+				            	}
+					            
+				
+					        }
+					    }
+				    } else {
+
+					    //console.log('false');
+				        if(!routeTimes.minutes.hasOwnProperty(predictions.predictions.routeTag)) {
+			
+				            routeTimes.minutes[predictions.predictions.routeTag] = [];
+				            routeTimes.directionText[predictions.predictions.routeTag] = [];
+			
+				            if (typeof(predictions.predictions.direction) !== 'undefined') {
+			
+				            	routeTimes.minutes[predictions.predictions.routeTag].push(predictions.predictions.direction.prediction);
+				            	
+			
+				            }
+				            
+				            if (typeof(predictions.predictions.direction) !== 'undefined') {
+			            		 routeTimes.directionText[predictions.predictions.routeTag].push(predictions.predictions.direction.title + ' ' + predictions.predictions.routeTitle);
+			            	} else {
+			            		 routeTimes.directionText[predictions.predictions.routeTag].push(predictions.predictions.routeTitle);
+			            	}
+			
+				        } else {
+			
+				        	if (typeof(predictions.predictions.direction) !== 'undefined') {
+			
+				        		routeTimes.minutes[predictions.predictions.routeTag].push(predictions.predictions.direction.prediction);
+				        		
+			
+				        	}
+				        	
+				        	if (typeof(predictions.predictions.direction) !== 'undefined') {
+				            		 routeTimes.directionText[predictions.predictions.routeTag].push(predictions.predictions.direction.title + ' ' + predictions.predictions.routeTitle);
+				            	} else {
+				            		 routeTimes.directionText[predictions.predictions.routeTag].push(predictions.predictions.routeTitle);
+				            	}
+				            
+			
+				        }
+
+				    }
+				
+				    // this function needs nearby stops already loaded to load all stops for the route, not just predictions, but maybe it shouldn't in case you want to see your favorite stops and they're not in range? Right now, I'll just make it load only routes with predictions, but eventually would be nice to do the second AJAX call to load this stop into memory
+				    /*
+if (stops.length) {
+				    	//console.log(stops.length);
+				    	var 
+				        	routes = stops.Stops[0].Routes,
+				        	routesVsMinutes = {};
+				    }
+				    
+				    if (stops.length) {
+					    for(var i in routes) {
+					        if (!routesVsMinutes.hasOwnProperty(routes[i])) {
+					            routesVsMinutes[routes[i]] = {Minutes: []};
+					        } 
+					        if (routeTimes[routes[i]]) {
+					            routesVsMinutes[routes[i]].Minutes = routeTimes[routes[i]];
+					        }
+					    } 
+					} 
+*/    
+				    
+				    //stops.Stops[0].Routes = routesVsMinutes;
+				    //console.log(routeTimes);
+				    //console.log('now to creatRouteList');
+				    // create HTML for the infowindow
+				    createCirculatorRouteList(routeTimes);
+				    //console.log(routeList);
+				    $('#infowindow-routes').html(circulatorRouteList);
+				    
+				    
+				    // pass some variables to the next page if a button is clicked
+				    $('.route-detail-btn').click(function() {
+				    
+				    	//console.log('route btn clicked');
+				
+				    	routeClicked = $(this).attr('id');
+				    	
+				    	if (routeClicked == 'yellow') {
+					    	routeTitle = 'Yellow';
+				    	} else if (routeClicked == 'gtownpm') {
+					    	routeTitle = 'Yellow';
+				    	} else if (routeClicked == 'green') {
+					    	routeTitle = 'Green';
+				    	} else if (routeClicked == 'blue') {
+					    	routeTitle = 'Blue';
+				    	} else if (routeClicked == 'rosslyn') {
+					    	routeTitle = 'Light Blue';
+				    	} else if (routeClicked == 'potomac') {
+					    	routeTitle = 'Orange';
+				    	}
+				    	
+				    	$('#route_map_title').html(routeTitle + ' Line');
+				    
+				    	$.mobile.changePage( "#route_map", { transition: "fade" } );
+
 				    });
 				    
 				    //$( "#infowindow" ).popup( "open" );
@@ -2009,7 +2259,7 @@ markerCirculatorStops = function(latitude,longitude,latitudeDelta,longitudeDelta
 	newCirculatorPins = [];
 	newCirculatorPins.length = 0;
 	
-	var data = JSON.parse(window.localStorage.getItem("circulatorStops"));
+	var circulatorData = JSON.parse(window.localStorage.getItem("circulatorStops"));
 	
 	//console.log('start markerCircStops');
 	//console.log(data.Entrances.length);
@@ -2023,9 +2273,9 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 	
 	//console.log('latitude=' + latitude + ' longitude=' + longitude + ' latitude+delta=' + latPlusDelta + ' latitude-delta=' + latMinusDelta + ' longitude+delta=' + lonPlusDelta + ' longitude-delta=' + lonMinusDelta);
 	
-	if (data) {
+	if (circulatorData) {
 		//console.log('start loop');
-		$.each(data, function(i, object) {
+		$.each(circulatorData, function(i, object) {
 		
 			//console.log('data lat=' + object.lat + ' data lon=' + object.lon);
 			
@@ -2080,26 +2330,26 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 	        createCirculatorRouteList = function(data) {
 	        	//console.log('createRouteList start');
 				circulatorRouteList = '';
-				circultaorRouteList.replace(circultaorRouteList, '');
+				circulatorRouteList.replace(circulatorRouteList, '');
 				potentialCirculatorRouteList = [];
 				potentialCirculatorRouteList.length = 0;
 				actualCirculatorRouteList = [];
 				circulatorPotentialVsActual = [];
 				
 				// create a list of all possible routes at this stop
-				/*
-$.each(stops.Stops, function(i2, object2) {
-					if (stopID == stops.Stops[i2].StopID) {
-						stopIDfocus = stops.Stops[i2].StopID;
-						stopName = stops.Stops[i2].Name;
-						potentialRouteList = stops.Stops[i2].Routes;
-						stopLat = stops.Stops[i2].Lat;
-						stopLon = stops.Stops[i2].Lon;
+				
+				$.each(circulatorData, function(i2, object2) {
+					if (stopID == 'Circulator Stop #' + object2.stopId) {
+						stopIDfocus = object2.stopId;
+						stopName = object2.title;
+						//potentialRouteList = stops.Stops[i2].Routes;
+						stopLat = object2.lat;
+						stopLon = object2.lon;
 						//potentialRouteList.push(routeID);
 					}
 					
 				});
-*/
+
 				
 				
 				//potentialRouteList.length = 0;
@@ -2110,8 +2360,10 @@ $.each(stops.Stops, function(i2, object2) {
 				    return this.filter(function(i) {return !(a.indexOf(i) > -1);});
 				};
 				
+				//console.log(data);
+
 				// make HTML for infowindow for actual buses that are coming
-				if (predictions.Predictions.length) {
+				//if (data.minutes.length) {
 					//console.log('true');
 					//console.log(data);
 					dataWorld = data;
@@ -2119,40 +2371,76 @@ $.each(stops.Stops, function(i2, object2) {
 						
 						// weed out undefined routes
 						if (i3 != 'undefined'){
-							//console.log('i3= ' + i3);
-							routeList = routeList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p><span class="ui-li-count">' + i3 + '</span></li>';
-						actualRouteList.push(i3);
-						potentialVsActual = potentialRouteList.diff(actualRouteList);
+							
+							circulatorMinutesArray = [];
+							circulatorMinutesArray.length = 0;
+							//console.log(i3);
+							//circulatorMinutesMultiArray = data.minutes.i3;
+							if (typeof(data.minutes[i3][0]) != 'undefined') {
+							
+								if (data.minutes[i3][0].length > 0) {
+									$.each(data.minutes[i3][0], function(i, object) {
+										circulatorMinutesArray.push(object.minutes);
+									});
+								} else {
+									$.each(data.minutes[i3], function(i, object) {
+										circulatorMinutesArray.push(object.minutes);
+									});
+								}
+								//console.log('i3= ' + i3);
+								circulatorRouteList = circulatorRouteList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>' + data.directionText[i3][0] + ' arrives in:</p><p><strong>' + circulatorMinutesArray.join(', ') + '</strong> minutes</p><span class="ui-li-count"><span>' + i3 + '</span></span></li>';
+								actualCirculatorRouteList.push(i3);
+								potentialCirculatorRouteList = potentialCirculatorRouteList.diff(actualCirculatorRouteList);
+								
+							} else {
+								// don't show no prediction available for yellow line/georgetown pm line
+								if (i3 != 'gtownpm' && i3 != 'yellow') {
+									circulatorRouteList = circulatorRouteList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>no prediction available</p><span class="ui-li-count"><span>' + i3 + '</span></span></a></li>';
+								} else {
+									yellowLineFlag = true;
+								}
+								
+							}
+							
 						}
 					});
 					
 					// then after, loop through routes with no predictions and add to the end
-					$.each(potentialVsActual, function(i4, object4) {
-						// check for the routes with a lowercase c or v in their name, they are variation routes and should be ignored
-						if (/([cv])/.exec(potentialVsActual[i4]) == null) {
-							routeList = routeList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + potentialVsActual[i4] + '"><p>no prediction available</p><span class="ui-li-count">' + potentialVsActual[i4] + '</span></a></li>';
+					$.each(circulatorPotentialVsActual, function(i4, object4) {
+						// don't show no prediction available for yellow line/georgetown pm line
+						if (potentialVsActual[i4] != 'gtownpm' && potentialVsActual[i4] != 'yellow') {
+							circulatorRouteList = circulatorRouteList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + potentialVsActual[i4] + '"><p>no prediction available</p><span class="ui-li-count"><span>' + potentialVsActual[i4] + '</span></span></a></li>';
 						}
 						
+						
+						
 					});
-				} else {
+					
+					// if there's no predictions at all, we need to show one yellow line with no predictions
+					if (circulatorRouteList == '' && yellowLineFlag == true) {
+						circulatorRouteList = circulatorRouteList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="yellow"><p>no prediction available</p><span class="ui-li-count"><span>yellow</span></span></a></li>';
+					}
+				/*
+} else {
 					
 					// if there are no predictions at all, just do the stops
-					$.each(potentialRouteList, function(i4, object4) {
+					$.each(potentialCirculatorRouteList, function(i4, object4) {
 						// check for the routes with a lowercase c or v in their name, they are variation routes and should be ignored
-						if (/([cv])/.exec(potentialRouteList[i4]) == null) {			
-							routeList = routeList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + potentialRouteList[i4] + '"><p>no prediction available</p><span class="ui-li-count">' + potentialRouteList[i4] + '</span></a></li>';
-						}
+						//if (/([cv])/.exec(potentialRouteList[i4]) == null) {			
+							circulatorRouteList = circulatorRouteList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + potentialRouteList[i4] + '"><p>no prediction available</p><span class="ui-li-count">' + potentialRouteList[i4] + '</span></a></li>';
+						//}
 					});
 					
-					actualRouteList.length = 0;
-					potentialVsActual.length = 0;
+					actualCirculatorRouteList.length = 0;
+					circulatorPotentialVsActual.length = 0;
 	
 				}
+*/
 				
 				//console.log('potential routes for stop ' + stopIDfocus + ': ' + potentialRouteList + ' and actual routes: ' + actualRouteList);
 				//console.log(stopName);
 				var dt = new DateTime();
-				routeList = '<li data-role="list-divider" class="stopTitle" id="' + stopID + '" data-lat=' + stopLat + '" data-lon=' + stopLon + '"><span class="stopName">' + toTitleCase(stopName) + '</span></li>' + routeList + '<div class="updated">Updated ' + dt.formats.busTrackDateTime.b + ' - Pull to refresh</div>';
+				circulatorRouteList = '<li data-role="list-divider" class="stopTitle" id="' + stopID + '" data-lat=' + stopLat + '" data-lon=' + stopLon + '"><span class="stopName">' + toTitleCase(stopName) + '</span></li>' + circulatorRouteList + '<div class="updated">Updated ' + dt.formats.busTrackDateTime.b + ' - Pull to refresh</div>';
 				//console.log(routeList);
 				
 	        }
@@ -2169,14 +2457,14 @@ $.each(stops.Stops, function(i2, object2) {
 		
 		// if we've clicked a favorite or route annotation, show the predictions
 		//console.log(favoriteBtnClickedFlag);
-/*
+
 		if (favoriteBtnClickedFlag == true) {
 			routeMapView = false;
 			annotationTap(notInRangeStopID);
 			favoriteBtnClickedFlag = false;
 			
 		}
-*/
+
 
 		
 	} else {
@@ -2688,7 +2976,7 @@ $(document).on('pagebeforeshow', '#gps_map', function() {
 			currentLongitude = currentLon;
 			
 			// if the map doesn't move much, no need to redraw the pins...
-			if (((Math.abs(previousLat - currentLat)*8) > latitudeDelta) || ((Math.abs(previousLon - currentLon)*8) > longitudeDelta)) {
+			if (((Math.abs(previousLat - currentLat)*32) > latitudeDelta) || ((Math.abs(previousLon - currentLon)*32) > longitudeDelta)) {
 				if ($('.refresh_location').length) {
 					//console.log('TRUE! ' + previousLat + ' - ' + currentLat + ' = ' + (Math.abs(previousLat - currentLat)*2) + ' with latitudeDelta = ' + latitudeDelta + ' and ' + previousLon + ' - ' + currentLon + ' = ' + (Math.abs(previousLon - currentLon)*2) + ' with longitudeDelta = ' + longitudeDelta);
 					
@@ -2712,7 +3000,7 @@ $(document).on('pagebeforeshow', '#gps_map', function() {
 				} else {
 					//console.log('FALSE');
 				}
-			} else {
+			//} else {
 				//console.log('FALSE! ' + previousLat + ' - ' + currentLat + ' = ' + (Math.abs(previousLat - currentLat)*2) + ' with latitudeDelta = ' + latitudeDelta + ' and ' + previousLon + ' - ' + currentLon + ' = ' + (Math.abs(previousLon - currentLon)*2) + ' with longitudeDelta = ' + longitudeDelta);
 			}
 			
@@ -2897,6 +3185,8 @@ $(document).on('pagebeforeshow', '#route_map', function() {
 	
 	if (routeClicked == 'RD' || routeClicked == 'BL' || routeClicked == 'OR' || routeClicked == 'YL' || routeClicked == 'GR') {
 		getRailStopsForRoute(routeClicked);
+	} else if (routeClicked == 'yellow' || routeClicked == 'gtownpm' || routeClicked == 'green' || routeClicked == 'blue' || routeClicked == 'rosslyn' || routeClicked == 'potomac') {
+		getCirculatorStopsForRoute(routeClicked);
 	} else {
 		getStopsForRoute(routeClicked);
 	}
