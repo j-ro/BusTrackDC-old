@@ -2367,6 +2367,7 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 					//console.log('true');
 					//console.log(data);
 					dataWorld = data;
+					yellowLineFlag = false;
 					$.each(data.minutes, function(i3, object) {
 						
 						// weed out undefined routes
@@ -2392,12 +2393,39 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 								actualCirculatorRouteList.push(i3);
 								potentialCirculatorRouteList = potentialCirculatorRouteList.diff(actualCirculatorRouteList);
 								
-							} else {
-								// don't show no prediction available for yellow line/georgetown pm line
-								if (i3 != 'gtownpm' && i3 != 'yellow') {
-									circulatorRouteList = circulatorRouteList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>no prediction available</p><span class="ui-li-count"><span>' + i3 + '</span></span></a></li>';
-								} else {
+								if (i3 == 'gtownpm' || i3 == 'yellow') {
 									yellowLineFlag = true;
+								}
+								
+							}
+							
+						}
+					});
+					
+					// then loop again to deal with the yellow line and empty routes
+					$.each(data.minutes, function(i3, object) {
+						
+						// weed out undefined routes
+						if (i3 != 'undefined'){
+							
+							circulatorMinutesArray = [];
+							circulatorMinutesArray.length = 0;
+							//console.log(i3);
+							//circulatorMinutesMultiArray = data.minutes.i3;
+							if (typeof(data.minutes[i3][0]) == 'undefined') {
+								// don't show yellow line/georgetown pm line twice, only once
+								if (yellowLineFlag != true) {
+									circulatorRouteList = circulatorRouteList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>no prediction available</p><span class="ui-li-count"><span>' + i3 + '</span></span></a></li>';
+									if (i3 == 'gtownpm' || i3 == 'yellow') {
+										yellowLineFlag = true;
+									}
+								//} else {
+								//	yellowLineFlag = true;
+								} else {
+									if (i3 != 'gtownpm' && i3 != 'yellow') {
+										circulatorRouteList = circulatorRouteList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>no prediction available</p><span class="ui-li-count"><span>' + i3 + '</span></span></a></li>';
+									}
+
 								}
 								
 							}
@@ -2417,9 +2445,11 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 					});
 					
 					// if there's no predictions at all, we need to show one yellow line with no predictions
+/*
 					if (circulatorRouteList == '' && yellowLineFlag == true) {
 						circulatorRouteList = circulatorRouteList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="yellow"><p>no prediction available</p><span class="ui-li-count"><span>yellow</span></span></a></li>';
 					}
+*/
 				/*
 } else {
 					
@@ -3045,7 +3075,7 @@ $(document).on('pagebeforeshow', '#favorite_menu_page', function() {
 		favoritesListHTML = '';
 		
 		$.each(favorites, function(i, object) {
-			if ((/WMATA Bus Stop #/).test(object.id) || (/Metro Rail Station #/).test(object.id)) {
+			if ((/WMATA Bus Stop #/).test(object.id) || (/Metro Rail Station #/).test(object.id) || (/Circulator Stop #/).test(object.id)) {
 				favoritesListHTML = favoritesListHTML + '<li data-id="' + object.id + '"><a data-transition="slide" class="favorite-stop-detail-btn" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><h1 class="favoriteMenuStopTitle">' + object.name +'</h1><p>'+ object.id + '</p><p class="delete-handle">Delete</p><p class="drag-handle">Sort</p></a></li>';	
 			} else if (isNaN(object.id)) { // this is to make favorites backwards compatible...
 				favoritesListHTML = favoritesListHTML + '<li data-id="' + object.id + '"><a data-transition="slide" class="favorite-stop-detail-btn" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><h1 class="favoriteMenuStopTitle">' + object.name +'</h1><p>Metro Rail Station #'+ object.id + '</p><p class="delete-handle">Delete</p><p class="drag-handle">Sort</p></a></li>';
@@ -3083,6 +3113,8 @@ $.mobile.loading( 'show', {
 				getStops(notInRangeStopLat, notInRangeStopLon, '50');
 			} else if ((/Metro Rail Station #/).test(notInRangeStopID)) {
 				getRailStops(notInRangeStopLat, notInRangeStopLon, '500');
+			} else if ((/Circulator Stop #/).test(notInRangeStopID)) {
+				markerCirculatorStops(notInRangeStopLat,notInRangeStopLon,.01,.01);
 			} else if (isNaN(notInRangeStopID)) {
 				notInRangeStopID = 'Metro Rail Station #' + notInRangeStopID;
 				getRailStops(notInRangeStopLat, notInRangeStopLon, '500');
@@ -3119,7 +3151,7 @@ $(document).on('pagebeforeshow', '#infowindow', function() {
 		var favoriteMatches = jQuery.grep(favorites, function(obj) {
 			//console.log(data.Stops[i].StopID + ' == ' + obj.subTitle + '?');
 			if (stopID) {
-				return (obj.id == stopID || 'WMATA Bus Stop #' + obj.id == stopID || 'Metro Rail Station #' + obj.id == stopID);
+				return (obj.id == stopID || 'WMATA Bus Stop #' + obj.id == stopID || 'Metro Rail Station #' + obj.id == stopID || 'Circulator Stop #' + obj.id == stopID);
 			} else {
 				return (obj.id == notInRangeStopID || 'WMATA Bus Stop #' + obj.id == notInRangeStopID || 'Metro Rail Station #' + obj.id == notInRangeStopID);
 			}
@@ -3233,6 +3265,10 @@ $(document).on('pagebeforehide', '#route_map', function() {
 	
 	if (typeof(getRailStopsForRouteJSON) != 'undefined') {
 		getRailStopsForRouteJSON.abort();
+	}
+	
+	if (typeof(getCirculatorStopsForRouteJSON) != 'undefined') {
+		getCirculatorStopsForRouteJSON.abort();
 	}
 	
 });

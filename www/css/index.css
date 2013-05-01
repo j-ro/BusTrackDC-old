@@ -184,7 +184,7 @@ h1 {
 }
 
 .ui-li-has-arrow.ui-li-has-count .ui-btn-inner a.ui-link-inherit, .ui-li-static.ui-li-has-arrow.ui-li-has-count {
-	padding-right: 78px;
+	padding-right: 78px !important;
 }
 
 .drag-handle {
