@@ -248,10 +248,12 @@ getRoutes = function() {
 	
 	getRoutesJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JRoutes?api_key=' + wmata_api_key + '&callback=?', function(data) {
 	
-		ajaxCount--;
+		/*
+ajaxCount--;
 	    if (ajaxCount == 0) {
 	    	$.mobile.loading( 'hide' );
 	    }
+*/
 	
 		//console.log('ajax call done');
 
@@ -259,18 +261,63 @@ getRoutes = function() {
 		routes = data;
 		//console.log(routes);
 		
+		/*
+ajaxCount++;
+	    if (ajaxCount > 0) {
+	    	$.mobile.loading( 'show' );
+	    }
+*/
+		
 		getRailRoutesJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JLines?api_key=' + wmata_api_key + '&callback=?', function(data) {
 		
-			ajaxCount--;
+			/*
+ajaxCount--;
 		    if (ajaxCount == 0) {
 		    	$.mobile.loading( 'hide' );
 		    }
+*/
 		    
 		    railRoutes = data;
-
-			// output to log
-			buildRouteMenu(routes, railRoutes);
-		
+		    
+		    /*
+ajaxCount++;
+		    if (ajaxCount > 0) {
+		    	$.mobile.loading( 'show' );
+		    }
+*/
+		    
+		    getCirculatorRoutesJSON = $.get('http://webservices.nextbus.com/service/publicXMLFeed?command=routeList&a=dc-circulator', function(data) {
+		    
+		    	ajaxCount--;
+			    if (ajaxCount == 0) {
+			    	$.mobile.loading( 'hide' );
+			    }
+			    
+			    circulatorRoutes = $.xml2json(data);
+			    
+			    // output to log
+			    buildRouteMenu(routes, railRoutes, circulatorRoutes);
+			    	
+	    	}).error(function(jqXHR, textStatus, errorThrown) {
+				//$.mobile.loading( 'hide' );
+				
+				ajaxCount--;
+			    if (ajaxCount == 0) {
+			    	$.mobile.loading( 'hide' );
+			    }
+				
+				$('#route_list_menu').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>');
+				$('#route_list_menu').listview('refresh');
+				
+				if (errorThrown != 'abort') {
+					navigator.notification.confirm(
+					    'An error occured fetching the data you requested.',  // message
+					    getRoutesConfirm,         // callback
+					    "There was an error",            // title
+					    'Try again,Cancel'                  // buttonName
+				    ); 
+				}
+			});
 		}).error(function(jqXHR, textStatus, errorThrown) {
 			//$.mobile.loading( 'hide' );
 			
@@ -319,20 +366,21 @@ getRoutes = function() {
 
 
 
-buildRouteMenu = function(dataBus, dataRail) {
+buildRouteMenu = function(dataBus, dataRail, dataCirculator) {
 	console.log('build start');
-	console.log(dataBus);
-	console.log(dataRail);
+	//console.log(dataBus);
+	//console.log(dataRail);
+	//console.log(dataCirculator);
 	
-	$('#route_list_content').html('<h2 class="center">Type a bus line number or<br/>rail line name in the box above<br/>to search for routes.</h2>');
+	$('#route_list_content').html('<h2 class="center">Type a Metro bus line number,<br/>Circulator bus line name, <br/>or Metro rail line name<br/>in the box above to search for routes.</h2>');
 	
 	$('<ul/>',{'data-role':'listview','data-filter-reveal':true,'data-filter':true, 'data-filter-placeholder':'Search...'}).prependTo( '#route_list_content' );
 	
 	//routeMenuHTML = '<ul data-role="listview" data-filter="true" data-filter-placeholder="Search..." id="route_list_menu" data-filter-reveal="true">';
 
 	$.each(dataRail.Lines, function(i, object) {
-		console.log(object.LineCode);
-		$('<li/>').html('<a href="#" data-routeid="' + object.LineCode + '" class="route_menu_btn">' + object.DisplayName + ' Rail Line</a>').prependTo( '#route_list_content ul' );
+		//console.log(object.LineCode);
+		$('<li data-filtertext="' + object.LineCode + ' ' + object.DisplayName + '  Rail Line" />').html('<a href="#" data-routeid="' + object.LineCode + '" class="route_menu_btn">' + object.DisplayName + ' Rail Line</a>').prependTo( '#route_list_content ul' );
 		//routeMenuHTML = routeMenuHTML + '<li><a href="#" data-routeid="' + object.RouteID + '" class="route_manu_btn">' + object.RouteID + '</a></li>';
 	
 	});
@@ -340,11 +388,25 @@ buildRouteMenu = function(dataBus, dataRail) {
 	$.each(dataBus.Routes, function(i, object) {
 		//filter out WMATA's weird half-routes
 		if (/([cv])/.exec(object.RouteID) == null) {
-			$('<li/>').html('<a href="#" data-routeid="' + object.RouteID + '" class="route_menu_btn">' + object.RouteID + ' Bus Line</a>').prependTo( '#route_list_content ul' );
+			$('<li data-filtertext="' + object.RouteID + '  Bus Route" />').html('<a href="#" data-routeid="' + object.RouteID + '" class="route_menu_btn">' + object.RouteID + ' Bus Route</a>').prependTo( '#route_list_content ul' );
 			//routeMenuHTML = routeMenuHTML + '<li><a href="#" data-routeid="' + object.RouteID + '" class="route_manu_btn">' + object.RouteID + '</a></li>';
 		}
 		
 	});
+	
+
+	$.each(dataCirculator.route, function(i, object) {
+		//console.log(object.LineCode);
+		if(typeof(object.shortTitle) !== 'undefined') {
+			$('<li data-filtertext="' + object.tag + ' ' + object.title + ' ' + object.shortTitle + '  Circulator Route" />').html('<a href="#" data-routeid="' + object.tag + '" class="route_menu_btn">' + object.shortTitle + ' Circulator Route</a>').prependTo( '#route_list_content ul' );
+		} else {
+			$('<li data-filtertext="' + object.tag + ' ' + object.title + '  Circulator Route" />').html('<a href="#" data-routeid="' + object.tag + '" class="route_menu_btn">' + object.title + ' Circulator Route</a>').prependTo( '#route_list_content ul' );
+		}
+		
+		//routeMenuHTML = routeMenuHTML + '<li><a href="#" data-routeid="' + object.RouteID + '" class="route_manu_btn">' + object.RouteID + '</a></li>';
+	
+	});
+
 	
 	//routeMenuHTML = routeMenuHTML + '</ul>';
 	
@@ -364,17 +426,40 @@ buildRouteMenu = function(dataBus, dataRail) {
 			
 			if (routeClicked == 'RD') {
 		    	routeTitle = 'Red';
+		    	$('#route_map_title').html(routeTitle + ' Line');
 	    	} else if (routeClicked == 'BL') {
 		    	routeTitle = 'Blue';
+		    	$('#route_map_title').html(routeTitle + ' Line');
 	    	} else if (routeClicked == 'OR') {
 		    	routeTitle = 'Orange';
+		    	$('#route_map_title').html(routeTitle + ' Line');
 	    	} else if (routeClicked == 'YL') {
 		    	routeTitle = 'Yellow';
+		    	$('#route_map_title').html(routeTitle + ' Line');
 	    	} else if (routeClicked == 'GR') {
 		    	routeTitle = 'Green';
+		    	$('#route_map_title').html(routeTitle + ' Line');
+	    	} else if (routeClicked == 'yellow') {
+		    	routeTitle = 'Yellow';
+		    	$('#route_map_title').html(routeTitle + ' Route');
+	    	} else if (routeClicked == 'gtownpm') {
+		    	routeTitle = 'Yellow';
+		    	$('#route_map_title').html(routeTitle + ' Route');
+	    	} else if (routeClicked == 'green') {
+		    	routeTitle = 'Green';
+		    	$('#route_map_title').html(routeTitle + ' Route');
+	    	} else if (routeClicked == 'blue') {
+		    	routeTitle = 'Blue';
+		    	$('#route_map_title').html(routeTitle + ' Route');
+	    	} else if (routeClicked == 'rosslyn') {
+		    	routeTitle = 'Light Blue';
+		    	$('#route_map_title').html(routeTitle + ' Route');
+	    	} else if (routeClicked == 'potomac') {
+		    	routeTitle = 'Orange';
+		    	$('#route_map_title').html(routeTitle + ' Route');
 	    	}
 	    	
-	    	$('#route_map_title').html(routeTitle + ' Line');
+	    	
 		} else {
 			$('#route_map_title').html('Route ' + routeClicked);
 		}
@@ -553,7 +638,7 @@ markerStopPoints = function(data) {
 				lat: data.Direction0.Stops[i].Lat,
 				lon: data.Direction0.Stops[i].Lon,
 				title: toTitleCase(data.Direction0.Stops[i].Name),
-				subTitle: 'WMATA Bus Stop #' + data.Direction0.Stops[i].StopID,
+				subTitle: 'Metro Bus Stop #' + data.Direction0.Stops[i].StopID,
 				pinColor: "green",
 				selected: false,
 				index: i
@@ -569,7 +654,7 @@ markerStopPoints = function(data) {
 				lat: data.Direction1.Stops[i].Lat,
 				lon: data.Direction1.Stops[i].Lon,
 				title: toTitleCase(data.Direction1.Stops[i].Name),
-				subTitle: 'WMATA Bus Stop #' + data.Direction1.Stops[i].StopID,
+				subTitle: 'Metro Bus Stop #' + data.Direction1.Stops[i].StopID,
 				//pinColor: "005534",
 				pinColor: "70f270",
 				selected: false,
@@ -1132,7 +1217,7 @@ function annotationTap(text, latitude, longitude) {
 	//console.log('annotation tap');
 	//console.log(latitude);
 	
-	//text = text.toString().replace(/Metro Rail Station #/,'').replace(/WMATA Bus Stop #/,'');
+	//text = text.toString().replace(/Metro Rail Station #/,'').replace(/Metro Bus Stop #/,'');
 	
 	
 	
@@ -1143,7 +1228,7 @@ function annotationTap(text, latitude, longitude) {
 		favoriteBtnClickedFlag = true;
 			if ((/Metro Rail Station #/).test(text)) {
 				getRailStops(latitude, longitude, '500');
-			} else if ((/WMATA Bus Stop #/).test(text)) {
+			} else if ((/Metro Bus Stop #/).test(text)) {
 				getStops(latitude, longitude, '50');
 			} else if ((/Circulator Stop #/).test(text)) {
 				markerCirculatorStops(latitude,longitude, .01 , .01);
@@ -1284,7 +1369,7 @@ if (railStops.length) {
 				});
 
 			}
-		} else if ((/WMATA Bus Stop #/).test(text)) {
+		} else if ((/Metro Bus Stop #/).test(text)) {
 	
 			self2 = this;
 			//console.log('click!');
@@ -1320,7 +1405,7 @@ if (railStops.length) {
 				    $.mobile.loading( 'show' );
 				}
 				
-				annotationTapJSON = $.getJSON('http://api.wmata.com/NextBusService.svc/json/JPredictions?StopID=' + stopID.toString().replace(/WMATA Bus Stop #/,'') + '&api_key=' + wmata_api_key + '&callback=?', function(data2, self4) {
+				annotationTapJSON = $.getJSON('http://api.wmata.com/NextBusService.svc/json/JPredictions?StopID=' + stopID.toString().replace(/Metro Bus Stop #/,'') + '&api_key=' + wmata_api_key + '&callback=?', function(data2, self4) {
 					
 					ajaxCount--;
 					if (ajaxCount == 0) {
@@ -1633,7 +1718,7 @@ if (stops.length) {
 					    	routeTitle = 'Orange';
 				    	}
 				    	
-				    	$('#route_map_title').html(routeTitle + ' Line');
+				    	$('#route_map_title').html(routeTitle + ' Route');
 				    
 				    	$.mobile.changePage( "#route_map", { transition: "fade" } );
 
@@ -1693,8 +1778,8 @@ markerStops = function(data) {
 	
 			// our match function to see if a pin already exists in the global pin array
 			matches = jQuery.grep(pins, function(obj) {
-				//console.log('WMATA Bus Stop #' + data.Stops[i].StopID + ' == ' + obj.subTitle + '?');
-				return obj.subTitle == 'WMATA Bus Stop #' + data.Stops[i].StopID;
+				//console.log('Metro Bus Stop #' + data.Stops[i].StopID + ' == ' + obj.subTitle + '?');
+				return obj.subTitle == 'Metro Bus Stop #' + data.Stops[i].StopID;
 			});
 			
 			if (matches.length == 0) {
@@ -1708,7 +1793,7 @@ markerStops = function(data) {
 						lat: data.Stops[i].Lat,
 						lon: data.Stops[i].Lon,
 						title: toTitleCase(data.Stops[i].Name),
-						subTitle: 'WMATA Bus Stop #' + data.Stops[i].StopID,
+						subTitle: 'Metro Bus Stop #' + data.Stops[i].StopID,
 						pinColor: "green",
 						selected: false,
 						index: i
@@ -1720,7 +1805,7 @@ markerStops = function(data) {
 						lat: data.Stops[i].Lat,
 						lon: data.Stops[i].Lon,
 						title: toTitleCase(data.Stops[i].Name),
-						subTitle: 'WMATA Bus Stop #' + data.Stops[i].StopID,
+						subTitle: 'Metro Bus Stop #' + data.Stops[i].StopID,
 						pinColor: "green",
 						selected: false,
 						index: i
@@ -1743,7 +1828,7 @@ markerStops = function(data) {
 				
 				// create a list of all possible routes at this stop
 				$.each(stops.Stops, function(i2, object2) {
-					if (stopID.toString().replace(/WMATA Bus Stop #/,'') == stops.Stops[i2].StopID) {
+					if (stopID.toString().replace(/Metro Bus Stop #/,'') == stops.Stops[i2].StopID) {
 						stopIDfocus = stops.Stops[i2].StopID;
 						stopName = stops.Stops[i2].Name;
 						potentialRouteList = stops.Stops[i2].Routes;
@@ -2569,7 +2654,7 @@ function favoriteTap(favorite) {
 		
 		var favoriteMatches = jQuery.grep(favorites, function(obj) {
 			//console.log(data.Stops[i].StopID + ' == ' + obj.subTitle + '?');
-			return (obj.id == favorite || 'WMATA Bus Stop #' + obj.id == favorite || 'Metro Rail Station #' + obj.id == favorite);
+			return (obj.id == favorite || 'Metro Bus Stop #' + obj.id == favorite || 'Metro Rail Station #' + obj.id == favorite);
 		});
 		
 		//console.log(favorites);
@@ -2577,7 +2662,7 @@ function favoriteTap(favorite) {
 			//console.log('match! remove');
 			$( "#favorite" ).buttonMarkup({theme: 'd'});
 			
-			favorites = favorites.filter(function(el){ console.log('favorite= ' + favorite); console.log('el.id= ' + el.id); return (el.id != favorite && 'WMATA Bus Stop #' + el.id != favorite && 'Metro Rail Station #' + el.id != favorite); });
+			favorites = favorites.filter(function(el){ console.log('favorite= ' + favorite); console.log('el.id= ' + el.id); return (el.id != favorite && 'Metro Bus Stop #' + el.id != favorite && 'Metro Rail Station #' + el.id != favorite); });
 			
 			window.localStorage.setItem("favorites", JSON.stringify(favorites));
 			//favoritesStorage = JSON.stringify(favorites);
@@ -2875,7 +2960,7 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 		
 				// if we click a favorite, get the stop and populate the stops array really quick, so we can view all the data about the predictions
 				favoriteBtnClickedFlag = true;
-				if ((/WMATA Bus Stop #/).test(notInRangeStopID)) {
+				if ((/Metro Bus Stop #/).test(notInRangeStopID)) {
 					getStops(notInRangeStopLat, notInRangeStopLon, '50');
 				} else if ((/Metro Rail Station #/).test(notInRangeStopID)) {
 					getRailStops(notInRangeStopLat, notInRangeStopLon, '500');
@@ -2883,7 +2968,7 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 					notInRangeStopID = 'Metro Rail Station #' + notInRangeStopID;
 					getRailStops(notInRangeStopLat, notInRangeStopLon, '500');
 				} else {
-					notInRangeStopID = 'WMATA Bus Stop #' + notInRangeStopID;
+					notInRangeStopID = 'Metro Bus Stop #' + notInRangeStopID;
 					getStops(notInRangeStopLat, notInRangeStopLon, '50');
 				}
 	
@@ -3075,12 +3160,12 @@ $(document).on('pagebeforeshow', '#favorite_menu_page', function() {
 		favoritesListHTML = '';
 		
 		$.each(favorites, function(i, object) {
-			if ((/WMATA Bus Stop #/).test(object.id) || (/Metro Rail Station #/).test(object.id) || (/Circulator Stop #/).test(object.id)) {
+			if ((/Metro Bus Stop #/).test(object.id) || (/Metro Rail Station #/).test(object.id) || (/Circulator Stop #/).test(object.id)) {
 				favoritesListHTML = favoritesListHTML + '<li data-id="' + object.id + '"><a data-transition="slide" class="favorite-stop-detail-btn" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><h1 class="favoriteMenuStopTitle">' + object.name +'</h1><p>'+ object.id + '</p><p class="delete-handle">Delete</p><p class="drag-handle">Sort</p></a></li>';	
 			} else if (isNaN(object.id)) { // this is to make favorites backwards compatible...
 				favoritesListHTML = favoritesListHTML + '<li data-id="' + object.id + '"><a data-transition="slide" class="favorite-stop-detail-btn" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><h1 class="favoriteMenuStopTitle">' + object.name +'</h1><p>Metro Rail Station #'+ object.id + '</p><p class="delete-handle">Delete</p><p class="drag-handle">Sort</p></a></li>';
 			} else {
-				favoritesListHTML = favoritesListHTML + '<li data-id="' + object.id + '"><a data-transition="slide" class="favorite-stop-detail-btn" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><h1 class="favoriteMenuStopTitle">' + object.name +'</h1><p>WMATA Bus Stop #'+ object.id + '</p><p class="delete-handle">Delete</p><p class="drag-handle">Sort</p></a></li>';
+				favoritesListHTML = favoritesListHTML + '<li data-id="' + object.id + '"><a data-transition="slide" class="favorite-stop-detail-btn" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><h1 class="favoriteMenuStopTitle">' + object.name +'</h1><p>Metro Bus Stop #'+ object.id + '</p><p class="delete-handle">Delete</p><p class="drag-handle">Sort</p></a></li>';
 			}
 		});
 		
@@ -3109,7 +3194,7 @@ $.mobile.loading( 'show', {
 	
 			// if we click a favorite, get the stop and populate the stops array really quick, so we can view all the data about the predictions
 			favoriteBtnClickedFlag = true;
-			if ((/WMATA Bus Stop #/).test(notInRangeStopID)) {
+			if ((/Metro Bus Stop #/).test(notInRangeStopID)) {
 				getStops(notInRangeStopLat, notInRangeStopLon, '50');
 			} else if ((/Metro Rail Station #/).test(notInRangeStopID)) {
 				getRailStops(notInRangeStopLat, notInRangeStopLon, '500');
@@ -3119,7 +3204,7 @@ $.mobile.loading( 'show', {
 				notInRangeStopID = 'Metro Rail Station #' + notInRangeStopID;
 				getRailStops(notInRangeStopLat, notInRangeStopLon, '500');
 			} else {
-				notInRangeStopID = 'WMATA Bus Stop #' + notInRangeStopID;
+				notInRangeStopID = 'Metro Bus Stop #' + notInRangeStopID;
 				getStops(notInRangeStopLat, notInRangeStopLon, '50');
 			}
 			
@@ -3151,9 +3236,9 @@ $(document).on('pagebeforeshow', '#infowindow', function() {
 		var favoriteMatches = jQuery.grep(favorites, function(obj) {
 			//console.log(data.Stops[i].StopID + ' == ' + obj.subTitle + '?');
 			if (stopID) {
-				return (obj.id == stopID || 'WMATA Bus Stop #' + obj.id == stopID || 'Metro Rail Station #' + obj.id == stopID || 'Circulator Stop #' + obj.id == stopID);
+				return (obj.id == stopID || 'Metro Bus Stop #' + obj.id == stopID || 'Metro Rail Station #' + obj.id == stopID || 'Circulator Stop #' + obj.id == stopID);
 			} else {
-				return (obj.id == notInRangeStopID || 'WMATA Bus Stop #' + obj.id == notInRangeStopID || 'Metro Rail Station #' + obj.id == notInRangeStopID);
+				return (obj.id == notInRangeStopID || 'Metro Bus Stop #' + obj.id == notInRangeStopID || 'Metro Rail Station #' + obj.id == notInRangeStopID);
 			}
 			
 		});
