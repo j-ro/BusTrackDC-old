@@ -20,6 +20,7 @@ window.addEventListener('load', function() {
 
 //on resume function to autorefresh bus times if the infowindow is active
 function onResume() {
+	ajaxCount = 0;
 	if ($.mobile.activePage[0].id == 'infowindow') {
 		resumeStopID = $('.stopTitle').attr('id');
     	annotationTap(resumeStopID); 
@@ -249,7 +250,12 @@ getRoutes = function() {
 	getRoutesJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JRoutes?api_key=' + wmata_api_key + '&callback=?', function(data) {
 	
 		/*
-ajaxCount--;
+		if (ajaxCount > 0 ) {
+    		ajaxCount--;
+    	} else {
+	    	ajaxCount = 0;
+    	}
+
 	    if (ajaxCount == 0) {
 	    	$.mobile.loading( 'hide' );
 	    }
@@ -271,7 +277,12 @@ ajaxCount++;
 		getRailRoutesJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JLines?api_key=' + wmata_api_key + '&callback=?', function(data) {
 		
 			/*
-ajaxCount--;
+if (ajaxCount > 0 ) {
+		    		ajaxCount--;
+		    	} else {
+			    	ajaxCount = 0;
+		    	}
+		    	
 		    if (ajaxCount == 0) {
 		    	$.mobile.loading( 'hide' );
 		    }
@@ -288,7 +299,12 @@ ajaxCount++;
 		    
 		    getCirculatorRoutesJSON = $.get('http://webservices.nextbus.com/service/publicXMLFeed?command=routeList&a=dc-circulator', function(data) {
 		    
-		    	ajaxCount--;
+		    	if (ajaxCount > 0 ) {
+		    		ajaxCount--;
+		    	} else {
+			    	ajaxCount = 0;
+		    	}
+		    	
 			    if (ajaxCount == 0) {
 			    	$.mobile.loading( 'hide' );
 			    }
@@ -301,7 +317,12 @@ ajaxCount++;
 	    	}).error(function(jqXHR, textStatus, errorThrown) {
 				//$.mobile.loading( 'hide' );
 				
-				ajaxCount--;
+				if (ajaxCount > 0 ) {
+		    		ajaxCount--;
+		    	} else {
+			    	ajaxCount = 0;
+		    	}
+		    	
 			    if (ajaxCount == 0) {
 			    	$.mobile.loading( 'hide' );
 			    }
@@ -321,7 +342,12 @@ ajaxCount++;
 		}).error(function(jqXHR, textStatus, errorThrown) {
 			//$.mobile.loading( 'hide' );
 			
-			ajaxCount--;
+			if (ajaxCount > 0 ) {
+	    		ajaxCount--;
+	    	} else {
+		    	ajaxCount = 0;
+	    	}
+	    	
 		    if (ajaxCount == 0) {
 		    	$.mobile.loading( 'hide' );
 		    }
@@ -345,7 +371,12 @@ ajaxCount++;
 	}).error(function(jqXHR, textStatus, errorThrown) {
 		//$.mobile.loading( 'hide' );
 		
-		ajaxCount--;
+		if (ajaxCount > 0 ) {
+    		ajaxCount--;
+    	} else {
+	    	ajaxCount = 0;
+    	}
+
 	    if (ajaxCount == 0) {
 	    	$.mobile.loading( 'hide' );
 	    }
@@ -496,7 +527,12 @@ getStops = function(latitude,longitude,radius) {
 		
 		//console.log($.ajax());
 		
-		ajaxCount--;
+		if (ajaxCount > 0 ) {
+    		ajaxCount--;
+    	} else {
+	    	ajaxCount = 0;
+    	}
+		    	
 	    if (ajaxCount == 0) {
 	    	$.mobile.loading( 'hide' );
 	    }
@@ -513,7 +549,12 @@ getStops = function(latitude,longitude,radius) {
 	}).error(function(jqXHR, textStatus, errorThrown) {
 		//$.mobile.loading( 'hide' );
 		
-		ajaxCount--;
+		if (ajaxCount > 0 ) {
+    		ajaxCount--;
+    	} else {
+	    	ajaxCount = 0;
+    	}
+		    	
 	    if (ajaxCount == 0) {
 	    	$.mobile.loading( 'hide' );
 	    }
@@ -558,7 +599,12 @@ getStopsForRoute = function(routeID) {
 		
 	getStopsForRouteJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JRouteDetails?routeID=' + routeID + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
 		
-		ajaxCount--;
+		if (ajaxCount > 0 ) {
+    		ajaxCount--;
+    	} else {
+	    	ajaxCount = 0;
+    	}
+
 	    if (ajaxCount == 0) {
 	    	$.mobile.loading( 'hide' );
 	    }
@@ -600,7 +646,12 @@ getStopsForRoute = function(routeID) {
 	}).error(function(jqXHR, textStatus, errorThrown) {
 		//$.mobile.loading( 'hide' );
 		
-		ajaxCount--;
+		if (ajaxCount > 0 ) {
+    		ajaxCount--;
+    	} else {
+	    	ajaxCount = 0;
+    	}
+		    	
 	    if (ajaxCount == 0) {
 	    	$.mobile.loading( 'hide' );
 	    }
@@ -702,7 +753,12 @@ getRailStops = function(latitude,longitude,radius) {
 	
 	getRailStopsJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JStationEntrances?lat=' + latitude + '&lon=' + longitude + '&radius=' + radius + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
 	
-		ajaxCount--;
+		if (ajaxCount > 0 ) {
+    		ajaxCount--;
+    	} else {
+	    	ajaxCount = 0;
+    	}
+
 	    if (ajaxCount == 0) {
 	    	$.mobile.loading( 'hide' );
 	    }
@@ -722,7 +778,12 @@ getRailStops = function(latitude,longitude,radius) {
 	}).error(function(jqXHR, textStatus, errorThrown) {
 		//$.mobile.loading( 'hide' );
 		
-		ajaxCount--;
+		if (ajaxCount > 0 ) {
+    		ajaxCount--;
+    	} else {
+	    	ajaxCount = 0;
+    	}
+
 	    if (ajaxCount == 0) {
 	    	$.mobile.loading( 'hide' );
 	    }
@@ -767,7 +828,12 @@ getRailStopsForRoute = function(routeID) {
 		
 	getRailStopsForRouteJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JStations?LineCode=' + routeID + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
 		
-		ajaxCount--;
+		if (ajaxCount > 0 ) {
+    		ajaxCount--;
+    	} else {
+	    	ajaxCount = 0;
+    	}
+    	
 	    if (ajaxCount == 0) {
 	    	$.mobile.loading( 'hide' );
 	    }
@@ -799,7 +865,12 @@ getRailStopsForRoute = function(routeID) {
 	}).error(function(jqXHR, textStatus, errorThrown) {
 		//$.mobile.loading( 'hide' );
 		
-		ajaxCount--;
+		if (ajaxCount > 0 ) {
+    		ajaxCount--;
+    	} else {
+	    	ajaxCount = 0;
+    	}
+		    	
 	    if (ajaxCount == 0) {
 	    	$.mobile.loading( 'hide' );
 	    }
@@ -906,7 +977,12 @@ getCirculatorStops = function(latitude,longitude,radius) {
 		    ajaxCirculatorCount++;
 		    
 	    	getCirculatorStopsJSON = $.get('http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a=dc-circulator&r=' + lineTag + '', function(data) {
-	    		ajaxCount--;
+	    		if (ajaxCount > 0 ) {
+		    		ajaxCount--;
+		    	} else {
+			    	ajaxCount = 0;
+		    	}
+		    	
 			    if (ajaxCount == 0) {
 			    	$.mobile.loading( 'hide' );
 			    }
@@ -946,7 +1022,12 @@ getCirculatorStops = function(latitude,longitude,radius) {
 	    	}).error(function(jqXHR, textStatus, errorThrown) {
 				//$.mobile.loading( 'hide' );
 				
-				ajaxCount--;
+				if (ajaxCount > 0 ) {
+		    		ajaxCount--;
+		    	} else {
+			    	ajaxCount = 0;
+		    	}
+		    	
 			    if (ajaxCount == 0) {
 			    	$.mobile.loading( 'hide' );
 			    }
@@ -974,7 +1055,12 @@ getCirculatorStops = function(latitude,longitude,radius) {
 		/* we don't use this big AJAX-in-AJAX loop anymore because it tends to block the UI...
 getCirculatorLineListJSON = $.get('http://webservices.nextbus.com/service/publicXMLFeed?command=routeList&a=dc-circulator', function(data) {
 	
-			ajaxCount--;
+			if (ajaxCount > 0 ) {
+	    		ajaxCount--;
+	    	} else {
+		    	ajaxCount = 0;
+	    	}
+
 		    if (ajaxCount == 0) {
 		    	$.mobile.loading( 'hide' );
 		    }
@@ -1014,7 +1100,12 @@ getCirculatorLineListJSON = $.get('http://webservices.nextbus.com/service/public
 		}).error(function(jqXHR, textStatus, errorThrown) {
 			//$.mobile.loading( 'hide' );
 			
-			ajaxCount--;
+			if (ajaxCount > 0 ) {
+	    		ajaxCount--;
+	    	} else {
+		    	ajaxCount = 0;
+	    	}
+		    	
 		    if (ajaxCount == 0) {
 		    	$.mobile.loading( 'hide' );
 		    }
@@ -1085,7 +1176,12 @@ getCirculatorStopsForRoute = function(routeID) {
 		
 	getCirculatorStopsForRouteJSON = $.get('http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a=dc-circulator&r=' + routeID, function(data) {
 		
-		ajaxCount--;
+		if (ajaxCount > 0 ) {
+    		ajaxCount--;
+    	} else {
+	    	ajaxCount = 0;
+    	}
+
 	    if (ajaxCount == 0) {
 	    	$.mobile.loading( 'hide' );
 	    }
@@ -1117,7 +1213,12 @@ getCirculatorStopsForRoute = function(routeID) {
 	}).error(function(jqXHR, textStatus, errorThrown) {
 		//$.mobile.loading( 'hide' );
 		
-		ajaxCount--;
+		if (ajaxCount > 0 ) {
+    		ajaxCount--;
+    	} else {
+	    	ajaxCount = 0;
+    	}
+		    	
 	    if (ajaxCount == 0) {
 	    	$.mobile.loading( 'hide' );
 	    }
@@ -1274,7 +1375,12 @@ function annotationTap(text, latitude, longitude) {
 				
 				annotationTapJSON = $.getJSON('http://api.wmata.com/StationPrediction.svc/json/GetPrediction/' + stopID.toString().replace(/Metro Rail Station #/,'') + '?api_key=' + wmata_api_key + '&callback=?', function(data2, self4) {
 					
-					ajaxCount--;
+					if (ajaxCount > 0 ) {
+			    		ajaxCount--;
+			    	} else {
+				    	ajaxCount = 0;
+			    	}
+
 					if (ajaxCount == 0) {
 						$.mobile.loading( 'hide' );
 					}
@@ -1353,7 +1459,12 @@ if (railStops.length) {
 			    }).error(function(jqXHR, textStatus, errorThrown) {
 					//$.mobile.loading( 'hide' );
 					console.log(errorThrown);
-					ajaxCount--;
+					if (ajaxCount > 0 ) {
+			    		ajaxCount--;
+			    	} else {
+				    	ajaxCount = 0;
+			    	}
+		    	
 					if (ajaxCount == 0) {
 						$.mobile.loading( 'hide' );
 					}
@@ -1407,7 +1518,12 @@ if (railStops.length) {
 				
 				annotationTapJSON = $.getJSON('http://api.wmata.com/NextBusService.svc/json/JPredictions?StopID=' + stopID.toString().replace(/Metro Bus Stop #/,'') + '&api_key=' + wmata_api_key + '&callback=?', function(data2, self4) {
 					
-					ajaxCount--;
+					if (ajaxCount > 0 ) {
+			    		ajaxCount--;
+			    	} else {
+				    	ajaxCount = 0;
+			    	}
+
 					if (ajaxCount == 0) {
 						$.mobile.loading( 'hide' );
 					}
@@ -1509,7 +1625,12 @@ if (railStops.length) {
 			    }).error(function(jqXHR, textStatus, errorThrown) {
 					//$.mobile.loading( 'hide' );
 					//console.log(errorThrown);
-					ajaxCount--;
+					if (ajaxCount > 0 ) {
+			    		ajaxCount--;
+			    	} else {
+				    	ajaxCount = 0;
+			    	}
+		    	
 					if (ajaxCount == 0) {
 						$.mobile.loading( 'hide' );
 					}
@@ -1565,7 +1686,12 @@ if (railStops.length) {
 			    
 			    
 					
-					ajaxCount--;
+					if (ajaxCount > 0 ) {
+			    		ajaxCount--;
+			    	} else {
+				    	ajaxCount = 0;
+			    	}
+		    	
 					if (ajaxCount == 0) {
 						$.mobile.loading( 'hide' );
 					}
@@ -1739,7 +1865,12 @@ if (stops.length) {
 			    }).error(function(jqXHR, textStatus, errorThrown) {
 					//$.mobile.loading( 'hide' );
 					//console.log(errorThrown);
-					ajaxCount--;
+					if (ajaxCount > 0 ) {
+			    		ajaxCount--;
+			    	} else {
+				    	ajaxCount = 0;
+			    	}
+		    	
 					if (ajaxCount == 0) {
 						$.mobile.loading( 'hide' );
 					}
@@ -2067,7 +2198,12 @@ markerRailStops = function(data) {
 					getRailStationInfoJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JStationInfo?StationCode=' + object + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
 						//console.log(data);
 					
-						ajaxCount--;
+						if (ajaxCount > 0 ) {
+				    		ajaxCount--;
+				    	} else {
+					    	ajaxCount = 0;
+				    	}
+
 					    if (ajaxCount == 0) {
 					    	$.mobile.loading( 'hide' );
 					    }
@@ -2287,7 +2423,12 @@ markerRailStops = function(data) {
 					}).error(function(jqXHR, textStatus, errorThrown) {
 						//$.mobile.loading( 'hide' );
 						
-						ajaxCount--;
+						if (ajaxCount > 0 ) {
+				    		ajaxCount--;
+				    	} else {
+					    	ajaxCount = 0;
+				    	}
+		    	
 					    if (ajaxCount == 0) {
 					    	$.mobile.loading( 'hide' );
 					    }
@@ -2889,8 +3030,8 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 			// undo the UI stuff
 			$( "#edit" ).buttonMarkup({theme: 'd'});
 			$('#edit .ui-btn-text').html('Edit');
-			$('.ui-li-has-arrow .ui-btn-inner a.ui-link-inherit').css('padding-right','inherit');
-			$('.ui-li-static.ui-li-has-arrow').css('padding-right','inherit');
+			$('.ui-li-has-arrow .ui-btn-inner a.ui-link-inherit').css('padding-right','40px');
+			$('.ui-li-static.ui-li-has-arrow').css('padding-right','40px');
 			$('.stopTitle, .favoriteMenuStopTitle').css('min-width','inherit');
 			
 			// undo the sorting
@@ -2964,6 +3105,8 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 					getStops(notInRangeStopLat, notInRangeStopLon, '50');
 				} else if ((/Metro Rail Station #/).test(notInRangeStopID)) {
 					getRailStops(notInRangeStopLat, notInRangeStopLon, '500');
+				} else if ((/Circulator Stop #/).test(notInRangeStopID)) {
+					markerCirculatorStops(notInRangeStopLat,notInRangeStopLon,.01,.01);
 				} else if (isNaN(notInRangeStopID)) {
 					notInRangeStopID = 'Metro Rail Station #' + notInRangeStopID;
 					getRailStops(notInRangeStopLat, notInRangeStopLon, '500');
