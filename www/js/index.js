@@ -1919,29 +1919,31 @@ markerStops = function(data) {
 				//console.log(matches);
 				
 				// if this is a new pin, add it to the global pin array AND the new pin array
-				pins.push(
-					{
-						lat: data.Stops[i].Lat,
-						lon: data.Stops[i].Lon,
-						title: toTitleCase(data.Stops[i].Name),
-						subTitle: 'Metro Bus Stop #' + data.Stops[i].StopID,
-						pinColor: "green",
-						selected: false,
-						index: i
-					}
-				);
-				
-				newPins.push(
-					{
-						lat: data.Stops[i].Lat,
-						lon: data.Stops[i].Lon,
-						title: toTitleCase(data.Stops[i].Name),
-						subTitle: 'Metro Bus Stop #' + data.Stops[i].StopID,
-						pinColor: "green",
-						selected: false,
-						index: i
-					}
-				);
+				if (routeMapView != true) {
+					pins.push(
+						{
+							lat: data.Stops[i].Lat,
+							lon: data.Stops[i].Lon,
+							title: toTitleCase(data.Stops[i].Name),
+							subTitle: 'Metro Bus Stop #' + data.Stops[i].StopID,
+							pinColor: "green",
+							selected: false,
+							index: i
+						}
+					);
+					
+					newPins.push(
+						{
+							lat: data.Stops[i].Lat,
+							lon: data.Stops[i].Lon,
+							title: toTitleCase(data.Stops[i].Name),
+							subTitle: 'Metro Bus Stop #' + data.Stops[i].StopID,
+							pinColor: "green",
+							selected: false,
+							index: i
+						}
+					);
+				}
 			
 			}
 			
@@ -2133,29 +2135,31 @@ markerRailStops = function(data) {
 				
 				
 				// if this is a new pin, add it to the global pin array AND the new pin array
-				pins.push(
-					{
-						lat: data.Entrances[i].Lat,
-						lon: data.Entrances[i].Lon,
-						title: data.Entrances[i].Name,
-						subTitle: 'Metro Rail Station #' + stationCode,
-						pinColor: "red",
-						selected: false,
-						index: '#' + data.Entrances[i].ID
-					}
-				);
-				
-				newRailPins.push(
-					{
-						lat: data.Entrances[i].Lat,
-						lon: data.Entrances[i].Lon,
-						title: data.Entrances[i].Name,
-						subTitle: 'Metro Rail Station #' + stationCode,
-						pinColor: "red",
-						selected: false,
-						index: '#' + data.Entrances[i].ID
-					}
-				);
+				if (routeMapView != true) {
+					pins.push(
+						{
+							lat: data.Entrances[i].Lat,
+							lon: data.Entrances[i].Lon,
+							title: data.Entrances[i].Name,
+							subTitle: 'Metro Rail Station #' + stationCode,
+							pinColor: "red",
+							selected: false,
+							index: '#' + data.Entrances[i].ID
+						}
+					);
+					
+					newRailPins.push(
+						{
+							lat: data.Entrances[i].Lat,
+							lon: data.Entrances[i].Lon,
+							title: data.Entrances[i].Name,
+							subTitle: 'Metro Rail Station #' + stationCode,
+							pinColor: "red",
+							selected: false,
+							index: '#' + data.Entrances[i].ID
+						}
+					);
+				}
 			
 			}
 			
@@ -2519,29 +2523,31 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 					//console.log(matches);
 					
 					// if this is a new pin, add it to the global pin array AND the new pin array
-					pins.push(
-						{
-							lat: object.lat,
-							lon: object.lon,
-							title: object.title,
-							subTitle: 'Circulator Stop #' + object.stopId,
-							pinColor: "purple",
-							selected: false,
-							index: '##' + object.stopId
-						}
-					);
-					
-					newCirculatorPins.push(
-						{
-							lat: object.lat,
-							lon: object.lon,
-							title: object.title,
-							subTitle: 'Circulator Stop #' + object.stopId,
-							pinColor: "purple",
-							selected: false,
-							index: '##' + object.stopId
-						}
-					);
+					if (routeMapView != true) {
+						pins.push(
+							{
+								lat: object.lat,
+								lon: object.lon,
+								title: object.title,
+								subTitle: 'Circulator Stop #' + object.stopId,
+								pinColor: "purple",
+								selected: false,
+								index: '##' + object.stopId
+							}
+						);
+						
+						newCirculatorPins.push(
+							{
+								lat: object.lat,
+								lon: object.lon,
+								title: object.title,
+								subTitle: 'Circulator Stop #' + object.stopId,
+								pinColor: "purple",
+								selected: false,
+								index: '##' + object.stopId
+							}
+						);
+					}
 				
 				}
 				
@@ -3498,6 +3504,8 @@ $(document).on('pagebeforehide', '#route_map', function() {
 	if (typeof(getCirculatorStopsForRouteJSON) != 'undefined') {
 		getCirculatorStopsForRouteJSON.abort();
 	}
+	
+	window.plugins.mapKit.clearMapPins();
 	
 });
 
