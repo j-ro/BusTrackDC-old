@@ -84,7 +84,38 @@ var app = {
                                   },
                                   function() { console.log('error'); });
         };
-        mapKit.showMap(success, error);
+        
+        var options = {
+			height: 460,
+			diameter: 1000,
+			paddingBottom: 100,
+			atBottom: true,
+			lat: 49.281468,
+			lon: -123.104446
+		};
+		
+        mapKit.showMap(success, error, options);
+    },
+    setMapData: function() {
+
+        //var pins = [[49.28115, -123.10450], [49.27503, -123.12138], [49.28286, -123.11891]];
+        var error = function() {
+          console.log('error');
+        };
+        var success = function() {
+          console.log('success');
+        };
+        
+        var options2 = {
+			height: 460,
+			diameter: 4000,
+			paddingBottom: 100,
+			atBottom: true,
+			lat: 39.281468,
+			lon: -123.104446
+		};
+		
+        mapKit.setMapData(success, error);
     },
     hideMap: function() {
         var success = function() {

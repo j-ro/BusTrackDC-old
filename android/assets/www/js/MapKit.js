@@ -8,6 +8,7 @@
 			height: 460,
 			diameter: 1000,
 			atBottom: true,
+			paddingBottom: 0,
 			lat: 49.281468,
 			lon: -123.104446
 		};
@@ -36,8 +37,8 @@
 
 	MapKit.prototype = {
 
-		showMap: function(success, error) {
-			cordovaRef.exec(success, error, 'MapKit', 'showMap', [this.options]);
+		showMap: function(success, error, options) {
+			cordovaRef.exec(success, error, 'MapKit', 'showMap', [options]);
 		},
 
 		addMapPins: function(pins, success, error) {
@@ -54,6 +55,11 @@
 
 		changeMapType: function(mapType, success, error) {
 			cordovaRef.exec(success, error, 'MapKit', 'changeMapType', [mapType ? { "mapType": mapType } :{ "mapType": 0 }]);
+		},
+		
+		setMapData: function(success, error) {
+			console.log('setmapdata');
+			cordovaRef.exec(success, error, 'MapKit', 'setMapData', []);
 		}
 
 	};

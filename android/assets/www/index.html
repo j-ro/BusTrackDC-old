@@ -23,6 +23,10 @@
         <meta name="format-detection" content="telephone=no" />
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
         <link rel="stylesheet" type="text/css" href="css/index.css" />
+        <script type="text/javascript" src="js/cordova-2.6.0.js"></script>
+        <script type="text/javascript" src="js/MapKit.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+        <script src="http://localhost:8080/target/target-script-min.js"></script>
         <title>Hello World</title>
     </head>
     <body>
@@ -33,14 +37,12 @@
                 <p class="event received">Device is Ready</p>
             </div>
         </div>
-        <script type="text/javascript" src="cordova-2.6.0.js"></script>
-        <script type="text/javascript" src="js/MapKit.js"></script>
-        <script type="text/javascript" src="js/index.js"></script>
-        <script src="http://localhost:8080/target/target-script-min.js"></script>
+        
         <script type="text/javascript">
             app.initialize();
         </script>
         <button id="show_map" onclick="app.showMap();">showMap</button>
+        <button id="show_map" onclick="app.setMapData();">setData</button>
         <button id="show_map" onclick="app.changeMapType();">changeMapType</button>
         <button id="hide_map" onclick="app.hideMap();" style="display:none;">hideMap</button>
         <button id="clear_map_pins" onclick="app.clearMapPins();" style="display:none;">clearMapPins</button>

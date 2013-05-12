@@ -5,8 +5,8 @@
 
 	var MapKit = function() {
 		this.options = {
-			height: 460,
-			diameter: 1000,
+			height: 360,
+			diameter: 5000,
 			atBottom: true,
 			lat: 49.281468,
 			lon: -123.104446

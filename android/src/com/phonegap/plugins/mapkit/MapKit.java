@@ -9,6 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
@@ -38,18 +39,21 @@ public class MapKit extends CordovaPlugin {
 	}
 
 	public void showMap(final JSONObject options) {
+		Log.d("MYTAG", "showMap");
 		try {
 			cordova.getActivity().runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
 					double latitude = 0, longitude = 0;
 					int height = 460;
-					boolean atBottom = false;
+					boolean atBottom = true;
+					int paddingBottom = 0;
 					try {
 						height = options.getInt("height");
 						latitude = options.getDouble("lat");
 						longitude = options.getDouble("lon");
 						atBottom = options.getBoolean("atBottom");
+						paddingBottom = options.getInt("paddingBottom");
 					} catch (JSONException e) {
 						LOG.e(TAG, "Error reading options");
 					}
@@ -72,9 +76,13 @@ public class MapKit extends CordovaPlugin {
 					if (atBottom) {
 						params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM,
 								RelativeLayout.TRUE);
+						//Log.d("MYTAG", ""+paddingBottom);
+						mapView.setPadding(0, 0, 0, paddingBottom);
 					} else {
 						params.addRule(RelativeLayout.ALIGN_PARENT_TOP,
 								RelativeLayout.TRUE);
+						mapView.setPadding(0, 0, 0, paddingBottom);
+						//Log.d("MYTAG", "" + paddingBottom);
 					}
 					params.addRule(RelativeLayout.CENTER_HORIZONTAL,
 							RelativeLayout.TRUE);
@@ -86,6 +94,7 @@ public class MapKit extends CordovaPlugin {
 					main.addView(mapView);
 
 					// Moving the map to lot, lon
+					//Log.d("MYTAG", ""+latitude);
 					mapView.getMap().moveCamera(
 							CameraUpdateFactory.newLatLngZoom(new LatLng(
 									latitude, longitude), 15));
@@ -96,6 +105,10 @@ public class MapKit extends CordovaPlugin {
 			e.printStackTrace();
 			cCtx.error("MapKitPlugin::showMap(): An exception occured");
 		}
+	}
+	
+	public void setMapData() {
+		Log.d("MYTAG", "setMapData");
 	}
 
 	private void hideMap() {
