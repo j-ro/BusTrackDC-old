@@ -106,7 +106,7 @@ var app = {
           console.log('success');
         };
         
-        var options2 = {
+        var options = {
 			height: 460,
 			diameter: 4000,
 			paddingBottom: 100,
@@ -115,7 +115,7 @@ var app = {
 			lon: -123.104446
 		};
 		
-        mapKit.setMapData(success, error);
+        mapKit.setMapData(success, error, options);
     },
     hideMap: function() {
         var success = function() {

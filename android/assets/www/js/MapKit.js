@@ -57,9 +57,9 @@
 			cordovaRef.exec(success, error, 'MapKit', 'changeMapType', [mapType ? { "mapType": mapType } :{ "mapType": 0 }]);
 		},
 		
-		setMapData: function(success, error) {
-			console.log('setmapdata');
-			cordovaRef.exec(success, error, 'MapKit', 'setMapData', []);
+		setMapData: function(success, error, options) {
+			console.log(options.lat);
+			cordovaRef.exec(success, error, 'MapKit', 'setMapData', [options]);
 		}
 
 	};

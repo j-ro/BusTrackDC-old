@@ -107,8 +107,73 @@ public class MapKit extends CordovaPlugin {
 		}
 	}
 	
-	public void setMapData() {
+	public void setMapData(final JSONObject options) {
 		Log.d("MYTAG", "setMapData");
+		try {
+			cordova.getActivity().runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					double latitude = 0, longitude = 0;
+					int height = 460;
+					boolean atBottom = true;
+					int paddingBottom = 0;
+					try {
+						height = options.getInt("height");
+						latitude = options.getDouble("lat");
+						longitude = options.getDouble("lon");
+						atBottom = options.getBoolean("atBottom");
+						paddingBottom = options.getInt("paddingBottom");
+					} catch (JSONException e) {
+						LOG.e(TAG, "Error reading options");
+					}
+//					mapView = new MapView(cordova.getActivity(),
+//							new GoogleMapOptions());
+//					root = (ViewGroup) webView.getParent();
+//					root.removeView(webView);
+//					main.addView(webView);
+//
+//					cordova.getActivity().setContentView(main);
+//
+//					try {
+//						MapsInitializer.initialize(cordova.getActivity());
+//					} catch (GooglePlayServicesNotAvailableException e) {
+//						e.printStackTrace();
+//					}
+//
+//					RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+//							LayoutParams.MATCH_PARENT, height);
+//					if (atBottom) {
+//						params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM,
+//								RelativeLayout.TRUE);
+//						//Log.d("MYTAG", ""+paddingBottom);
+//						mapView.setPadding(0, 0, 0, paddingBottom);
+//					} else {
+//						params.addRule(RelativeLayout.ALIGN_PARENT_TOP,
+//								RelativeLayout.TRUE);
+//						mapView.setPadding(0, 0, 0, paddingBottom);
+//						//Log.d("MYTAG", "" + paddingBottom);
+//					}
+//					params.addRule(RelativeLayout.CENTER_HORIZONTAL,
+//							RelativeLayout.TRUE);
+//
+//					mapView.setLayoutParams(params);
+//					mapView.onCreate(null);
+//					mapView.onResume(); // FIXME: I wish there was a better way
+//										// than this...
+//					main.addView(mapView);
+
+					// Moving the map to lot, lon
+					//Log.d("MYTAG", ""+latitude);
+					mapView.getMap().animateCamera(
+							CameraUpdateFactory.newLatLngZoom(new LatLng(
+									latitude, longitude), 15));
+					cCtx.success();
+				}
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+			cCtx.error("MapKitPlugin::showMap(): An exception occured");
+		}
 	}
 
 	private void hideMap() {
@@ -254,6 +319,8 @@ public class MapKit extends CordovaPlugin {
 		cCtx = callbackContext;
 		if (action.compareTo("showMap") == 0) {
 			showMap(args.getJSONObject(0));
+		} else if (action.compareTo("setMapData") == 0) {
+			setMapData(args.getJSONObject(0));
 		} else if (action.compareTo("hideMap") == 0) {
 			hideMap();
 		} else if (action.compareTo("addMapPins") == 0) {
