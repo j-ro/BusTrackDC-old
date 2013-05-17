@@ -2966,6 +2966,8 @@ $(document).ajaxStop(function(){ console.log('ajax stop'); $.mobile.loading( 'hi
 
 $(document).on('pageinit', '#gps_map', function() {
 
+	$.mobile.activeBtnClass = 'unused';
+
 	ajaxCount = 0;
 	ajaxCirculatorCount = 0;
 	circulatorStopsArray = [];
