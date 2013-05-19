@@ -1,4 +1,3 @@
-
 (function() {
 
 	var cordovaRef = window.PhoneGap || window.Cordova || window.cordova;
@@ -7,8 +6,9 @@
 		this.options = {
 			height: 460,
 			diameter: 1000,
-			atBottom: true,
-			paddingBottom: 0,
+			zoomLevel: 0,
+			atBottom: false,
+			offsetTop: 0,
 			lat: 49.281468,
 			lon: -123.104446
 		};
@@ -33,39 +33,209 @@
             HUE_MAGENTA: 300.0,
             HUE_ROSE: 330.0
         };
+        
+        this.error = function() {
+          //console.log('error');
+        };
+        
+        this.success = function() {
+          //console.log('success');
+        };
+        
+        this.hideMethod = {
+        	hideMethod: ""
+        };
 	};
+
+	// convert diameter to zoom level
+	function getZoomLevel(m){
+	    var z=0;
+	    var i=20088000;
+	    while(i/2>=m && z<19){
+	        z++;
+	        i=i/2;
+	    }
+	    return z;
+	}
+	
 
 	MapKit.prototype = {
 
-		showMap: function(success, error, options) {
-			cordovaRef.exec(success, error, 'MapKit', 'showMap', [options]);
+
+		showMap: function(options, success, error) {
+			options.zoomLevel = getZoomLevel(options.diameter);
+			
+			if (success) {
+				if (error) {
+					cordovaRef.exec(success, error, 'MapKit', 'showMap', [options]);
+				} else {
+					cordovaRef.exec(success, this.error, 'MapKit', 'showMap', [options]);
+				}
+				
+			} else {
+				if (error) {
+					cordovaRef.exec(this.success, error, 'MapKit', 'showMap', [options]);
+				} else {
+					cordovaRef.exec(this.success, this.error, 'MapKit', 'showMap', [options]);
+				}
+			}
 		},
 
 		addMapPins: function(pins, success, error) {
-			cordovaRef.exec(success, error, 'MapKit', 'addMapPins', [pins]);
+			
+			// convert subTitle to snippet (overwrites snippet)
+			for (var i = 0; i < pins.length; i++) { 
+			    pins[i].snippet = pins[i].subTitle;
+			    
+			    if (pins[i].pinColor == "red") {
+				    pins[i].icon = window.plugins.mapKit.iconColors.HUE_RED;
+			    } else if (pins[i].pinColor == "purple") {
+				    pins[i].icon = window.plugins.mapKit.iconColors.HUE_VIOLET;
+			    } else if (pins[i].pinColor == "green") {
+				    pins[i].icon = window.plugins.mapKit.iconColors.HUE_GREEN;
+			    } else {
+			    	var color= pins[i].pinColor; // A nice shade of green.
+					var r = parseInt(color.substr(0,2), 16); // Grab the hex representation of red (chars 1-2) and convert to decimal (base 10).
+					var g = parseInt(color.substr(2,2), 16);
+					var b = parseInt(color.substr(4,2), 16);
+					
+					function rgbToHsl(r, g, b){
+					    r /= 255, g /= 255, b /= 255;
+					    var max = Math.max(r, g, b), min = Math.min(r, g, b);
+					    var h, s, l = (max + min) / 2;
+					
+					    if(max == min){
+					        h = s = 0; // achromatic
+					    }else{
+					        var d = max - min;
+					        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+					        switch(max){
+					            case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+					            case g: h = (b - r) / d + 2; break;
+					            case b: h = (r - g) / d + 4; break;
+					        }
+					        h /= 6;
+					    }
+					
+					    return [h, s, l];
+					}
+					
+					console.log(rgbToHsl(r, g, b)[0] * 360);
+				    pins[i].icon = rgbToHsl(r, g, b)[0] * 360;
+			    }
+			}
+			
+			if (success) {
+				if (error) {
+					cordovaRef.exec(success, error, 'MapKit', 'addMapPins', [pins]);
+				} else {
+					cordovaRef.exec(success, this.error, 'MapKit', 'addMapPins', [pins]);
+				}
+				
+			} else {
+				if (error) {
+					cordovaRef.exec(this.success, error, 'MapKit', 'addMapPins', [pins]);
+				} else {
+					cordovaRef.exec(this.success, this.error, 'MapKit', 'addMapPins', [pins]);
+				}
+			}
 		},
 
 		clearMapPins: function(success, error) {
-			cordovaRef.exec(success, error, 'MapKit', 'clearMapPins', []);
+			if (success) {
+				if (error) {
+					cordovaRef.exec(success, error, 'MapKit', 'clearMapPins', []);
+				} else {
+					cordovaRef.exec(success, this.error, 'MapKit', 'clearMapPins', []);
+				}
+				
+			} else {
+				if (error) {
+					cordovaRef.exec(this.success, error, 'MapKit', 'clearMapPins', []);
+				} else {
+					cordovaRef.exec(this.success, this.error, 'MapKit', 'clearMapPins', []);
+				}
+			}
 		},
 
-		hideMap: function(success, error) {
-			cordovaRef.exec(success, error, 'MapKit', 'hideMap', []);
+		hideMap: function(hideMethod, success, error) {
+			if (success) {
+				if (error) {
+					if (hideMethod) {
+						cordovaRef.exec(success, error, 'MapKit', 'hideMap', [hideMethod]);
+					} else {
+						cordovaRef.exec(success, error, 'MapKit', 'hideMap', [this.hideMethod]);
+					}
+					
+				} else {
+					if (hideMethod) {
+						cordovaRef.exec(success, this.error, 'MapKit', 'hideMap', [hideMethod]);
+					} else {
+						cordovaRef.exec(success, this.error, 'MapKit', 'hideMap', [this.hideMethod]);
+					}
+				}
+				
+			} else {
+				if (error) {
+					if (hideMethod) {
+						cordovaRef.exec(this.success, error, 'MapKit', 'hideMap', [hideMethod]);
+					} else {
+						cordovaRef.exec(this.success, error, 'MapKit', 'hideMap', [this.hideMethod]);
+					}
+				} else {
+					if (hideMethod) {
+						cordovaRef.exec(this.success, this.error, 'MapKit', 'hideMap', [hideMethod]);
+					} else {
+						cordovaRef.exec(this.success, this.error, 'MapKit', 'hideMap', [this.hideMethod]);
+					}
+				}
+			}
 		},
 
 		changeMapType: function(mapType, success, error) {
-			cordovaRef.exec(success, error, 'MapKit', 'changeMapType', [mapType ? { "mapType": mapType } :{ "mapType": 0 }]);
+			if (success) {
+				if (error) {
+					cordovaRef.exec(success, error, 'MapKit', 'changeMapType', [mapType ? { "mapType": mapType } :{ "mapType": 0 }]);
+				} else {
+					cordovaRef.exec(success, this.error, 'MapKit', 'changeMapType', [mapType ? { "mapType": mapType } :{ "mapType": 0 }]);
+				}
+				
+			} else {
+				if (error) {
+					cordovaRef.exec(this.success, error, 'MapKit', 'changeMapType', [mapType ? { "mapType": mapType } :{ "mapType": 0 }]);
+				} else {
+					cordovaRef.exec(this.success, this.error, 'MapKit', 'changeMapType', [mapType ? { "mapType": mapType } :{ "mapType": 0 }]);
+				}
+			}
+			
+			
 		},
 		
-		setMapData: function(success, error, options) {
-			console.log(options.lat);
-			cordovaRef.exec(success, error, 'MapKit', 'setMapData', [options]);
+		setMapData: function(options, success, error) {
+			options.zoomLevel = getZoomLevel(options.diameter);
+			
+			if (success) {
+				if (error) {
+					cordovaRef.exec(success, error, 'MapKit', 'setMapData', [options]);
+				} else {
+					cordovaRef.exec(success, this.error, 'MapKit', 'setMapData', [options]);
+				}
+				
+			} else {
+				if (error) {
+					cordovaRef.exec(this.success, error, 'MapKit', 'setMapData', [options]);
+				} else {
+					cordovaRef.exec(this.success, this.error, 'MapKit', 'setMapData', [options]);
+				}
+			}
+			
 		}
 
 	};
 
 	cordovaRef.addConstructor(function() {
-		window.mapKit = new MapKit();
+		window.plugins = {};
+		window.plugins.mapKit = new MapKit();
 	});
 
 })();

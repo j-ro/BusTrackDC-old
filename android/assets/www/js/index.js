@@ -48,102 +48,78 @@ var app = {
 
     },
     showMap: function() {
-        var pins = [
+        
+        //var pins = [[49.28115, -123.10450], [49.27503, -123.12138], [49.28286, -123.11891]];
+
+        
+        var options = {};
+		
+        window.plugins.mapKit.showMap(options);
+    },
+    setMapData: function() {
+
+        //var pins = [[49.28115, -123.10450], [49.27503, -123.12138], [49.28286, -123.11891]];
+        
+        var options = {
+			height: 360,
+			diameter: 1500,
+			offsetTop: 50,
+			lat: 49.28115,
+            lon: -123.10450
+		};
+		
+        window.plugins.mapKit.setMapData(options);
+    },
+    addMapPins: function() {
+	    var pins = [
             {
                 lat: 49.28115,
                 lon: -123.10450,
                 title: "A Cool Title",
-                snippet: "A Really Cool Snippet",
-                icon: mapKit.iconColors.HUE_ROSE
+                subTitle: "dsdf",
+                pinColor: "red",
+				index: 1
             },
             {
                 lat: 49.27503,
                 lon: -123.12138,
                 title: "A Cool Title, with no Snippet",
-                icon: {
-                  type: "asset",
-                  resource: "www/map-close-button.png" //an image in the asset directory
-                }
+                subTitle: "A Really Cool Snippet",
+                pinColor: "purple",
+				index: 2
             },
             {
                 lat: 49.28286,
                 lon: -123.11891,
-                snippet: "Awesome Snippet with no title"
+                title: "Loading...",
+                subTitle: "A Really Cool Snippet",
+                pinColor: "bd91e5",
+				index: 3
             }
         ];
-        //var pins = [[49.28115, -123.10450], [49.27503, -123.12138], [49.28286, -123.11891]];
-        var error = function() {
-          console.log('error');
-        };
-        var success = function() {
-          document.getElementById('hide_map').style.display = 'block';
-          document.getElementById('show_map').style.display = 'none';
-          mapKit.addMapPins(pins, function() { 
-                                      console.log('adMapPins success');  
-                                      document.getElementById('clear_map_pins').style.display = 'block';
-                                  },
-                                  function() { console.log('error'); });
-        };
         
-        var options = {
-			height: 460,
-			diameter: 1000,
-			paddingBottom: 100,
-			atBottom: true,
-			lat: 49.281468,
-			lon: -123.104446
-		};
-		
-        mapKit.showMap(success, error, options);
-    },
-    setMapData: function() {
-
-        //var pins = [[49.28115, -123.10450], [49.27503, -123.12138], [49.28286, -123.11891]];
-        var error = function() {
-          console.log('error');
-        };
-        var success = function() {
-          console.log('success');
-        };
-        
-        var options = {
-			height: 460,
-			diameter: 4000,
-			paddingBottom: 100,
-			atBottom: true,
-			lat: 39.281468,
-			lon: -123.104446
-		};
-		
-        mapKit.setMapData(success, error, options);
+        window.plugins.mapKit.addMapPins(pins);
     },
     hideMap: function() {
-        var success = function() {
-          document.getElementById('hide_map').style.display = 'none';
-          document.getElementById('clear_map_pins').style.display = 'none';
-          document.getElementById('show_map').style.display = 'block';
-        };
-        var error = function() {
-          console.log('error');
-        };
-        mapKit.hideMap(success, error);
+        window.plugins.mapKit.hideMap();
     },
     clearMapPins: function() {
-        var success = function() {
-          console.log('Map Pins cleared!');
-        };
-        var error = function() {
-          console.log('error');
-        };
-        mapKit.clearMapPins(success, error);
+
+        window.plugins.mapKit.clearMapPins();
     },
     changeMapType: function() {
-      var success = function() {
-          console.log('Map Type Changed');
-        };
-        var error = function() {
-          console.log('error');
-        };
-        mapKit.changeMapType(mapKit.mapType.MAP_TYPE_SATELLITE, success, error);
+
+        window.plugins.mapKit.changeMapType(mapKit.mapType.MAP_TYPE_SATELLITE);
     }
 };
+
+function annotationTap(text, latitude, longitude) {
+	console.log('text = ' + text);
+	console.log('lat = ' + latitude);
+	console.log('lon = ' + longitude);
+}
+
+
+function annotationDeselect() {
+	console.log('deselect');
+}

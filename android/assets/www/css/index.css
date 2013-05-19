@@ -116,6 +116,7 @@ h1 {
 
 button {
   height: 100px;
-  width: 200px;
+  width: 50px;
   font-size: 24px;
+  margin-top: 550px;
 }
