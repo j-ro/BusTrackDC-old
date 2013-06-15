@@ -505,6 +505,13 @@ buildRouteMenu = function(dataBus, dataRail, dataCirculator) {
 			    
 	});
 	
+	//if (device.platform != "iOS") {
+		//var initialScreenSize = window.innerHeight;
+		//window.addEventListener("resize", function() {
+$( ".ui-footer" ).fixedtoolbar( "option", "hideDuringFocus" );
+		//});
+	//}
+	
 }
 
 
@@ -2833,12 +2840,14 @@ onCurrentLocationSuccess = function(position) {
 	        lat: currentLat,
 	        lon: currentLong
 	    };
+	    
+	    
 	}
 	
     
     
     window.plugins.mapKit.setMapData(mapOptions);
-    
+    navigator.splashscreen.hide();
 
     
     //console.log('time to calculate radius!');
@@ -3004,6 +3013,7 @@ function onDeviceReady() {
 	    };
 	    
 	    window.plugins.mapKit.setMapData(mapOptions);
+	    
 	}
 	
 	//used for locally simulating local storage, comment out when not needed for debugging
@@ -3026,9 +3036,12 @@ function onDeviceReady() {
 	
 	//needed to prevent weird android flickering
 	if (device.platform != "iOS") {
+		pageFlash = false;
 		$.mobile.changePage( "#infowindow", { transition: "none"} );
 		$.mobile.changePage( "#gps_map", { transition: "none"} );
 	}
+	
+	pageFlash = true;
 
     
     // get current position (which also shows nearby stops)
@@ -3465,30 +3478,32 @@ $(document).on('pagebeforeshow', '#infowindow', function() {
 	
 	//console.log(window.history);
 	
-	
-	 // deal with favorite button UI
-	if (window.localStorage.getItem("favorites")) {
-	//if (favoritesStorage) {
-		//console.log('true');
-		
-		var favorites = JSON.parse(window.localStorage.getItem("favorites"));
-		//favorites = JSON.parse(favoritesStorage);
-		
-		var favoriteMatches = jQuery.grep(favorites, function(obj) {
-			//console.log(data.Stops[i].StopID + ' == ' + obj.subTitle + '?');
-			if (stopID) {
-				return (obj.id == stopID || 'Metro Bus Stop #' + obj.id == stopID || 'Metro Rail Station #' + obj.id == stopID || 'Circulator Stop #' + obj.id == stopID);
-			} else {
-				return (obj.id == notInRangeStopID || 'Metro Bus Stop #' + obj.id == notInRangeStopID || 'Metro Rail Station #' + obj.id == notInRangeStopID);
-			}
+	//only do this after the page flash we have to do to avoid android flickering
+	if (pageFlash) {
+		// deal with favorite button UI
+		if (window.localStorage.getItem("favorites")) {
+		//if (favoritesStorage) {
+			//console.log('true');
 			
-		});
-		
-		//console.log(favoriteMatches);
-		if (favoriteMatches.length) {		
-			$( "#favorite" ).buttonMarkup({theme: 'e'});
-		} else {
-			$( "#favorite" ).buttonMarkup({theme: 'd'});
+			var favorites = JSON.parse(window.localStorage.getItem("favorites"));
+			//favorites = JSON.parse(favoritesStorage);
+			
+			var favoriteMatches = jQuery.grep(favorites, function(obj) {
+				//console.log(data.Stops[i].StopID + ' == ' + obj.subTitle + '?');
+				if (stopID) {
+					return (obj.id == stopID || 'Metro Bus Stop #' + obj.id == stopID || 'Metro Rail Station #' + obj.id == stopID || 'Circulator Stop #' + obj.id == stopID);
+				} else {
+					return (obj.id == notInRangeStopID || 'Metro Bus Stop #' + obj.id == notInRangeStopID || 'Metro Rail Station #' + obj.id == notInRangeStopID);
+				}
+				
+			});
+			
+			//console.log(favoriteMatches);
+			if (favoriteMatches.length) {		
+				$( "#favorite" ).buttonMarkup({theme: 'e'});
+			} else {
+				$( "#favorite" ).buttonMarkup({theme: 'd'});
+			}	
 		}	
 	}
 	

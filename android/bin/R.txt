@@ -14,6 +14,7 @@ int attr useViewLifecycle 0x7f01000c
 int attr zOrderOnTop 0x7f01000d
 int drawable ic_launcher 0x7f020000
 int drawable icon 0x7f020001
+int drawable splash 0x7f020002
 int id hybrid 0x7f050004
 int id none 0x7f050000
 int id normal 0x7f050001

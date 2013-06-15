@@ -121,6 +121,9 @@ public class MapKit extends CordovaPlugin {
 							mapView.onResume(); // FIXME: I wish there was a better way
 												// than this...
 							main.addView(mapView);
+							
+							mapView.getMap().setMyLocationEnabled(true);
+							mapView.getMap().getUiSettings().setMyLocationButtonEnabled(false);
 		
 							// Moving the map to lot, lon
 							//Log.d("MYTAG", ""+latitude);
