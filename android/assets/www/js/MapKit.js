@@ -4,7 +4,7 @@
 
 	var MapKit = function() {
 		this.options = {
-			height: 460,
+			height: window.outerHeight,
 			diameter: 1000,
 			zoomLevel: 0,
 			atBottom: false,
@@ -63,22 +63,40 @@
 
 
 		showMap: function(options, success, error) {
-			options.zoomLevel = getZoomLevel(options.diameter);
-			
-			if (success) {
-				if (error) {
-					cordovaRef.exec(success, error, 'MapKit', 'showMap', [options]);
+			if (options) {
+				options.zoomLevel = getZoomLevel(options.diameter);
+				if (success) {
+					if (error) {
+						cordovaRef.exec(success, error, 'MapKit', 'showMap', [options]);
+					} else {
+						cordovaRef.exec(success, this.error, 'MapKit', 'showMap', [options]);
+					}
+					
 				} else {
-					cordovaRef.exec(success, this.error, 'MapKit', 'showMap', [options]);
+					if (error) {
+						cordovaRef.exec(this.success, error, 'MapKit', 'showMap', [options]);
+					} else {
+						cordovaRef.exec(this.success, this.error, 'MapKit', 'showMap', [options]);
+					}
 				}
-				
 			} else {
-				if (error) {
-					cordovaRef.exec(this.success, error, 'MapKit', 'showMap', [options]);
+				if (success) {
+					if (error) {
+						cordovaRef.exec(success, error, 'MapKit', 'showMap', [this.options]);
+					} else {
+						cordovaRef.exec(success, this.error, 'MapKit', 'showMap', [this.options]);
+					}
+					
 				} else {
-					cordovaRef.exec(this.success, this.error, 'MapKit', 'showMap', [options]);
+					if (error) {
+						cordovaRef.exec(this.success, error, 'MapKit', 'showMap', [this.options]);
+					} else {
+						cordovaRef.exec(this.success, this.error, 'MapKit', 'showMap', [this.options]);
+					}
 				}
 			}
+			
+			
 		},
 
 		addMapPins: function(pins, success, error) {

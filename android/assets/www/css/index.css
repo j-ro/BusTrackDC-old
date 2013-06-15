@@ -20,11 +20,17 @@
     -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
 }
 
+html {
+	background-image: url("../img/lightlinen-bg.png");
+	background-repeat: repeat !important;
+}
+
 body {
     -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
     -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
     -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
-    background-color:#E4E4E4;
+    /*
+background-color:#E4E4E4;
     background-image:linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
     background-image:-webkit-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
     background-image:-ms-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
@@ -38,37 +44,21 @@ body {
     background-attachment:fixed;
     font-family:'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
     font-size:12px;
+    text-transform:uppercase;
+*/
+    
     height:100%;
     margin:0px;
     padding:0px;
-    text-transform:uppercase;
-    width:100%;
+    width:320;
+    overflow: hidden;
+    background-image: url("../img/lightlinen-bg.png");
+	background-repeat: repeat !important;
 }
 
-/* Portrait layout (default) */
-.app {
-    background:url(../img/logo.png) no-repeat center top; /* 170px x 200px */
-    position:absolute;             /* position in the center of the screen */
-    left:50%;
-    top:50%;
-    height:50px;                   /* text area height */
-    width:225px;                   /* text area width */
-    text-align:center;
-    padding:180px 0px 0px 0px;     /* image height is 200px (bottom 20px are overlapped with text) */
-    margin:-115px 0px 0px -112px;  /* offset vertical: half of image height and text area height */
-                                   /* offset horizontal: half of text area width */
-}
 
-/* Landscape layout (with min-width) */
-@media screen and (min-aspect-ratio: 1/1) and (min-width:400px) {
-    .app {
-        background-position:left center;
-        padding:75px 0px 75px 170px;  /* padding-top + padding-bottom + text area = image height */
-        margin:-90px 0px 0px -198px;  /* offset vertical: half of image height */
-                                      /* offset horizontal: half of image width and text area width */
-    }
-}
 
+/*
 h1 {
     font-size:24px;
     font-weight:normal;
@@ -77,46 +67,321 @@ h1 {
     padding:0px;
     text-align:center;
 }
+*/
 
-.event {
-    border-radius:4px;
-    -webkit-border-radius:4px;
-    color:#FFFFFF;
-    font-size:12px;
-    margin:0px 30px;
-    padding:2px 0px;
+#gps_map {
+	background-repeat: repeat !important;
+	
 }
 
-.event.listening {
-    background-color:#333333;
-    display:block;
+.ui-popup-screen {
+	height: 110%;
 }
 
-.event.received {
-    background-color:#4B946A;
-    display:none;
+/*
+.ui-footer h1 {
+	margin-top: 8px;
+	padding-right: 1em !important;
+}
+*/
+
+/*
+.ui-footer .ui-btn {
+	position: relative;
+	top: 0px;
+}
+*/
+
+/*
+.refresh_location, .back_btn, .favorites_menu_btn {
+	float: left;
+	margin-top: 0.1em !important;
 }
 
-@keyframes fade {
-    from { opacity: 1.0; }
-    50% { opacity: 0.4; }
-    to { opacity: 1.0; }
+.footer_title {
+	float: right;
 }
- 
-@-webkit-keyframes fade {
-    from { opacity: 1.0; }
-    50% { opacity: 0.4; }
-    to { opacity: 1.0; }
-}
- 
-.blink {
-    animation:fade 3000ms infinite;
-    -webkit-animation:fade 3000ms infinite;
+*/
+
+.center {
+	display: block;
+	text-align: center;
+	margin-top: 50px;
 }
 
-button {
-  height: 100px;
-  width: 50px;
-  font-size: 24px;
-  margin-top: 550px;
+
+.ui-footer .ui-controlgroup  {
+	margin-left: 8px;
+}
+
+
+
+.ui-header .ui-btn {
+	margin-top: 3px;
+}
+
+
+.ui-header .ui-icon {
+	top: 49% !important;
+}
+
+.ui-header .ui-btn-text, .ui-footer .ui-btn-text {
+	top: -1px;
+}
+
+.stopTitle, .favoriteMenuStopTitle {
+	text-overflow: ellipsis;
+	min-width: 250px;
+}
+
+#favorite {
+	margin-top: 1px;
+	margin-right: 4px;
+}
+
+.stopName {
+	display: block;
+	height: 24px;
+	margin-top: 4px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 89%;
+	overflow: hidden;
+}
+
+#infowindow .route-detail-btn {
+	padding-bottom: 0.1em !important;
+}
+
+/*target the count bubbles and left align them, by default they are right aligned*/
+#infowindow .ui-li-has-count .ui-li-count {
+    left  : 10px !important;
+    right : auto !important;
+}
+
+#infowindow .ui-li-desc {
+	padding-left: 12px !important;
+}
+
+/*target the link in which the count bubbles reside and add some padding so the bubbles and link text don't overlap*/
+/*notice this is only applied to list-items that actually have count bubbles*/
+#infowindow .ui-li-has-count .ui-btn-inner a.ui-link-inherit {
+    padding-left : 35px !important;
+}
+
+.ui-icon-currloc {
+	background-image: url("../img/currloc-icon.png");
+	background-size: 18px 18px;
+}
+
+
+#infowindow .ui-btn-text {
+	width: 115%;
+}
+
+#infowindow .ui-li > .ui-btn-inner {
+	overflow: hidden;
+}
+
+.ui-li-has-arrow.ui-li-has-count .ui-btn-inner a.ui-link-inherit, .ui-li-static.ui-li-has-arrow.ui-li-has-count {
+	padding-right: 78px !important;
+}
+
+.drag-handle {
+	display: none;
+	background-image: url("../img/sort.png");
+	background-repeat: no-repeat;
+	background-size: 30px 30px;
+	height: 30px;
+	width: 30px;
+	position: absolute;
+	top: 44%;
+	margin-top: -9px;
+	right: 10px;
+	text-indent: -99999em;
+}
+
+.delete-handle {
+	display: none;
+	background-image: url("../img/delete.png");
+	background-repeat: no-repeat;
+	background-size: 25px 25px;
+	height: 25px;
+	width: 25px;
+	position: absolute;
+	top: 47%;
+	margin-top: -9px;
+	right: 50px;
+	text-indent: -99999em;
+}
+
+.ui-li-has-arrow .ui-btn-inner a.ui-link-inherit, .ui-li-static.ui-li-has-arrow {
+	padding-right: 40px;
+}
+
+/*
+.drag-handle:before {
+content: "";
+  position: absolute;
+  left: 0;
+  top: 0.21em;
+  bottom: 0.21em;
+  width: 1em;
+  background: linear-gradient(
+    top, 
+    black, black 20%, 
+    white 20%, white 40%, 
+    black 40%, black 60%, 
+    white 60%, white 80%, 
+    black 80%, black 100%
+  );
+}
+*/
+
+/*
+#favorites_menu_content, #favorites_menu_header {
+	display: none;
+}
+*/
+
+/* move the loader to the lower right */
+
+.ui-loader {
+	bottom: 9px !important;
+	right: 9px !important;
+	top: inherit !important;
+	left: inherit !important;
+}
+
+.ui-loader-default {
+	width: 32px !important;
+	height: 32px !important;
+}
+
+.ui-loader .ui-icon {
+	width: 30px !important;
+	height: 30px !important;
+}
+
+.ui-icon-loading {
+	background-size: 32px 32px;
+}
+
+#route_list_content h2 {
+	font-size: 14px;
+}
+
+/* pull to refresh */
+.iscroll-pulldown, .iscroll-pullup {
+	background: none !important;
+}
+
+.iscroll-content li  {
+     -webkit-transform: translateZ(0);
+}
+
+
+/* date format */
+
+.updated, .updated a.ui-link {
+	font-size: 10px;
+	text-align: center;
+	margin: 10px 0;
+	color: #a6a6a6 !important;
+	font-weight: normal !important;
+}
+
+
+/* change jquery mobile transition speed */
+.in {
+	-webkit-animation-timing-function: ease-out;
+	-webkit-animation-duration: 150ms;
+	-moz-animation-timing-function: ease-out;
+	-moz-animation-duration: 150ms;
+}
+
+.out {
+	-webkit-animation-timing-function: ease-in;
+	-webkit-animation-duration: 125ms;
+	-moz-animation-timing-function: ease-in;
+	-moz-animation-duration: 125ms;
+}
+
+/* rail button colors */
+
+#OR .ui-li-count, #potomac .ui-li-count {
+	background-image: -webkit-gradient(linear,left top,left bottom,from( #ffc155 ),to( #ffedb2 ));
+	background-image: -webkit-linear-gradient(#ffc155, #ffedb2);
+	background-image: -moz-linear-gradient( #ffc155,#ffedb2 );
+	background-image: -ms-linear-gradient( #ffc155,#ffedb2 );
+	background-image: -o-linear-gradient( #ffc155,#ffedb2 );
+	background-image: linear-gradient( #ffc155,#ffedb2 );
+}
+
+#BL .ui-li-count {
+	background-image: -webkit-gradient(linear,left top,left bottom,from( #76afff ),to( #bbdfff ));
+	background-image: -webkit-linear-gradient(#76afff, #bbdfff);
+	background-image: -moz-linear-gradient( #76afff,#bbdfff );
+	background-image: -ms-linear-gradient( #76afff,#bbdfff );
+	background-image: -o-linear-gradient( #76afff,#bbdfff );
+	background-image: linear-gradient( #76afff,#bbdfff );
+}
+
+#rosslyn .ui-li-count {
+	background-image: -webkit-gradient(linear,left top,left bottom,from( #a7deff ),to( #e5f6ff ));
+	background-image: -webkit-linear-gradient(#a7deff, #e5f6ff);
+	background-image: -moz-linear-gradient( #a7deff,#e5f6ff );
+	background-image: -ms-linear-gradient( #a7deff,#e5f6ff );
+	background-image: -o-linear-gradient( #a7deff,#e5f6ff );
+	background-image: linear-gradient( #a7deff,#e5f6ff );
+}
+
+#blue .ui-li-count {
+	background-image: -webkit-gradient(linear,left top,left bottom,from( #3e5cd9 ),to( #7891f4 ));
+	background-image: -webkit-linear-gradient(#3e5cd9, #7891f4);
+	background-image: -moz-linear-gradient( #3e5cd9,#7891f4 );
+	background-image: -ms-linear-gradient( #3e5cd9,#7891f4 );
+	background-image: -o-linear-gradient( #3e5cd9,#7891f4 );
+	background-image: linear-gradient( #3e5cd9,#7891f4 );
+}
+
+#RD .ui-li-count {
+	background-image: -webkit-gradient(linear,left top,left bottom,from( #ff8080 ),to( #ffbbbb ));
+	background-image: -webkit-linear-gradient(#ff8080, #ffbbbb);
+	background-image: -moz-linear-gradient( #ff8080,#ffbbbb );
+	background-image: -ms-linear-gradient( #ff8080,#ffbbbb );
+	background-image: -o-linear-gradient( #ff8080,#ffbbbb );
+	background-image: linear-gradient( #ff8080,#ffbbbb );
+}
+
+#YL .ui-li-count, #yellow .ui-li-count, #gtownpm .ui-li-count {
+	background-image: -webkit-gradient(linear,left top,left bottom,from( #fffa6a ),to( #ffffcc ));
+	background-image: -webkit-linear-gradient(#fffa6a, #ffffcc);
+	background-image: -moz-linear-gradient( #fffa6a,#ffffcc );
+	background-image: -ms-linear-gradient( #fffa6a,#ffffcc );
+	background-image: -o-linear-gradient( #fffa6a,#ffffcc );
+	background-image: linear-gradient( #fffa6a,#ffffcc );
+}
+
+#GR .ui-li-count, #green .ui-li-count {
+	background-image: -webkit-gradient(linear,left top,left bottom,from( #91d197 ),to( #d3f9d3 ));
+	background-image: -webkit-linear-gradient(#91d197, #d3f9d3);
+	background-image: -moz-linear-gradient( #91d197,#d3f9d3 );
+	background-image: -ms-linear-gradient( #91d197,#d3f9d3 );
+	background-image: -o-linear-gradient( #91d197,#d3f9d3 );
+	background-image: linear-gradient( #91d197,#d3f9d3 );
+}
+
+#yellow .ui-li-count span, #green .ui-li-count span, #gtownpm .ui-li-count span, #rosslyn .ui-li-count span, #blue .ui-li-count span, #potomac .ui-li-count span {
+	background-image: url('../img/circulator-icon.png');
+	background-size: 10px 10px;
+	background-repeat: no-repeat;
+	background-position: 2px 2px;
+	height: 14px;
+	width: 14px;
+	display: block;
+}
+
+#yellow .ui-li-count, #green .ui-li-count, #gtownpm .ui-li-count, #rosslyn .ui-li-count, #blue .ui-li-count, #potomac .ui-li-count {
+	text-indent: -99999em;
 }

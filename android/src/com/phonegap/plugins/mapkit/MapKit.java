@@ -9,25 +9,32 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.graphics.Rect;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
+import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.VisibleRegion;
 
 public class MapKit extends CordovaPlugin {
 
@@ -43,6 +50,9 @@ public class MapKit extends CordovaPlugin {
 	int offsetTop = 0;
 	int zoomLevel = 0;
 	boolean infoWindowOpen = false;
+	
+	
+	
 
 	@Override
 	public void initialize(CordovaInterface cordova, CordovaWebView webView) {
@@ -65,10 +75,10 @@ public class MapKit extends CordovaPlugin {
 					} else {
 						
 						try {
-							height = options.getInt("height");
+							height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,options.getInt("height"), cordova.getActivity().getResources().getDisplayMetrics());
 							latitude = options.getDouble("lat");
 							longitude = options.getDouble("lon");
-							offsetTop = options.getInt("offsetTop");
+							offsetTop = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,options.getInt("offsetTop"), cordova.getActivity().getResources().getDisplayMetrics());
 							zoomLevel = options.getInt("zoomLevel");
 							atBottom = options.getBoolean("atBottom");
 						} catch (JSONException e) {
@@ -97,12 +107,10 @@ public class MapKit extends CordovaPlugin {
 							if (atBottom) {
 								params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM,
 										RelativeLayout.TRUE);
-								//Log.d("MYTAG", ""+offsetTop);
 								mapView.setPadding(0, offsetTop, 0, 0);
 							} else {
 								params.addRule(RelativeLayout.ALIGN_PARENT_TOP,
 										RelativeLayout.TRUE);
-								//Log.d("MYTAG", ""+offsetTop);
 								mapView.setPadding(0, offsetTop, 0, 0);
 							}
 							params.addRule(RelativeLayout.CENTER_HORIZONTAL,
@@ -137,6 +145,34 @@ public class MapKit extends CordovaPlugin {
 //									Log.d("MYTAG", "on Marker click: " +  marker.getPosition().latitude);
 //									Log.d("MYTAG", "on Marker click: " +  marker.getPosition().longitude);
 						            return false;
+						        }
+							});
+							
+							mapView.getMap().setOnCameraChangeListener(new OnCameraChangeListener() {
+								@Override
+						        public void onCameraChange(CameraPosition position) {
+									VisibleRegion vr = mapView.getMap().getProjection().getVisibleRegion();
+									double left = vr.latLngBounds.southwest.longitude;
+									double top = vr.latLngBounds.northeast.latitude;
+									double right = vr.latLngBounds.northeast.longitude;
+									double bottom = vr.latLngBounds.southwest.latitude;
+									double longDelta = left - right;
+									double latDelta = top - bottom;
+									
+									webView.loadUrl(
+											"javascript:geo.onMapMove(" +
+												position.target.latitude + 
+											"," + 
+												position.target.longitude + 
+											"," + 
+												latDelta +
+											"," +
+												longDelta +
+											");");
+//									Log.d("MYTAG", "on Marker click: " + marker.getSnippet());
+//									Log.d("MYTAG", "on Marker click: " +  marker.getPosition().latitude);
+//									Log.d("MYTAG", "on Marker click: " +  marker.getPosition().longitude);
+						            return;
 						        }
 							});
 							
@@ -194,10 +230,10 @@ public class MapKit extends CordovaPlugin {
 				@Override
 				public void run() {
 					try {
-						height = options.getInt("height");
+						height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,options.getInt("height"), cordova.getActivity().getResources().getDisplayMetrics());
 						latitude = options.getDouble("lat");
 						longitude = options.getDouble("lon");
-						offsetTop = options.getInt("offsetTop");
+						offsetTop = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,options.getInt("offsetTop"), cordova.getActivity().getResources().getDisplayMetrics());
 						zoomLevel = options.getInt("zoomLevel");
 						atBottom = options.getBoolean("atBottom");
 					} catch (JSONException e) {
@@ -209,13 +245,11 @@ public class MapKit extends CordovaPlugin {
 					if (atBottom) {
 						params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM,
 								RelativeLayout.TRUE);
-						//Log.d("MYTAG", ""+offsetTop);
 						mapView.setPadding(0, offsetTop, 0, 0);
 					} else {
 						params.addRule(RelativeLayout.ALIGN_PARENT_TOP,
 								RelativeLayout.TRUE);
 						mapView.setPadding(0, offsetTop, 0, 0);
-						//Log.d("MYTAG", "" + offsetTop);
 					}
 					params.addRule(RelativeLayout.CENTER_HORIZONTAL,
 							RelativeLayout.TRUE);
@@ -235,7 +269,7 @@ public class MapKit extends CordovaPlugin {
 	}
 
 	private void hideMap(final String string) {
-		Log.d("MYTAG", "start");
+		//Log.d("MYTAG", "start");
 		try {
 			cordova.getActivity().runOnUiThread(new Runnable() {
 				@Override

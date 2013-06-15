@@ -1,0 +1,11 @@
+html, body, div {
+	margin: 0;
+	padding: 0;
+}
+
+.ruler {
+	width: 100px;
+	height: 100px;
+	margin-top: 20px;
+	background-color: red;
+}
