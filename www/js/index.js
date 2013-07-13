@@ -13,10 +13,12 @@ function onBodyLoad() {
 }
 */
 
-//fastclick.js instantiation to get rid of 300ms delay on click events...
+//fastclick.js instantiation to get rid of 300ms delay on click events... DO WE NEED THIS AT ALL? WORKS FINE WITHOUT ON ANDROID
+/*
 window.addEventListener('load', function() {
     new FastClick(document.body);
 }, false);
+*/
 
 //on resume function to autorefresh bus times if the infowindow is active
 function onResume() {
@@ -197,8 +199,8 @@ calculateRadius = function(viewportLat, viewportLon, latitudeDelta, longitudeDel
 	
 	circulatorLat = viewportLat;
 	circulatorLon = viewportLon;
-	circulatorLatDelta = latitudeDelta;
-	circulatorLonDelta = longitudeDelta;
+	circulatorLatDelta = Math.abs(latitudeDelta);
+	circulatorLonDelta = Math.abs(longitudeDelta);
 	
 	var r = 6378100;  
     
@@ -327,8 +329,7 @@ ajaxCount++;
 			    	$.mobile.loading( 'hide' );
 			    }
 				
-				$('#route_list_menu').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>');
-				$('#route_list_menu').listview('refresh');
+				$('#route_list_menu').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>').listview('refresh');
 				
 				if (errorThrown != 'abort') {
 					navigator.notification.confirm(
@@ -352,8 +353,7 @@ ajaxCount++;
 		    	$.mobile.loading( 'hide' );
 		    }
 			
-			$('#route_list_menu').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>');
-			$('#route_list_menu').listview('refresh');
+			$('#route_list_menu').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>').listview('refresh');
 			
 			if (errorThrown != 'abort') {
 				navigator.notification.confirm(
@@ -381,8 +381,7 @@ ajaxCount++;
 	    	$.mobile.loading( 'hide' );
 	    }
 		
-		$('#route_list_menu').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>');
-		$('#route_list_menu').listview('refresh');
+		$('#route_list_menu').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>').listview('refresh');
 		
 		if (errorThrown != 'abort') {
 			navigator.notification.confirm(
@@ -398,7 +397,7 @@ ajaxCount++;
 
 
 buildRouteMenu = function(dataBus, dataRail, dataCirculator) {
-	console.log('build start');
+	//console.log('build start');
 	//console.log(dataBus);
 	//console.log(dataRail);
 	//console.log(dataCirculator);
@@ -494,9 +493,21 @@ buildRouteMenu = function(dataBus, dataRail, dataCirculator) {
 		} else {
 			$('#route_map_title').html('Route ' + routeClicked);
 		}
+		
+		if (device.platform == "iOS") {
+			$.mobile.changePage( "#route_map", { transition: "fade"} );
+		} else {
+			$.mobile.changePage( "#route_map", { transition: "none"} );
+		}
 			    
-		$.mobile.changePage( "#route_map", { transition: "fade" } );
 	});
+	
+	//if (device.platform != "iOS") {
+		//var initialScreenSize = window.innerHeight;
+		//window.addEventListener("resize", function() {
+	$( ".ui-footer" ).fixedtoolbar( "option", "hideDuringFocus" );
+		//});
+	//}
 	
 }
 
@@ -630,13 +641,24 @@ getStopsForRoute = function(routeID) {
 		
 		//console.log(stopsForRoute);
 		
-		mapOptions2 = {
-
-	        diameter: 1500,
-	        lat: currentLatitude,
-	        lon: currentLongitude
-
-	    };
+		if (device.platform == "iOS") {
+			mapOptions2 = {
+				
+		        diameter: 1500,
+		        lat: currentLatitude,
+		        lon: currentLongitude
+	
+		    };
+		} else {
+			mapOptions2 = {
+				height: mapHeight, // changed for android, does this work on ios?
+				offsetTop: mapOffsetTop, // changed for android, does this work on ios?
+		        diameter: 1000,
+		        lat: currentLatitude,
+		        lon: currentLongitude
+		    };
+		}
+		
 	    
 	    //console.log('call mapoptions');
 	    window.plugins.mapKit.setMapData(mapOptions2);
@@ -849,13 +871,23 @@ getRailStopsForRoute = function(routeID) {
 		
 		//console.log(stopsForRoute);
 		
-		mapOptions2 = {
-
-	        diameter: 1500,
-	        lat: currentLatitude,
-	        lon: currentLongitude
-
-	    };
+		if (device.platform == "iOS") {
+			mapOptions2 = {
+				
+		        diameter: 1500,
+		        lat: currentLatitude,
+		        lon: currentLongitude
+	
+		    };
+		} else {
+			mapOptions2 = {
+				height: mapHeight, // changed for android, does this work on ios?
+				offsetTop: mapOffsetTop, // changed for android, does this work on ios?
+		        diameter: 1000,
+		        lat: currentLatitude,
+		        lon: currentLongitude
+		    };
+		}
 	    
 	    //console.log('call mapoptions');
 	    window.plugins.mapKit.setMapData(mapOptions2);
@@ -1197,13 +1229,23 @@ getCirculatorStopsForRoute = function(routeID) {
 		
 		//console.log(stopsForRoute);
 		
-		mapOptions2 = {
-
-	        diameter: 1500,
-	        lat: currentLatitude,
-	        lon: currentLongitude
-
-	    };
+		if (device.platform == "iOS") {
+			mapOptions2 = {
+				
+		        diameter: 1500,
+		        lat: currentLatitude,
+		        lon: currentLongitude
+	
+		    };
+		} else {
+			mapOptions2 = {
+				height: mapHeight, // changed for android, does this work on ios?
+				offsetTop: mapOffsetTop, // changed for android, does this work on ios?
+		        diameter: 1000,
+		        lat: currentLatitude,
+		        lon: currentLongitude
+		    };
+		}
 	    
 	    //console.log('call mapoptions');
 	    window.plugins.mapKit.setMapData(mapOptions2);
@@ -1602,11 +1644,12 @@ if (railStops.length) {
 				
 				    	routeClicked = $(this).attr('id');
 				    	$('#route_map_title').html('Route ' + routeClicked);
-				    
-				    	$.mobile.changePage( "#route_map", { transition: "fade" } );
-		
 				    	
-				    	
+				    	if (device.platform == "iOS") {
+							$.mobile.changePage( "#route_map", { transition: "fade"} );
+						} else {
+							$.mobile.changePage( "#route_map", { transition: "none"} );
+						}	
 				    	
 				    });
 				    
@@ -1616,10 +1659,13 @@ if (railStops.length) {
 				    // show the page
 				    annotationTapJSON.abort();
 				    
-				    $.mobile.changePage( "#infowindow", { transition: "fade"} );
-				    $('#infowindow-routes').listview('refresh');
-				    $("#infowindow-content").iscrollview("refresh");
-				    $('#infowindow-content').css('height', $('#infowindow').css('min-height'));
+				    if (device.platform == "iOS") {
+						$.mobile.changePage( "#infowindow", { transition: "fade"} );
+					} else {
+						$.mobile.changePage( "#infowindow", { transition: "none"} );
+					}
+				    
+				    $('#infowindow-routes').listview('refresh').iscrollview("refresh").css('height', $('#infowindow').css('min-height'));
 				    
 				    	
 			    }).error(function(jqXHR, textStatus, errorThrown) {
@@ -1846,7 +1892,11 @@ if (stops.length) {
 				    	
 				    	$('#route_map_title').html(routeTitle + ' Route');
 				    
-				    	$.mobile.changePage( "#route_map", { transition: "fade" } );
+				    	if (device.platform == "iOS") {
+							$.mobile.changePage( "#route_map", { transition: "fade"} );
+						} else {
+							$.mobile.changePage( "#route_map", { transition: "none"} );
+						}
 
 				    });
 				    
@@ -1856,10 +1906,13 @@ if (stops.length) {
 				    // show the page
 				    annotationTapJSON.abort();
 				    
-				    $.mobile.changePage( "#infowindow", { transition: "fade"} );
-				    $('#infowindow-routes').listview('refresh');
-				    $("#infowindow-content").iscrollview("refresh");
-				    $('#infowindow-content').css('height', $('#infowindow').css('min-height'));
+				    if (device.platform == "iOS") {
+						$.mobile.changePage( "#infowindow", { transition: "fade"} );
+					} else {
+						$.mobile.changePage( "#infowindow", { transition: "none"} );
+					}
+					
+				    $('#infowindow-routes').listview('refresh').iscrollview("refresh").css('height', $('#infowindow').css('min-height'));
 				    
 				    	
 			    }).error(function(jqXHR, textStatus, errorThrown) {
@@ -2403,12 +2456,13 @@ markerRailStops = function(data) {
 					    	}
 					    	
 					    	$('#route_map_title').html(routeTitle + ' Line');
-					    
-					    	$.mobile.changePage( "#route_map", { transition: "fade" } );
-			
 					    	
-					    	
-					    	
+					    	if (device.platform == "iOS") {
+								$.mobile.changePage( "#route_map", { transition: "fade"} );
+							} else {
+								$.mobile.changePage( "#route_map", { transition: "none"} );
+							}
+	
 					    });
 					    
 					    //$( "#infowindow" ).popup( "open" );
@@ -2417,12 +2471,13 @@ markerRailStops = function(data) {
 					    // show the page
 					    annotationTapJSON.abort();
 					    
-					    $.mobile.changePage( "#infowindow", { transition: "fade"} );
-					    $('#infowindow-routes').listview('refresh');
-					    $("#infowindow-content").iscrollview("refresh");
-					    $('#infowindow-content').css('height', $('#infowindow').css('min-height'));
+					    if (device.platform == "iOS") {
+							$.mobile.changePage( "#infowindow", { transition: "fade"} );
+						} else {
+							$.mobile.changePage( "#infowindow", { transition: "none"} );
+						}
 						
-						
+					    $('#infowindow-routes').listview('refresh').iscrollview("refresh").css('height', $('#infowindow').css('min-height'));
 						
 					}).error(function(jqXHR, textStatus, errorThrown) {
 						//$.mobile.loading( 'hide' );
@@ -2514,16 +2569,21 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 				// rail matching query
 				circulatorMatches = jQuery.grep(pins, function(obj) {
 					// our match function to see if a pin already exists in the global pin array
+					//console.log(obj.index);
+					//console.log(object.stopId);
 					return obj.index == '##' + object.stopId;
 				});
+				
+				//console.log(circulatorMatches);
 				
 				if (circulatorMatches.length == 0) {
 					
 					//console.log('no matches');
 					//console.log(matches);
-					
+					//console.log(routeMapView);
 					// if this is a new pin, add it to the global pin array AND the new pin array
 					if (routeMapView != true) {
+						//console.log('pins');
 						pins.push(
 							{
 								lat: object.lat,
@@ -2713,7 +2773,7 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 		//console.log('add new pins');
 		// show the new pins, but only if this is a real stop get, and not a favorite button or route annotation being clicked
 		//if (favoriteBtnClickedFlag != true) {
-			//console.log(newRailPins);
+			//console.log(newCirculatorPins);
 			window.plugins.mapKit.addMapPins(newCirculatorPins);
 		//}
 		
@@ -2749,18 +2809,34 @@ onCurrentLocationSuccess = function(position) {
     currentLatitude = position.coords.latitude;
     currentLongitude = position.coords.longitude;
     //currlocsuccess = currlocsuccess + 1;
-    //console.log('currloc success!');
-    mapOptions = {
-        buttonCallback: "cbMapCallback",
-        height: window.innerHeight - 92,
-        diameter: 400,
-        offsetTop: 43,
-        lat: currentLat,
-        lon: currentLong
-    };
+    console.log('currloc success!');
+	
+	if (device.platform == "iOS") {
+		mapOptions = {
+	        buttonCallback: "cbMapCallback",
+	        height: mapHeight, // changed for android, does this work on ios?
+	        diameter: 400,
+	        offsetTop: mapOffsetTop, // changed for android, does this work on ios?
+	        lat: currentLat,
+	        lon: currentLong
+	    };
+	} else {
+		mapOptions = {
+	        buttonCallback: "cbMapCallback",
+	        height: mapHeight, // changed for android, does this work on ios?
+	        diameter: 300,
+	        offsetTop: mapOffsetTop, // changed for android, does this work on ios?
+	        lat: currentLat,
+	        lon: currentLong
+	    };
+	    
+	    
+	}
+	
+    
     
     window.plugins.mapKit.setMapData(mapOptions);
-    
+    navigator.splashscreen.hide();
 
     
     //console.log('time to calculate radius!');
@@ -2819,11 +2895,13 @@ function favoriteTap(favorite) {
 			//console.log('no match! add');
 			$( "#favorite" ).buttonMarkup({theme: 'e'});
 			
+			var $stopTitle = $('#infowindow .stopTitle');
+			
 			favorites.push({
 				id: favorite,
 				name: $('#infowindow .stopName').html(),
-				lat: $('#infowindow .stopTitle').data('lat'),
-				lon: $('#infowindow .stopTitle').data('lon')
+				lat: $stopTitle.data('lat'),
+				lon: $stopTitle.data('lon')
 			});
 			
 			window.localStorage.setItem("favorites", JSON.stringify(favorites));
@@ -2847,11 +2925,13 @@ function favoriteTap(favorite) {
 		
 		var favorites = [];
 		
+		var $stopTitle = $('#infowindow .stopTitle');
+		
 		favorites.push({
 			id: favorite,
 			name: $('#infowindow .stopName').html(),
-			lat: $('#infowindow .stopTitle').data('lat'),
-			lon: $('#infowindow .stopTitle').data('lon')
+			lat: $stopTitle.data('lat'),
+			lon: $stopTitle.data('lon')
 		});
 		
 		window.localStorage.setItem("favorites", JSON.stringify(favorites));
@@ -2867,10 +2947,8 @@ function favoriteTap(favorite) {
 function showMap() {
 
 	mapVisible = true;
-    
+	
     window.plugins.mapKit.showMap();
-    //window.plugins.mapKit.setMapData(mapOptions);
-    //window.plugins.mapKit.addMapPins(pins);
 }
 
 function hideMap() {
@@ -2901,25 +2979,55 @@ function zoomIn() {
 
 function onDeviceReady() {
 
-	window.GA.trackerWithTrackingId("UA-39138450-1");
-    window.GA.trackView("/index");
-	
+	if (device.platform == "iOS") {
+		window.GA.trackerWithTrackingId("UA-39138450-1");
+		window.GA.trackView("/index");
+	} else {
+		$.mobile.defaultPageTransition="none";
+		 window.plugins.analytics.start(
+            function(){
+                window.plugins.analytics.trackPageView(
+                	"/index",
+					function(){
+                    	console.log("Track: success");
+					},
+	                function(){
+	                    console.log("Track: failure");
+	                }
+				);
+            },
+            
+            function(){
+                console.log("Start: failure");
+            }
+		);
+	}
+
 	deviceReadyFlag = true;
 	//console.log('deviceready');
 	
 	// add an on resume event to call an autorefresh if the app becomes active again...
 	document.addEventListener("resume", onResume, false);
-	
-	mapOptions = {
-        buttonCallback: "cbMapCallback",
-        height: window.innerHeight - 92,
-        diameter: 400,
-        offsetTop: 43,
-        lat: 38.8897,
-        lon: -77.0089
-    };
     
     showMap();
+    
+    mapHeight = $('#gps_map').height(); // changed for android, does this work on ios?
+    //console.log(mapHeight);
+    mapOffsetTop = $('.ui-header').height() + 2; // changed for android, does this work on ios?
+    
+    //if (device.platform != "iOS") {
+		mapOptions = {
+	        //buttonCallback: "cbMapCallback",
+	        height: mapHeight,
+	        diameter: 400,
+	        offsetTop: mapOffsetTop, // changed for android, does this work on ios?
+	        lat: 38.8897,
+	        lon: -77.0089
+	    };
+	    
+	    window.plugins.mapKit.setMapData(mapOptions);
+	    
+	//} 
 	
 	//used for locally simulating local storage, comment out when not needed for debugging
 	//favoritesStorage = '';
@@ -2938,16 +3046,25 @@ function onDeviceReady() {
 	currentLongitude = mapOptions.lon;
 	
 	currlocsuccess = 0;
+	
+	//needed to prevent weird android flickering
+	if (device.platform != "iOS") {
+		pageFlash = false;
+		$.mobile.changePage( "#infowindow", { transition: "none"} );
+		$.mobile.changePage( "#gps_map", { transition: "none"} );
+	}
+	
+	pageFlash = true;
 
     
     // get current position (which also shows nearby stops)
-	navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError);
+	navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError, { enableHighAccuracy: true });
 	
 	// this needs to be in deviceReady so as not to make weird this website needs access to your location notices in the app...
 	$(document).on('pageinit', '#gps_map', function() {
 		
 		if (deviceReadyFlag = true) {
-			navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError);
+			navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError, { enableHighAccuracy: true });
 		}
 		
 	});
@@ -2965,8 +3082,6 @@ $(document).ajaxStop(function(){ console.log('ajax stop'); $.mobile.loading( 'hi
 
 
 $(document).on('pageinit', '#gps_map', function() {
-
-	$.mobile.activeBtnClass = 'unused';
 
 	ajaxCount = 0;
 	ajaxCirculatorCount = 0;
@@ -2999,7 +3114,7 @@ if ($('#favorites_menu_content').css('display') != 'none') {
     	if (mapVisible == false) {
 			showMap();
 		}
-    	navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError);
+    	navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError, { enableHighAccuracy: true });
     });
 
 });
@@ -3043,18 +3158,15 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 			$('.stopTitle, .favoriteMenuStopTitle').css('min-width','inherit');
 			
 			// undo the sorting
-			$("#favorites_menu").sortable("destroy");
-			
-			$( "#favorites_menu" ).enableSelection();
-			
-			$( "#favorites_menu" ).unbind( "sortstop");
+			var $favorites_menu = $("#favorites_menu");
+			$favorites_menu.sortable("destroy").enableSelection().unbind( "sortstop");
 			
 			// change the ui
 			$('#favorites_menu .ui-icon-arrow-r').fadeIn('fast');
 			$('#favorites_menu .drag-handle').fadeOut('fast');
 			$('#favorites_menu .delete-handle').fadeOut('fast');
 			
-			$('#favorites_menu').listview('refresh');
+			$favorites_menu.listview('refresh');
 			
 			// deal with the new favorites list for the new order
 			if (window.localStorage.getItem("favorites")) {
@@ -3072,11 +3184,13 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 					console.log($('#favorites_menu #' + id + ' .favorite-stop-detail-btn').data('lon'));
 					*/
 					
+					var $favorites_menu_detail_btn = $('#favorites_menu li[data-id="' + id + '"] .favorite-stop-detail-btn');
+					
 					favorites.push({
 						id: id,
 						name: $('#favorites_menu li[data-id="' + id + '"] h1').html(),
-						lat: $('#favorites_menu li[data-id="' + id + '"] .favorite-stop-detail-btn').data('lat'),
-						lon: $('#favorites_menu li[data-id="' + id + '"] .favorite-stop-detail-btn').data('lon')
+						lat: $favorites_menu_detail_btn.data('lat'),
+						lon: $favorites_menu_detail_btn.data('lon')
 					});
 				});
 				
@@ -3139,17 +3253,18 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 			$('#favorites_menu .drag-handle').fadeIn('fast');
 			$('#favorites_menu .delete-handle').fadeIn('fast');
 			
+			var $favorites_menu = $( "#favorites_menu" );
+			
 			//drag and drop sorting, adapted from http://forresst.github.com/2012/06/22/Make-a-list-jQuery-Mobile-sortable-by-drag-and-drop/
-			$( "#favorites_menu" ).sortable({
+			$favorites_menu.sortable({
 				 handle: ".drag-handle",
 				 axis: "y",
 				 scrollSensitivity: 500,
 				 scroll: true
-			});
-		    $( "#favorites_menu" ).disableSelection();
-		    
-		    $( "#favorites_menu" ).bind( "sortstop", function(event, ui) {
-		    	$('#favorites_menu').listview('refresh');
+			})
+			.disableSelection()
+			.bind( "sortstop", function(event, ui) {
+		    	$favorites_menu.listview('refresh');
 		    });
 		    
 		    // take off the click handler while in edit mode to allow clicking on the delete button
@@ -3221,28 +3336,30 @@ $(document).on('pagebeforeshow', '#gps_map', function() {
 		
 	}
 	
-
-	
+	// put this here for android, does that work on iOS?
+	geo = window.geo || {};
 	 // timeout needed to prevent UI lock -- the onMapMove function is called a lot during initialization, so we want to bypass that
     window.setTimeout(function() {
     
-	    geo = window.geo || {};
+	    
 	    
 	    // save some data on the previous location so we can see how much we move...
-	    geo.beforeMapMove = function(currentLat,currentLon,latitudeDelta,longitudeDelta) {
+	    /*
+geo.beforeMapMove = function(currentLat,currentLon,latitudeDelta,longitudeDelta) {
 			previousLat = currentLat;
 			previousLon = currentLon;
 	    }
+*/
 	    
 	    // whenever the map moves, get the new location and radius and show nearby stops
 		geo.onMapMove = function(currentLat,currentLon,latitudeDelta,longitudeDelta) {
-		
+		//console.log('move');
 			
 			currentLatitude = currentLat;
 			currentLongitude = currentLon;
 			
-			// if the map doesn't move much, no need to redraw the pins...
-			if (((Math.abs(previousLat - currentLat)*32) > latitudeDelta) || ((Math.abs(previousLon - currentLon)*32) > longitudeDelta)) {
+			// if the map doesn't move much, no need to redraw the pins... REMOVED FOR ANDROID, IS THAT OK ON IOS?
+			//if (((Math.abs(previousLat - currentLat)*32) > latitudeDelta) || ((Math.abs(previousLon - currentLon)*32) > longitudeDelta)) {
 				if ($('.refresh_location').length) {
 					//console.log('TRUE! ' + previousLat + ' - ' + currentLat + ' = ' + (Math.abs(previousLat - currentLat)*2) + ' with latitudeDelta = ' + latitudeDelta + ' and ' + previousLon + ' - ' + currentLon + ' = ' + (Math.abs(previousLon - currentLon)*2) + ' with longitudeDelta = ' + longitudeDelta);
 					
@@ -3256,7 +3373,6 @@ $(document).on('pagebeforeshow', '#gps_map', function() {
 							getRailStops(viewportLat, viewportLon, radius);
 							
 							if (ajaxCirculatorCount == circulatorStopsArray.length) {
-								//console.log('marker time!');
 								markerCirculatorStops(circulatorLat,circulatorLon,circulatorLatDelta,circulatorLonDelta);
 							}
 		    	
@@ -3268,7 +3384,7 @@ $(document).on('pagebeforeshow', '#gps_map', function() {
 				}
 			//} else {
 				//console.log('FALSE! ' + previousLat + ' - ' + currentLat + ' = ' + (Math.abs(previousLat - currentLat)*2) + ' with latitudeDelta = ' + latitudeDelta + ' and ' + previousLon + ' - ' + currentLon + ' = ' + (Math.abs(previousLon - currentLon)*2) + ' with longitudeDelta = ' + longitudeDelta);
-			}
+			//}
 			
 		};
 		
@@ -3312,11 +3428,11 @@ $(document).on('pagebeforeshow', '#favorite_menu_page', function() {
 		
 		$.each(favorites, function(i, object) {
 			if ((/Metro Bus Stop #/).test(object.id) || (/Metro Rail Station #/).test(object.id) || (/Circulator Stop #/).test(object.id)) {
-				favoritesListHTML = favoritesListHTML + '<li data-id="' + object.id + '"><a data-transition="slide" class="favorite-stop-detail-btn" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><h1 class="favoriteMenuStopTitle">' + object.name +'</h1><p>'+ object.id + '</p><p class="delete-handle">Delete</p><p class="drag-handle">Sort</p></a></li>';	
+				favoritesListHTML = favoritesListHTML + '<li class="needsclick" data-id="' + object.id + '"><a data-transition="slide" class="favorite-stop-detail-btn" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><h1 class="favoriteMenuStopTitle">' + object.name +'</h1><p>'+ object.id + '</p><p class="delete-handle">Delete</p><p class="drag-handle">Sort</p></a></li>';	
 			} else if (isNaN(object.id)) { // this is to make favorites backwards compatible...
-				favoritesListHTML = favoritesListHTML + '<li data-id="' + object.id + '"><a data-transition="slide" class="favorite-stop-detail-btn" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><h1 class="favoriteMenuStopTitle">' + object.name +'</h1><p>Metro Rail Station #'+ object.id + '</p><p class="delete-handle">Delete</p><p class="drag-handle">Sort</p></a></li>';
+				favoritesListHTML = favoritesListHTML + '<li class="needsclick" data-id="' + object.id + '"><a data-transition="slide" class="favorite-stop-detail-btn" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><h1 class="favoriteMenuStopTitle">' + object.name +'</h1><p>Metro Rail Station #'+ object.id + '</p><p class="delete-handle">Delete</p><p class="drag-handle">Sort</p></a></li>';
 			} else {
-				favoritesListHTML = favoritesListHTML + '<li data-id="' + object.id + '"><a data-transition="slide" class="favorite-stop-detail-btn" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><h1 class="favoriteMenuStopTitle">' + object.name +'</h1><p>Metro Bus Stop #'+ object.id + '</p><p class="delete-handle">Delete</p><p class="drag-handle">Sort</p></a></li>';
+				favoritesListHTML = favoritesListHTML + '<li class="needsclick" data-id="' + object.id + '"><a data-transition="slide" class="favorite-stop-detail-btn" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><h1 class="favoriteMenuStopTitle">' + object.name +'</h1><p>Metro Bus Stop #'+ object.id + '</p><p class="delete-handle">Delete</p><p class="drag-handle">Sort</p></a></li>';
 			}
 		});
 		
@@ -3375,37 +3491,41 @@ $(document).on('pagebeforeshow', '#infowindow', function() {
 	
 	//console.log(window.history);
 	
-	
-	 // deal with favorite button UI
-	if (window.localStorage.getItem("favorites")) {
-	//if (favoritesStorage) {
-		//console.log('true');
-		
-		var favorites = JSON.parse(window.localStorage.getItem("favorites"));
-		//favorites = JSON.parse(favoritesStorage);
-		
-		var favoriteMatches = jQuery.grep(favorites, function(obj) {
-			//console.log(data.Stops[i].StopID + ' == ' + obj.subTitle + '?');
-			if (stopID) {
-				return (obj.id == stopID || 'Metro Bus Stop #' + obj.id == stopID || 'Metro Rail Station #' + obj.id == stopID || 'Circulator Stop #' + obj.id == stopID);
-			} else {
-				return (obj.id == notInRangeStopID || 'Metro Bus Stop #' + obj.id == notInRangeStopID || 'Metro Rail Station #' + obj.id == notInRangeStopID);
-			}
+	//only do this after the page flash we have to do to avoid android flickering
+	if (pageFlash) {
+		// deal with favorite button UI
+		if (window.localStorage.getItem("favorites")) {
+		//if (favoritesStorage) {
+			//console.log('true');
 			
-		});
-		
-		//console.log(favoriteMatches);
-		if (favoriteMatches.length) {		
-			$( "#favorite" ).buttonMarkup({theme: 'e'});
-		} else {
-			$( "#favorite" ).buttonMarkup({theme: 'd'});
+			var favorites = JSON.parse(window.localStorage.getItem("favorites"));
+			//favorites = JSON.parse(favoritesStorage);
+			
+			var favoriteMatches = jQuery.grep(favorites, function(obj) {
+				//console.log(data.Stops[i].StopID + ' == ' + obj.subTitle + '?');
+				if (stopID) {
+					return (obj.id == stopID || 'Metro Bus Stop #' + obj.id == stopID || 'Metro Rail Station #' + obj.id == stopID || 'Circulator Stop #' + obj.id == stopID);
+				} else {
+					return (obj.id == notInRangeStopID || 'Metro Bus Stop #' + obj.id == notInRangeStopID || 'Metro Rail Station #' + obj.id == notInRangeStopID);
+				}
+				
+			});
+			
+			//console.log(favoriteMatches);
+			if (favoriteMatches.length) {		
+				$( "#favorite" ).buttonMarkup({theme: 'e'});
+			} else {
+				$( "#favorite" ).buttonMarkup({theme: 'd'});
+			}	
 		}	
 	}
 	
 	 // hide the map when we show the jQuery stuff, hopefully this can be eliminated in the future...
-    //$('#infowindow-routes').listview('refresh');
-    //$("#infowindow-content").iscrollview("refresh");
-    //$('#infowindow-content').css('height', $('#infowindow').css('min-height'));
+    /*
+$('#infowindow-routes').listview('refresh');
+    $("#infowindow-content").iscrollview("refresh");
+    $('#infowindow-content').css('height', $('#infowindow').css('min-height'));
+*/
     
     
     
@@ -3421,9 +3541,11 @@ $(document).on('pageshow', '#infowindow', function() {
 
 	
 	 // hide the map when we show the jQuery stuff, hopefully this can be eliminated in the future...
-    //$('#infowindow-routes').listview('refresh');
-    //$("#infowindow-content").iscrollview("refresh");
-    //$('#infowindow-content').css('height', $('#infowindow').css('min-height'));
+    /*
+$('#infowindow-routes').listview('refresh');
+    $("#infowindow-content").iscrollview("refresh");
+    $('#infowindow-content').css('height', $('#infowindow').css('min-height'));
+*/
 
 	
 });
@@ -3512,7 +3634,9 @@ $(document).on('pagebeforehide', '#route_map', function() {
 });
 
 $(document).on('pagebeforehide', '#infowindow', function() {
-	annotationTapJSON.abort();
+	if (typeof(annotationTapJSON) != "undefined") {
+		annotationTapJSON.abort();
+	}
 });
 
 //on page hide functions
