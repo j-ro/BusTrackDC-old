@@ -31,7 +31,7 @@
   float: left;
   width: 40px; 
   height: 40px;
-  background: url(iscroll-pull-icon@2x.png) 0 0 no-repeat;
+  background: url(iscroll-pull-icon@2x.png) 0 0 no-repeat !important;
   -webkit-background-size: 40px 80px;
   -moz-background-size: 40px 80px;
   -o-background-size: 40px 80px; 
@@ -80,20 +80,20 @@
 
 .iscroll-pulldown.iscroll-pull-loading .iscroll-pull-icon,
 .iscroll-pullup.iscroll-pull-loading .iscroll-pull-icon {
-  background-position: 0 100%;
-  -webkit-transform: rotate(0deg) translateZ(0);
-  -webkit-transition-duration: 0ms;
-  -webkit-animation: iscroll-pull-loading 2s infinite linear;  
-  -moz-transform: rotate(0deg);
-  -moz-transition-duration: 0ms;
-  -moz-animation: iscroll-pull-loading 2s infinite linear;
-  -o-transform: rotate(0deg);
-  -o-transition-duration: 0ms;
-  -o-animation: iscroll-pull-loading 2s infinite linear;   /* Opera 12+ only */
-  transform: rotate(0deg) translateZ(0);
-  transition: transform 0ms linear;
-  animation: iscroll-pull-loading 2s infinite linear; 
-  -webkit-transform-style: preserve-3d;      
+  background-position: 0 100% !important;
+  -webkit-transform: rotate(0deg) translateZ(0) !important;
+  -webkit-transition-duration: 0ms !important;
+  -webkit-animation: iscroll-pull-loading 2s infinite linear !important;  
+  -moz-transform: rotate(0deg) !important;
+  -moz-transition-duration: 0ms !important;
+  -moz-animation: iscroll-pull-loading 2s infinite linear !important;
+  -o-transform: rotate(0deg) !important;
+  -o-transition-duration: 0ms !important;
+  -o-animation: iscroll-pull-loading 2s infinite linear !important;   /* Opera 12+ only */
+  transform: rotate(0deg) translateZ(0) !important;
+  transition: transform 0ms linear !important;
+  animation: iscroll-pull-loading 2s infinite linear !important; 
+  -webkit-transform-style: preserve-3d !important;      
   }
   
 @-webkit-keyframes iscroll-pull-loading {

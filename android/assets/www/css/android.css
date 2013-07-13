@@ -1,0 +1,51 @@
+
+/* speedup? */
+
+/* disable shadows for better android performance */
+.ui-body-a,
+.ui-bar-a,
+.ui-btn-up-a,
+.ui-btn-hover-a,
+.ui-btn-down-a,
+
+.ui-body-b,
+.ui-bar-b,
+.ui-btn-up-b,
+.ui-btn-hover-b,
+.ui-btn-down-b,
+
+.ui-body-c,
+.ui-bar-c,
+.ui-btn-up-c,
+.ui-btn-hover-c,
+.ui-btn-down-c,
+
+.ui-body-d,
+.ui-bar-d,
+.ui-btn-up-d,
+.ui-btn-hover-d,
+.ui-btn-down-d,
+
+.ui-body-e,
+.ui-bar-e,
+.ui-btn-up-e,
+.ui-btn-hover-e,
+.ui-btn-down-e,
+
+.ui-shadow-inset,
+.ui-icon-shadow,
+.ui-focus,
+.ui-overlay-shadow,
+.ui-shadow,
+.ui-btn-active,
+* {
+    text-shadow: none !important;
+    box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+}
+
+:not(.ui-icon)
+{
+    background-image: url('none') !important;
+}

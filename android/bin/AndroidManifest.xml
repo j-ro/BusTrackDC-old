@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<manifest android:hardwareAccelerated="true" android:versionCode="1" android:versionName="1.0" android:windowSoftInputMode="adjustPan" package="com.JasonRosenbaum.BusTrackDC" xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest android:hardwareAccelerated="true" android:versionCode="1" android:versionName="1.5.a" android:windowSoftInputMode="adjustPan" package="com.JasonRosenbaum.BusTrackDC" xmlns:android="http://schemas.android.com/apk/res/android">
     <supports-screens android:anyDensity="true" android:largeScreens="true" android:normalScreens="true" android:resizeable="true" android:smallScreens="true" android:xlargeScreens="true" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -24,6 +24,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="com.phonegap.DroidGap" android:label="@string/app_name">
+
+      		<intent-filter>
+
+      		</intent-filter>
+
+    	</activity>
         <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyA2ej9ad7GWgQKRkgGPCmK90udOJ-Jy6tY" />
     </application>
     <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="17" />

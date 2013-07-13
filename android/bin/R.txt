@@ -12,6 +12,10 @@ int attr uiZoomControls 0x7f01000a
 int attr uiZoomGestures 0x7f01000b
 int attr useViewLifecycle 0x7f01000c
 int attr zOrderOnTop 0x7f01000d
+int bool ga_anonymizeIp 0x7f070002
+int bool ga_autoActivityTracking 0x7f070000
+int bool ga_debug 0x7f070003
+int bool ga_reportUncaughtExceptions 0x7f070001
 int drawable ic_launcher 0x7f020000
 int drawable icon 0x7f020001
 int drawable splash 0x7f020002
@@ -21,7 +25,7 @@ int id normal 0x7f050001
 int id satellite 0x7f050002
 int id terrain 0x7f050003
 int layout main 0x7f030000
-int string app_name 0x7f060011
+int string app_name 0x7f060012
 int string auth_client_availability_notification_title 0x7f06000e
 int string auth_client_play_services_err_notification_msg 0x7f06000f
 int string auth_client_requested_by_msg 0x7f060010
@@ -39,6 +43,7 @@ int string common_google_play_services_update_button 0x7f06000c
 int string common_google_play_services_update_text 0x7f060008
 int string common_google_play_services_update_title 0x7f060007
 int string common_signin_button_text_long 0x7f06000d
+int string ga_trackingId 0x7f060011
 int[] styleable MapAttrs { 0x7f010000, 0x7f010001, 0x7f010002, 0x7f010003, 0x7f010004, 0x7f010005, 0x7f010006, 0x7f010007, 0x7f010008, 0x7f010009, 0x7f01000a, 0x7f01000b, 0x7f01000c, 0x7f01000d }
 int styleable MapAttrs_cameraBearing 1
 int styleable MapAttrs_cameraTargetLat 2

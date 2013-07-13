@@ -329,8 +329,7 @@ ajaxCount++;
 			    	$.mobile.loading( 'hide' );
 			    }
 				
-				$('#route_list_menu').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>');
-				$('#route_list_menu').listview('refresh');
+				$('#route_list_menu').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>').listview('refresh');
 				
 				if (errorThrown != 'abort') {
 					navigator.notification.confirm(
@@ -354,8 +353,7 @@ ajaxCount++;
 		    	$.mobile.loading( 'hide' );
 		    }
 			
-			$('#route_list_menu').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>');
-			$('#route_list_menu').listview('refresh');
+			$('#route_list_menu').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>').listview('refresh');
 			
 			if (errorThrown != 'abort') {
 				navigator.notification.confirm(
@@ -383,8 +381,7 @@ ajaxCount++;
 	    	$.mobile.loading( 'hide' );
 	    }
 		
-		$('#route_list_menu').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>');
-		$('#route_list_menu').listview('refresh');
+		$('#route_list_menu').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>').listview('refresh');
 		
 		if (errorThrown != 'abort') {
 			navigator.notification.confirm(
@@ -400,7 +397,7 @@ ajaxCount++;
 
 
 buildRouteMenu = function(dataBus, dataRail, dataCirculator) {
-	console.log('build start');
+	//console.log('build start');
 	//console.log(dataBus);
 	//console.log(dataRail);
 	//console.log(dataCirculator);
@@ -508,7 +505,7 @@ buildRouteMenu = function(dataBus, dataRail, dataCirculator) {
 	//if (device.platform != "iOS") {
 		//var initialScreenSize = window.innerHeight;
 		//window.addEventListener("resize", function() {
-$( ".ui-footer" ).fixedtoolbar( "option", "hideDuringFocus" );
+	$( ".ui-footer" ).fixedtoolbar( "option", "hideDuringFocus" );
 		//});
 	//}
 	
@@ -656,7 +653,7 @@ getStopsForRoute = function(routeID) {
 			mapOptions2 = {
 				height: mapHeight, // changed for android, does this work on ios?
 				offsetTop: mapOffsetTop, // changed for android, does this work on ios?
-		        diameter: 1500,
+		        diameter: 1000,
 		        lat: currentLatitude,
 		        lon: currentLongitude
 		    };
@@ -886,7 +883,7 @@ getRailStopsForRoute = function(routeID) {
 			mapOptions2 = {
 				height: mapHeight, // changed for android, does this work on ios?
 				offsetTop: mapOffsetTop, // changed for android, does this work on ios?
-		        diameter: 1500,
+		        diameter: 1000,
 		        lat: currentLatitude,
 		        lon: currentLongitude
 		    };
@@ -1244,7 +1241,7 @@ getCirculatorStopsForRoute = function(routeID) {
 			mapOptions2 = {
 				height: mapHeight, // changed for android, does this work on ios?
 				offsetTop: mapOffsetTop, // changed for android, does this work on ios?
-		        diameter: 1500,
+		        diameter: 1000,
 		        lat: currentLatitude,
 		        lon: currentLongitude
 		    };
@@ -1668,9 +1665,7 @@ if (railStops.length) {
 						$.mobile.changePage( "#infowindow", { transition: "none"} );
 					}
 				    
-				    $('#infowindow-routes').listview('refresh');
-				    $("#infowindow-content").iscrollview("refresh");
-				    $('#infowindow-content').css('height', $('#infowindow').css('min-height'));
+				    $('#infowindow-routes').listview('refresh').iscrollview("refresh").css('height', $('#infowindow').css('min-height'));
 				    
 				    	
 			    }).error(function(jqXHR, textStatus, errorThrown) {
@@ -1917,9 +1912,7 @@ if (stops.length) {
 						$.mobile.changePage( "#infowindow", { transition: "none"} );
 					}
 					
-				    $('#infowindow-routes').listview('refresh');
-				    $("#infowindow-content").iscrollview("refresh");
-				    $('#infowindow-content').css('height', $('#infowindow').css('min-height'));
+				    $('#infowindow-routes').listview('refresh').iscrollview("refresh").css('height', $('#infowindow').css('min-height'));
 				    
 				    	
 			    }).error(function(jqXHR, textStatus, errorThrown) {
@@ -2484,11 +2477,7 @@ markerRailStops = function(data) {
 							$.mobile.changePage( "#infowindow", { transition: "none"} );
 						}
 						
-					    $('#infowindow-routes').listview('refresh');
-					    $("#infowindow-content").iscrollview("refresh");
-					    $('#infowindow-content').css('height', $('#infowindow').css('min-height'));
-						
-						
+					    $('#infowindow-routes').listview('refresh').iscrollview("refresh").css('height', $('#infowindow').css('min-height'));
 						
 					}).error(function(jqXHR, textStatus, errorThrown) {
 						//$.mobile.loading( 'hide' );
@@ -2820,7 +2809,7 @@ onCurrentLocationSuccess = function(position) {
     currentLatitude = position.coords.latitude;
     currentLongitude = position.coords.longitude;
     //currlocsuccess = currlocsuccess + 1;
-    //console.log('currloc success!');
+    console.log('currloc success!');
 	
 	if (device.platform == "iOS") {
 		mapOptions = {
@@ -2906,11 +2895,13 @@ function favoriteTap(favorite) {
 			//console.log('no match! add');
 			$( "#favorite" ).buttonMarkup({theme: 'e'});
 			
+			var $stopTitle = $('#infowindow .stopTitle');
+			
 			favorites.push({
 				id: favorite,
 				name: $('#infowindow .stopName').html(),
-				lat: $('#infowindow .stopTitle').data('lat'),
-				lon: $('#infowindow .stopTitle').data('lon')
+				lat: $stopTitle.data('lat'),
+				lon: $stopTitle.data('lon')
 			});
 			
 			window.localStorage.setItem("favorites", JSON.stringify(favorites));
@@ -2934,11 +2925,13 @@ function favoriteTap(favorite) {
 		
 		var favorites = [];
 		
+		var $stopTitle = $('#infowindow .stopTitle');
+		
 		favorites.push({
 			id: favorite,
 			name: $('#infowindow .stopName').html(),
-			lat: $('#infowindow .stopTitle').data('lat'),
-			lon: $('#infowindow .stopTitle').data('lon')
+			lat: $stopTitle.data('lat'),
+			lon: $stopTitle.data('lon')
 		});
 		
 		window.localStorage.setItem("favorites", JSON.stringify(favorites));
@@ -2989,6 +2982,25 @@ function onDeviceReady() {
 	if (device.platform == "iOS") {
 		window.GA.trackerWithTrackingId("UA-39138450-1");
 		window.GA.trackView("/index");
+	} else {
+		$.mobile.defaultPageTransition="none";
+		 window.plugins.analytics.start(
+            function(){
+                window.plugins.analytics.trackPageView(
+                	"/index",
+					function(){
+                    	console.log("Track: success");
+					},
+	                function(){
+	                    console.log("Track: failure");
+	                }
+				);
+            },
+            
+            function(){
+                console.log("Start: failure");
+            }
+		);
 	}
 
 	deviceReadyFlag = true;
@@ -3045,13 +3057,13 @@ function onDeviceReady() {
 
     
     // get current position (which also shows nearby stops)
-	navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError);
+	navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError, { enableHighAccuracy: true });
 	
 	// this needs to be in deviceReady so as not to make weird this website needs access to your location notices in the app...
 	$(document).on('pageinit', '#gps_map', function() {
 		
 		if (deviceReadyFlag = true) {
-			navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError);
+			navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError, { enableHighAccuracy: true });
 		}
 		
 	});
@@ -3101,7 +3113,7 @@ if ($('#favorites_menu_content').css('display') != 'none') {
     	if (mapVisible == false) {
 			showMap();
 		}
-    	navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError);
+    	navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError, { enableHighAccuracy: true });
     });
 
 });
@@ -3145,18 +3157,15 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 			$('.stopTitle, .favoriteMenuStopTitle').css('min-width','inherit');
 			
 			// undo the sorting
-			$("#favorites_menu").sortable("destroy");
-			
-			$( "#favorites_menu" ).enableSelection();
-			
-			$( "#favorites_menu" ).unbind( "sortstop");
+			var $favorites_menu = $("#favorites_menu");
+			$favorites_menu.sortable("destroy").enableSelection().unbind( "sortstop");
 			
 			// change the ui
 			$('#favorites_menu .ui-icon-arrow-r').fadeIn('fast');
 			$('#favorites_menu .drag-handle').fadeOut('fast');
 			$('#favorites_menu .delete-handle').fadeOut('fast');
 			
-			$('#favorites_menu').listview('refresh');
+			$favorites_menu.listview('refresh');
 			
 			// deal with the new favorites list for the new order
 			if (window.localStorage.getItem("favorites")) {
@@ -3174,11 +3183,13 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 					console.log($('#favorites_menu #' + id + ' .favorite-stop-detail-btn').data('lon'));
 					*/
 					
+					var $favorites_menu_detail_btn = $('#favorites_menu li[data-id="' + id + '"] .favorite-stop-detail-btn');
+					
 					favorites.push({
 						id: id,
 						name: $('#favorites_menu li[data-id="' + id + '"] h1').html(),
-						lat: $('#favorites_menu li[data-id="' + id + '"] .favorite-stop-detail-btn').data('lat'),
-						lon: $('#favorites_menu li[data-id="' + id + '"] .favorite-stop-detail-btn').data('lon')
+						lat: $favorites_menu_detail_btn.data('lat'),
+						lon: $favorites_menu_detail_btn.data('lon')
 					});
 				});
 				
@@ -3241,17 +3252,18 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 			$('#favorites_menu .drag-handle').fadeIn('fast');
 			$('#favorites_menu .delete-handle').fadeIn('fast');
 			
+			var $favorites_menu = $( "#favorites_menu" );
+			
 			//drag and drop sorting, adapted from http://forresst.github.com/2012/06/22/Make-a-list-jQuery-Mobile-sortable-by-drag-and-drop/
-			$( "#favorites_menu" ).sortable({
+			$favorites_menu.sortable({
 				 handle: ".drag-handle",
 				 axis: "y",
 				 scrollSensitivity: 500,
 				 scroll: true
-			});
-		    $( "#favorites_menu" ).disableSelection();
-		    
-		    $( "#favorites_menu" ).bind( "sortstop", function(event, ui) {
-		    	$('#favorites_menu').listview('refresh');
+			})
+			.disableSelection()
+			.bind( "sortstop", function(event, ui) {
+		    	$favorites_menu.listview('refresh');
 		    });
 		    
 		    // take off the click handler while in edit mode to allow clicking on the delete button
@@ -3508,9 +3520,11 @@ $(document).on('pagebeforeshow', '#infowindow', function() {
 	}
 	
 	 // hide the map when we show the jQuery stuff, hopefully this can be eliminated in the future...
-    $('#infowindow-routes').listview('refresh');
+    /*
+$('#infowindow-routes').listview('refresh');
     $("#infowindow-content").iscrollview("refresh");
     $('#infowindow-content').css('height', $('#infowindow').css('min-height'));
+*/
     
     
     
@@ -3526,9 +3540,11 @@ $(document).on('pageshow', '#infowindow', function() {
 
 	
 	 // hide the map when we show the jQuery stuff, hopefully this can be eliminated in the future...
-    $('#infowindow-routes').listview('refresh');
+    /*
+$('#infowindow-routes').listview('refresh');
     $("#infowindow-content").iscrollview("refresh");
     $('#infowindow-content').css('height', $('#infowindow').css('min-height'));
+*/
 
 	
 });

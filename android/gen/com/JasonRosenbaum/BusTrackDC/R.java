@@ -128,6 +128,20 @@ containing a value of this type.
          */
         public static final int zOrderOnTop=0x7f01000d;
     }
+    public static final class bool {
+        /**  Anonymize tracking 
+         */
+        public static final int ga_anonymizeIp=0x7f070002;
+        /**  Disable Activity tracking, not used in Cordova which only has one activity 
+         */
+        public static final int ga_autoActivityTracking=0x7f070000;
+        /**  Enable debugging 
+         */
+        public static final int ga_debug=0x7f070003;
+        /**  Enable automatic exception tracking 
+         */
+        public static final int ga_reportUncaughtExceptions=0x7f070001;
+    }
     public static final class drawable {
         public static final int ic_launcher=0x7f020000;
         public static final int icon=0x7f020001;
@@ -144,7 +158,7 @@ containing a value of this type.
         public static final int main=0x7f030000;
     }
     public static final class string {
-        public static final int app_name=0x7f060011;
+        public static final int app_name=0x7f060012;
         /**   Title for notification shown when GooglePlayServices is unavailable [CHAR LIMIT=70] 
          */
         public static final int auth_client_availability_notification_title=0x7f06000e;
@@ -207,6 +221,9 @@ containing a value of this type.
         find the service-side assets. [CHAR LIMIT=25] 
          */
         public static final int common_signin_button_text_long=0x7f06000d;
+        /**  Replace placeholder ID with your tracking ID 
+         */
+        public static final int ga_trackingId=0x7f060011;
     }
     public static final class xml {
         public static final int config=0x7f040000;
