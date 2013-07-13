@@ -3011,10 +3011,11 @@ function onDeviceReady() {
     
     showMap();
     
-    mapHeight = $(window).height() - $('.ui-header').height() - $('.ui-footer').height() - 3; // changed for android, does this work on ios?
+    mapHeight = $('#gps_map').height(); // changed for android, does this work on ios?
+    //console.log(mapHeight);
     mapOffsetTop = $('.ui-header').height() + 2; // changed for android, does this work on ios?
     
-    if (device.platform != "iOS") {
+    //if (device.platform != "iOS") {
 		mapOptions = {
 	        //buttonCallback: "cbMapCallback",
 	        height: mapHeight,
@@ -3026,7 +3027,7 @@ function onDeviceReady() {
 	    
 	    window.plugins.mapKit.setMapData(mapOptions);
 	    
-	}
+	//} 
 	
 	//used for locally simulating local storage, comment out when not needed for debugging
 	//favoritesStorage = '';
