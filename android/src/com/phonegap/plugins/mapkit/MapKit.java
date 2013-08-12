@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import android.graphics.Rect;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -472,3 +473,4 @@ public class MapKit extends CordovaPlugin {
 		super.onDestroy();
 	}
 }
+

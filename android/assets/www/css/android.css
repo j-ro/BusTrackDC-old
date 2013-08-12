@@ -1,3 +1,6 @@
+input {
+	-webkit-user-select: text; 
+}
 
 /* speedup? */
 
@@ -48,4 +51,13 @@
 :not(.ui-icon)
 {
     background-image: url('none') !important;
+}
+
+*{
+    -webkit-touch-callout: none;
+    -webkit-user-select: none; 
+}
+textarea
+{
+    -webkit-user-select: auto !important;
 }
