@@ -1044,6 +1044,7 @@ getCirculatorStops = function(latitude,longitude,radius) {
 				 // only put pins on the map if they're all done loading
 				 if (ajaxCirculatorCount == 6) {
 					//console.log('marker time!');
+					//console.log('marker circ stops from getcirculatorstopsJSON/getcirculatorLineStops');
 					markerCirculatorStops(currentLatitude,currentLongitude, .01 , .01);
 				 }
 		 
@@ -1170,6 +1171,7 @@ getCirculatorLineListJSON = $.get('http://webservices.nextbus.com/service/public
 			
 	    } else {
 	    	//console.log('circulator data is not old!');
+	    	//console.log('marker circ stops from getcirculatorstops');
 	    	markerCirculatorStops(currentLatitude,currentLongitude, .01 , .01);
 	    }
 	    
@@ -1374,6 +1376,7 @@ function annotationTap(text, latitude, longitude) {
 			} else if ((/Metro Bus Stop #/).test(text)) {
 				getStops(latitude, longitude, '50');
 			} else if ((/Circulator Stop #/).test(text)) {
+				//console.log('marker circ stops from annotationtap');
 				markerCirculatorStops(latitude,longitude, .01 , .01);
 			}
 				
@@ -2544,7 +2547,11 @@ markerCirculatorStops = function(latitude,longitude,latitudeDelta,longitudeDelta
 	newCirculatorPins = [];
 	newCirculatorPins.length = 0;
 	
-	var circulatorData = JSON.parse(window.localStorage.getItem("circulatorStops"));
+	if (window.localStorage.getItem("circulatorStops") != null) {
+		var circulatorData = JSON.parse(window.localStorage.getItem("circulatorStops"));
+	}
+	
+	
 	
 	//console.log('start markerCircStops');
 	//console.log(data.Entrances.length);
@@ -2809,7 +2816,7 @@ onCurrentLocationSuccess = function(position) {
     currentLatitude = position.coords.latitude;
     currentLongitude = position.coords.longitude;
     //currlocsuccess = currlocsuccess + 1;
-    console.log('currloc success!');
+    //console.log('currloc success!');
 	
 	if (device.platform == "iOS") {
 		mapOptions = {
@@ -2836,7 +2843,7 @@ onCurrentLocationSuccess = function(position) {
     
     
     window.plugins.mapKit.setMapData(mapOptions);
-    navigator.splashscreen.hide();
+    
 
     
     //console.log('time to calculate radius!');
@@ -2855,12 +2862,22 @@ onCurrentLocationSuccess = function(position) {
 // if we can't get current position, callback receives a PositionError object
 function onCurrentLocationError(error) {
 	//console.log('currloc error');
-    navigator.notification.alert(
-	    'Please allow BusTrackDC to access your current location by going to Settings > Privacy > Location Services and turning on location services for BusTrackDC.',  // message
-	    console.log('currlocerror'),         // callback, this needs to be something, otherwise this doesn't work.
-	    "Couldn't find current location",            // title
-	    'OK'                  // buttonName
-	);
+	if (device.platform == "iOS") {
+		navigator.notification.alert(
+		    'Please allow BusTrackDC to access your current location by going to Settings > Privacy > Location Services and turning on location services for BusTrackDC.',  // message
+		    console.log('currlocerror'),         // callback, this needs to be something, otherwise this doesn't work.
+		    "Couldn't find current location",            // title
+		    'OK'                  // buttonName
+		);
+	} else {
+		navigator.notification.alert(
+		    'Please allow BusTrackDC to access your current location via GPS by going to Location Services and turning on Google location services, GPS satellites, Use sensor aiding, and Location and Google search.',  // message
+		    console.log('currlocerror'),         // callback, this needs to be something, otherwise this doesn't work.
+		    "Couldn't find current location",            // title
+		    'OK'                  // buttonName
+		);
+	}
+    
 }
 
 
@@ -2989,20 +3006,22 @@ function onDeviceReady() {
                 window.plugins.analytics.trackPageView(
                 	"/index",
 					function(){
-                    	console.log("Track: success");
+                    	//console.log("Track: success");
 					},
 	                function(){
-	                    console.log("Track: failure");
+	                    //console.log("Track: failure");
 	                }
 				);
             },
             
             function(){
-                console.log("Start: failure");
+                //console.log("Start: failure");
             }
 		);
+		
+		navigator.splashscreen.hide();
 	}
-
+	
 	deviceReadyFlag = true;
 	//console.log('deviceready');
 	
@@ -3058,13 +3077,13 @@ function onDeviceReady() {
 
     
     // get current position (which also shows nearby stops)
-	navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError, { enableHighAccuracy: true });
+	navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError, { maximumAge: 60000, timeout: 10000, enableHighAccuracy: true });
 	
 	// this needs to be in deviceReady so as not to make weird this website needs access to your location notices in the app...
 	$(document).on('pageinit', '#gps_map', function() {
 		
 		if (deviceReadyFlag = true) {
-			navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError, { enableHighAccuracy: true });
+			navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError, { maximumAge: 60000, timeout: 10000, enableHighAccuracy: true });
 		}
 		
 	});
@@ -3114,7 +3133,7 @@ if ($('#favorites_menu_content').css('display') != 'none') {
     	if (mapVisible == false) {
 			showMap();
 		}
-    	navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError, { enableHighAccuracy: true });
+    	navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError, { maximumAge: 60000, timeout: 10000, enableHighAccuracy: true });
     });
 
 });
@@ -3228,6 +3247,7 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 				} else if ((/Metro Rail Station #/).test(notInRangeStopID)) {
 					getRailStops(notInRangeStopLat, notInRangeStopLon, '500');
 				} else if ((/Circulator Stop #/).test(notInRangeStopID)) {
+					//console.log('marker circ stops from favoritebuton click');
 					markerCirculatorStops(notInRangeStopLat,notInRangeStopLon,.01,.01);
 				} else if (isNaN(notInRangeStopID)) {
 					notInRangeStopID = 'Metro Rail Station #' + notInRangeStopID;
@@ -3278,7 +3298,7 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 		    	
 		    	deletedElementID = $(this).parent().data('stopid');
 		    	
-		    	console.log(deletedElementID);
+		    	//console.log(deletedElementID);
 		    	
 		    	favorites = favorites.filter(function(el){ return el.id != deletedElementID });
 		    	
@@ -3317,7 +3337,8 @@ $(document).on('pagebeforeshow', '#gps_map', function() {
 		showMap();
 	}
 
-	if (typeof(currentLatitude) === 'undefined') {
+	/*
+if (typeof(currentLatitude) === 'undefined') {
 		//console.log('true');
 	} else {
 		//console.log(currentLatitude);
@@ -3329,12 +3350,14 @@ $(document).on('pagebeforeshow', '#gps_map', function() {
 			
 			if (ajaxCirculatorCount == circulatorStopsArray.length) {
 				//console.log('marker time!');
+				//console.log('marker circ stops from pagebeforeshow');
 				markerCirculatorStops(currentLatitude,currentLongitude, .01 , .01);
 			}
 		    	
 		//}
 		
 	}
+*/
 	
 	// put this here for android, does that work on iOS?
 	geo = window.geo || {};
@@ -3373,7 +3396,10 @@ geo.beforeMapMove = function(currentLat,currentLon,latitudeDelta,longitudeDelta)
 							getRailStops(viewportLat, viewportLon, radius);
 							
 							if (ajaxCirculatorCount == circulatorStopsArray.length) {
-								markerCirculatorStops(circulatorLat,circulatorLon,circulatorLatDelta,circulatorLonDelta);
+								if (window.localStorage.getItem("circulatorStopsDatestamp") && window.localStorage.getItem("circulatorStops")) {
+									//console.log('marker circ stops from geo.onmapmove');
+									markerCirculatorStops(circulatorLat,circulatorLon,circulatorLatDelta,circulatorLonDelta);
+								}
 							}
 		    	
 						}
@@ -3466,6 +3492,7 @@ $.mobile.loading( 'show', {
 			} else if ((/Metro Rail Station #/).test(notInRangeStopID)) {
 				getRailStops(notInRangeStopLat, notInRangeStopLon, '500');
 			} else if ((/Circulator Stop #/).test(notInRangeStopID)) {
+				//console.log('marker circ stops from favorite button');
 				markerCirculatorStops(notInRangeStopLat,notInRangeStopLon,.01,.01);
 			} else if (isNaN(notInRangeStopID)) {
 				notInRangeStopID = 'Metro Rail Station #' + notInRangeStopID;
