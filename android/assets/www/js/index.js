@@ -2871,7 +2871,7 @@ function onCurrentLocationError(error) {
 		);
 	} else {
 		navigator.notification.alert(
-		    'Please allow BusTrackDC to access your current location via GPS by going to Settings > Location Services and turning on Google location services, GPS satellites, Use sensor aiding, and Location and Google search.',  // message
+		    'Please allow BusTrackDC to access your current location via GPS by going to Location Services and turning on Google location services, GPS satellites, Use sensor aiding, and Location and Google search.',  // message
 		    console.log('currlocerror'),         // callback, this needs to be something, otherwise this doesn't work.
 		    "Couldn't find current location",            // title
 		    'OK'                  // buttonName
