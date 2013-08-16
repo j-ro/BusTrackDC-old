@@ -30,7 +30,7 @@ public class BusTrackDC extends DroidGap
         super.onCreate(savedInstanceState);
         super.setIntegerProperty("splashscreen", R.drawable.splash);
         // Set by <content src="index.html" /> in config.xml
-        super.loadUrl(Config.getStartUrl(), 2000);
+        super.loadUrl(Config.getStartUrl(), 10000);
         //super.loadUrl("file:///android_asset/www/index.html")
     }
 }
