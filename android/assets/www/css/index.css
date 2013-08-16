@@ -147,6 +147,10 @@ h1 {
 	overflow: hidden;
 }
 
+#infowindow-content {
+	overflow: visible !important;
+}
+
 #infowindow .route-detail-btn {
 	padding-bottom: 0.1em !important;
 }
