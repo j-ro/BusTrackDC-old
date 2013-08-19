@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <cordova>
-    <access origin="http://127.0.0.1*" />
-    <access origin=".*" />
+    <access origin="*" />
     <content src="index.html" />
     <log level="DEBUG" />
     <preference name="useBrowserHistory" value="true" />
