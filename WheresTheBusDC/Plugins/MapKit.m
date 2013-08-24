@@ -48,6 +48,29 @@
 	[ [ [ self viewController ] view ] addSubview:self.childView];  
 }
 
+- (void)applyMapViewMemoryHotFix{
+    
+    switch (self.mapView.mapType) {
+        case MKMapTypeHybrid:
+        {
+            self.mapView.mapType = MKMapTypeStandard;
+        }
+            
+            break;
+        case MKMapTypeStandard:
+        {
+            self.mapView.mapType = MKMapTypeHybrid;
+        }
+            
+            break;
+        default:
+            break;
+    }
+    
+    [self.mapView removeFromSuperview];
+    self.mapView = nil;
+}
+
 - (void)mapView:(MKMapView *)theMapView regionDidChangeAnimated: (BOOL)animated 
 { 
     float currentLat = theMapView.region.center.latitude; 
