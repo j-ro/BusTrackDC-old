@@ -43,6 +43,8 @@
 	<true/>
 	<key>NSMainNibFile~ipad</key>
 	<string></string>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleDefault</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

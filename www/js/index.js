@@ -3068,9 +3068,9 @@ function onDeviceReady() {
     
     showMap();
     
-    mapHeight = $('#gps_map').height(); // changed for android, does this work on ios?
+    mapHeight = $('html').height() - $('.header').height() - $('.footer').height(); // changed for android, does this work on ios?
     //console.log(mapHeight);
-    mapOffsetTop = $('.ui-header').height() + 2; // changed for android, does this work on ios?
+    mapOffsetTop = $('.header').height(); // changed for android, does this work on ios?
     
     //if (device.platform != "iOS") {
 		mapOptions = {
@@ -3115,7 +3115,7 @@ function onDeviceReady() {
 
     
     // get current position (which also shows nearby stops)
-	navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError, { maximumAge: 60000, timeout: 10000, enableHighAccuracy: true });
+	//navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError, { maximumAge: 60000, timeout: 10000, enableHighAccuracy: true });
 	
 	// this needs to be in deviceReady so as not to make weird this website needs access to your location notices in the app...
 	$(document).on('pageinit', '#gps_map', function() {
@@ -3131,12 +3131,17 @@ function onDeviceReady() {
     
 }
 
+jQuery(document).ready(function($) {
+	document.addEventListener("deviceready", onDeviceReady);
+});
+
 /*
 $.ajaxPrefilter(function (options){options.global = true;});
 $(document).ajaxStart(function(){ console.log('ajax start'); $.mobile.loading( 'show' ); });
 $(document).ajaxStop(function(){ console.log('ajax stop'); $.mobile.loading( 'hide' ); });
 */
 
+/*
 
 $(document).on('pageinit', '#gps_map', function() {
 
@@ -3156,6 +3161,7 @@ $(document).on('pageinit', '#gps_map', function() {
 	
 	// make the refresh button work
     $('.refresh_location').click(function() {
+*/
     	
     	/*
 if ($('#favorites_menu_content').css('display') != 'none') {
@@ -3167,6 +3173,7 @@ if ($('#favorites_menu_content').css('display') != 'none') {
 		}
 */
     	
+/*
     	// when the refresh button is pressed, restore the map view -- hopefully this can be removed later
     	if (mapVisible == false) {
 			showMap();
@@ -3198,7 +3205,9 @@ $(document).on('pageinit', '#infowindow', function() {
     //favoritesMenuBtnTap();
     
 });
+*/
 
+/*
 $(document).on('pageinit', '#favorite_menu_page', function() {
 	editFlag = false;
 	
@@ -3232,6 +3241,7 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 				
 				$.each($('#favorites_menu li'), function() {
 					var id = $(this).data('id');
+*/
 					/*
 					console.log(id);
 					console.log('#favorites_menu #' + id + ' h1');
@@ -3241,6 +3251,7 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 					console.log($('#favorites_menu #' + id + ' .favorite-stop-detail-btn').data('lon'));
 					*/
 					
+/*
 					var $favorites_menu_detail_btn = $('#favorites_menu li[data-id="' + id + '"] .favorite-stop-detail-btn');
 					
 					favorites.push({
@@ -3259,6 +3270,7 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 			
 			// rebind the click handler
 			$('.favorite-stop-detail-btn').click(function() {
+*/
 				
 				
 				/*
@@ -3270,6 +3282,7 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 				});
 	*/
 		
+/*
 				// store a variable on this stop's name in case we need to retrieve it later...
 				notInRangeStopID = $(this).data('stopid');
 				notInRangeStopName = $(this).data('stopname');
@@ -3365,8 +3378,10 @@ $(document).on('pageinit', '#route_list', function() {
 
 	getRoutes();
 });
+*/
 
 
+/*
 //page show functions
 $(document).on('pagebeforeshow', '#gps_map', function() {
 
@@ -3374,6 +3389,7 @@ $(document).on('pagebeforeshow', '#gps_map', function() {
 	if (mapVisible == false) {
 		showMap();
 	}
+*/
 
 	/*
 if (typeof(currentLatitude) === 'undefined') {
@@ -3397,10 +3413,12 @@ if (typeof(currentLatitude) === 'undefined') {
 	}
 */
 	
+/*
 	// put this here for android, does that work on iOS?
 	geo = window.geo || {};
 	 // timeout needed to prevent UI lock -- the onMapMove function is called a lot during initialization, so we want to bypass that
     window.setTimeout(function() {
+*/
     
 	    
 	    
@@ -3412,6 +3430,7 @@ geo.beforeMapMove = function(currentLat,currentLon,latitudeDelta,longitudeDelta)
 	    }
 */
 	    
+/*
 	    // whenever the map moves, get the new location and radius and show nearby stops
 		geo.onMapMove = function(currentLat,currentLon,latitudeDelta,longitudeDelta) {
 		//console.log('move');
@@ -3456,6 +3475,7 @@ geo.beforeMapMove = function(currentLat,currentLon,latitudeDelta,longitudeDelta)
 		delay = 500;
 		geo.onMapMove = _.debounce(geo.onMapMove, delay); // this is too long, set it long on startup but thereafter set it short
 	}, 3000);
+*/
 	
 	/*
 if (deviceReadyFlag = true) {
@@ -3463,10 +3483,11 @@ if (deviceReadyFlag = true) {
 	}
 */
 	
-});
+/* }); */
 
 
 
+/*
 $(document).on('pagebeforeshow', '#favorite_menu_page', function() {
 	
 	//console.log(window.localStorage.getItem("favorites"));
@@ -3506,6 +3527,7 @@ $(document).on('pagebeforeshow', '#favorite_menu_page', function() {
 		$('#favorites_menu').html(favoritesListHTML).listview('refresh');
 		
 		$('.favorite-stop-detail-btn').click(function() {
+*/
 			//console.log($(this).data('stopid'));
 			
 			/*
@@ -3517,6 +3539,7 @@ $.mobile.loading( 'show', {
 			});
 */
 	
+/*
 			// store a variable on this stop's name in case we need to retrieve it later...
 			notInRangeStopID = $(this).data('stopid'); // this will need to be edited to figure out if the stop is rail...
 			notInRangeStopName = $(this).data('stopname');
@@ -3551,7 +3574,9 @@ $.mobile.loading( 'show', {
 	
 
 });
+*/
 
+/*
 $(document).on('pagebeforeshow', '#infowindow', function() {
 	
 	//console.log(window.history);
@@ -3584,6 +3609,7 @@ $(document).on('pagebeforeshow', '#infowindow', function() {
 			}	
 		}	
 	}
+*/
 	
 	 // hide the map when we show the jQuery stuff, hopefully this can be eliminated in the future...
     /*
@@ -3593,6 +3619,7 @@ $('#infowindow-routes').listview('refresh');
 */
     
     
+/*
     
     if (mapVisible == true) {
 		hideMap();
@@ -3601,8 +3628,9 @@ $('#infowindow-routes').listview('refresh');
 	
 	
 });
+*/
 
-$(document).on('pageshow', '#infowindow', function() {
+//$(document).on('pageshow', '#infowindow', function() {
 
 	
 	 // hide the map when we show the jQuery stuff, hopefully this can be eliminated in the future...
@@ -3613,9 +3641,10 @@ $('#infowindow-routes').listview('refresh');
 */
 
 	
-});
+//});
 
 
+/*
 $(document).on('pagebeforeshow', '#route_map', function() {
   	
   	//console.log(window.history);
@@ -3720,6 +3749,7 @@ $(document).on('pagebeforehide', '#favorite_menu_page', function() {
 	$('.stopTitle, .favoriteMenuStopTitle').css('min-width','inherit');
 	$('.ui-listview-filter input').val('');
 });
+*/
 
 
 /***********************************************************************************************/
