@@ -6,7 +6,7 @@
 #import "MapKit.h"
 #import "CDVAnnotation.h"
 #import "AsyncImageView.h"
-#import "ZSPinAnnotation.h" // custom color pin stuff
+//#import "ZSPinAnnotation.h" // custom color pin stuff
 
 #import <Cordova/JSONKit.h>
 
@@ -257,49 +257,49 @@
     
 	//self.childView.hidden = YES; // unmcomment to go back to default behavior
 }
-
-// make drop in animations for pins
-- (void)mapView:(MKMapView *)mapView didAddAnnotationViews:(NSArray *)views {
-    MKAnnotationView *aV;
-    
-    for (aV in views) {
-        
-        // Don't pin drop if annotation is user location
-        if ([aV.annotation isKindOfClass:[MKUserLocation class]]) {
-            continue;
-        }
-        
-        // Check if current annotation is inside visible map rect, else go to next one
-        MKMapPoint point =  MKMapPointForCoordinate(aV.annotation.coordinate);
-        if (!MKMapRectContainsPoint(self.mapView.visibleMapRect, point)) {
-            continue;
-        }
-        
-        CGRect endFrame = aV.frame;
-        
-        // Move annotation out of view
-        aV.frame = CGRectMake(aV.frame.origin.x, aV.frame.origin.y - [[UIScreen mainScreen] bounds].size.height, aV.frame.size.width, aV.frame.size.height);
-        
-        // Animate drop
-        [UIView animateWithDuration:0.5 delay:0.04*[views indexOfObject:aV] options:UIViewAnimationCurveLinear animations:^{
-            
-            aV.frame = endFrame;
-            
-            // Animate squash
-        }completion:^(BOOL finished){
-            if (finished) {
-                [UIView animateWithDuration:0.05 animations:^{
-                    aV.transform = CGAffineTransformMake(1.0, 0, 0, 0.8, 0, + aV.frame.size.height*0.1);
-                    
-                }completion:^(BOOL finished){
-                    [UIView animateWithDuration:0.1 animations:^{
-                        aV.transform = CGAffineTransformIdentity;
-                    }];
-                }];
-            }
-        }];
-    }
-}
+//
+//// make drop in animations for pins -- comment in for custom animation with custom pins
+//- (void)mapView:(MKMapView *)mapView didAddAnnotationViews:(NSArray *)views {
+//    MKAnnotationView *aV;
+//    
+//    for (aV in views) {
+//        
+//        // Don't pin drop if annotation is user location
+//        if ([aV.annotation isKindOfClass:[MKUserLocation class]]) {
+//            continue;
+//        }
+//        
+//        // Check if current annotation is inside visible map rect, else go to next one
+//        MKMapPoint point =  MKMapPointForCoordinate(aV.annotation.coordinate);
+//        if (!MKMapRectContainsPoint(self.mapView.visibleMapRect, point)) {
+//            continue;
+//        }
+//        
+//        CGRect endFrame = aV.frame;
+//        
+//        // Move annotation out of view
+//        aV.frame = CGRectMake(aV.frame.origin.x, aV.frame.origin.y - [[UIScreen mainScreen] bounds].size.height, aV.frame.size.width, aV.frame.size.height);
+//        
+//        // Animate drop
+//        [UIView animateWithDuration:0.5 delay:0.04*[views indexOfObject:aV] options:UIViewAnimationCurveLinear animations:^{
+//            
+//            aV.frame = endFrame;
+//            
+//            // Animate squash
+//        }completion:^(BOOL finished){
+//            if (finished) {
+//                [UIView animateWithDuration:0.05 animations:^{
+//                    aV.transform = CGAffineTransformMake(1.0, 0, 0, 0.8, 0, + aV.frame.size.height*0.1);
+//                    
+//                }completion:^(BOOL finished){
+//                    [UIView animateWithDuration:0.1 animations:^{
+//                        aV.transform = CGAffineTransformIdentity;
+//                    }];
+//                }];
+//            }
+//        }];
+//    }
+//}
 
 
 - (MKAnnotationView *) mapView:(MKMapView *)theMapView viewForAnnotation:(id <MKAnnotation>) annotation {
@@ -314,8 +314,8 @@
 	NSString *identifier=[NSString stringWithFormat:@"INDEX[%i]", phAnnotation.index];
 
     // uncomment for original. Second allows for images and therefor custom colors
-	//MKPinAnnotationView *annView = (MKPinAnnotationView *)[theMapView dequeueReusableAnnotationViewWithIdentifier:identifier];
-    MKAnnotationView *annView = (MKAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
+	MKPinAnnotationView *annView = (MKPinAnnotationView *)[theMapView dequeueReusableAnnotationViewWithIdentifier:identifier];
+    //MKAnnotationView *annView = (MKAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
     
     //commented out to fix pin color cache issues. Uncomment to get back original functionality, whatever that is...
 	//if (annView!=nil) return annView;
@@ -323,35 +323,36 @@
 	annView=[[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:identifier];
 
     // uncomment to use normal animiations and restore defaults. Only works with MKPinAnnotationView, not MKAnnotationView
-	//annView.animatesDrop=YES;
+	annView.animatesDrop=YES;
     
     // change to yes to allow callouts on annotations
 	annView.canShowCallout = YES;
     
-    // convert from hex to ui color values for custom pin colors
-    NSScanner *customColor = [NSScanner scannerWithString:phAnnotation.pinColor];
-    [customColor setCharactersToBeSkipped:[NSCharacterSet symbolCharacterSet]]; 
-    int baseColor1;
-    [customColor scanHexInt:&baseColor1];
-    CGFloat red   = ((baseColor1 & 0xFF0000) >> 16) / 255.0f;
-    CGFloat green = ((baseColor1 & 0x00FF00) >>  8) / 255.0f;
-    CGFloat blue  =  (baseColor1 & 0x0000FF) / 255.0f;
+    // convert from hex to ui color values for custom pin colors -- comment in for custom pins
+//    NSScanner *customColor = [NSScanner scannerWithString:phAnnotation.pinColor];
+//    [customColor setCharactersToBeSkipped:[NSCharacterSet symbolCharacterSet]]; 
+//    int baseColor1;
+//    [customColor scanHexInt:&baseColor1];
+//    CGFloat red   = ((baseColor1 & 0xFF0000) >> 16) / 255.0f;
+//    CGFloat green = ((baseColor1 & 0x00FF00) >>  8) / 255.0f;
+//    CGFloat blue  =  (baseColor1 & 0x0000FF) / 255.0f;
     
 	if ([phAnnotation.pinColor isEqualToString:@"green"])
         // original
-        // annView.pinColor = MKPinAnnotationColorGreen;
-		annView.image = [ZSPinAnnotation pinAnnotationWithColor:[UIColor colorWithRed:(18/255.0) green:(170/255.0) blue:(65/255.0) alpha:1.0]];
+         annView.pinColor = MKPinAnnotationColorGreen;
+		//annView.image = [ZSPinAnnotation pinAnnotationWithColor:[UIColor colorWithRed:(18/255.0) green:(170/255.0) blue:(65/255.0) alpha:1.0]];
 	else if ([phAnnotation.pinColor isEqualToString:@"purple"])
         // original
-        // annView.pinColor = MKPinAnnotationColorPurple;
-		annView.image = [ZSPinAnnotation pinAnnotationWithColor:[UIColor colorWithRed:(121/255.0) green:(50/255.0) blue:(185/255.0) alpha:1.0]];
+         annView.pinColor = MKPinAnnotationColorPurple;
+		//annView.image = [ZSPinAnnotation pinAnnotationWithColor:[UIColor colorWithRed:(121/255.0) green:(50/255.0) blue:(185/255.0) alpha:1.0]];
 	else if ([phAnnotation.pinColor isEqualToString:@"red"])
         // original (this was also the end of the if statement, no else if, just default to red)
-        // annView.pinColor = MKPinAnnotationColorPurple;
-		annView.image = [ZSPinAnnotation pinAnnotationWithColor:[UIColor colorWithRed:(244/255.0) green:(0/255.0) blue:(0/255.0) alpha:1.0]];
-    else
-        // set the custom pin color using the values above
-        annView.image = [ZSPinAnnotation pinAnnotationWithColor:[UIColor colorWithRed:red green: green blue: blue alpha:1.0]];
+         annView.pinColor = MKPinAnnotationColorRed;
+		//annView.image = [ZSPinAnnotation pinAnnotationWithColor:[UIColor colorWithRed:(244/255.0) green:(0/255.0) blue:(0/255.0) alpha:1.0]];
+    // comment in for custom pins
+//    else
+//        // set the custom pin color using the values above
+//        annView.image = [ZSPinAnnotation pinAnnotationWithColor:[UIColor colorWithRed:red green: green blue: blue alpha:1.0]];
 
 	AsyncImageView* asyncImage = [[[AsyncImageView alloc] initWithFrame:CGRectMake(0,0, 50, 32)] autorelease];
 	asyncImage.tag = 999;

@@ -728,8 +728,8 @@ markerStopPoints = function(data) {
 				lon: data.Direction1.Stops[i].Lon,
 				title: toTitleCase(data.Direction1.Stops[i].Name),
 				subTitle: 'Metro Bus Stop #' + data.Direction1.Stops[i].StopID,
-				//pinColor: "005534",
-				pinColor: "70f270",
+				//pinColor: "70f270",
+				pinColor: "green",
 				selected: false,
 				index: i
 			}
@@ -1323,7 +1323,8 @@ markerCirculatorStopPoints = function(data) {
 					lon: object.lon,
 					title: object.shortTitle,
 					subTitle: 'Circulator Stop #' + object.stopId,
-					pinColor: "bd91e5",
+					//pinColor: "bd91e5",
+					pinColor: "purple",
 					selected: false,
 					index: '##' + object.stopId
 				}
