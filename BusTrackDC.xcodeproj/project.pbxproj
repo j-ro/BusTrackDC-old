@@ -619,6 +619,7 @@
 					"\"$(SRCROOT)/WheresTheBusDC/Plugins/GoogleAnalytics/GoogleSDK\"",
 					"\"$(SRCROOT)/WheresTheBusDC/Plugins/GoogleSDK\"",
 				);
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = BusTrackDC;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -643,6 +644,7 @@
 					"\"$(SRCROOT)/WheresTheBusDC/Plugins/GoogleAnalytics/GoogleSDK\"",
 					"\"$(SRCROOT)/WheresTheBusDC/Plugins/GoogleSDK\"",
 				);
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = BusTrackDC;
 				PROVISIONING_PROFILE = "9ABF83ED-F351-4D6E-AAF8-62D7CEDBFD28";
 				TARGETED_DEVICE_FAMILY = 1;

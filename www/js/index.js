@@ -2008,6 +2008,7 @@ markerStops = function(data) {
 	        // loop through all routes in this stop and create a string from all of them
 	        createRouteList = function(data) {
 	        	//console.log('createRouteList start');
+	        	routeListArray = [];
 				routeList = '';
 				routeList.replace(routeList, '');
 				potentialRouteList = [];
@@ -2040,18 +2041,54 @@ markerStops = function(data) {
 				// make HTML for infowindow for actual buses that are coming
 				if (predictions.Predictions.length) {
 					//console.log('true');
-					//console.log(data);
+					console.log(data);
 					dataWorld = data;
+
+					lowestMinute = 'start';
+					routePlaced = false;
+					lowestMinuteArray = [];
+					
 					$.each(data.minutes, function(i3, object) {
+						
 						
 						// weed out undefined routes
 						if (i3 != 'undefined'){
 							//console.log('i3= ' + i3);
-							routeList = routeList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p><span class="ui-li-count">' + i3 + '</span></li>';
+							if (lowestMinute == 'start') {
+								routeListArray.push('<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p><span class="ui-li-count">' + i3 + '</span></li>');
+								
+								lowestMinute = data.minutes[i3][0];
+								lowestMinuteArray.push(data.minutes[i3][0]);
+							} else {
+								if (data.minutes[i3][0] > lowestMinute) {
+									$.each(lowestMinuteArray, function(i, object) {
+										if (data.minutes[i3][0] < object) {
+											lowestMinuteArray.splice(i, 0, data.minutes[i3][0]);
+											routeListArray.splice(i, 0, '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p><span class="ui-li-count">' + i3 + '</span></li>');
+											routePlaced = true;
+										}
+									});
+									
+									if (routePlaced == false) {
+										routeListArray.push('<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p><span class="ui-li-count">' + i3 + '</span></li>');
+									} else {
+										routePlaced == false;
+									}
+								} else {
+									routeListArray.unshift('<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p><span class="ui-li-count">' + i3 + '</span></li>');
+									
+									lowestMinute = data.minutes[i3][0];
+									lowestMinuteArray.unshift(data.minutes[i3][0]);
+								}
+							}
+							
+							
 						actualRouteList.push(i3);
 						potentialVsActual = potentialRouteList.diff(actualRouteList);
 						}
 					});
+					
+					routeList = routeListArray.join('');
 					
 					// then after, loop through routes with no predictions and add to the end
 					$.each(potentialVsActual, function(i4, object4) {
