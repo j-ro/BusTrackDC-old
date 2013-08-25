@@ -14,11 +14,11 @@ function onBodyLoad() {
 */
 
 //fastclick.js instantiation to get rid of 300ms delay on click events... DO WE NEED THIS AT ALL? WORKS FINE WITHOUT ON ANDROID
-/*
+
 window.addEventListener('load', function() {
     new FastClick(document.body);
 }, false);
-*/
+
 
 //on resume function to autorefresh bus times if the infowindow is active
 function onResume() {
@@ -728,8 +728,8 @@ markerStopPoints = function(data) {
 				lon: data.Direction1.Stops[i].Lon,
 				title: toTitleCase(data.Direction1.Stops[i].Name),
 				subTitle: 'Metro Bus Stop #' + data.Direction1.Stops[i].StopID,
-				//pinColor: "005534",
-				pinColor: "70f270",
+				//pinColor: "70f270",
+				pinColor: "green",
 				selected: false,
 				index: i
 			}
@@ -1323,7 +1323,8 @@ markerCirculatorStopPoints = function(data) {
 					lon: object.lon,
 					title: object.shortTitle,
 					subTitle: 'Circulator Stop #' + object.stopId,
-					pinColor: "bd91e5",
+					//pinColor: "bd91e5",
+					pinColor: "purple",
 					selected: false,
 					index: '##' + object.stopId
 				}
@@ -2008,6 +2009,7 @@ markerStops = function(data) {
 	        // loop through all routes in this stop and create a string from all of them
 	        createRouteList = function(data) {
 	        	//console.log('createRouteList start');
+	        	routeListArray = [];
 				routeList = '';
 				routeList.replace(routeList, '');
 				potentialRouteList = [];
@@ -2040,18 +2042,54 @@ markerStops = function(data) {
 				// make HTML for infowindow for actual buses that are coming
 				if (predictions.Predictions.length) {
 					//console.log('true');
-					//console.log(data);
+					console.log(data);
 					dataWorld = data;
+
+					lowestMinute = 'start';
+					routePlaced = false;
+					lowestMinuteArray = [];
+					
 					$.each(data.minutes, function(i3, object) {
+						
 						
 						// weed out undefined routes
 						if (i3 != 'undefined'){
 							//console.log('i3= ' + i3);
-							routeList = routeList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p><span class="ui-li-count">' + i3 + '</span></li>';
+							if (lowestMinute == 'start') {
+								routeListArray.push('<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p><span class="ui-li-count">' + i3 + '</span></li>');
+								
+								lowestMinute = data.minutes[i3][0];
+								lowestMinuteArray.push(data.minutes[i3][0]);
+							} else {
+								if (data.minutes[i3][0] > lowestMinute) {
+									$.each(lowestMinuteArray, function(i, object) {
+										if (data.minutes[i3][0] < object) {
+											lowestMinuteArray.splice(i, 0, data.minutes[i3][0]);
+											routeListArray.splice(i, 0, '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p><span class="ui-li-count">' + i3 + '</span></li>');
+											routePlaced = true;
+										}
+									});
+									
+									if (routePlaced == false) {
+										routeListArray.push('<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p><span class="ui-li-count">' + i3 + '</span></li>');
+									} else {
+										routePlaced == false;
+									}
+								} else {
+									routeListArray.unshift('<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p><span class="ui-li-count">' + i3 + '</span></li>');
+									
+									lowestMinute = data.minutes[i3][0];
+									lowestMinuteArray.unshift(data.minutes[i3][0]);
+								}
+							}
+							
+							
 						actualRouteList.push(i3);
 						potentialVsActual = potentialRouteList.diff(actualRouteList);
 						}
 					});
+					
+					routeList = routeListArray.join('');
 					
 					// then after, loop through routes with no predictions and add to the end
 					$.each(potentialVsActual, function(i4, object4) {
@@ -2996,7 +3034,59 @@ function zoomIn() {
 
 function onDeviceReady() {
 
-	if (device.platform == "iOS") {
+	homePage = $("#gps_map"),
+	currentPage = homePage,
+	pageHistory = [];
+	
+	currentPage.css('display','block');
+	
+    function slidePageFrom(page, from) {
+    
+        // Position the page at the starting position of the animation
+        $(page).removeClass('left right');
+        $(page).addClass(from);
+        $(page).css('display','block');
+        // Position the new page and the current page at the ending position of their animation with a transition class indicating the duration of the animation
+        //this timeout is needed, not exactly sure why
+        window.setTimeout(function() {
+	        $(page).addClass('transition center').removeClass(from);
+	        window.setTimeout(function() {
+	        	$(page).removeClass('transition');
+	        }, 250);
+	        currentPage.addClass('transition').addClass(from === "left" ? "right" : "left").removeClass('center');
+	        currentPageDelay = currentPage;
+	        window.setTimeout(function() {
+	        	currentPageDelay.removeClass('transition').removeClass(from);
+	        	currentPageDelay.css('display','none');
+	        }, 250);
+	        currentPage = $(page);
+        }, 1);
+    }
+    
+    $('.icon').click(function(e) {
+    	e.preventDefault();
+		if ($(this).attr('href') != '#' && $(this).attr('href') != '#back') {
+			
+			if ($(this).attr('href') != '#gps_map') {
+				slidePageFrom($(this).attr('href'), 'right'); 
+			} else {
+				slidePageFrom($(this).attr('href'), 'left'); 
+			}
+			
+	    	pageHistory.push('#' + currentPage.attr('id'));;
+		
+		} else if ($(this).attr('href') == '#back') {
+			
+			slidePageFrom(pageHistory[pageHistory.length - 1], 'left'); 
+			
+			pageHistory.pop();
+		}
+    });
+
+
+
+	/*
+if (device.platform == "iOS") {
 		window.GA.trackerWithTrackingId("UA-39138450-1");
 		window.GA.trackView("/index");
 	} else {
@@ -3021,6 +3111,7 @@ function onDeviceReady() {
 		
 		navigator.splashscreen.hide();
 	}
+*/
 	
 	deviceReadyFlag = true;
 	//console.log('deviceready');
@@ -3028,11 +3119,11 @@ function onDeviceReady() {
 	// add an on resume event to call an autorefresh if the app becomes active again...
 	document.addEventListener("resume", onResume, false);
     
-    showMap();
+    //showMap();
     
-    mapHeight = $('#gps_map').height(); // changed for android, does this work on ios?
+    mapHeight = $('html').height() - $('.header').height() - $('.footer').height(); // changed for android, does this work on ios?
     //console.log(mapHeight);
-    mapOffsetTop = $('.ui-header').height() + 2; // changed for android, does this work on ios?
+    mapOffsetTop = $('.header').height(); // changed for android, does this work on ios?
     
     //if (device.platform != "iOS") {
 		mapOptions = {
@@ -3044,7 +3135,7 @@ function onDeviceReady() {
 	        lon: -77.0089
 	    };
 	    
-	    window.plugins.mapKit.setMapData(mapOptions);
+	    //window.plugins.mapKit.setMapData(mapOptions);
 	    
 	//} 
 	
@@ -3067,17 +3158,19 @@ function onDeviceReady() {
 	currlocsuccess = 0;
 	
 	//needed to prevent weird android flickering
-	if (device.platform != "iOS") {
+	/*
+if (device.platform != "iOS") {
 		pageFlash = false;
 		$.mobile.changePage( "#infowindow", { transition: "none"} );
 		$.mobile.changePage( "#gps_map", { transition: "none"} );
 	}
+*/
 	
 	pageFlash = true;
 
     
     // get current position (which also shows nearby stops)
-	navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError, { maximumAge: 60000, timeout: 10000, enableHighAccuracy: true });
+	//navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError, { maximumAge: 60000, timeout: 10000, enableHighAccuracy: true });
 	
 	// this needs to be in deviceReady so as not to make weird this website needs access to your location notices in the app...
 	$(document).on('pageinit', '#gps_map', function() {
@@ -3093,12 +3186,17 @@ function onDeviceReady() {
     
 }
 
+jQuery(document).ready(function($) {
+	document.addEventListener("deviceready", onDeviceReady);
+});
+
 /*
 $.ajaxPrefilter(function (options){options.global = true;});
 $(document).ajaxStart(function(){ console.log('ajax start'); $.mobile.loading( 'show' ); });
 $(document).ajaxStop(function(){ console.log('ajax stop'); $.mobile.loading( 'hide' ); });
 */
 
+/*
 
 $(document).on('pageinit', '#gps_map', function() {
 
@@ -3118,6 +3216,7 @@ $(document).on('pageinit', '#gps_map', function() {
 	
 	// make the refresh button work
     $('.refresh_location').click(function() {
+*/
     	
     	/*
 if ($('#favorites_menu_content').css('display') != 'none') {
@@ -3129,6 +3228,7 @@ if ($('#favorites_menu_content').css('display') != 'none') {
 		}
 */
     	
+/*
     	// when the refresh button is pressed, restore the map view -- hopefully this can be removed later
     	if (mapVisible == false) {
 			showMap();
@@ -3160,7 +3260,9 @@ $(document).on('pageinit', '#infowindow', function() {
     //favoritesMenuBtnTap();
     
 });
+*/
 
+/*
 $(document).on('pageinit', '#favorite_menu_page', function() {
 	editFlag = false;
 	
@@ -3194,6 +3296,7 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 				
 				$.each($('#favorites_menu li'), function() {
 					var id = $(this).data('id');
+*/
 					/*
 					console.log(id);
 					console.log('#favorites_menu #' + id + ' h1');
@@ -3203,6 +3306,7 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 					console.log($('#favorites_menu #' + id + ' .favorite-stop-detail-btn').data('lon'));
 					*/
 					
+/*
 					var $favorites_menu_detail_btn = $('#favorites_menu li[data-id="' + id + '"] .favorite-stop-detail-btn');
 					
 					favorites.push({
@@ -3221,6 +3325,7 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 			
 			// rebind the click handler
 			$('.favorite-stop-detail-btn').click(function() {
+*/
 				
 				
 				/*
@@ -3232,6 +3337,7 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 				});
 	*/
 		
+/*
 				// store a variable on this stop's name in case we need to retrieve it later...
 				notInRangeStopID = $(this).data('stopid');
 				notInRangeStopName = $(this).data('stopname');
@@ -3327,8 +3433,10 @@ $(document).on('pageinit', '#route_list', function() {
 
 	getRoutes();
 });
+*/
 
 
+/*
 //page show functions
 $(document).on('pagebeforeshow', '#gps_map', function() {
 
@@ -3336,6 +3444,7 @@ $(document).on('pagebeforeshow', '#gps_map', function() {
 	if (mapVisible == false) {
 		showMap();
 	}
+*/
 
 	/*
 if (typeof(currentLatitude) === 'undefined') {
@@ -3359,10 +3468,12 @@ if (typeof(currentLatitude) === 'undefined') {
 	}
 */
 	
+/*
 	// put this here for android, does that work on iOS?
 	geo = window.geo || {};
 	 // timeout needed to prevent UI lock -- the onMapMove function is called a lot during initialization, so we want to bypass that
     window.setTimeout(function() {
+*/
     
 	    
 	    
@@ -3374,6 +3485,7 @@ geo.beforeMapMove = function(currentLat,currentLon,latitudeDelta,longitudeDelta)
 	    }
 */
 	    
+/*
 	    // whenever the map moves, get the new location and radius and show nearby stops
 		geo.onMapMove = function(currentLat,currentLon,latitudeDelta,longitudeDelta) {
 		//console.log('move');
@@ -3418,6 +3530,7 @@ geo.beforeMapMove = function(currentLat,currentLon,latitudeDelta,longitudeDelta)
 		delay = 500;
 		geo.onMapMove = _.debounce(geo.onMapMove, delay); // this is too long, set it long on startup but thereafter set it short
 	}, 3000);
+*/
 	
 	/*
 if (deviceReadyFlag = true) {
@@ -3425,10 +3538,11 @@ if (deviceReadyFlag = true) {
 	}
 */
 	
-});
+/* }); */
 
 
 
+/*
 $(document).on('pagebeforeshow', '#favorite_menu_page', function() {
 	
 	//console.log(window.localStorage.getItem("favorites"));
@@ -3468,6 +3582,7 @@ $(document).on('pagebeforeshow', '#favorite_menu_page', function() {
 		$('#favorites_menu').html(favoritesListHTML).listview('refresh');
 		
 		$('.favorite-stop-detail-btn').click(function() {
+*/
 			//console.log($(this).data('stopid'));
 			
 			/*
@@ -3479,6 +3594,7 @@ $.mobile.loading( 'show', {
 			});
 */
 	
+/*
 			// store a variable on this stop's name in case we need to retrieve it later...
 			notInRangeStopID = $(this).data('stopid'); // this will need to be edited to figure out if the stop is rail...
 			notInRangeStopName = $(this).data('stopname');
@@ -3513,7 +3629,9 @@ $.mobile.loading( 'show', {
 	
 
 });
+*/
 
+/*
 $(document).on('pagebeforeshow', '#infowindow', function() {
 	
 	//console.log(window.history);
@@ -3546,6 +3664,7 @@ $(document).on('pagebeforeshow', '#infowindow', function() {
 			}	
 		}	
 	}
+*/
 	
 	 // hide the map when we show the jQuery stuff, hopefully this can be eliminated in the future...
     /*
@@ -3555,6 +3674,7 @@ $('#infowindow-routes').listview('refresh');
 */
     
     
+/*
     
     if (mapVisible == true) {
 		hideMap();
@@ -3563,8 +3683,9 @@ $('#infowindow-routes').listview('refresh');
 	
 	
 });
+*/
 
-$(document).on('pageshow', '#infowindow', function() {
+//$(document).on('pageshow', '#infowindow', function() {
 
 	
 	 // hide the map when we show the jQuery stuff, hopefully this can be eliminated in the future...
@@ -3575,9 +3696,10 @@ $('#infowindow-routes').listview('refresh');
 */
 
 	
-});
+//});
 
 
+/*
 $(document).on('pagebeforeshow', '#route_map', function() {
   	
   	//console.log(window.history);
@@ -3682,6 +3804,7 @@ $(document).on('pagebeforehide', '#favorite_menu_page', function() {
 	$('.stopTitle, .favoriteMenuStopTitle').css('min-width','inherit');
 	$('.ui-listview-filter input').val('');
 });
+*/
 
 
 /***********************************************************************************************/

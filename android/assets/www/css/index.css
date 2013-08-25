@@ -21,8 +21,7 @@
 }
 
 html {
-	background-image: url("../img/lightlinen-bg.png");
-	background-repeat: repeat !important;
+	
 }
 
 body {
@@ -47,13 +46,132 @@ background-color:#E4E4E4;
     text-transform:uppercase;
 */
     
-    height:100%;
+   /*
+ height:100%;
     margin:0px;
     padding:0px;
     overflow: hidden;
-    background-image: url("../img/lightlinen-bg.png");
-	background-repeat: repeat !important;
+*/
 }
+
+/* main UI *************************************************/
+
+body {
+	font-family: "Helvetica Neue", "Helvetica", Helvetica Neue, Helvetica, sans-serif !important;
+}
+
+.topcoat-navigation-bar {
+	position: fixed;
+	width: 100%;
+	padding-left: 0.5rem;
+	z-index: 10;
+}
+
+.topcoat-navigation-bar__title {
+	font-size: 1rem;
+	font-weight: 500;
+}
+
+.header .topcoat-navigation-bar__item {
+	padding: 10px 0 0 0;
+}
+
+.footer .topcoat-navigation-bar__item {
+	line-height: 3rem !important;
+}
+
+.header {
+	top: 0;
+	-webkit-box-shadow: inset 0 -1px #d3d3d3;
+	box-shadow: inset 0 -1px #d3d3d3;
+}
+
+.footer {
+	bottom: 0;
+	-webkit-box-shadow: inset 0 1px #d3d3d3;
+	box-shadow: inset 0 1px #d3d3d3;
+	height: 2.75rem;
+}
+
+.icon {
+	font-size: 1.5em;
+	color: #ff3600;
+	width: 50px;
+	display: inline-block;
+}
+
+.icon:visited {
+	color: #ff3600;
+}
+
+.icon:active, .active {
+	color: #ff8c6d;
+}
+
+.active {
+	color: #c9c9c9 !important;
+}
+
+
+.content {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	overflow: scroll;
+	-webkit-overflow-scrolling: touch;
+	z-index: 9;
+}
+
+
+/* page navigation CSS transitions */
+
+.page {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+	display: none;
+}
+
+.page.transition {
+	
+}
+
+.page.left {
+    -webkit-transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0);
+}
+
+.page.center {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    
+}
+
+.page.right {
+    -webkit-transform: translate3d(100%, 0, 0);
+    transform: translate3d(100%, 0, 0);
+}
+
+.page.transition {
+    -webkit-transition-duration: 0.25s;
+    transition-duration: 0.25s;
+}
+
+.page .content {
+	height: 100%;
+}
+
+.content * {
+	margin: 0 !important;
+}
+
+
+
+
 
 
 /*
@@ -66,15 +184,17 @@ h1 {
     text-align:center;
 }
 */
-
+/*
 #gps_map {
 	background-repeat: repeat !important;
 	
-}
+}*/
 
+/*
 .ui-popup-screen {
 	height: 110%;
 }
+*/
 
 /*
 .ui-footer h1 {
@@ -101,6 +221,7 @@ h1 {
 }
 */
 
+/*
 .center {
 	display: block;
 	text-align: center;
@@ -144,7 +265,7 @@ h1 {
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	/* width: 89%; */
-	overflow: hidden;
+	/*overflow: hidden;
 }
 
 #infowindow-content {
@@ -154,8 +275,10 @@ h1 {
 #infowindow .route-detail-btn {
 	padding-bottom: 0.1em !important;
 }
+*/
 
 /*target the count bubbles and left align them, by default they are right aligned*/
+/*
 #infowindow .ui-li-has-count .ui-li-count {
     left  : 10px !important;
     right : auto !important;
@@ -164,9 +287,11 @@ h1 {
 #infowindow .ui-li-desc {
 	padding-left: 12px !important;
 }
+*/
 
 /*target the link in which the count bubbles reside and add some padding so the bubbles and link text don't overlap*/
 /*notice this is only applied to list-items that actually have count bubbles*/
+/*
 #infowindow .ui-li-has-count .ui-btn-inner a.ui-link-inherit {
     padding-left : 35px !important;
 }
@@ -220,6 +345,7 @@ h1 {
 .ui-li-has-arrow .ui-btn-inner a.ui-link-inherit, .ui-li-static.ui-li-has-arrow {
 	padding-right: 40px;
 }
+*/
 
 /*
 .drag-handle:before {
@@ -248,6 +374,7 @@ content: "";
 
 /* move the loader to the lower right */
 
+/*
 .ui-loader {
 	bottom: 9px !important;
 	right: 9px !important;
@@ -272,8 +399,10 @@ content: "";
 #route_list_content h2 {
 	font-size: 14px;
 }
+*/
 
 /* pull to refresh */
+/*
 .iscroll-pulldown, .iscroll-pullup {
 	background: none !important;
 }
@@ -281,10 +410,12 @@ content: "";
 .iscroll-content li  {
      -webkit-transform: translateZ(0);
 }
+*/
 
 
 /* date format */
 
+/*
 .updated, .updated a.ui-link {
 	font-size: 10px;
 	text-align: center;
@@ -292,9 +423,11 @@ content: "";
 	color: #a6a6a6 !important;
 	font-weight: normal !important;
 }
+*/
 
 
 /* change jquery mobile transition speed */
+/*
 .in {
 	-webkit-animation-timing-function: ease-out;
 	-webkit-animation-duration: 150ms;
@@ -308,9 +441,11 @@ content: "";
 	-moz-animation-timing-function: ease-in;
 	-moz-animation-duration: 125ms;
 }
+*/
 
 /* rail button colors */
 
+/*
 #OR .ui-li-count, #potomac .ui-li-count {
 	background-image: -webkit-gradient(linear,left top,left bottom,from( #ffc155 ),to( #ffedb2 )) !important;
 	background-image: -webkit-linear-gradient(#ffc155, #ffedb2) !important;
@@ -387,3 +522,4 @@ content: "";
 #yellow .ui-li-count, #green .ui-li-count, #gtownpm .ui-li-count, #rosslyn .ui-li-count, #blue .ui-li-count, #potomac .ui-li-count {
 	text-indent: -99999em;
 }
+*/
