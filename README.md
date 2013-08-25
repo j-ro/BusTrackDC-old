@@ -4,12 +4,12 @@ Built using:
 
 * Cordova/PhoneGap
 * HTML/CSS/Javascript
-* jQuery/jQuery UI/jQuery Mobile
+* jQuery/jQuery UI
+* Topcoat
 * Underscore.js
 * jQuery UI Touch Punch
 * FastClick
-* iScroll and jQuery Mobile iScrollView
-* ZSPinAnnotation
+* iScroll
 * xml2json.js
 * xCode
 
@@ -19,4 +19,4 @@ Please direct all bug reports or feature requests to the issue tracker.
 
 Source available at https://github.com/j-ro/WheresTheBusDC
 
-Version 1.5
+Version 1.6
