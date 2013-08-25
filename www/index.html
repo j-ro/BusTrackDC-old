@@ -15,6 +15,7 @@
        <!--  <link rel="stylesheet" href="js/jquery.mobile-1.3.0/jquery.mobile-1.3.0.min.css" /> -->
         <link href="js/jquery.mobile.iscrollview.css" media="screen" rel="stylesheet" type="text/css" />
         <link href="js/jquery.mobile.iscrollview-pull.css" media="screen" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="font/font-awesome/css/font-awesome.min.css">
         <link rel="stylesheet" type="text/css" href="css/topcoat-mobile-light.css">
         <link rel="stylesheet" href="css/main.css" />
         <link rel="stylesheet" href="css/brackets.css" />
@@ -48,60 +49,64 @@
     </head>
     <body>
         
-        <div data-role="page" id="gps_map" data-add-back-btn="true">
+        <div data-role="page" id="gps_map" data-add-back-btn="true" class="page center">
         	<div class="topcoat-navigation-bar header">
 				<div class="topcoat-navigation-bar__item center full">
 					<h1 class="topcoat-navigation-bar__title">BusTrackDC</h1>
 				</div>
 			</div>
 			
-			<div>
-				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+			<div class="content">
 				
-				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-				
-				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-				
-				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-				
-				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-				
-				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-				
-				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-				
-				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+			</div>
 			
 			<div class="topcoat-navigation-bar footer">
-				<div class="topcoat-navigation-bar__item">
-					<a href="#" data-role="button" data-icon="currloc" data-iconpos="notext" class="refresh_location">Refresh Location</a>
+				<div class="topcoat-navigation-bar__item left third">
+					<a href="#" data-role="button" data-icon="currloc" data-iconpos="notext" class="refresh_location icon-location-arrow icon"></a>
 
 				</div>
 				
-				<div class="topcoat-navigation-bar__item">
-			     	<a href="#route_list" data-role="button" data-icon="bars">Routes</a> 
+				<div class="topcoat-navigation-bar__item center third">
+               		<a href="#favorite_menu_page" data-role="button" data-icon="star" class="favorites_menu_btn icon icon-star" id="favorites_menu_home"></a>
 
 				</div>
 				
-				<div class="topcoat-navigation-bar__item">
-               		<a href="#favorite_menu_page" data-role="button" data-icon="star" class="favorites_menu_btn">Favorites</a>
+				<div class="topcoat-navigation-bar__item right third">
+			     	<a href="#route_list" data-role="button" data-icon="bars" class="icon icon-list"></a> 
 
 				</div>
+				
+				
 			</div>
 
         </div><!-- /page -->
         
-        <div data-role="page" id="infowindow" data-add-back-btn="true" class="hide">
+        <div data-role="page" id="infowindow" data-add-back-btn="true" class="page">
         
-        	<div data-role="header" data-position="fixed" data-theme="c" data-tap-toggle="false" data-id="persistant">
+        	<!--
+<div data-role="header" data-position="fixed" data-theme="c" data-tap-toggle="false" data-id="persistant">
 			    
                 <h1>Predictions</h1>
                 
                 <a data-icon="star" data-iconpos="notext" id="favorite" class="ui-btn-right">Add to favorites</a>
                 
             </div>
+-->
+            
+            <div class="topcoat-navigation-bar header">
+            	<div class="topcoat-navigation-bar__item left third">
+					<a href="#back" data-role="button" data-icon="currloc" data-iconpos="notext" class="back icon-angle-left icon"></a>
+				</div>
+				
+				<div class="topcoat-navigation-bar__item center two-thirds">
+					<h1 class="topcoat-navigation-bar__title">Predictions</h1>
+				</div>
+				
+				<div class="topcoat-navigation-bar__item right third">
+				</div>
+			</div>
 
-    		<div data-role="content" id="infowindow-content" data-iscroll="">
+    		<div data-role="content" id="infowindow-content" data-iscroll="" class="content">
     			<div class="iscroll-pulldown">
 		          <span class="iscroll-pull-icon"></span><span class="iscroll-pull-label"></span>
 		        </div>
@@ -110,7 +115,8 @@
 	    		</ul>
     		</div>
     		
-    		<div data-role="footer" data-position="fixed" data-theme="c" data-tap-toggle="false" data-id="persistant">
+    		<!--
+<div data-role="footer" data-position="fixed" data-theme="c" data-tap-toggle="false" data-id="persistant">
         		
         		<div data-role="controlgroup" data-type="horizontal">
 
@@ -121,18 +127,58 @@
 			    </div>
 			     
 			</div>
+-->
+			
+			<div class="topcoat-navigation-bar footer">
+				<div class="topcoat-navigation-bar__item left third">
+					<a href="#gps_map" data-role="button" data-icon="currloc" data-iconpos="notext" class="current_location icon-home icon"></a>
+
+				</div>
+				
+				<div class="topcoat-navigation-bar__item center third">
+               		<a href="#favorite_menu_page" data-role="button" data-icon="star" class="favorites_menu_btn icon icon-star"></a>
+
+				</div>
+				
+				<div class="topcoat-navigation-bar__item right third">
+			     	<a href="#route_list" data-role="button" data-icon="bars" class="icon icon-list"></a> 
+
+				</div>
+				
+				
+			</div>
 
         </div><!-- /page -->
         
-        <div data-role="page" id="route_map" data-add-back-btn="true" class="hide">
+        <div data-role="page" id="route_map" data-add-back-btn="true" class="page">
         
-        	<div data-role="header" data-position="fixed" data-theme="c" data-tap-toggle="false" data-id="persistant">
+        	<!--
+<div data-role="header" data-position="fixed" data-theme="c" data-tap-toggle="false" data-id="persistant">
 			    
                 <h1 id="route_map_title">Route Map</h1>
                 
             </div>
+-->
+			
+			<div class="topcoat-navigation-bar header">
+            	<div class="topcoat-navigation-bar__item left third">
+					<a href="#back" data-role="button" data-icon="currloc" data-iconpos="notext" class="back icon-angle-left icon"></a>
+				</div>
+				
+				<div class="topcoat-navigation-bar__item center two-thirds">
+					<h1 class="topcoat-navigation-bar__title" id="route_map_title">Route Map</h1>
+				</div>
+				
+				<div class="topcoat-navigation-bar__item right third">
+				</div>
+			</div>
+            
+            <div class="content">
+            	<p>Loading...</p>
+            </div>
         
-        	<div data-role="footer" data-position="fixed" data-theme="c" data-tap-toggle="false" data-id="persistant">
+        	<!--
+<div data-role="footer" data-position="fixed" data-theme="c" data-tap-toggle="false" data-id="persistant">
                 <div data-role="controlgroup" data-type="horizontal">
 
 			     	<a href="#gps_map" data-role="button" data-icon="home" data-iconpos="notext">Current Location</a>
@@ -141,23 +187,58 @@
               
 			    </div>  
             </div>
+-->
+			<div class="topcoat-navigation-bar footer third">
+				<div class="topcoat-navigation-bar__item left">
+					<a href="#gps_map" data-role="button" data-icon="currloc" data-iconpos="notext" class="current_location icon-home icon"></a>
+
+				</div>
+				
+				<div class="topcoat-navigation-bar__item center third">
+               		<a href="#favorite_menu_page" data-role="button" data-icon="star" class="favorites_menu_btn icon icon-star"></a>
+
+				</div>
+				
+				<div class="topcoat-navigation-bar__item right third">
+			     	<a href="#route_list" data-role="button" data-icon="bars" class="icon icon-list"></a> 
+
+				</div>
+				
+				
+			</div>
             
         </div><!-- /page -->
         
         <!-- a good idea to have a route list available, but the listview is way too long and jQuery Mobile can't handle it... -->
-	    <div data-role="page" id="route_list" data-add-back-btn="true" class="hide">
+	    <div data-role="page" id="route_list" data-add-back-btn="true" class="page">
         
-        	<div data-role="header" data-position="fixed" data-theme="c" data-tap-toggle="false" data-id="persistant">
+        	<!--
+<div data-role="header" data-position="fixed" data-theme="c" data-tap-toggle="false" data-id="persistant">
 			    
                 <h1>Routes</h1>
                 
             </div>
+-->
+            
+            <div class="topcoat-navigation-bar header">
+            	<div class="topcoat-navigation-bar__item left third">
+					<a href="#back" data-role="button" data-icon="currloc" data-iconpos="notext" class="back icon-angle-left icon"></a>
+				</div>
+				
+				<div class="topcoat-navigation-bar__item center third">
+					<h1 class="topcoat-navigation-bar__title">Routes</h1>
+				</div>
+				
+				<div class="topcoat-navigation-bar__item right third">
+				</div>
+			</div>
         	
-        	<div data-role="content" id="route_list_content">
+        	<div data-role="content" id="route_list_content" class="content">
 	        	<h2 class="center">No routes available at this time.<br/>Try again later.</h2>
         	</div>
         	
-        	<div data-role="footer" data-position="fixed" data-theme="c" data-tap-toggle="false" data-id="persistant">
+        	<!--
+<div data-role="footer" data-position="fixed" data-theme="c" data-tap-toggle="false" data-id="persistant">
                 <div data-role="controlgroup" data-type="horizontal">
 
 			     	<a href="#gps_map" data-role="button" data-icon="home" data-iconpos="notext">Current Location</a>
@@ -167,29 +248,65 @@
 			    </div>
                 
             </div>
+-->
+			<div class="topcoat-navigation-bar footer">
+				<div class="topcoat-navigation-bar__item left third">
+					<a href="#gps_map" data-role="button" data-icon="currloc" data-iconpos="notext" class="current_location icon-home icon"></a>
+
+				</div>
+				
+				<div class="topcoat-navigation-bar__item center third">
+               		<a href="#favorite_menu_page" data-role="button" data-icon="star" class="favorites_menu_btn icon icon-star"></a>
+
+				</div>
+				
+				<div class="topcoat-navigation-bar__item right third">
+			     	<a href="#" data-role="button" data-icon="bars" class="icon icon-list active"></a> 
+
+				</div>
+				
+				
+			</div>
 
         </div>
        <!-- /page -->
         
         
-        <div data-role="page" id="favorite_menu_page" data-add-back-btn="true" class="hide">
+        <div data-role="page" id="favorite_menu_page" data-add-back-btn="true" class="page">
         
-        	<div data-role="header" data-position="fixed" data-theme="c" data-tap-toggle="false" data-id="persistant">
+        	<!--
+<div data-role="header" data-position="fixed" data-theme="c" data-tap-toggle="false" data-id="persistant">
 			    
                 <h1>Favorites</h1>
                 
                 <a id="edit" class="ui-btn-right">Edit</a>
                 
-            </div>
+
+            </div>-->
+            
+            <div class="topcoat-navigation-bar header">
+            	<div class="topcoat-navigation-bar__item left third">
+					<a href="#back" data-role="button" data-icon="currloc" data-iconpos="notext" class="back icon-angle-left icon"></a>
+				</div>
+				
+				<div class="topcoat-navigation-bar__item center third">
+					<h1 class="topcoat-navigation-bar__title">Favorites</h1>
+				</div>
+				
+				<div class="topcoat-navigation-bar__item right third">
+					<a href="#" data-role="button" data-icon="currloc" data-iconpos="notext" class="icon-edit icon" id="edit"></a>
+				</div>
+			</div>
         	
-        	<div data-role="content" id="favorites_menu_content">
+        	<div data-role="content" id="favorites_menu_content" class="content">
 	        	<ul data-role="listview" data-filter="true" data-filter-placeholder="Search..." id="favorites_menu">
 	        		<h2 class="center">You haven't added any<br/>favorite stops yet!</h2>
 	        		<h2 class="center">Click the star icon<br/>when viewing a stop to<br/>add it as a favorite.</h2>
 	        	</ul>
         	</div>
         	
-        	<div data-role="footer" data-position="fixed" data-theme="c" data-tap-toggle="false" data-id="persistant">
+        	<!--
+<div data-role="footer" data-position="fixed" data-theme="c" data-tap-toggle="false" data-id="persistant">
                 <div data-role="controlgroup" data-type="horizontal">
 
 			     	<a href="#gps_map" data-role="button" data-icon="home" data-iconpos="notext">Current Location</a>
@@ -199,6 +316,26 @@
 			    </div>
                 
             </div>
+-->
+            
+            <div class="topcoat-navigation-bar footer">
+				<div class="topcoat-navigation-bar__item left third">
+					<a href="#gps_map" data-role="button" data-icon="currloc" data-iconpos="notext" class="current_location icon-home icon"></a>
+
+				</div>
+				
+				<div class="topcoat-navigation-bar__item center third">
+               		<a href="#" data-role="button" data-icon="star" class="favorites_menu_btn icon icon-star active"></a>
+
+				</div>
+				
+				<div class="topcoat-navigation-bar__item right third">
+			     	<a href="#route_list" data-role="button" data-icon="bars" class="icon icon-list"></a> 
+
+				</div>
+				
+				
+			</div>
 
         </div><!-- /page -->
         

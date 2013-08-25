@@ -14,11 +14,11 @@ function onBodyLoad() {
 */
 
 //fastclick.js instantiation to get rid of 300ms delay on click events... DO WE NEED THIS AT ALL? WORKS FINE WITHOUT ON ANDROID
-/*
+
 window.addEventListener('load', function() {
     new FastClick(document.body);
 }, false);
-*/
+
 
 //on resume function to autorefresh bus times if the infowindow is active
 function onResume() {
@@ -3034,7 +3034,59 @@ function zoomIn() {
 
 function onDeviceReady() {
 
-	if (device.platform == "iOS") {
+	homePage = $("#gps_map"),
+	currentPage = homePage,
+	pageHistory = [];
+	
+	currentPage.css('display','block');
+	
+    function slidePageFrom(page, from) {
+    
+        // Position the page at the starting position of the animation
+        $(page).removeClass('left right');
+        $(page).addClass(from);
+        $(page).css('display','block');
+        // Position the new page and the current page at the ending position of their animation with a transition class indicating the duration of the animation
+        //this timeout is needed, not exactly sure why
+        window.setTimeout(function() {
+	        $(page).addClass('transition center').removeClass(from);
+	        window.setTimeout(function() {
+	        	$(page).removeClass('transition');
+	        }, 250);
+	        currentPage.addClass('transition').addClass(from === "left" ? "right" : "left").removeClass('center');
+	        currentPageDelay = currentPage;
+	        window.setTimeout(function() {
+	        	currentPageDelay.removeClass('transition').removeClass(from);
+	        	currentPageDelay.css('display','none');
+	        }, 250);
+	        currentPage = $(page);
+        }, 1);
+    }
+    
+    $('.icon').click(function(e) {
+    	e.preventDefault();
+		if ($(this).attr('href') != '#' && $(this).attr('href') != '#back') {
+			
+			if ($(this).attr('href') != '#gps_map') {
+				slidePageFrom($(this).attr('href'), 'right'); 
+			} else {
+				slidePageFrom($(this).attr('href'), 'left'); 
+			}
+			
+	    	pageHistory.push('#' + currentPage.attr('id'));;
+		
+		} else if ($(this).attr('href') == '#back') {
+			
+			slidePageFrom(pageHistory[pageHistory.length - 1], 'left'); 
+			
+			pageHistory.pop();
+		}
+    });
+
+
+
+	/*
+if (device.platform == "iOS") {
 		window.GA.trackerWithTrackingId("UA-39138450-1");
 		window.GA.trackView("/index");
 	} else {
@@ -3059,6 +3111,7 @@ function onDeviceReady() {
 		
 		navigator.splashscreen.hide();
 	}
+*/
 	
 	deviceReadyFlag = true;
 	//console.log('deviceready');
@@ -3066,7 +3119,7 @@ function onDeviceReady() {
 	// add an on resume event to call an autorefresh if the app becomes active again...
 	document.addEventListener("resume", onResume, false);
     
-    showMap();
+    //showMap();
     
     mapHeight = $('html').height() - $('.header').height() - $('.footer').height(); // changed for android, does this work on ios?
     //console.log(mapHeight);
@@ -3082,7 +3135,7 @@ function onDeviceReady() {
 	        lon: -77.0089
 	    };
 	    
-	    window.plugins.mapKit.setMapData(mapOptions);
+	    //window.plugins.mapKit.setMapData(mapOptions);
 	    
 	//} 
 	
@@ -3105,11 +3158,13 @@ function onDeviceReady() {
 	currlocsuccess = 0;
 	
 	//needed to prevent weird android flickering
-	if (device.platform != "iOS") {
+	/*
+if (device.platform != "iOS") {
 		pageFlash = false;
 		$.mobile.changePage( "#infowindow", { transition: "none"} );
 		$.mobile.changePage( "#gps_map", { transition: "none"} );
 	}
+*/
 	
 	pageFlash = true;
 
