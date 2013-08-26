@@ -246,7 +246,7 @@ getRoutes = function() {
     
     ajaxCount++;
     if (ajaxCount > 0) {
-    	$.mobile.loading( 'show' );
+    	/// this goes back in $.mobile.loading( 'show' );
     }
 	
 	getRoutesJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JRoutes?api_key=' + wmata_api_key + '&callback=?', function(data) {
@@ -259,7 +259,7 @@ getRoutes = function() {
     	}
 
 	    if (ajaxCount == 0) {
-	    	$.mobile.loading( 'hide' );
+	    	/// this goes back in $.mobile.loading( 'hide' );
 	    }
 */
 	
@@ -272,7 +272,7 @@ getRoutes = function() {
 		/*
 ajaxCount++;
 	    if (ajaxCount > 0) {
-	    	$.mobile.loading( 'show' );
+	    	/// this goes back in $.mobile.loading( 'show' );
 	    }
 */
 		
@@ -286,7 +286,7 @@ if (ajaxCount > 0 ) {
 		    	}
 		    	
 		    if (ajaxCount == 0) {
-		    	$.mobile.loading( 'hide' );
+		    	/// this goes back in $.mobile.loading( 'hide' );
 		    }
 */
 		    
@@ -295,7 +295,7 @@ if (ajaxCount > 0 ) {
 		    /*
 ajaxCount++;
 		    if (ajaxCount > 0) {
-		    	$.mobile.loading( 'show' );
+		    	/// this goes back in $.mobile.loading( 'show' );
 		    }
 */
 		    
@@ -308,7 +308,7 @@ ajaxCount++;
 		    	}
 		    	
 			    if (ajaxCount == 0) {
-			    	$.mobile.loading( 'hide' );
+			    	/// this goes back in $.mobile.loading( 'hide' );
 			    }
 			    
 			    circulatorRoutes = $.xml2json(data);
@@ -326,10 +326,11 @@ ajaxCount++;
 		    	}
 		    	
 			    if (ajaxCount == 0) {
-			    	$.mobile.loading( 'hide' );
+			    	/// this goes back in $.mobile.loading( 'hide' );
 			    }
 				
-				$('#route_list_menu').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>').listview('refresh');
+				//$('#route_list_menu').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>').listview('refresh');
+				$('#route_list_menu').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>');
 				
 				if (errorThrown != 'abort') {
 					navigator.notification.confirm(
@@ -350,10 +351,11 @@ ajaxCount++;
 	    	}
 	    	
 		    if (ajaxCount == 0) {
-		    	$.mobile.loading( 'hide' );
+		    	/// this goes back in $.mobile.loading( 'hide' );
 		    }
 			
-			$('#route_list_menu').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>').listview('refresh');
+			//$('#route_list_menu').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>').listview('refresh');
+			$('#route_list_menu').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>');
 			
 			if (errorThrown != 'abort') {
 				navigator.notification.confirm(
@@ -378,10 +380,11 @@ ajaxCount++;
     	}
 
 	    if (ajaxCount == 0) {
-	    	$.mobile.loading( 'hide' );
+	    	/// this goes back in $.mobile.loading( 'hide' );
 	    }
 		
-		$('#route_list_menu').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>').listview('refresh');
+		//$('#route_list_menu').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>').listview('refresh');
+		$('#route_list_menu').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>');
 		
 		if (errorThrown != 'abort') {
 			navigator.notification.confirm(
@@ -410,7 +413,7 @@ buildRouteMenu = function(dataBus, dataRail, dataCirculator) {
 
 	$.each(dataRail.Lines, function(i, object) {
 		//console.log(object.LineCode);
-		$('<li data-filtertext="' + object.LineCode + ' ' + object.DisplayName + '  Rail Line" />').html('<a href="#" data-routeid="' + object.LineCode + '" class="route_menu_btn">' + object.DisplayName + ' Rail Line</a>').prependTo( '#route_list_content ul' );
+		$('<li data-filtertext="' + object.LineCode + ' ' + object.DisplayName + '  Rail Line" class="topcoat-list__item" />').html('<a href="#" data-routeid="' + object.LineCode + '" class="route_menu_btn">' + object.DisplayName + ' Rail Line</a>').prependTo( '#route_list_content ul' );
 		//routeMenuHTML = routeMenuHTML + '<li><a href="#" data-routeid="' + object.RouteID + '" class="route_manu_btn">' + object.RouteID + '</a></li>';
 	
 	});
@@ -418,7 +421,7 @@ buildRouteMenu = function(dataBus, dataRail, dataCirculator) {
 	$.each(dataBus.Routes, function(i, object) {
 		//filter out WMATA's weird half-routes
 		if (/([cv])/.exec(object.RouteID) == null) {
-			$('<li data-filtertext="' + object.RouteID + '  Bus Route" />').html('<a href="#" data-routeid="' + object.RouteID + '" class="route_menu_btn">' + object.RouteID + ' Bus Route</a>').prependTo( '#route_list_content ul' );
+			$('<li data-filtertext="' + object.RouteID + '  Bus Route" class="topcoat-list__item" />').html('<a href="#" data-routeid="' + object.RouteID + '" class="route_menu_btn">' + object.RouteID + ' Bus Route</a>').prependTo( '#route_list_content ul' );
 			//routeMenuHTML = routeMenuHTML + '<li><a href="#" data-routeid="' + object.RouteID + '" class="route_manu_btn">' + object.RouteID + '</a></li>';
 		}
 		
@@ -428,9 +431,9 @@ buildRouteMenu = function(dataBus, dataRail, dataCirculator) {
 	$.each(dataCirculator.route, function(i, object) {
 		//console.log(object.LineCode);
 		if(typeof(object.shortTitle) !== 'undefined') {
-			$('<li data-filtertext="' + object.tag + ' ' + object.title + ' ' + object.shortTitle + '  Circulator Route" />').html('<a href="#" data-routeid="' + object.tag + '" class="route_menu_btn">' + object.shortTitle + ' Circulator Route</a>').prependTo( '#route_list_content ul' );
+			$('<li data-filtertext="' + object.tag + ' ' + object.title + ' ' + object.shortTitle + '  Circulator Route" class="topcoat-list__item" />').html('<a href="#" data-routeid="' + object.tag + '" class="route_menu_btn">' + object.shortTitle + ' Circulator Route</a>').prependTo( '#route_list_content ul' );
 		} else {
-			$('<li data-filtertext="' + object.tag + ' ' + object.title + '  Circulator Route" />').html('<a href="#" data-routeid="' + object.tag + '" class="route_menu_btn">' + object.title + ' Circulator Route</a>').prependTo( '#route_list_content ul' );
+			$('<li data-filtertext="' + object.tag + ' ' + object.title + '  Circulator Route" class="topcoat-list__item" />').html('<a href="#" data-routeid="' + object.tag + '" class="route_menu_btn">' + object.title + ' Circulator Route</a>').prependTo( '#route_list_content ul' );
 		}
 		
 		//routeMenuHTML = routeMenuHTML + '<li><a href="#" data-routeid="' + object.RouteID + '" class="route_manu_btn">' + object.RouteID + '</a></li>';
@@ -494,11 +497,15 @@ buildRouteMenu = function(dataBus, dataRail, dataCirculator) {
 			$('#route_map_title').html('Route ' + routeClicked);
 		}
 		
-		if (device.platform == "iOS") {
+		/*
+if (device.platform == "iOS") {
 			$.mobile.changePage( "#route_map", { transition: "fade"} );
 		} else {
 			$.mobile.changePage( "#route_map", { transition: "none"} );
 		}
+*/
+		pageHistory.push('#' + currentPage.attr('id'));
+		slidePageFrom('#route_map', 'right');
 			    
 	});
 	
@@ -529,7 +536,7 @@ getStops = function(latitude,longitude,radius) {
     
     ajaxCount++;
     if (ajaxCount > 0) {
-    	$.mobile.loading( 'show' );
+    	/// this goes back in $.mobile.loading( 'show' );
     }
 	
 	getStopsJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JStops?lat=' + latitude + '&lon=' + longitude + '&radius=' + radius + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
@@ -545,7 +552,7 @@ getStops = function(latitude,longitude,radius) {
     	}
 		    	
 	    if (ajaxCount == 0) {
-	    	$.mobile.loading( 'hide' );
+	    	/// this goes back in $.mobile.loading( 'hide' );
 	    }
 		
 		stops = data;
@@ -567,7 +574,7 @@ getStops = function(latitude,longitude,radius) {
     	}
 		    	
 	    if (ajaxCount == 0) {
-	    	$.mobile.loading( 'hide' );
+	    	/// this goes back in $.mobile.loading( 'hide' );
 	    }
 		
 		if (errorThrown != 'abort') {
@@ -587,7 +594,7 @@ getStopsForRoute = function(routeID) {
 	//console.log('getstops start');
 	
 	/* it's unclear why this one doesn't work, but all the other ones right before AJAX calls do. Anyway, we load this on on the pageshow event for the #route_map page instead.
-	$.mobile.loading( 'show', {
+	/// this goes back in $.mobile.loading( 'show', {
 		text: 'Loading',
 		textVisible: false,
 		theme: 'a',
@@ -605,7 +612,7 @@ getStopsForRoute = function(routeID) {
     
     ajaxCount++;
     if (ajaxCount > 0) {
-    	$.mobile.loading( 'show' );
+    	/// this goes back in $.mobile.loading( 'show' );
     }
 		
 	getStopsForRouteJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JRouteDetails?routeID=' + routeID + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
@@ -617,7 +624,7 @@ getStopsForRoute = function(routeID) {
     	}
 
 	    if (ajaxCount == 0) {
-	    	$.mobile.loading( 'hide' );
+	    	/// this goes back in $.mobile.loading( 'hide' );
 	    }
 	
 		//console.log('ajax call done');
@@ -675,7 +682,7 @@ getStopsForRoute = function(routeID) {
     	}
 		    	
 	    if (ajaxCount == 0) {
-	    	$.mobile.loading( 'hide' );
+	    	/// this goes back in $.mobile.loading( 'hide' );
 	    }
 		
 		if (errorThrown != 'abort') {
@@ -770,7 +777,7 @@ getRailStops = function(latitude,longitude,radius) {
     
     ajaxCount++;
     if (ajaxCount > 0) {
-    	$.mobile.loading( 'show' );
+    	/// this goes back in $.mobile.loading( 'show' );
     }
 	
 	getRailStopsJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JStationEntrances?lat=' + latitude + '&lon=' + longitude + '&radius=' + radius + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
@@ -782,7 +789,7 @@ getRailStops = function(latitude,longitude,radius) {
     	}
 
 	    if (ajaxCount == 0) {
-	    	$.mobile.loading( 'hide' );
+	    	/// this goes back in $.mobile.loading( 'hide' );
 	    }
 	    
 		//console.log('ajax call done');
@@ -807,7 +814,7 @@ getRailStops = function(latitude,longitude,radius) {
     	}
 
 	    if (ajaxCount == 0) {
-	    	$.mobile.loading( 'hide' );
+	    	/// this goes back in $.mobile.loading( 'hide' );
 	    }
 		
 		if (errorThrown != 'abort') {
@@ -827,7 +834,7 @@ getRailStopsForRoute = function(routeID) {
 	//console.log('getstops start');
 	
 	/* it's unclear why this one doesn't work, but all the other ones right before AJAX calls do. Anyway, we load this on on the pageshow event for the #route_map page instead.
-	$.mobile.loading( 'show', {
+	/// this goes back in $.mobile.loading( 'show', {
 		text: 'Loading',
 		textVisible: false,
 		theme: 'a',
@@ -845,7 +852,7 @@ getRailStopsForRoute = function(routeID) {
     
     ajaxCount++;
     if (ajaxCount > 0) {
-    	$.mobile.loading( 'show' );
+    	/// this goes back in $.mobile.loading( 'show' );
     }
 		
 	getRailStopsForRouteJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JStations?LineCode=' + routeID + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
@@ -857,7 +864,7 @@ getRailStopsForRoute = function(routeID) {
     	}
     	
 	    if (ajaxCount == 0) {
-	    	$.mobile.loading( 'hide' );
+	    	/// this goes back in $.mobile.loading( 'hide' );
 	    }
 	
 		//console.log('ajax call done');
@@ -904,7 +911,7 @@ getRailStopsForRoute = function(routeID) {
     	}
 		    	
 	    if (ajaxCount == 0) {
-	    	$.mobile.loading( 'hide' );
+	    	/// this goes back in $.mobile.loading( 'hide' );
 	    }
 		
 		if (errorThrown != 'abort') {
@@ -1003,7 +1010,7 @@ getCirculatorStops = function(latitude,longitude,radius) {
 	    function getCirculatorLineStops(lineTag) {
 		    ajaxCount++;
 		    if (ajaxCount > 0) {
-		    	$.mobile.loading( 'show' );
+		    	/// this goes back in $.mobile.loading( 'show' );
 		    }
 		    
 		    ajaxCirculatorCount++;
@@ -1016,7 +1023,7 @@ getCirculatorStops = function(latitude,longitude,radius) {
 		    	}
 		    	
 			    if (ajaxCount == 0) {
-			    	$.mobile.loading( 'hide' );
+			    	/// this goes back in $.mobile.loading( 'hide' );
 			    }
 			    
 			    circulatorStopsArray.push($.xml2json(data));
@@ -1062,7 +1069,7 @@ getCirculatorStops = function(latitude,longitude,radius) {
 		    	}
 		    	
 			    if (ajaxCount == 0) {
-			    	$.mobile.loading( 'hide' );
+			    	/// this goes back in $.mobile.loading( 'hide' );
 			    }
 				
 				if (errorThrown != 'abort') {
@@ -1095,7 +1102,7 @@ getCirculatorLineListJSON = $.get('http://webservices.nextbus.com/service/public
 	    	}
 
 		    if (ajaxCount == 0) {
-		    	$.mobile.loading( 'hide' );
+		    	/// this goes back in $.mobile.loading( 'hide' );
 		    }
 		    
 		    circulatorLineList = $.xml2json(data);
@@ -1140,7 +1147,7 @@ getCirculatorLineListJSON = $.get('http://webservices.nextbus.com/service/public
 	    	}
 		    	
 		    if (ajaxCount == 0) {
-		    	$.mobile.loading( 'hide' );
+		    	/// this goes back in $.mobile.loading( 'hide' );
 		    }
 			
 			if (errorThrown != 'abort') {
@@ -1187,7 +1194,7 @@ getCirculatorStopsForRoute = function(routeID) {
 	//console.log('getstops start');
 	
 	/* it's unclear why this one doesn't work, but all the other ones right before AJAX calls do. Anyway, we load this on on the pageshow event for the #route_map page instead.
-	$.mobile.loading( 'show', {
+	/// this goes back in $.mobile.loading( 'show', {
 		text: 'Loading',
 		textVisible: false,
 		theme: 'a',
@@ -1205,7 +1212,7 @@ getCirculatorStopsForRoute = function(routeID) {
     
     ajaxCount++;
     if (ajaxCount > 0) {
-    	$.mobile.loading( 'show' );
+    	/// this goes back in $.mobile.loading( 'show' );
     }
 		
 	getCirculatorStopsForRouteJSON = $.get('http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a=dc-circulator&r=' + routeID, function(data) {
@@ -1217,7 +1224,7 @@ getCirculatorStopsForRoute = function(routeID) {
     	}
 
 	    if (ajaxCount == 0) {
-	    	$.mobile.loading( 'hide' );
+	    	/// this goes back in $.mobile.loading( 'hide' );
 	    }
 	
 		//console.log('ajax call done');
@@ -1264,7 +1271,7 @@ getCirculatorStopsForRoute = function(routeID) {
     	}
 		    	
 	    if (ajaxCount == 0) {
-	    	$.mobile.loading( 'hide' );
+	    	/// this goes back in $.mobile.loading( 'hide' );
 	    }
 		
 		if (errorThrown != 'abort') {
@@ -1395,7 +1402,7 @@ function annotationTap(text, latitude, longitude) {
 			// only get this stuff if the annotation tapped is a stop, rather than part of a route map
 			if (text != '(null)') {
 				/*
-	$.mobile.loading( 'show', {
+	/// this goes back in $.mobile.loading( 'show', {
 					text: 'Loading',
 					textVisible: false,
 					theme: 'a',
@@ -1415,7 +1422,7 @@ function annotationTap(text, latitude, longitude) {
 			    
 			    ajaxCount++;
 			    if (ajaxCount > 0) {
-				    $.mobile.loading( 'show' );
+				    /// this goes back in $.mobile.loading( 'show' );
 				}
 				//console.log('http://api.wmata.com/StationPrediction.svc/json/GetPrediction/' + stopID.toString().replace(/Metro Rail Station #/,'') + '?api_key=' + wmata_api_key + '&callback=?');
 				
@@ -1428,7 +1435,7 @@ function annotationTap(text, latitude, longitude) {
 			    	}
 
 					if (ajaxCount == 0) {
-						$.mobile.loading( 'hide' );
+						/// this goes back in $.mobile.loading( 'hide' );
 					}
 				
 					//console.log('predictions=' + data2.Predictions.length);
@@ -1512,7 +1519,7 @@ if (railStops.length) {
 			    	}
 		    	
 					if (ajaxCount == 0) {
-						$.mobile.loading( 'hide' );
+						/// this goes back in $.mobile.loading( 'hide' );
 					}
 					
 					if (errorThrown != 'abort') {
@@ -1540,7 +1547,7 @@ if (railStops.length) {
 			// only get this stuff if the annotation tapped is a stop, rather than part of a route map
 			if (text != '(null)') {
 				/*
-	$.mobile.loading( 'show', {
+	/// this goes back in $.mobile.loading( 'show', {
 					text: 'Loading',
 					textVisible: false,
 					theme: 'a',
@@ -1559,7 +1566,7 @@ if (railStops.length) {
 			    
 			    ajaxCount++;
 			    if (ajaxCount > 0) {
-				    $.mobile.loading( 'show' );
+				    /// this goes back in $.mobile.loading( 'show' );
 				}
 				
 				annotationTapJSON = $.getJSON('http://api.wmata.com/NextBusService.svc/json/JPredictions?StopID=' + stopID.toString().replace(/Metro Bus Stop #/,'') + '&api_key=' + wmata_api_key + '&callback=?', function(data2, self4) {
@@ -1571,7 +1578,7 @@ if (railStops.length) {
 			    	}
 
 					if (ajaxCount == 0) {
-						$.mobile.loading( 'hide' );
+						/// this goes back in $.mobile.loading( 'hide' );
 					}
 				
 					//console.log('predictions=' + data2.Predictions.length);
@@ -1649,11 +1656,15 @@ if (railStops.length) {
 				    	routeClicked = $(this).attr('id');
 				    	$('#route_map_title').html('Route ' + routeClicked);
 				    	
-				    	if (device.platform == "iOS") {
+				    	/*
+if (device.platform == "iOS") {
 							$.mobile.changePage( "#route_map", { transition: "fade"} );
 						} else {
 							$.mobile.changePage( "#route_map", { transition: "none"} );
-						}	
+						}
+*/
+						pageHistory.push('#' + currentPage.attr('id'));
+						slidePageFrom('#route_map', 'right');
 				    	
 				    });
 				    
@@ -1663,13 +1674,29 @@ if (railStops.length) {
 				    // show the page
 				    annotationTapJSON.abort();
 				    
-				    if (device.platform == "iOS") {
+				    /*
+if (device.platform == "iOS") {
 						$.mobile.changePage( "#infowindow", { transition: "fade"} );
 					} else {
 						$.mobile.changePage( "#infowindow", { transition: "none"} );
 					}
+*/
+					if (!$('#infowindow').hasClass('center')) {
+						pageHistory.push('#' + currentPage.attr('id'));
+						slidePageFrom('#infowindow', 'right');
+					}
+					
+					
+					if (mapVisible == true) {
+						hideMap();
+					}
 				    
-				    $('#infowindow-routes').listview('refresh').iscrollview("refresh").css('height', $('#infowindow').css('min-height'));
+				    //$('#infowindow-routes').listview('refresh').iscrollview("refresh").css('height', $('#infowindow').css('min-height'));
+				    
+				    //$('#infowindow-routes').iscrollview("refresh").css('height', $('#infowindow').css('min-height'));
+				    //pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Pull down to refresh...';
+				    $('.pullDownIcon').removeClass('icon-repeat').addClass('icon-angle-down');
+				    myScroll.refresh();
 				    
 				    	
 			    }).error(function(jqXHR, textStatus, errorThrown) {
@@ -1682,7 +1709,7 @@ if (railStops.length) {
 			    	}
 		    	
 					if (ajaxCount == 0) {
-						$.mobile.loading( 'hide' );
+						/// this goes back in $.mobile.loading( 'hide' );
 					}
 					
 					if (errorThrown != 'abort') {
@@ -1710,7 +1737,7 @@ if (railStops.length) {
 			// only get this stuff if the annotation tapped is a stop, rather than part of a route map
 			if (text != '(null)') {
 				/*
-	$.mobile.loading( 'show', {
+	/// this goes back in $.mobile.loading( 'show', {
 					text: 'Loading',
 					textVisible: false,
 					theme: 'a',
@@ -1729,7 +1756,7 @@ if (railStops.length) {
 			    
 			    ajaxCount++;
 			    if (ajaxCount > 0) {
-				    $.mobile.loading( 'show' );
+				    /// this goes back in $.mobile.loading( 'show' );
 				}
 				
 				annotationTapJSON = $.get('http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=dc-circulator&stopId=' + stopID.toString().replace(/Circulator Stop #/,'') + '', function(data) {
@@ -1743,7 +1770,7 @@ if (railStops.length) {
 			    	}
 		    	
 					if (ajaxCount == 0) {
-						$.mobile.loading( 'hide' );
+						/// this goes back in $.mobile.loading( 'hide' );
 					}
 				
 					//console.log('predictions=' + data2.Predictions.length);
@@ -1896,11 +1923,15 @@ if (stops.length) {
 				    	
 				    	$('#route_map_title').html(routeTitle + ' Route');
 				    
-				    	if (device.platform == "iOS") {
+				    	/*
+if (device.platform == "iOS") {
 							$.mobile.changePage( "#route_map", { transition: "fade"} );
 						} else {
 							$.mobile.changePage( "#route_map", { transition: "none"} );
 						}
+*/
+						pageHistory.push('#' + currentPage.attr('id'));
+						slidePageFrom('#route_map', 'right');
 
 				    });
 				    
@@ -1910,13 +1941,28 @@ if (stops.length) {
 				    // show the page
 				    annotationTapJSON.abort();
 				    
-				    if (device.platform == "iOS") {
+				    /*
+if (device.platform == "iOS") {
 						$.mobile.changePage( "#infowindow", { transition: "fade"} );
 					} else {
 						$.mobile.changePage( "#infowindow", { transition: "none"} );
 					}
+*/
+
+					if (!$('#infowindow').hasClass('center')) {
+						pageHistory.push('#' + currentPage.attr('id'));
+						slidePageFrom('#infowindow', 'right');
+					}
 					
-				    $('#infowindow-routes').listview('refresh').iscrollview("refresh").css('height', $('#infowindow').css('min-height'));
+					if (mapVisible == true) {
+						hideMap();
+					}
+					
+				    //$('#infowindow-routes').listview('refresh').iscrollview("refresh").css('height', $('#infowindow').css('min-height'));
+				    
+				    //pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Pull down to refresh...';
+				    $('.pullDownIcon').removeClass('icon-repeat').addClass('icon-angle-down');
+				    myScroll.refresh();
 				    
 				    	
 			    }).error(function(jqXHR, textStatus, errorThrown) {
@@ -1929,7 +1975,7 @@ if (stops.length) {
 			    	}
 		    	
 					if (ajaxCount == 0) {
-						$.mobile.loading( 'hide' );
+						/// this goes back in $.mobile.loading( 'hide' );
 					}
 					
 					if (errorThrown != 'abort') {
@@ -2056,7 +2102,7 @@ markerStops = function(data) {
 						if (i3 != 'undefined'){
 							//console.log('i3= ' + i3);
 							if (lowestMinute == 'start') {
-								routeListArray.push('<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p><span class="ui-li-count">' + i3 + '</span></li>');
+								routeListArray.push('<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p><span class="ui-li-count">' + i3 + '</span></li>');
 								
 								lowestMinute = data.minutes[i3][0];
 								lowestMinuteArray.push(data.minutes[i3][0]);
@@ -2065,18 +2111,18 @@ markerStops = function(data) {
 									$.each(lowestMinuteArray, function(i, object) {
 										if (data.minutes[i3][0] < object) {
 											lowestMinuteArray.splice(i, 0, data.minutes[i3][0]);
-											routeListArray.splice(i, 0, '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p><span class="ui-li-count">' + i3 + '</span></li>');
+											routeListArray.splice(i, 0, '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p><span class="ui-li-count">' + i3 + '</span></li>');
 											routePlaced = true;
 										}
 									});
 									
 									if (routePlaced == false) {
-										routeListArray.push('<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p><span class="ui-li-count">' + i3 + '</span></li>');
+										routeListArray.push('<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p><span class="ui-li-count">' + i3 + '</span></li>');
 									} else {
 										routePlaced == false;
 									}
 								} else {
-									routeListArray.unshift('<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p><span class="ui-li-count">' + i3 + '</span></li>');
+									routeListArray.unshift('<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p><span class="ui-li-count">' + i3 + '</span></li>');
 									
 									lowestMinute = data.minutes[i3][0];
 									lowestMinuteArray.unshift(data.minutes[i3][0]);
@@ -2095,7 +2141,7 @@ markerStops = function(data) {
 					$.each(potentialVsActual, function(i4, object4) {
 						// check for the routes with a lowercase c or v in their name, they are variation routes and should be ignored
 						if (/([cv])/.exec(potentialVsActual[i4]) == null) {
-							routeList = routeList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + potentialVsActual[i4] + '"><p>no prediction available</p><span class="ui-li-count">' + potentialVsActual[i4] + '</span></a></li>';
+							routeList = routeList + '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn" id="' + potentialVsActual[i4] + '"><p>no prediction available</p><span class="ui-li-count">' + potentialVsActual[i4] + '</span></a></li>';
 						}
 						
 					});
@@ -2105,7 +2151,7 @@ markerStops = function(data) {
 					$.each(potentialRouteList, function(i4, object4) {
 						// check for the routes with a lowercase c or v in their name, they are variation routes and should be ignored
 						if (/([cv])/.exec(potentialRouteList[i4]) == null) {			
-							routeList = routeList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + potentialRouteList[i4] + '"><p>no prediction available</p><span class="ui-li-count">' + potentialRouteList[i4] + '</span></a></li>';
+							routeList = routeList + '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn" id="' + potentialRouteList[i4] + '"><p>no prediction available</p><span class="ui-li-count">' + potentialRouteList[i4] + '</span></a></li>';
 						}
 					});
 					
@@ -2117,7 +2163,7 @@ markerStops = function(data) {
 				//console.log('potential routes for stop ' + stopIDfocus + ': ' + potentialRouteList + ' and actual routes: ' + actualRouteList);
 				//console.log(stopName);
 				var dt = new DateTime();
-				routeList = '<li data-role="list-divider" class="stopTitle" id="' + stopID + '" data-lat=' + stopLat + '" data-lon=' + stopLon + '"><span class="stopName">' + toTitleCase(stopName) + '</span></li>' + routeList + '<div class="updated">Updated ' + dt.formats.busTrackDateTime.b + ' - Pull to refresh</div>';
+				routeList = '<li data-role="list-divider" class="stopTitle topcoat-list__header" id="' + stopID + '" data-lat=' + stopLat + '" data-lon=' + stopLon + '"><span class="stopName">' + toTitleCase(stopName) + '</span></li>' + routeList + '<div class="updated">Updated ' + dt.formats.busTrackDateTime.b + ' - Pull to refresh</div>';
 				//console.log(routeList);
 				
 	        }
@@ -2171,7 +2217,7 @@ markerStops = function(data) {
 					// weed out undefined routes
 					if (i3 != 'undefined'){
 						//console.log('i3= ' + i3);
-						routeList = routeList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p><span class="ui-li-count">' + i3 + '</span></li>';
+						routeList = routeList + '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p><span class="ui-li-count">' + i3 + '</span></li>';
 					actualRouteList.push(i3);
 					potentialVsActual = potentialRouteList.diff(actualRouteList);
 					}
@@ -2186,7 +2232,7 @@ markerStops = function(data) {
 			//console.log('potential routes for stop ' + stopIDfocus + ': ' + potentialRouteList + ' and actual routes: ' + actualRouteList);
 			//console.log(stopName);
 			var dt = new DateTime();
-			routeList = '<li data-role="list-divider" class="stopTitle" id="' + stopID + '" data-lat=' + notInRangeStopLat + '" data-lon=' + notInRangeStopLon + '"><span class="stopName">' + notInRangeStopName + '</span></li>' + routeList + '<div class="updated">Updated ' + dt.formats.busTrackDateTime.b + ' - Pull to refresh</div>';
+			routeList = '<li data-role="list-divider" class="stopTitle topcoat-list__header" id="' + stopID + '" data-lat=' + notInRangeStopLat + '" data-lon=' + notInRangeStopLon + '"><span class="stopName">' + notInRangeStopName + '</span></li>' + routeList + '<div class="updated">Updated ' + dt.formats.busTrackDateTime.b + ' - Pull to refresh</div>';
 			//console.log(routeList);
 			
         }
@@ -2289,7 +2335,7 @@ markerRailStops = function(data) {
 
 				    ajaxCount++;
 				    if (ajaxCount > 0) {
-				    	$.mobile.loading( 'show' );
+				    	/// this goes back in $.mobile.loading( 'show' );
 				    }
 				    
 					//console.log('start each');
@@ -2303,7 +2349,7 @@ markerRailStops = function(data) {
 				    	}
 
 					    if (ajaxCount == 0) {
-					    	$.mobile.loading( 'hide' );
+					    	/// this goes back in $.mobile.loading( 'hide' );
 					    }
 					    
 					    //console.log(data);
@@ -2426,7 +2472,7 @@ markerRailStops = function(data) {
 								});
 								
 								$.each(railDirectionTracker, function(i, object) {
-									railRouteList = railRouteList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + object.Line + '"><p>to ' + object.DestinationName + ' arrives in:</p><p><strong>' + object.Min + '</strong> minutes</p><span class="ui-li-count">' + object.Line + '</span></li>';
+									railRouteList = railRouteList + '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn" id="' + object.Line + '"><p>to ' + object.DestinationName + ' arrives in:</p><p><strong>' + object.Min + '</strong> minutes</p><span class="ui-li-count">' + object.Line + '</span></li>';
 								});
 								
 								// then after, loop through routes with no predictions and add to the end
@@ -2435,7 +2481,7 @@ markerRailStops = function(data) {
 									
 									$.each(missingRailRoutes, function(i, object) {
 										// check for the routes with a lowercase c or v in their name, they are variation routes and should be ignored
-										railRouteList = railRouteList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + object + '"><p>no prediction available</p><span class="ui-li-count">' + object + '</span></a></li>';
+										railRouteList = railRouteList + '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn" id="' + object + '"><p>no prediction available</p><span class="ui-li-count">' + object + '</span></a></li>';
 										
 									});
 								}
@@ -2448,7 +2494,7 @@ markerRailStops = function(data) {
 								// if there are no predictions at all, just do the stops
 								//console.log('realRailTrains false');
 								$.each(potentialRailRouteList, function(i4, object4) {			
-									railRouteList = railRouteList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + object4 + '"><p>no prediction available</p><span class="ui-li-count">' + object4 + '</span></a></li>';
+									railRouteList = railRouteList + '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn" id="' + object4 + '"><p>no prediction available</p><span class="ui-li-count">' + object4 + '</span></a></li>';
 								});
 								
 								actualRailRouteList.length = 0;
@@ -2461,7 +2507,7 @@ markerRailStops = function(data) {
 							//console.log(stopName);
 							console.log(stationList.join().toString());
 							var dt = new DateTime();
-							railRouteList = '<li data-role="list-divider" class="stopTitle" id="' + station + '" data-lat=' + railStopLat + '" data-lon=' + railStopLon + '"><span class="stopName">' + railStopName + '</span></li>' + railRouteList + '<div class="updated">Updated ' + dt.formats.busTrackDateTime.b + ' - Pull to refresh</div>';
+							railRouteList = '<li data-role="list-divider" class="stopTitle topcoat-list__header" id="' + station + '" data-lat=' + railStopLat + '" data-lon=' + railStopLon + '"><span class="stopName">' + railStopName + '</span></li>' + railRouteList + '<div class="updated">Updated ' + dt.formats.busTrackDateTime.b + ' - Pull to refresh</div>';
 
 							//console.log(railRouteList);
 							
@@ -2498,11 +2544,15 @@ markerRailStops = function(data) {
 					    	
 					    	$('#route_map_title').html(routeTitle + ' Line');
 					    	
-					    	if (device.platform == "iOS") {
+					    	/*
+if (device.platform == "iOS") {
 								$.mobile.changePage( "#route_map", { transition: "fade"} );
 							} else {
 								$.mobile.changePage( "#route_map", { transition: "none"} );
 							}
+*/
+							pageHistory.push('#' + currentPage.attr('id'));
+							slidePageFrom('#route_map', 'right');
 	
 					    });
 					    
@@ -2512,13 +2562,28 @@ markerRailStops = function(data) {
 					    // show the page
 					    annotationTapJSON.abort();
 					    
-					    if (device.platform == "iOS") {
+					    /*
+if (device.platform == "iOS") {
 							$.mobile.changePage( "#infowindow", { transition: "fade"} );
 						} else {
 							$.mobile.changePage( "#infowindow", { transition: "none"} );
 						}
+*/
 						
-					    $('#infowindow-routes').listview('refresh').iscrollview("refresh").css('height', $('#infowindow').css('min-height'));
+						if (!$('#infowindow').hasClass('center')) {
+							pageHistory.push('#' + currentPage.attr('id'));
+							slidePageFrom('#infowindow', 'right');
+						}
+						
+						if (mapVisible == true) {
+							hideMap();
+						}
+						
+					    //$('#infowindow-routes').listview('refresh').iscrollview("refresh").css('height', $('#infowindow').css('min-height'));
+					    
+					    //pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Pull down to refresh...';
+					    $('.pullDownIcon').removeClass('icon-repeat').addClass('icon-angle-down');
+						myScroll.refresh();
 						
 					}).error(function(jqXHR, textStatus, errorThrown) {
 						//$.mobile.loading( 'hide' );
@@ -2530,7 +2595,7 @@ markerRailStops = function(data) {
 				    	}
 		    	
 					    if (ajaxCount == 0) {
-					    	$.mobile.loading( 'hide' );
+					    	/// this goes back in $.mobile.loading( 'hide' );
 					    }
 						
 						if (errorThrown != 'abort') {
@@ -2726,7 +2791,7 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 									});
 								}
 								//console.log('i3= ' + i3);
-								circulatorRouteList = circulatorRouteList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>' + data.directionText[i3][0] + ' arrives in:</p><p><strong>' + circulatorMinutesArray.join(', ') + '</strong> minutes</p><span class="ui-li-count"><span>' + i3 + '</span></span></li>';
+								circulatorRouteList = circulatorRouteList + '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>' + data.directionText[i3][0] + ' arrives in:</p><p><strong>' + circulatorMinutesArray.join(', ') + '</strong> minutes</p><span class="ui-li-count"><span>' + i3 + '</span></span></li>';
 								actualCirculatorRouteList.push(i3);
 								potentialCirculatorRouteList = potentialCirculatorRouteList.diff(actualCirculatorRouteList);
 								
@@ -2752,7 +2817,7 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 							if (typeof(data.minutes[i3][0]) == 'undefined') {
 								// don't show yellow line/georgetown pm line twice, only once
 								if (yellowLineFlag != true) {
-									circulatorRouteList = circulatorRouteList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>no prediction available</p><span class="ui-li-count"><span>' + i3 + '</span></span></a></li>';
+									circulatorRouteList = circulatorRouteList + '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>no prediction available</p><span class="ui-li-count"><span>' + i3 + '</span></span></a></li>';
 									if (i3 == 'gtownpm' || i3 == 'yellow') {
 										yellowLineFlag = true;
 									}
@@ -2760,7 +2825,7 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 								//	yellowLineFlag = true;
 								} else {
 									if (i3 != 'gtownpm' && i3 != 'yellow') {
-										circulatorRouteList = circulatorRouteList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>no prediction available</p><span class="ui-li-count"><span>' + i3 + '</span></span></a></li>';
+										circulatorRouteList = circulatorRouteList + '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>no prediction available</p><span class="ui-li-count"><span>' + i3 + '</span></span></a></li>';
 									}
 
 								}
@@ -2774,7 +2839,7 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 					$.each(circulatorPotentialVsActual, function(i4, object4) {
 						// don't show no prediction available for yellow line/georgetown pm line
 						if (potentialVsActual[i4] != 'gtownpm' && potentialVsActual[i4] != 'yellow') {
-							circulatorRouteList = circulatorRouteList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + potentialVsActual[i4] + '"><p>no prediction available</p><span class="ui-li-count"><span>' + potentialVsActual[i4] + '</span></span></a></li>';
+							circulatorRouteList = circulatorRouteList + '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn" id="' + potentialVsActual[i4] + '"><p>no prediction available</p><span class="ui-li-count"><span>' + potentialVsActual[i4] + '</span></span></a></li>';
 						}
 						
 						
@@ -2807,7 +2872,7 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 				//console.log('potential routes for stop ' + stopIDfocus + ': ' + potentialRouteList + ' and actual routes: ' + actualRouteList);
 				//console.log(stopName);
 				var dt = new DateTime();
-				circulatorRouteList = '<li data-role="list-divider" class="stopTitle" id="' + stopID + '" data-lat=' + stopLat + '" data-lon=' + stopLon + '"><span class="stopName">' + toTitleCase(stopName) + '</span></li>' + circulatorRouteList + '<div class="updated">Updated ' + dt.formats.busTrackDateTime.b + ' - Pull to refresh</div>';
+				circulatorRouteList = '<li data-role="list-divider" class="stopTitle topcoat-list__header" id="' + stopID + '" data-lat=' + stopLat + '" data-lon=' + stopLon + '"><span>' + toTitleCase(stopName) + '</span></li>' + circulatorRouteList + '<div class="updated">Updated ' + dt.formats.busTrackDateTime.b + ' - Pull to refresh</div>';
 				//console.log(routeList);
 				
 	        }
@@ -2997,6 +3062,56 @@ function favoriteTap(favorite) {
 
 };
 
+function slidePageFrom(page, from) {
+    
+	// new page show event
+	$(page).trigger({
+		type: "pagebeforeshow"
+	});
+
+    // Position the page at the starting position of the animation
+    $(page).removeClass('left right');
+    $(page).addClass(from);
+    $(page).css('display','block');
+    
+    // Position the new page and the current page at the ending position of their animation with a transition class indicating the duration of the animation
+    //this timeout is needed, not exactly sure why
+    window.setTimeout(function() {
+    	
+        $(page).addClass('transition center').removeClass(from);
+        window.setTimeout(function() {
+        	$(page).removeClass('transition');
+        }, 250);
+        
+        // current page hiding event
+        currentPage.trigger({
+			type: "pagebeforehide"
+		});
+        currentPage.addClass('transition').addClass(from === "left" ? "right" : "left").removeClass('center');
+        currentPageDelay = currentPage;
+        window.setTimeout(function() {
+        	currentPageDelay.removeClass('transition').removeClass(from);
+        	currentPageDelay.css('display','none');
+        }, 250);
+        
+        currentPage = $(page);
+        
+        // send init and show events, only send init once
+        if (pageInitHistory.indexOf(currentPage.attr('id')) == '-1') {
+        	currentPage.trigger({
+				type: "pageinit"
+			});
+	        pageInitHistory.push(currentPage.attr('id'));
+        }
+        
+        currentPage.trigger({
+			type: "pageshow"
+		});
+    }, 1);
+}
+
+
+
 
 //our initial show map function
 function showMap() {
@@ -3036,44 +3151,38 @@ function onDeviceReady() {
 
 	homePage = $("#gps_map"),
 	currentPage = homePage,
-	pageHistory = [];
+	pageHistory = [],
+	pageInitHistory = [],
+	mapVisible = true;;
 	
 	currentPage.css('display','block');
 	
-    function slidePageFrom(page, from) {
+	currentPage.trigger({
+		type: "pagebeforeshow"
+	});
+	
+	currentPage.trigger({
+		type: "pageshow"
+	});
+	
+	currentPage.trigger({
+		type: "pageinit"
+	});
+	
+	pageInitHistory.push(currentPage.attr('id'));
+	
     
-        // Position the page at the starting position of the animation
-        $(page).removeClass('left right');
-        $(page).addClass(from);
-        $(page).css('display','block');
-        // Position the new page and the current page at the ending position of their animation with a transition class indicating the duration of the animation
-        //this timeout is needed, not exactly sure why
-        window.setTimeout(function() {
-	        $(page).addClass('transition center').removeClass(from);
-	        window.setTimeout(function() {
-	        	$(page).removeClass('transition');
-	        }, 250);
-	        currentPage.addClass('transition').addClass(from === "left" ? "right" : "left").removeClass('center');
-	        currentPageDelay = currentPage;
-	        window.setTimeout(function() {
-	        	currentPageDelay.removeClass('transition').removeClass(from);
-	        	currentPageDelay.css('display','none');
-	        }, 250);
-	        currentPage = $(page);
-        }, 1);
-    }
-    
-    $('.icon').click(function(e) {
-    	e.preventDefault();
+	$('.icon').click(function(e) {
+		e.preventDefault();
 		if ($(this).attr('href') != '#' && $(this).attr('href') != '#back') {
+			
+			pageHistory.push('#' + currentPage.attr('id'));
 			
 			if ($(this).attr('href') != '#gps_map') {
 				slidePageFrom($(this).attr('href'), 'right'); 
 			} else {
 				slidePageFrom($(this).attr('href'), 'left'); 
 			}
-			
-	    	pageHistory.push('#' + currentPage.attr('id'));;
 		
 		} else if ($(this).attr('href') == '#back') {
 			
@@ -3081,12 +3190,50 @@ function onDeviceReady() {
 			
 			pageHistory.pop();
 		}
-    });
+	});
+	
+	
+	// pull to refresh from http://cubiq.org/dropbox/iscroll4/examples/pull-to-refresh/
+	pullDownEl = document.getElementById('pullDown');
+	pullDownOffset = $(pullDownEl).outerHeight();
+	pullUpEl = document.getElementById('pullUp');	
+	pullUpOffset = $(pullUpEl).outerHeight();	
+	
+	myScroll = new iScroll('infowindow-content', {
+		useTransition: true,
+		topOffset: pullDownOffset,
+		onRefresh: function () {
+				pullDownEl.className = '';
+				//pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Pull down to refresh...';
+			
+		},
+		onScrollMove: function () {
+			if (this.y > 5 && !pullDownEl.className.match('flip')) {
+				pullDownEl.className = 'flip';
+				//pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Release to refresh...';
+				this.minScrollY = 0;
+			} else if (this.y < 5 && pullDownEl.className.match('flip')) {
+				pullDownEl.className = '';
+				//pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Pull down to refresh...';
+				this.minScrollY = -pullDownOffset;
+			} else if (this.y < (this.maxScrollY - 5) && !pullUpEl.className.match('flip')) {
+				this.maxScrollY = this.maxScrollY;
+			} else if (this.y > (this.maxScrollY + 5) && pullUpEl.className.match('flip')) {
+				this.maxScrollY = pullUpOffset;
+			}
+		},
+		onScrollEnd: function () {
+			if (pullDownEl.className.match('flip')) {
+				pullDownEl.className = 'loading';
+				$('.pullDownIcon').removeClass('icon-angle-down').addClass('icon-repeat');
+				//pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Loading...';				
+				refreshStopID = $('.stopTitle').attr('id');
+				annotationTap(refreshStopID); 
+			}
+		}
+	});
 
-
-
-	/*
-if (device.platform == "iOS") {
+	if (device.platform == "iOS") {
 		window.GA.trackerWithTrackingId("UA-39138450-1");
 		window.GA.trackView("/index");
 	} else {
@@ -3111,7 +3258,6 @@ if (device.platform == "iOS") {
 		
 		navigator.splashscreen.hide();
 	}
-*/
 	
 	deviceReadyFlag = true;
 	//console.log('deviceready');
@@ -3119,7 +3265,7 @@ if (device.platform == "iOS") {
 	// add an on resume event to call an autorefresh if the app becomes active again...
 	document.addEventListener("resume", onResume, false);
     
-    //showMap();
+    showMap();
     
     mapHeight = $('html').height() - $('.header').height() - $('.footer').height(); // changed for android, does this work on ios?
     //console.log(mapHeight);
@@ -3158,6 +3304,7 @@ if (device.platform == "iOS") {
 	currlocsuccess = 0;
 	
 	//needed to prevent weird android flickering
+	
 	/*
 if (device.platform != "iOS") {
 		pageFlash = false;
@@ -3170,7 +3317,7 @@ if (device.platform != "iOS") {
 
     
     // get current position (which also shows nearby stops)
-	//navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError, { maximumAge: 60000, timeout: 10000, enableHighAccuracy: true });
+	navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError, { maximumAge: 60000, timeout: 10000, enableHighAccuracy: true });
 	
 	// this needs to be in deviceReady so as not to make weird this website needs access to your location notices in the app...
 	$(document).on('pageinit', '#gps_map', function() {
@@ -3192,13 +3339,15 @@ jQuery(document).ready(function($) {
 
 /*
 $.ajaxPrefilter(function (options){options.global = true;});
-$(document).ajaxStart(function(){ console.log('ajax start'); $.mobile.loading( 'show' ); });
-$(document).ajaxStop(function(){ console.log('ajax stop'); $.mobile.loading( 'hide' ); });
+$(document).ajaxStart(function(){ console.log('ajax start'); /// this goes back in $.mobile.loading( 'show' ); });
+$(document).ajaxStop(function(){ console.log('ajax stop'); /// this goes back in $.mobile.loading( 'hide' ); });
 */
 
-/*
+
 
 $(document).on('pageinit', '#gps_map', function() {
+
+	//$('#infowindow').hook();
 
 	ajaxCount = 0;
 	ajaxCirculatorCount = 0;
@@ -3209,14 +3358,14 @@ $(document).on('pageinit', '#gps_map', function() {
 	
 	//console.log('init!');
 
-	mapVisible = true;
-	document.addEventListener("deviceready", onDeviceReady);
+	
+	//document.addEventListener("deviceready", onDeviceReady);
 	
 	routeMapView = false;
 	
 	// make the refresh button work
     $('.refresh_location').click(function() {
-*/
+
     	
     	/*
 if ($('#favorites_menu_content').css('display') != 'none') {
@@ -3228,7 +3377,7 @@ if ($('#favorites_menu_content').css('display') != 'none') {
 		}
 */
     	
-/*
+
     	// when the refresh button is pressed, restore the map view -- hopefully this can be removed later
     	if (mapVisible == false) {
 			showMap();
@@ -3239,6 +3388,8 @@ if ($('#favorites_menu_content').css('display') != 'none') {
 });
 
 
+
+
 $(document).on('pageinit', '#infowindow', function() {	
 	
 	// make the favorite button work
@@ -3247,23 +3398,14 @@ $(document).on('pageinit', '#infowindow', function() {
     	favoriteTap($('.stopTitle').prop('id'));
     });
     
-    
-    
-    $(".iscroll-wrapper", this).bind( "iscroll_onpulldown" , function() { 
-    	//console.log($('.stopTitle').attr('id'));
-    	refreshStopID = $('.stopTitle').attr('id');
-    	annotationTap(refreshStopID); 
-    });
-    
-    //$('#infowindow-routes').scrollz();
-    
     //favoritesMenuBtnTap();
     
 });
-*/
 
-/*
+
+
 $(document).on('pageinit', '#favorite_menu_page', function() {
+
 	editFlag = false;
 	
 	$('#edit').click(function() {
@@ -3287,7 +3429,7 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 			$('#favorites_menu .drag-handle').fadeOut('fast');
 			$('#favorites_menu .delete-handle').fadeOut('fast');
 			
-			$favorites_menu.listview('refresh');
+			//$favorites_menu.listview('refresh');
 			
 			// deal with the new favorites list for the new order
 			if (window.localStorage.getItem("favorites")) {
@@ -3296,7 +3438,7 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 				
 				$.each($('#favorites_menu li'), function() {
 					var id = $(this).data('id');
-*/
+
 					/*
 					console.log(id);
 					console.log('#favorites_menu #' + id + ' h1');
@@ -3306,7 +3448,7 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 					console.log($('#favorites_menu #' + id + ' .favorite-stop-detail-btn').data('lon'));
 					*/
 					
-/*
+
 					var $favorites_menu_detail_btn = $('#favorites_menu li[data-id="' + id + '"] .favorite-stop-detail-btn');
 					
 					favorites.push({
@@ -3325,11 +3467,11 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 			
 			// rebind the click handler
 			$('.favorite-stop-detail-btn').click(function() {
-*/
+
 				
 				
 				/*
-	$.mobile.loading( 'show', {
+	/// this goes back in $.mobile.loading( 'show', {
 					text: 'Loading',
 					textVisible: false,
 					theme: 'a',
@@ -3337,7 +3479,7 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 				});
 	*/
 		
-/*
+
 				// store a variable on this stop's name in case we need to retrieve it later...
 				notInRangeStopID = $(this).data('stopid');
 				notInRangeStopName = $(this).data('stopname');
@@ -3390,7 +3532,7 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 			})
 			.disableSelection()
 			.bind( "sortstop", function(event, ui) {
-		    	$favorites_menu.listview('refresh');
+		    	//$favorites_menu.listview('refresh');
 		    });
 		    
 		    // take off the click handler while in edit mode to allow clicking on the delete button
@@ -3433,10 +3575,10 @@ $(document).on('pageinit', '#route_list', function() {
 
 	getRoutes();
 });
-*/
 
 
-/*
+
+
 //page show functions
 $(document).on('pagebeforeshow', '#gps_map', function() {
 
@@ -3444,7 +3586,7 @@ $(document).on('pagebeforeshow', '#gps_map', function() {
 	if (mapVisible == false) {
 		showMap();
 	}
-*/
+
 
 	/*
 if (typeof(currentLatitude) === 'undefined') {
@@ -3468,12 +3610,12 @@ if (typeof(currentLatitude) === 'undefined') {
 	}
 */
 	
-/*
+
 	// put this here for android, does that work on iOS?
 	geo = window.geo || {};
 	 // timeout needed to prevent UI lock -- the onMapMove function is called a lot during initialization, so we want to bypass that
     window.setTimeout(function() {
-*/
+
     
 	    
 	    
@@ -3485,7 +3627,7 @@ geo.beforeMapMove = function(currentLat,currentLon,latitudeDelta,longitudeDelta)
 	    }
 */
 	    
-/*
+
 	    // whenever the map moves, get the new location and radius and show nearby stops
 		geo.onMapMove = function(currentLat,currentLon,latitudeDelta,longitudeDelta) {
 		//console.log('move');
@@ -3530,7 +3672,7 @@ geo.beforeMapMove = function(currentLat,currentLon,latitudeDelta,longitudeDelta)
 		delay = 500;
 		geo.onMapMove = _.debounce(geo.onMapMove, delay); // this is too long, set it long on startup but thereafter set it short
 	}, 3000);
-*/
+
 	
 	/*
 if (deviceReadyFlag = true) {
@@ -3538,11 +3680,11 @@ if (deviceReadyFlag = true) {
 	}
 */
 	
-/* }); */
+}); 
 
 
 
-/*
+
 $(document).on('pagebeforeshow', '#favorite_menu_page', function() {
 	
 	//console.log(window.localStorage.getItem("favorites"));
@@ -3553,7 +3695,8 @@ $(document).on('pagebeforeshow', '#favorite_menu_page', function() {
 	
 	if (window.localStorage.getItem("favorites") == '[]') {
 		//console.log('empty array');
-		$('#favorites_menu').html('<h2 class="center">You haven\'t added any<br/>favorite stops yet!</h2><h2 class="center">Click the star icon<br/>when viewing a stop to<br/>add it as a favorite.</h2>').listview('refresh');
+		//$('#favorites_menu').html('<h2 class="center">You haven\'t added any<br/>favorite stops yet!</h2><h2 class="center">Click the star icon<br/>when viewing a stop to<br/>add it as a favorite.</h2>').listview('refresh');
+		$('#favorites_menu').html('<h2 class="center">You haven\'t added any<br/>favorite stops yet!</h2><h2 class="center">Click the star icon<br/>when viewing a stop to<br/>add it as a favorite.</h2>');
 
 	} else if (window.localStorage.getItem("favorites")) {
 		
@@ -3568,21 +3711,22 @@ $(document).on('pagebeforeshow', '#favorite_menu_page', function() {
 		
 		$.each(favorites, function(i, object) {
 			if ((/Metro Bus Stop #/).test(object.id) || (/Metro Rail Station #/).test(object.id) || (/Circulator Stop #/).test(object.id)) {
-				favoritesListHTML = favoritesListHTML + '<li class="needsclick" data-id="' + object.id + '"><a data-transition="slide" class="favorite-stop-detail-btn" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><h1 class="favoriteMenuStopTitle">' + object.name +'</h1><p>'+ object.id + '</p><p class="delete-handle">Delete</p><p class="drag-handle">Sort</p></a></li>';	
+				favoritesListHTML = favoritesListHTML + '<li class="needsclick topcoat-list__item" data-id="' + object.id + '"><a data-transition="slide" class="favorite-stop-detail-btn" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><h1 class="favoriteMenuStopTitle">' + object.name +'</h1><p>'+ object.id + '</p><p class="delete-handle">Delete</p><p class="drag-handle">Sort</p></a></li>';	
 			} else if (isNaN(object.id)) { // this is to make favorites backwards compatible...
-				favoritesListHTML = favoritesListHTML + '<li class="needsclick" data-id="' + object.id + '"><a data-transition="slide" class="favorite-stop-detail-btn" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><h1 class="favoriteMenuStopTitle">' + object.name +'</h1><p>Metro Rail Station #'+ object.id + '</p><p class="delete-handle">Delete</p><p class="drag-handle">Sort</p></a></li>';
+				favoritesListHTML = favoritesListHTML + '<li class="needsclick topcoat-list__item" data-id="' + object.id + '"><a data-transition="slide" class="favorite-stop-detail-btn" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><h1 class="favoriteMenuStopTitle">' + object.name +'</h1><p>Metro Rail Station #'+ object.id + '</p><p class="delete-handle">Delete</p><p class="drag-handle">Sort</p></a></li>';
 			} else {
-				favoritesListHTML = favoritesListHTML + '<li class="needsclick" data-id="' + object.id + '"><a data-transition="slide" class="favorite-stop-detail-btn" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><h1 class="favoriteMenuStopTitle">' + object.name +'</h1><p>Metro Bus Stop #'+ object.id + '</p><p class="delete-handle">Delete</p><p class="drag-handle">Sort</p></a></li>';
+				favoritesListHTML = favoritesListHTML + '<li class="needsclick topcoat-list__item" data-id="' + object.id + '"><a data-transition="slide" class="favorite-stop-detail-btn" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><h1 class="favoriteMenuStopTitle">' + object.name +'</h1><p>Metro Bus Stop #'+ object.id + '</p><p class="delete-handle">Delete</p><p class="drag-handle">Sort</p></a></li>';
 			}
 		});
 		
 		
 		
 		//console.log(favoritesListHTML);
-		$('#favorites_menu').html(favoritesListHTML).listview('refresh');
+		//$('#favorites_menu').html(favoritesListHTML).listview('refresh');
+		$('#favorites_menu').html(favoritesListHTML);
 		
 		$('.favorite-stop-detail-btn').click(function() {
-*/
+
 			//console.log($(this).data('stopid'));
 			
 			/*
@@ -3594,7 +3738,7 @@ $.mobile.loading( 'show', {
 			});
 */
 	
-/*
+
 			// store a variable on this stop's name in case we need to retrieve it later...
 			notInRangeStopID = $(this).data('stopid'); // this will need to be edited to figure out if the stop is rail...
 			notInRangeStopName = $(this).data('stopname');
@@ -3623,15 +3767,16 @@ $.mobile.loading( 'show', {
 		
 	} else {
 		//console.log('nothing');
-		$('#favorites_menu').html('<h2 class="center">You haven\'t added any<br/>favorite stops yet!</h2><h2 class="center">Click the star icon<br/>when viewing a stop to<br/>add it as a favorite.</h2>').listview('refresh');
+		//$('#favorites_menu').html('<h2 class="center">You haven\'t added any<br/>favorite stops yet!</h2><h2 class="center">Click the star icon<br/>when viewing a stop to<br/>add it as a favorite.</h2>').listview('refresh');
+		$('#favorites_menu').html('<h2 class="center">You haven\'t added any<br/>favorite stops yet!</h2><h2 class="center">Click the star icon<br/>when viewing a stop to<br/>add it as a favorite.</h2>');
 	}
 	
 	
 
 });
-*/
 
-/*
+
+
 $(document).on('pagebeforeshow', '#infowindow', function() {
 	
 	//console.log(window.history);
@@ -3658,13 +3803,13 @@ $(document).on('pagebeforeshow', '#infowindow', function() {
 			
 			//console.log(favoriteMatches);
 			if (favoriteMatches.length) {		
-				$( "#favorite" ).buttonMarkup({theme: 'e'});
+				$( "#favorite" ).removeClass('icon-star-empty').addClass('icon-star');
 			} else {
-				$( "#favorite" ).buttonMarkup({theme: 'd'});
+				$( "#favorite" ).removeClass('icon-star').addClass('icon-star-empty');
 			}	
 		}	
 	}
-*/
+
 	
 	 // hide the map when we show the jQuery stuff, hopefully this can be eliminated in the future...
     /*
@@ -3674,18 +3819,16 @@ $('#infowindow-routes').listview('refresh');
 */
     
     
-/*
+
     
-    if (mapVisible == true) {
-		hideMap();
-	}
+   
 	
 	
 	
 });
-*/
 
-//$(document).on('pageshow', '#infowindow', function() {
+
+$(document).on('pageshow', '#infowindow', function() {
 
 	
 	 // hide the map when we show the jQuery stuff, hopefully this can be eliminated in the future...
@@ -3696,10 +3839,10 @@ $('#infowindow-routes').listview('refresh');
 */
 
 	
-//});
+});
 
 
-/*
+
 $(document).on('pagebeforeshow', '#route_map', function() {
   	
   	//console.log(window.history);
@@ -3737,7 +3880,7 @@ $(document).on('pageshow', '#route_map', function() {
 	
 	if (getStopsForRouteFlag == false) {
 		if (ajaxCount > 0) {
-    		$.mobile.loading( 'show' );
+    		/// this goes back in $.mobile.loading( 'show' );
     	}
 	}
 	
@@ -3804,7 +3947,7 @@ $(document).on('pagebeforehide', '#favorite_menu_page', function() {
 	$('.stopTitle, .favoriteMenuStopTitle').css('min-width','inherit');
 	$('.ui-listview-filter input').val('');
 });
-*/
+
 
 
 /***********************************************************************************************/

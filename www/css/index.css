@@ -112,17 +112,114 @@ body {
 	color: #c9c9c9 !important;
 }
 
-
-.content {
+.page .content {
 	position: absolute;
-	top: 0;
+	top: 4rem;
 	left: 0;
 	right: 0;
-	bottom: 0;
+	bottom: 2.75rem;
 	overflow: scroll;
 	-webkit-overflow-scrolling: touch;
 	z-index: 9;
+	text-align: left;
 }
+
+.content * {
+	margin: 0 !important;
+}
+
+.topcoat-list {
+	border: 0;
+	background-color: #dfe2e2;
+}
+
+.topcoat-list__header {
+	border: 0px;
+	text-shadow: 0 1px 0 rgba(0,0,0,0.5);
+	background-color: #ff3600;
+	color: white;
+	font-weight: 800;
+	font-size: 1em;
+}
+
+.screen {
+	position: fixed;
+	height: 67%;
+	bottom: 0;
+	background-color: #dfe2e2;
+	z-index: 7;
+	width: 100%;
+}
+
+#scroller {
+	z-index: 8;
+	position: relative;
+}
+
+/**
+ *
+ * Pull to refresh styles
+ *
+ */
+ 
+#infowindow-content {
+	background: #ff3600;
+}
+
+/*
+#infowindow-routes {
+	border-bottom: 8rem solid white;
+}
+*/
+
+#pullDown, #pullUp {
+	background:#ff3600;
+	height:1.5rem;
+	line-height:1.5rem;
+	padding-top: 0.75rem;
+	/* border-top: 8rem solid #ff3600; */
+	border-bottom:0;
+	font-weight:300;
+	font-size:1.5rem;
+	color: white;
+}
+#pullDown .pullDownIcon, #pullUp .pullUpIcon  {
+	display:block; 
+	/* position: fixed; */
+	top: 5rem;
+	-webkit-transition-property:-webkit-transform;
+	-webkit-transition-duration:250ms;	
+}
+#pullDown .pullDownIcon {
+	-webkit-transform:rotate(0deg) translateZ(0);
+}
+#pullUp .pullUpIcon  {
+	-webkit-transform:rotate(-180deg) translateZ(0);
+}
+
+#pullDown.flip .pullDownIcon {
+	-webkit-transform:rotate(-180deg) translateZ(0);
+}
+
+#pullUp.flip .pullUpIcon {
+	-webkit-transform:rotate(0deg) translateZ(0);
+}
+
+#pullDown.loading .pullDownIcon, #pullUp.loading .pullUpIcon {
+	font-size:1rem;
+	-webkit-transform:rotate(0deg) translateZ(0);
+	-webkit-transition-duration:0ms;
+	-webkit-animation-name:loading;
+	-webkit-animation-duration:2s;
+	-webkit-animation-iteration-count:infinite;
+	-webkit-animation-timing-function:linear;
+}
+
+@-webkit-keyframes loading {
+	from { -webkit-transform:rotate(0deg) translateZ(0); }
+	to { -webkit-transform:rotate(360deg) translateZ(0); }
+}
+
 
 
 /* page navigation CSS transitions */
@@ -161,13 +258,6 @@ body {
     transition-duration: 0.25s;
 }
 
-.page .content {
-	height: 100%;
-}
-
-.content * {
-	margin: 0 !important;
-}
 
 
 

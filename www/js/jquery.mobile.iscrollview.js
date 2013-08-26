@@ -1857,4 +1857,3 @@ jQuery(document).bind("pagecreate", function (e) {
     elements.iscrollview();
   });
 
-
