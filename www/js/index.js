@@ -247,6 +247,9 @@ getRoutes = function() {
     ajaxCount++;
     if (ajaxCount > 0) {
     	/// this goes back in $.mobile.loading( 'show' );
+    	$('.topcoat-navigation-bar__title').css('margin-left','24px');
+    	$('.spinner').css('display','inline-block');
+    	
     }
 	
 	getRoutesJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JRoutes?api_key=' + wmata_api_key + '&callback=?', function(data) {
@@ -309,6 +312,9 @@ ajaxCount++;
 		    	
 			    if (ajaxCount == 0) {
 			    	/// this goes back in $.mobile.loading( 'hide' );
+			    	$('.topcoat-navigation-bar__title').css('margin-left','0');
+			    	$('.spinner').css('display','none');
+					
 			    }
 			    
 			    circulatorRoutes = $.xml2json(data);
@@ -327,6 +333,8 @@ ajaxCount++;
 		    	
 			    if (ajaxCount == 0) {
 			    	/// this goes back in $.mobile.loading( 'hide' );
+			    	$('.topcoat-navigation-bar__title').css('margin-left','0');
+			    	$('.spinner').css('display','none');
 			    }
 				
 				//$('#route_list_menu').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>').listview('refresh');
@@ -352,6 +360,8 @@ ajaxCount++;
 	    	
 		    if (ajaxCount == 0) {
 		    	/// this goes back in $.mobile.loading( 'hide' );
+		    	$('.topcoat-navigation-bar__title').css('margin-left','0');
+		    	$('.spinner').css('display','none');
 		    }
 			
 			//$('#route_list_menu').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>').listview('refresh');
@@ -381,6 +391,8 @@ ajaxCount++;
 
 	    if (ajaxCount == 0) {
 	    	/// this goes back in $.mobile.loading( 'hide' );
+	    	$('.topcoat-navigation-bar__title').css('margin-left','0');
+	    	$('.spinner').css('display','none');
 	    }
 		
 		//$('#route_list_menu').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>').listview('refresh');
@@ -537,6 +549,9 @@ getStops = function(latitude,longitude,radius) {
     ajaxCount++;
     if (ajaxCount > 0) {
     	/// this goes back in $.mobile.loading( 'show' );
+    	$('.topcoat-navigation-bar__title').css('margin-left','24px');
+    	$('.spinner').css('display','inline-block');
+    	
     }
 	
 	getStopsJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JStops?lat=' + latitude + '&lon=' + longitude + '&radius=' + radius + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
@@ -553,6 +568,8 @@ getStops = function(latitude,longitude,radius) {
 		    	
 	    if (ajaxCount == 0) {
 	    	/// this goes back in $.mobile.loading( 'hide' );
+	    	$('.topcoat-navigation-bar__title').css('margin-left','0');
+	    	$('.spinner').css('display','none');
 	    }
 		
 		stops = data;
@@ -575,6 +592,8 @@ getStops = function(latitude,longitude,radius) {
 		    	
 	    if (ajaxCount == 0) {
 	    	/// this goes back in $.mobile.loading( 'hide' );
+	    	$('.topcoat-navigation-bar__title').css('margin-left','0');
+	    	$('.spinner').css('display','none');
 	    }
 		
 		if (errorThrown != 'abort') {
@@ -613,6 +632,9 @@ getStopsForRoute = function(routeID) {
     ajaxCount++;
     if (ajaxCount > 0) {
     	/// this goes back in $.mobile.loading( 'show' );
+    	$('.topcoat-navigation-bar__title').css('margin-left','24px');
+    	$('.spinner').css('display','inline-block');
+    	
     }
 		
 	getStopsForRouteJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JRouteDetails?routeID=' + routeID + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
@@ -625,6 +647,8 @@ getStopsForRoute = function(routeID) {
 
 	    if (ajaxCount == 0) {
 	    	/// this goes back in $.mobile.loading( 'hide' );
+	    	$('.topcoat-navigation-bar__title').css('margin-left','0');
+	    	$('.spinner').css('display','none');
 	    }
 	
 		//console.log('ajax call done');
@@ -683,6 +707,8 @@ getStopsForRoute = function(routeID) {
 		    	
 	    if (ajaxCount == 0) {
 	    	/// this goes back in $.mobile.loading( 'hide' );
+	    	$('.topcoat-navigation-bar__title').css('margin-left','0');
+	    	$('.spinner').css('display','none');
 	    }
 		
 		if (errorThrown != 'abort') {
@@ -778,6 +804,9 @@ getRailStops = function(latitude,longitude,radius) {
     ajaxCount++;
     if (ajaxCount > 0) {
     	/// this goes back in $.mobile.loading( 'show' );
+    	$('.topcoat-navigation-bar__title').css('margin-left','24px');
+    	$('.spinner').css('display','inline-block');
+    	
     }
 	
 	getRailStopsJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JStationEntrances?lat=' + latitude + '&lon=' + longitude + '&radius=' + radius + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
@@ -790,6 +819,8 @@ getRailStops = function(latitude,longitude,radius) {
 
 	    if (ajaxCount == 0) {
 	    	/// this goes back in $.mobile.loading( 'hide' );
+	    	$('.topcoat-navigation-bar__title').css('margin-left','0');
+	    	$('.spinner').css('display','none');
 	    }
 	    
 		//console.log('ajax call done');
@@ -815,6 +846,8 @@ getRailStops = function(latitude,longitude,radius) {
 
 	    if (ajaxCount == 0) {
 	    	/// this goes back in $.mobile.loading( 'hide' );
+	    	$('.topcoat-navigation-bar__title').css('margin-left','0');
+	    	$('.spinner').css('display','none');
 	    }
 		
 		if (errorThrown != 'abort') {
@@ -853,6 +886,9 @@ getRailStopsForRoute = function(routeID) {
     ajaxCount++;
     if (ajaxCount > 0) {
     	/// this goes back in $.mobile.loading( 'show' );
+    	$('.topcoat-navigation-bar__title').css('margin-left','24px');
+    	$('.spinner').css('display','inline-block');
+    	
     }
 		
 	getRailStopsForRouteJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JStations?LineCode=' + routeID + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
@@ -865,6 +901,8 @@ getRailStopsForRoute = function(routeID) {
     	
 	    if (ajaxCount == 0) {
 	    	/// this goes back in $.mobile.loading( 'hide' );
+	    	$('.topcoat-navigation-bar__title').css('margin-left','0');
+	    	$('.spinner').css('display','none');
 	    }
 	
 		//console.log('ajax call done');
@@ -912,6 +950,8 @@ getRailStopsForRoute = function(routeID) {
 		    	
 	    if (ajaxCount == 0) {
 	    	/// this goes back in $.mobile.loading( 'hide' );
+	    	$('.topcoat-navigation-bar__title').css('margin-left','0');
+	    	$('.spinner').css('display','none');
 	    }
 		
 		if (errorThrown != 'abort') {
@@ -1011,6 +1051,9 @@ getCirculatorStops = function(latitude,longitude,radius) {
 		    ajaxCount++;
 		    if (ajaxCount > 0) {
 		    	/// this goes back in $.mobile.loading( 'show' );
+		    	$('.topcoat-navigation-bar__title').css('margin-left','24px');
+		    	$('.spinner').css('display','inline-block');
+				
 		    }
 		    
 		    ajaxCirculatorCount++;
@@ -1024,6 +1067,8 @@ getCirculatorStops = function(latitude,longitude,radius) {
 		    	
 			    if (ajaxCount == 0) {
 			    	/// this goes back in $.mobile.loading( 'hide' );
+			    	$('.topcoat-navigation-bar__title').css('margin-left','0');
+			    	$('.spinner').css('display','none');
 			    }
 			    
 			    circulatorStopsArray.push($.xml2json(data));
@@ -1070,6 +1115,8 @@ getCirculatorStops = function(latitude,longitude,radius) {
 		    	
 			    if (ajaxCount == 0) {
 			    	/// this goes back in $.mobile.loading( 'hide' );
+			    	$('.topcoat-navigation-bar__title').css('margin-left','0');
+			    	$('.spinner').css('display','none');
 			    }
 				
 				if (errorThrown != 'abort') {
@@ -1213,6 +1260,9 @@ getCirculatorStopsForRoute = function(routeID) {
     ajaxCount++;
     if (ajaxCount > 0) {
     	/// this goes back in $.mobile.loading( 'show' );
+    	$('.topcoat-navigation-bar__title').css('margin-left','24px');
+    	$('.spinner').css('display','inline-block');
+    	
     }
 		
 	getCirculatorStopsForRouteJSON = $.get('http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a=dc-circulator&r=' + routeID, function(data) {
@@ -1225,6 +1275,8 @@ getCirculatorStopsForRoute = function(routeID) {
 
 	    if (ajaxCount == 0) {
 	    	/// this goes back in $.mobile.loading( 'hide' );
+	    	$('.topcoat-navigation-bar__title').css('margin-left','0');
+	    	$('.spinner').css('display','none');
 	    }
 	
 		//console.log('ajax call done');
@@ -1272,6 +1324,8 @@ getCirculatorStopsForRoute = function(routeID) {
 		    	
 	    if (ajaxCount == 0) {
 	    	/// this goes back in $.mobile.loading( 'hide' );
+	    	$('.topcoat-navigation-bar__title').css('margin-left','0');
+	    	$('.spinner').css('display','none');
 	    }
 		
 		if (errorThrown != 'abort') {
@@ -1423,6 +1477,9 @@ function annotationTap(text, latitude, longitude) {
 			    ajaxCount++;
 			    if (ajaxCount > 0) {
 				    /// this goes back in $.mobile.loading( 'show' );
+				    $('.topcoat-navigation-bar__title').css('margin-left','24px');
+				    $('.spinner').css('display','inline-block');
+					
 				}
 				//console.log('http://api.wmata.com/StationPrediction.svc/json/GetPrediction/' + stopID.toString().replace(/Metro Rail Station #/,'') + '?api_key=' + wmata_api_key + '&callback=?');
 				
@@ -1436,6 +1493,8 @@ function annotationTap(text, latitude, longitude) {
 
 					if (ajaxCount == 0) {
 						/// this goes back in $.mobile.loading( 'hide' );
+						$('.topcoat-navigation-bar__title').css('margin-left','0');
+						$('.spinner').css('display','none');
 					}
 				
 					//console.log('predictions=' + data2.Predictions.length);
@@ -1520,6 +1579,8 @@ if (railStops.length) {
 		    	
 					if (ajaxCount == 0) {
 						/// this goes back in $.mobile.loading( 'hide' );
+						$('.topcoat-navigation-bar__title').css('margin-left','0');
+						$('.spinner').css('display','none');
 					}
 					
 					if (errorThrown != 'abort') {
@@ -1567,6 +1628,9 @@ if (railStops.length) {
 			    ajaxCount++;
 			    if (ajaxCount > 0) {
 				    /// this goes back in $.mobile.loading( 'show' );
+				    $('.topcoat-navigation-bar__title').css('margin-left','24px');
+				    $('.spinner').css('display','inline-block');
+					
 				}
 				
 				annotationTapJSON = $.getJSON('http://api.wmata.com/NextBusService.svc/json/JPredictions?StopID=' + stopID.toString().replace(/Metro Bus Stop #/,'') + '&api_key=' + wmata_api_key + '&callback=?', function(data2, self4) {
@@ -1579,6 +1643,8 @@ if (railStops.length) {
 
 					if (ajaxCount == 0) {
 						/// this goes back in $.mobile.loading( 'hide' );
+						$('.topcoat-navigation-bar__title').css('margin-left','0');
+						$('.spinner').css('display','none');
 					}
 				
 					//console.log('predictions=' + data2.Predictions.length);
@@ -1695,7 +1761,7 @@ if (device.platform == "iOS") {
 				    
 				    //$('#infowindow-routes').iscrollview("refresh").css('height', $('#infowindow').css('min-height'));
 				    //pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Pull down to refresh...';
-				    $('.pullDownIcon').removeClass('icon-repeat').addClass('icon-angle-down');
+				    $('.pullDownIcon').removeClass('icon-refresh').addClass('icon-angle-down');
 				    myScroll.refresh();
 				    
 				    	
@@ -1710,6 +1776,8 @@ if (device.platform == "iOS") {
 		    	
 					if (ajaxCount == 0) {
 						/// this goes back in $.mobile.loading( 'hide' );
+						$('.topcoat-navigation-bar__title').css('margin-left','0');
+						$('.spinner').css('display','none');
 					}
 					
 					if (errorThrown != 'abort') {
@@ -1757,6 +1825,9 @@ if (device.platform == "iOS") {
 			    ajaxCount++;
 			    if (ajaxCount > 0) {
 				    /// this goes back in $.mobile.loading( 'show' );
+				    $('.topcoat-navigation-bar__title').css('margin-left','24px');
+				    $('.spinner').css('display','inline-block');
+					
 				}
 				
 				annotationTapJSON = $.get('http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=dc-circulator&stopId=' + stopID.toString().replace(/Circulator Stop #/,'') + '', function(data) {
@@ -1771,6 +1842,8 @@ if (device.platform == "iOS") {
 		    	
 					if (ajaxCount == 0) {
 						/// this goes back in $.mobile.loading( 'hide' );
+						$('.topcoat-navigation-bar__title').css('margin-left','0');
+						$('.spinner').css('display','none');
 					}
 				
 					//console.log('predictions=' + data2.Predictions.length);
@@ -1961,7 +2034,7 @@ if (device.platform == "iOS") {
 				    //$('#infowindow-routes').listview('refresh').iscrollview("refresh").css('height', $('#infowindow').css('min-height'));
 				    
 				    //pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Pull down to refresh...';
-				    $('.pullDownIcon').removeClass('icon-repeat').addClass('icon-angle-down');
+				    $('.pullDownIcon').removeClass('icon-refresh').addClass('icon-angle-down');
 				    myScroll.refresh();
 				    
 				    	
@@ -1976,6 +2049,8 @@ if (device.platform == "iOS") {
 		    	
 					if (ajaxCount == 0) {
 						/// this goes back in $.mobile.loading( 'hide' );
+						$('.topcoat-navigation-bar__title').css('margin-left','0');
+						$('.spinner').css('display','none');
 					}
 					
 					if (errorThrown != 'abort') {
@@ -2102,7 +2177,7 @@ markerStops = function(data) {
 						if (i3 != 'undefined'){
 							//console.log('i3= ' + i3);
 							if (lowestMinute == 'start') {
-								routeListArray.push('<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p><span class="ui-li-count">' + i3 + '</span></li>');
+								routeListArray.push('<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn icon-angle-right" id="' + i3 + '"><span class="ui-li-count">' + i3 + '</span><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p></a></li>');
 								
 								lowestMinute = data.minutes[i3][0];
 								lowestMinuteArray.push(data.minutes[i3][0]);
@@ -2111,18 +2186,18 @@ markerStops = function(data) {
 									$.each(lowestMinuteArray, function(i, object) {
 										if (data.minutes[i3][0] < object) {
 											lowestMinuteArray.splice(i, 0, data.minutes[i3][0]);
-											routeListArray.splice(i, 0, '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p><span class="ui-li-count">' + i3 + '</span></li>');
+											routeListArray.splice(i, 0, '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn icon-angle-right" id="' + i3 + '"><span class="ui-li-count">' + i3 + '</span><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p></a></li>');
 											routePlaced = true;
 										}
 									});
 									
 									if (routePlaced == false) {
-										routeListArray.push('<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p><span class="ui-li-count">' + i3 + '</span></li>');
+										routeListArray.push('<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn icon-angle-right" id="' + i3 + '"><span class="ui-li-count">' + i3 + '</span><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p></a></li>');
 									} else {
 										routePlaced == false;
 									}
 								} else {
-									routeListArray.unshift('<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p><span class="ui-li-count">' + i3 + '</span></li>');
+									routeListArray.unshift('<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn icon-angle-right" id="' + i3 + '"><span class="ui-li-count">' + i3 + '</span><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p></a></li>');
 									
 									lowestMinute = data.minutes[i3][0];
 									lowestMinuteArray.unshift(data.minutes[i3][0]);
@@ -2141,7 +2216,7 @@ markerStops = function(data) {
 					$.each(potentialVsActual, function(i4, object4) {
 						// check for the routes with a lowercase c or v in their name, they are variation routes and should be ignored
 						if (/([cv])/.exec(potentialVsActual[i4]) == null) {
-							routeList = routeList + '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn" id="' + potentialVsActual[i4] + '"><p>no prediction available</p><span class="ui-li-count">' + potentialVsActual[i4] + '</span></a></li>';
+							routeList = routeList + '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn icon-angle-right" id="' + potentialVsActual[i4] + '"><span class="ui-li-count">' + potentialVsActual[i4] + '</span><p>no prediction available</p></a></li>';
 						}
 						
 					});
@@ -2151,7 +2226,7 @@ markerStops = function(data) {
 					$.each(potentialRouteList, function(i4, object4) {
 						// check for the routes with a lowercase c or v in their name, they are variation routes and should be ignored
 						if (/([cv])/.exec(potentialRouteList[i4]) == null) {			
-							routeList = routeList + '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn" id="' + potentialRouteList[i4] + '"><p>no prediction available</p><span class="ui-li-count">' + potentialRouteList[i4] + '</span></a></li>';
+							routeList = routeList + '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn icon-angle-right" id="' + potentialRouteList[i4] + '"><span class="ui-li-count">' + potentialRouteList[i4] + '</span><p>no prediction available</p></a></li>';
 						}
 					});
 					
@@ -2217,7 +2292,7 @@ markerStops = function(data) {
 					// weed out undefined routes
 					if (i3 != 'undefined'){
 						//console.log('i3= ' + i3);
-						routeList = routeList + '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p><span class="ui-li-count">' + i3 + '</span></li>';
+						routeList = routeList + '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn icon-angle-right" id="' + i3 + '"><span class="ui-li-count">' + i3 + '</span><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p></a></li>';
 					actualRouteList.push(i3);
 					potentialVsActual = potentialRouteList.diff(actualRouteList);
 					}
@@ -2336,6 +2411,9 @@ markerRailStops = function(data) {
 				    ajaxCount++;
 				    if (ajaxCount > 0) {
 				    	/// this goes back in $.mobile.loading( 'show' );
+				    	$('.topcoat-navigation-bar__title').css('margin-left','24px');
+				    	$('.spinner').css('display','inline-block');
+
 				    }
 				    
 					//console.log('start each');
@@ -2350,6 +2428,8 @@ markerRailStops = function(data) {
 
 					    if (ajaxCount == 0) {
 					    	/// this goes back in $.mobile.loading( 'hide' );
+					    	$('.topcoat-navigation-bar__title').css('margin-left','0');
+					    	$('.spinner').css('display','none');
 					    }
 					    
 					    //console.log(data);
@@ -2472,7 +2552,7 @@ markerRailStops = function(data) {
 								});
 								
 								$.each(railDirectionTracker, function(i, object) {
-									railRouteList = railRouteList + '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn" id="' + object.Line + '"><p>to ' + object.DestinationName + ' arrives in:</p><p><strong>' + object.Min + '</strong> minutes</p><span class="ui-li-count">' + object.Line + '</span></li>';
+									railRouteList = railRouteList + '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn icon-angle-right" id="' + object.Line + '"><span class="ui-li-count">' + object.Line + '</span><p>to ' + object.DestinationName + ' arrives in:</p><p><strong>' + object.Min + '</strong> minutes</p></a></li>';
 								});
 								
 								// then after, loop through routes with no predictions and add to the end
@@ -2481,7 +2561,7 @@ markerRailStops = function(data) {
 									
 									$.each(missingRailRoutes, function(i, object) {
 										// check for the routes with a lowercase c or v in their name, they are variation routes and should be ignored
-										railRouteList = railRouteList + '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn" id="' + object + '"><p>no prediction available</p><span class="ui-li-count">' + object + '</span></a></li>';
+										railRouteList = railRouteList + '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn icon-angle-right" id="' + object + '"><span class="ui-li-count">' + object + '</span><p>no prediction available</p></a></li>';
 										
 									});
 								}
@@ -2494,7 +2574,7 @@ markerRailStops = function(data) {
 								// if there are no predictions at all, just do the stops
 								//console.log('realRailTrains false');
 								$.each(potentialRailRouteList, function(i4, object4) {			
-									railRouteList = railRouteList + '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn" id="' + object4 + '"><p>no prediction available</p><span class="ui-li-count">' + object4 + '</span></a></li>';
+									railRouteList = railRouteList + '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn icon-angle-right" id="' + object4 + '"><span class="ui-li-count">' + object4 + '</span><p>no prediction available</p></a></li>';
 								});
 								
 								actualRailRouteList.length = 0;
@@ -2582,7 +2662,7 @@ if (device.platform == "iOS") {
 					    //$('#infowindow-routes').listview('refresh').iscrollview("refresh").css('height', $('#infowindow').css('min-height'));
 					    
 					    //pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Pull down to refresh...';
-					    $('.pullDownIcon').removeClass('icon-repeat').addClass('icon-angle-down');
+					    $('.pullDownIcon').removeClass('icon-refresh').addClass('icon-angle-down');
 						myScroll.refresh();
 						
 					}).error(function(jqXHR, textStatus, errorThrown) {
@@ -2596,6 +2676,8 @@ if (device.platform == "iOS") {
 		    	
 					    if (ajaxCount == 0) {
 					    	/// this goes back in $.mobile.loading( 'hide' );
+					    	$('.topcoat-navigation-bar__title').css('margin-left','0');
+					    	$('.spinner').css('display','none');
 					    }
 						
 						if (errorThrown != 'abort') {
@@ -2791,7 +2873,7 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 									});
 								}
 								//console.log('i3= ' + i3);
-								circulatorRouteList = circulatorRouteList + '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>' + data.directionText[i3][0] + ' arrives in:</p><p><strong>' + circulatorMinutesArray.join(', ') + '</strong> minutes</p><span class="ui-li-count"><span>' + i3 + '</span></span></li>';
+								circulatorRouteList = circulatorRouteList + '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn icon-angle-right" id="' + i3 + '"><span class="ui-li-count icon-refresh"><span>' + i3 + '</span></span><p>' + data.directionText[i3][0] + ' arrives in:</p><p><strong>' + circulatorMinutesArray.join(', ') + '</strong> minutes</p></a></li>';
 								actualCirculatorRouteList.push(i3);
 								potentialCirculatorRouteList = potentialCirculatorRouteList.diff(actualCirculatorRouteList);
 								
@@ -2817,7 +2899,7 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 							if (typeof(data.minutes[i3][0]) == 'undefined') {
 								// don't show yellow line/georgetown pm line twice, only once
 								if (yellowLineFlag != true) {
-									circulatorRouteList = circulatorRouteList + '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>no prediction available</p><span class="ui-li-count"><span>' + i3 + '</span></span></a></li>';
+									circulatorRouteList = circulatorRouteList + '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn icon-angle-right" id="' + i3 + '"><span class="ui-li-count icon-refresh"><span>' + i3 + '</span></span><p>no prediction available</p></a></li>';
 									if (i3 == 'gtownpm' || i3 == 'yellow') {
 										yellowLineFlag = true;
 									}
@@ -2825,7 +2907,7 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 								//	yellowLineFlag = true;
 								} else {
 									if (i3 != 'gtownpm' && i3 != 'yellow') {
-										circulatorRouteList = circulatorRouteList + '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn" id="' + i3 + '"><p>no prediction available</p><span class="ui-li-count"><span>' + i3 + '</span></span></a></li>';
+										circulatorRouteList = circulatorRouteList + '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn icon-angle-right" id="' + i3 + '"><span class="ui-li-count icon-refresh"><span>' + i3 + '</span></span><p>no prediction available</p></a></li>';
 									}
 
 								}
@@ -2839,7 +2921,7 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 					$.each(circulatorPotentialVsActual, function(i4, object4) {
 						// don't show no prediction available for yellow line/georgetown pm line
 						if (potentialVsActual[i4] != 'gtownpm' && potentialVsActual[i4] != 'yellow') {
-							circulatorRouteList = circulatorRouteList + '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn" id="' + potentialVsActual[i4] + '"><p>no prediction available</p><span class="ui-li-count"><span>' + potentialVsActual[i4] + '</span></span></a></li>';
+							circulatorRouteList = circulatorRouteList + '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn icon-angle-right" id="' + potentialVsActual[i4] + '"><span class="ui-li-count icon-refresh"><span>' + potentialVsActual[i4] + '</span></span><p>no prediction available</p></a></li>';
 						}
 						
 						
@@ -2849,7 +2931,7 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 					// if there's no predictions at all, we need to show one yellow line with no predictions
 /*
 					if (circulatorRouteList == '' && yellowLineFlag == true) {
-						circulatorRouteList = circulatorRouteList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="yellow"><p>no prediction available</p><span class="ui-li-count"><span>yellow</span></span></a></li>';
+						circulatorRouteList = circulatorRouteList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn icon-angle-right" id="yellow"><p>no prediction available</p><span class="ui-li-count"><span>yellow</span></span></a></li>';
 					}
 */
 				/*
@@ -2859,7 +2941,7 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 					$.each(potentialCirculatorRouteList, function(i4, object4) {
 						// check for the routes with a lowercase c or v in their name, they are variation routes and should be ignored
 						//if (/([cv])/.exec(potentialRouteList[i4]) == null) {			
-							circulatorRouteList = circulatorRouteList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn" id="' + potentialRouteList[i4] + '"><p>no prediction available</p><span class="ui-li-count">' + potentialRouteList[i4] + '</span></a></li>';
+							circulatorRouteList = circulatorRouteList + '<li data-theme="d"><a data-transition="slide" class="route-detail-btn icon-angle-right" id="' + potentialRouteList[i4] + '"><p>no prediction available</p><span class="ui-li-count">' + potentialRouteList[i4] + '</span></a></li>';
 						//}
 					});
 					
@@ -3225,7 +3307,7 @@ function onDeviceReady() {
 		onScrollEnd: function () {
 			if (pullDownEl.className.match('flip')) {
 				pullDownEl.className = 'loading';
-				$('.pullDownIcon').removeClass('icon-angle-down').addClass('icon-repeat');
+				$('.pullDownIcon').removeClass('icon-angle-down').addClass('icon-refresh');
 				//pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Loading...';				
 				refreshStopID = $('.stopTitle').attr('id');
 				annotationTap(refreshStopID); 
@@ -3881,6 +3963,9 @@ $(document).on('pageshow', '#route_map', function() {
 	if (getStopsForRouteFlag == false) {
 		if (ajaxCount > 0) {
     		/// this goes back in $.mobile.loading( 'show' );
+    		$('.topcoat-navigation-bar__title').css('margin-left','24px');
+    		$('.spinner').css('display','inline-block');
+			
     	}
 	}
 	
