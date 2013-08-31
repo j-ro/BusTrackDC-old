@@ -120,7 +120,7 @@ body {
 	color: #ff3600;
 }
 
-.icon:active, .active {
+.icon:active, .active, .open-state {
 	color: #ff8c6d;
 }
 
@@ -181,10 +181,11 @@ body {
 .topcoat-list__item {
 	padding: 0.75rem;
 	min-height: 2.5rem;
+	background-color: rgb(223, 226, 226);
 }
 
 .topcoat-list__item p {
-	margin: -0.15rem 1rem 0 4rem !important;
+	margin: -0.15rem 1rem 0 0.25rem !important;
 	font-size: 1rem;
 	overflow: hidden;
 	height: 1.4rem;
@@ -192,6 +193,10 @@ body {
 	white-space: nowrap;
 	font-weight: 200 !important;
 	font-family: "Helvetica Neue", "Helvetica", Helvetica Neue, Helvetica, sans-serif !important;
+}
+
+#infowindow .topcoat-list__item p {
+	margin: -0.15rem 1rem 0 4rem !important;
 }
 
 .ui-li-count {
@@ -225,6 +230,34 @@ body {
 	padding: 0.5rem 0;
 }
 
+.delete-handle, .drag-handle, .delete-handle span, .drag-handle span {
+	display: none;
+}
+
+.delete-handle, .drag-handle {
+	font-size: 1.5rem;
+	float: right;
+	position: relative;
+	color: #bcbfbf;
+	top: -2.2rem;
+}
+
+.delete-handle {
+	right: 3rem;
+}
+
+.drag-handle {
+	right: -1rem;
+}
+
+#favorites_menu_content h2 {
+	padding-top: 2rem;
+	font-size: 1rem;
+}
+
+.topcoat-list__item p.favorite-list-item-edit {
+	margin-right: 4.5rem !important;
+}
 
 
 

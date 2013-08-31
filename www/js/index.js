@@ -2954,7 +2954,7 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 				//console.log('potential routes for stop ' + stopIDfocus + ': ' + potentialRouteList + ' and actual routes: ' + actualRouteList);
 				//console.log(stopName);
 				var dt = new DateTime();
-				circulatorRouteList = '<li data-role="list-divider" class="stopTitle topcoat-list__header" id="' + stopID + '" data-lat=' + stopLat + '" data-lon=' + stopLon + '"><span>' + toTitleCase(stopName) + '</span></li>' + circulatorRouteList + '<div class="updated">Updated ' + dt.formats.busTrackDateTime.b + ' - Pull to refresh</div>';
+				circulatorRouteList = '<li data-role="list-divider" class="stopTitle topcoat-list__header" id="' + stopID + '" data-lat=' + stopLat + '" data-lon=' + stopLon + '"><span class="stopName">' + toTitleCase(stopName) + '</span></li>' + circulatorRouteList + '<div class="updated">Updated ' + dt.formats.busTrackDateTime.b + ' - Pull to refresh</div>';
 				//console.log(routeList);
 				
 	        }
@@ -3085,7 +3085,7 @@ function favoriteTap(favorite) {
 		//console.log(favorites);
 		if (favoriteMatches.length) {
 			//console.log('match! remove');
-			$( "#favorite" ).buttonMarkup({theme: 'd'});
+			$( "#favorite" ).removeClass('icon-star').addClass('icon-star-empty');
 			
 			favorites = favorites.filter(function(el){ console.log('favorite= ' + favorite); console.log('el.id= ' + el.id); return (el.id != favorite && 'Metro Bus Stop #' + el.id != favorite && 'Metro Rail Station #' + el.id != favorite); });
 			
@@ -3095,7 +3095,7 @@ function favoriteTap(favorite) {
 			//console.log(favorites);
 		} else {
 			//console.log('no match! add');
-			$( "#favorite" ).buttonMarkup({theme: 'e'});
+			$( "#favorite" ).removeClass('icon-star-empty').addClass('icon-star');
 			
 			var $stopTitle = $('#infowindow .stopTitle');
 			
@@ -3123,7 +3123,7 @@ function favoriteTap(favorite) {
 		//console.log('no storage');
 		//console.log(favorite);
 		
-		$( "#favorite" ).buttonMarkup({theme: 'e'});
+		$( "#favorite" ).removeClass('icon-star-empty').addClass('icon-star');
 		
 		var favorites = [];
 		
@@ -3496,18 +3496,15 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 		if (editFlag) {
 			//console.log('true');
 			// undo the UI stuff
-			$( "#edit" ).buttonMarkup({theme: 'd'});
-			$('#edit .ui-btn-text').html('Edit');
-			$('.ui-li-has-arrow .ui-btn-inner a.ui-link-inherit').css('padding-right','40px');
-			$('.ui-li-static.ui-li-has-arrow').css('padding-right','40px');
-			$('.stopTitle, .favoriteMenuStopTitle').css('min-width','inherit');
+			$( "#edit" ).removeClass('open-state');
+			$('.topcoat-list__item a').addClass('icon-angle-right');
+			$('.topcoat-list__item p').removeClass('favorite-list-item-edit');
 			
 			// undo the sorting
 			var $favorites_menu = $("#favorites_menu");
 			$favorites_menu.sortable("destroy").enableSelection().unbind( "sortstop");
 			
 			// change the ui
-			$('#favorites_menu .ui-icon-arrow-r').fadeIn('fast');
 			$('#favorites_menu .drag-handle').fadeOut('fast');
 			$('#favorites_menu .delete-handle').fadeOut('fast');
 			
@@ -3535,7 +3532,7 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 					
 					favorites.push({
 						id: id,
-						name: $('#favorites_menu li[data-id="' + id + '"] h1').html(),
+						name: $('#favorites_menu li[data-id="' + id + '"] p strong').html(),
 						lat: $favorites_menu_detail_btn.data('lat'),
 						lon: $favorites_menu_detail_btn.data('lon')
 					});
@@ -3593,13 +3590,10 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 		} else {
 			//console.log('false');
 			// ui stuff
-			$( "#edit" ).buttonMarkup({theme: 'e'});
-			$('#edit .ui-btn-text').html('Done');
-			$('.ui-li-has-arrow .ui-btn-inner a.ui-link-inherit').css('padding-right','80px');
-			$('.ui-li-static.ui-li-has-arrow').css('padding-right','80px');
-			$('.stopTitle, .favoriteMenuStopTitle').css('min-width','220px');
+			$( "#edit" ).addClass('open-state');
+			$('.topcoat-list__item a').removeClass('icon-angle-right');
+			$('.topcoat-list__item p').addClass('favorite-list-item-edit');
 			
-			$('#favorites_menu .ui-icon-arrow-r').fadeOut('fast');
 			$('#favorites_menu .drag-handle').fadeIn('fast');
 			$('#favorites_menu .delete-handle').fadeIn('fast');
 			
@@ -3610,7 +3604,7 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 				 handle: ".drag-handle",
 				 axis: "y",
 				 scrollSensitivity: 500,
-				 scroll: true
+				 scroll: false
 			})
 			.disableSelection()
 			.bind( "sortstop", function(event, ui) {
@@ -3793,11 +3787,11 @@ $(document).on('pagebeforeshow', '#favorite_menu_page', function() {
 		
 		$.each(favorites, function(i, object) {
 			if ((/Metro Bus Stop #/).test(object.id) || (/Metro Rail Station #/).test(object.id) || (/Circulator Stop #/).test(object.id)) {
-				favoritesListHTML = favoritesListHTML + '<li class="needsclick topcoat-list__item" data-id="' + object.id + '"><a data-transition="slide" class="favorite-stop-detail-btn" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><h1 class="favoriteMenuStopTitle">' + object.name +'</h1><p>'+ object.id + '</p><p class="delete-handle">Delete</p><p class="drag-handle">Sort</p></a></li>';	
+				favoritesListHTML = favoritesListHTML + '<li class="needsclick topcoat-list__item" data-id="' + object.id + '"><a class="favorite-stop-detail-btn icon-angle-right" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><p class="favoriteMenuStopTitle"><strong>' + object.name +'</strong></p><p>'+ object.id + '</p><span class="delete-handle icon-remove" style="display:none;"><span>Delete</span></span><span class="drag-handle icon-reorder" style="display:none;"><span>Sort</span></span></a></li>';	
 			} else if (isNaN(object.id)) { // this is to make favorites backwards compatible...
-				favoritesListHTML = favoritesListHTML + '<li class="needsclick topcoat-list__item" data-id="' + object.id + '"><a data-transition="slide" class="favorite-stop-detail-btn" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><h1 class="favoriteMenuStopTitle">' + object.name +'</h1><p>Metro Rail Station #'+ object.id + '</p><p class="delete-handle">Delete</p><p class="drag-handle">Sort</p></a></li>';
+				favoritesListHTML = favoritesListHTML + '<li class="needsclick topcoat-list__item" data-id="' + object.id + '"><a class="favorite-stop-detail-btn icon-angle-right" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><p class="favoriteMenuStopTitle"><strong>' + object.name +'</strong></p><p>Metro Rail Station #'+ object.id + '</p><span class="delete-handle icon-remove" style="display:none;"><span>Delete</span></span><span class="drag-handle icon-reorder" style="display:none;"><span>Sort</span></span></a></li>';
 			} else {
-				favoritesListHTML = favoritesListHTML + '<li class="needsclick topcoat-list__item" data-id="' + object.id + '"><a data-transition="slide" class="favorite-stop-detail-btn" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><h1 class="favoriteMenuStopTitle">' + object.name +'</h1><p>Metro Bus Stop #'+ object.id + '</p><p class="delete-handle">Delete</p><p class="drag-handle">Sort</p></a></li>';
+				favoritesListHTML = favoritesListHTML + '<li class="needsclick topcoat-list__item" data-id="' + object.id + '"><a class="favorite-stop-detail-btn icon-angle-right" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><p class="favoriteMenuStopTitle"><strong>' + object.name +'</strong></p><p>Metro Bus Stop #'+ object.id + '</p><span class="delete-handle icon-remove" style="display:none;"><span>Delete</span></span><span class="drag-handle icon-reorder" style="display:none;"><span>Sort</span></span></a></li>';
 			}
 		});
 		
@@ -4025,12 +4019,9 @@ $(document).on('pagebeforehide', '#gps_map', function() {
 });
 
 $(document).on('pagebeforehide', '#favorite_menu_page', function() {
-	$( "#edit" ).buttonMarkup({theme: 'd'});
-	$('#edit .ui-btn-text').html('Edit');
-	$('.ui-li-has-arrow .ui-btn-inner a.ui-link-inherit').css('padding-right','inherit');
-	$('.ui-li-static.ui-li-has-arrow').css('padding-right','inherit');
-	$('.stopTitle, .favoriteMenuStopTitle').css('min-width','inherit');
-	$('.ui-listview-filter input').val('');
+	$( "#edit" ).removeClass('open-state');
+	$('.topcoat-list__item a').addClass('icon-angle-right');
+	$('.topcoat-list__item p').removeClass('favorite-list-item-edit');
 });
 
 
