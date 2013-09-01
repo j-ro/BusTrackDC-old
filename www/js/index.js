@@ -417,15 +417,15 @@ buildRouteMenu = function(dataBus, dataRail, dataCirculator) {
 	//console.log(dataRail);
 	//console.log(dataCirculator);
 	
-	$('#route_list_content').html('<h2 class="center">Type a Metro bus line number,<br/>Circulator bus line name, <br/>or Metro rail line name<br/>in the box above to search for routes.</h2>');
+	$('#route_list_content_list').html('');
 	
-	$('<ul/>',{'data-role':'listview','data-filter-reveal':true,'data-filter':true, 'data-filter-placeholder':'Search...'}).prependTo( '#route_list_content' );
+	//$('<ul/>',{'data-role':'listview','data-filter-reveal':true,'data-filter':true, 'data-filter-placeholder':'Search...'}).prependTo( '#route_list_content' );
 	
 	//routeMenuHTML = '<ul data-role="listview" data-filter="true" data-filter-placeholder="Search..." id="route_list_menu" data-filter-reveal="true">';
 
 	$.each(dataRail.Lines, function(i, object) {
 		//console.log(object.LineCode);
-		$('<li data-filtertext="' + object.LineCode + ' ' + object.DisplayName + '  Rail Line" class="topcoat-list__item" />').html('<a href="#" data-routeid="' + object.LineCode + '" class="route_menu_btn">' + object.DisplayName + ' Rail Line</a>').prependTo( '#route_list_content ul' );
+		$('<li class="topcoat-list__item" />').html('<a data-routeid="' + object.LineCode + '" class="route_menu_btn icon-angle-right"><p><strong>' + object.DisplayName + ' Rail Line</strong><span class="hide">' + object.LineCode + '</span></p></a>').prependTo( '#route_list_content ul' );
 		//routeMenuHTML = routeMenuHTML + '<li><a href="#" data-routeid="' + object.RouteID + '" class="route_manu_btn">' + object.RouteID + '</a></li>';
 	
 	});
@@ -433,7 +433,7 @@ buildRouteMenu = function(dataBus, dataRail, dataCirculator) {
 	$.each(dataBus.Routes, function(i, object) {
 		//filter out WMATA's weird half-routes
 		if (/([cv])/.exec(object.RouteID) == null) {
-			$('<li data-filtertext="' + object.RouteID + '  Bus Route" class="topcoat-list__item" />').html('<a href="#" data-routeid="' + object.RouteID + '" class="route_menu_btn">' + object.RouteID + ' Bus Route</a>').prependTo( '#route_list_content ul' );
+			$('<li class="topcoat-list__item" />').html('<a data-routeid="' + object.RouteID + '" class="route_menu_btn icon-angle-right"><p><strong>' + object.RouteID + ' Bus Route</strong></p></a>').prependTo( '#route_list_content ul' );
 			//routeMenuHTML = routeMenuHTML + '<li><a href="#" data-routeid="' + object.RouteID + '" class="route_manu_btn">' + object.RouteID + '</a></li>';
 		}
 		
@@ -443,13 +443,18 @@ buildRouteMenu = function(dataBus, dataRail, dataCirculator) {
 	$.each(dataCirculator.route, function(i, object) {
 		//console.log(object.LineCode);
 		if(typeof(object.shortTitle) !== 'undefined') {
-			$('<li data-filtertext="' + object.tag + ' ' + object.title + ' ' + object.shortTitle + '  Circulator Route" class="topcoat-list__item" />').html('<a href="#" data-routeid="' + object.tag + '" class="route_menu_btn">' + object.shortTitle + ' Circulator Route</a>').prependTo( '#route_list_content ul' );
+			$('<li class="topcoat-list__item" />').html('<a data-routeid="' + object.tag + '" class="route_menu_btn icon-angle-right"><p><strong>' + object.shortTitle + ' Circulator Route</strong><span class="hide">' + object.tag + ' ' + object.title + '</span></p></a>').prependTo( '#route_list_content ul' );
 		} else {
-			$('<li data-filtertext="' + object.tag + ' ' + object.title + '  Circulator Route" class="topcoat-list__item" />').html('<a href="#" data-routeid="' + object.tag + '" class="route_menu_btn">' + object.title + ' Circulator Route</a>').prependTo( '#route_list_content ul' );
+			$('<li class="topcoat-list__item" />').html('<a data-routeid="' + object.tag + '" class="route_menu_btn icon-angle-right"><p><strong>' + object.title + ' Circulator Route</strong><span class="hide">' + object.tag + ' ' + object.title + '</span></p></a>').prependTo( '#route_list_content ul' );
 		}
 		
 		//routeMenuHTML = routeMenuHTML + '<li><a href="#" data-routeid="' + object.RouteID + '" class="route_manu_btn">' + object.RouteID + '</a></li>';
 	
+	});
+	
+	$("ul#route_list_content_list").listfilter({ 
+		'filter': $('#route_list_filter_wrap .filter'),
+		'clearlink': $('#route_list_filter_wrap a.clear')
 	});
 
 	
@@ -459,7 +464,7 @@ buildRouteMenu = function(dataBus, dataRail, dataCirculator) {
 	
 	//$('#route_list_content').html(routeMenuHTML);
 	//$('#route_list_menu').listview('refresh');
-	$('#route_list_content').trigger('create');
+	//$('#route_list_content').trigger('create');
 	//$('#route_list_content ul').listview('refresh');
 	routeListFlag = true;
 	//$.mobile.loading( 'hide' );
@@ -524,7 +529,7 @@ if (device.platform == "iOS") {
 	//if (device.platform != "iOS") {
 		//var initialScreenSize = window.innerHeight;
 		//window.addEventListener("resize", function() {
-	$( ".ui-footer" ).fixedtoolbar( "option", "hideDuringFocus" );
+//	$( ".ui-footer" ).fixedtoolbar( "option", "hideDuringFocus" );
 		//});
 	//}
 	
@@ -3145,6 +3150,8 @@ function favoriteTap(favorite) {
 };
 
 function slidePageFrom(page, from) {
+
+	transitionNavigationFlag = true;
     
 	// new page show event
 	$(page).trigger({
@@ -3189,6 +3196,8 @@ function slidePageFrom(page, from) {
         currentPage.trigger({
 			type: "pageshow"
 		});
+		
+		transitionNavigationFlag = false;
     }, 1);
 }
 
@@ -3253,24 +3262,29 @@ function onDeviceReady() {
 	
 	pageInitHistory.push(currentPage.attr('id'));
 	
+	// set transition navigation flag that locks buttons until the page transition is finished
+    transitionNavigationFlag = false;
     
 	$('.icon').click(function(e) {
 		e.preventDefault();
-		if ($(this).attr('href') != '#' && $(this).attr('href') != '#back') {
-			
-			pageHistory.push('#' + currentPage.attr('id'));
-			
-			if ($(this).attr('href') != '#gps_map') {
-				slidePageFrom($(this).attr('href'), 'right'); 
-			} else {
-				slidePageFrom($(this).attr('href'), 'left'); 
-			}
 		
-		} else if ($(this).attr('href') == '#back') {
+		if (!transitionNavigationFlag) {
+			if ($(this).attr('href') != '#' && $(this).attr('href') != '#back') {
 			
-			slidePageFrom(pageHistory[pageHistory.length - 1], 'left'); 
+				pageHistory.push('#' + currentPage.attr('id'));
+				
+				if ($(this).attr('href') != '#gps_map') {
+					slidePageFrom($(this).attr('href'), 'right'); 
+				} else {
+					slidePageFrom($(this).attr('href'), 'left'); 
+				}
 			
-			pageHistory.pop();
+			} else if ($(this).attr('href') == '#back') {
+				
+				slidePageFrom(pageHistory[pageHistory.length - 1], 'left'); 
+				
+				pageHistory.pop();
+			}
 		}
 	});
 	
@@ -3409,6 +3423,8 @@ if (device.platform != "iOS") {
 		}
 		
 	});
+	
+	
 	
 	
 
@@ -3644,7 +3660,7 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 
 $(document).on('pageinit', '#route_list', function() {
 
-	$('#route_list_content').html('<h2 class="center">Loading...</h2>');
+	$('#route_list_content_list').html('<h2 class="center">Loading...</h2>');
 	//$('#route_list_content').listview('refresh');
 	
 	//$.mobile.loading( 'show' );
@@ -3794,13 +3810,17 @@ $(document).on('pagebeforeshow', '#favorite_menu_page', function() {
 				favoritesListHTML = favoritesListHTML + '<li class="needsclick topcoat-list__item" data-id="' + object.id + '"><a class="favorite-stop-detail-btn icon-angle-right" data-stopid="' + object.id + '" data-stopname="' + object.name + '" data-lat="' + object.lat + '" data-lon="' + object.lon + '"><p class="favoriteMenuStopTitle"><strong>' + object.name +'</strong></p><p>Metro Bus Stop #'+ object.id + '</p><span class="delete-handle icon-remove" style="display:none;"><span>Delete</span></span><span class="drag-handle icon-reorder" style="display:none;"><span>Sort</span></span></a></li>';
 			}
 		});
-		
-		
-		
+
 		//console.log(favoritesListHTML);
 		//$('#favorites_menu').html(favoritesListHTML).listview('refresh');
 		$('#favorites_menu').html(favoritesListHTML);
-		
+
+		$("ul#favorites_menu").listfilter({ 
+			'filter': $('#favorites_filter_wrap .filter'),
+			'clearlink': $('#favorites_filter_wrap a.clear'),
+			'alternate': false
+		});
+
 		$('.favorite-stop-detail-btn').click(function() {
 
 			//console.log($(this).data('stopid'));
@@ -3852,6 +3872,14 @@ $.mobile.loading( 'show', {
 });
 
 
+$(document).on('pageshow', '#favorite_menu_page', function() {
+	//console.log(favoriteListfilterInit);
+	//if (favoriteListfilterInit) {
+		//$('ul#favorites_menu').listfilter("refresh");
+	//}
+});
+
+
 
 $(document).on('pagebeforeshow', '#infowindow', function() {
 	
@@ -3895,7 +3923,9 @@ $('#infowindow-routes').listview('refresh');
 */
     
     
-
+	if (mapVisible == true) {
+		hideMap();
+	}
     
    
 	
@@ -3966,6 +3996,7 @@ $(document).on('pageshow', '#route_map', function() {
 });
 
 
+
 // way to slow on jQuery mobile do to huge listview, so commenting out for now...
 $(document).on('pagebeforeshow', '#route_list', function() {
 	
@@ -3973,9 +4004,27 @@ $(document).on('pagebeforeshow', '#route_list', function() {
 	
 	if (mapVisible == true) {
 		hideMap();
+		
 	}
 	
 
+	
+	//getRoutes();
+});
+
+
+// way to slow on jQuery mobile do to huge listview, so commenting out for now...
+$(document).on('pagebeforehide', '#route_list', function() {
+	
+	//console.log(window.localStorage.getItem("favorites"));
+	
+	/*
+if (mapVisible == true) {
+		hideMap();
+	}
+*/
+	
+	$('#route_list_filter_wrap .filter').val('');
 	
 	//getRoutes();
 });
@@ -4022,6 +4071,7 @@ $(document).on('pagebeforehide', '#favorite_menu_page', function() {
 	$( "#edit" ).removeClass('open-state');
 	$('.topcoat-list__item a').addClass('icon-angle-right');
 	$('.topcoat-list__item p').removeClass('favorite-list-item-edit');
+	$('#favorites_filter_wrap .filter').val('');
 });
 
 

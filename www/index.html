@@ -32,11 +32,11 @@
         
         <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
         <script type="text/javascript" src="js/underscore-min.js"></script>
-        <script type="text/javascript" src="js/pull.js"></script>
         <script type="text/javascript" src="js/jquery-ui-1.10.1.custom.min.js"></script>
         <script type="text/javascript" src="js/jquery.ui.touch-punch.min.js"></script>
         <script type="text/javascript" src="js/fastclick.js"></script>
         <script type="text/javascript" src="js/jquery.xml2json.js"></script>
+        <script type="text/javascript" src="js/jquery.listfilter.js"></script>
         
         
         <script type="text/javascript" charset="utf-8" src="js/config.js"></script>       
@@ -65,8 +65,18 @@
 			</div>
 			
 			<div class="content">
-			
-		
+
+<!--
+        		<div id="filter_wrap" class="">
+					<input id="filter" type="search" class="topcoat-search-input" placeholder="Search routes by name/number">
+					<a class="clear icon-remove"></a>
+				</div>
+		<ul id="route_list_content_list" class="topcoat-list">
+	        		
+		    			<li class="needsclick topcoat-list__item"><a data-routeid="12345" class="route_menu_btn icon-angle-right"><p><strong>Skyland Bus Route</strong></p></a></li>
+		    			<h2 class="center">No routes available at this time.<br/>Try again later.</h2>
+        		</ul>
+-->
 			
 		    		<!--
 <ul data-role="listview" id="infowindow-routes" class="topcoat-list">
@@ -173,7 +183,7 @@
 			</div>
             
             <div class="content">
-            	<p>Loading...</p>
+            	
             </div>
 
 			<div class="topcoat-navigation-bar footer">
@@ -218,7 +228,13 @@
 			</div>
         	
         	<div id="route_list_content" class="content">
-	        	<h2 class="center">No routes available at this time.<br/>Try again later.</h2>
+        		<div id="route_list_filter_wrap" class="filter_wrap">
+					<input type="search" class="topcoat-search-input filter" placeholder="Search routes by name or number">
+					<a class="clear icon-remove"></a>
+				</div>
+        		<ul id="route_list_content_list" class="topcoat-list">
+	        		<h2 class="center">No routes available at this time.<br/>Try again later.</h2>
+        		</ul>
         	</div>
 
 			<div class="topcoat-navigation-bar footer">
@@ -265,6 +281,10 @@
 			</div>
         	
         	<div id="favorites_menu_content" class="content">
+        		<div id="favorites_filter_wrap" class="filter_wrap">
+					<input type="search" class="topcoat-search-input filter" placeholder="Search favorites by name">
+					<a class="clear icon-remove"></a>
+				</div>
 	        	<ul id="favorites_menu" class="topcoat-list">
 	        		<h2 class="center">You haven't added any<br/>favorite stops yet!</h2>
 	        		<h2 class="center">Click the star icon<br/>when viewing a stop to<br/>add it as a favorite.</h2>
