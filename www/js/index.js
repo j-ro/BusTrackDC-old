@@ -338,7 +338,7 @@ ajaxCount++;
 			    }
 				
 				//$('#route_list_menu').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>').listview('refresh');
-				$('#route_list_menu').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>');
+				$('#route_list_content_list').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>');
 				
 				if (errorThrown != 'abort') {
 					navigator.notification.confirm(
@@ -365,7 +365,7 @@ ajaxCount++;
 		    }
 			
 			//$('#route_list_menu').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>').listview('refresh');
-			$('#route_list_menu').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>');
+			$('#route_list_content_list').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>');
 			
 			if (errorThrown != 'abort') {
 				navigator.notification.confirm(
@@ -396,7 +396,8 @@ ajaxCount++;
 	    }
 		
 		//$('#route_list_menu').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>').listview('refresh');
-		$('#route_list_menu').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>');
+		$('#route_list_content_list').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>');
+		
 		
 		if (errorThrown != 'abort') {
 			navigator.notification.confirm(
@@ -3240,6 +3241,28 @@ function zoomIn() {
 
 function onDeviceReady() {
 
+//$(document).on('touchmove', function (ev) {ev.preventDefault();});
+
+/*
+$('input').on('focus', function(){
+    $('.header').css({position:'absolute'});
+    $('.footer').css({position:'absolute'});
+    $(window).scrollTop(0);    
+});
+$('input').on('blur', function(){
+    $('.header').css({position:'fixed'});
+    $('.footer').css({position:'fixed'});
+});
+*/
+
+	$(document).on('touchmove', function (ev) {
+		//console.log($(ev.target));
+                if (!$(ev.target).parents('ul').hasClass('scroll')) {
+                	//console.log('div!');
+                    ev.preventDefault();
+                }
+            });
+
 	homePage = $("#gps_map"),
 	currentPage = homePage,
 	pageHistory = [],
@@ -3647,6 +3670,10 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 		    	//console.log(favorites);
 			
 		    	window.localStorage.setItem("favorites", JSON.stringify(favorites));
+		    	
+		    	if (!favorites.length) {
+			    	$('#favorites_menu').html('<h2 class="center">You haven\'t added any<br/>favorite stops yet!</h2><h2 class="center">Click the star icon<br/>when viewing a stop to<br/>add it as a favorite.</h2>');
+		    	}
 		    });
 
 		    
