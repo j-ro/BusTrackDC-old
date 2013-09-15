@@ -54,12 +54,20 @@ background-color:#E4E4E4;
 */
 }
 
+body.Android {
+	text-rendering: auto;
+}
+
 /* main UI *************************************************/
 
 body {
 	font-family: "Helvetica Neue", "Helvetica", Helvetica Neue, Helvetica, sans-serif !important;
 	font-smooth:always !important;
 	-webkit-font-smoothing: antialiased !important;
+}
+
+.Android strong {
+	font-weight: bold;
 }
 
 .hide {
@@ -69,7 +77,7 @@ body {
 .topcoat-navigation-bar {
 	position: fixed;
 	width: 100%;
-	padding-right: 1.5rem;
+	padding: 0rem;
 	z-index: 10;
 	background-color: #f8f8f8;
 }
@@ -91,9 +99,36 @@ body {
 	padding: 10px 0 0 0;
 }
 
+.topcoat-navigation-bar__item.left .icon {
+	padding-left: 1rem;
+}
+
+.topcoat-navigation-bar__item.right .icon {
+	padding-right: 1.5rem;
+}
+
+.Android .header, .iOS6_or_lower .header {
+	height: 2.75rem;
+}
+
+.Android .header .topcoat-navigation-bar__item, .iOS6_or_lower .header .topcoat-navigation-bar__item {
+	padding: 0px 0 0 0;
+	line-height: 2.75rem;
+	
+}
+
+.Android .header .topcoat-navigation-bar__item a, .iOS6_or_lower .header .topcoat-navigation-bar__item a {
+	margin-top: 0.6rem;
+}
+
 .header .icon-angle-left {
 	font-size: 2rem;
 	margin-top: 0.95rem;
+}
+
+.Android .header .topcoat-navigation-bar__item a.icon-angle-left, .iOS6_or_lower .header .topcoat-navigation-bar__item a.icon-angle-left {
+	font-size: 2rem;
+	margin-top: 0.35rem;
 }
 
 .footer .topcoat-navigation-bar__item {
@@ -142,6 +177,10 @@ body {
 	-webkit-overflow-scrolling: touch;
 	z-index: 9;
 	text-align: left;
+}
+
+.Android .page .content, .iOS6_or_lower .page .content {
+	top: 2.75rem;
 }
 
 .content * {
@@ -207,6 +246,10 @@ body {
 	margin: -0.15rem 1rem 0 4rem !important;
 }
 
+.Android #infowindow .topcoat-list__item p {
+	width: 75%;
+}
+
 .ui-li-count {
 	background-color: #454545;
 	color: white;
@@ -262,6 +305,15 @@ body {
 	right: -1rem;
 }
 
+/* no sortable for android, it just doesn't work... */
+.Android .drag-handle {
+	display: none !important;
+}
+
+.Android .delete-handle {
+	right: 1rem;
+}
+
 .topcoat-list h2 {
 	padding-top: 2rem;
 	font-size: 1rem;
@@ -269,6 +321,10 @@ body {
 
 .topcoat-list__item p.favorite-list-item-edit {
 	margin-right: 4.5rem !important;
+}
+
+.Android .topcoat-list__item a {
+	display: block;
 }
 
 

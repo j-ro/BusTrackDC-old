@@ -23,7 +23,7 @@ window.addEventListener('load', function() {
 //on resume function to autorefresh bus times if the infowindow is active
 function onResume() {
 	ajaxCount = 0;
-	if ($.mobile.activePage[0].id == 'infowindow') {
+	if (currentPage.attr('id') == 'infowindow') {
 		resumeStopID = $('.stopTitle').attr('id');
     	annotationTap(resumeStopID); 
 	}
@@ -247,7 +247,11 @@ getRoutes = function() {
     ajaxCount++;
     if (ajaxCount > 0) {
     	/// this goes back in $.mobile.loading( 'show' );
-    	$('.topcoat-navigation-bar__title').css('margin-left','24px');
+    	if (device.platform == "iOS") {
+    		$('.topcoat-navigation-bar__title').css('margin-left','24px');
+    	} else {
+    		$('.topcoat-navigation-bar__title').css('margin-left','23px');
+    	}
     	$('.spinner').css('display','inline-block');
     	
     }
@@ -2183,7 +2187,7 @@ markerStops = function(data) {
 						if (i3 != 'undefined'){
 							//console.log('i3= ' + i3);
 							if (lowestMinute == 'start') {
-								routeListArray.push('<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn icon-angle-right" id="' + i3 + '"><span class="ui-li-count">' + i3 + '</span><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p></a></li>');
+								routeListArray.push('<li class="topcoat-list__item"><a class="route-detail-btn icon-angle-right" id="' + i3 + '"><span class="ui-li-count">' + i3 + '</span><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p></a></li>');
 								
 								lowestMinute = data.minutes[i3][0];
 								lowestMinuteArray.push(data.minutes[i3][0]);
@@ -2192,18 +2196,18 @@ markerStops = function(data) {
 									$.each(lowestMinuteArray, function(i, object) {
 										if (data.minutes[i3][0] < object) {
 											lowestMinuteArray.splice(i, 0, data.minutes[i3][0]);
-											routeListArray.splice(i, 0, '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn icon-angle-right" id="' + i3 + '"><span class="ui-li-count">' + i3 + '</span><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p></a></li>');
+											routeListArray.splice(i, 0, '<li class="topcoat-list__item"><a class="route-detail-btn icon-angle-right" id="' + i3 + '"><span class="ui-li-count">' + i3 + '</span><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p></a></li>');
 											routePlaced = true;
 										}
 									});
 									
 									if (routePlaced == false) {
-										routeListArray.push('<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn icon-angle-right" id="' + i3 + '"><span class="ui-li-count">' + i3 + '</span><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p></a></li>');
+										routeListArray.push('<li class="topcoat-list__item"><a class="route-detail-btn icon-angle-right" id="' + i3 + '"><span class="ui-li-count">' + i3 + '</span><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p></a></li>');
 									} else {
 										routePlaced == false;
 									}
 								} else {
-									routeListArray.unshift('<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn icon-angle-right" id="' + i3 + '"><span class="ui-li-count">' + i3 + '</span><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p></a></li>');
+									routeListArray.unshift('<li class="topcoat-list__item"><a class="route-detail-btn icon-angle-right" id="' + i3 + '"><span class="ui-li-count">' + i3 + '</span><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p></a></li>');
 									
 									lowestMinute = data.minutes[i3][0];
 									lowestMinuteArray.unshift(data.minutes[i3][0]);
@@ -2222,7 +2226,7 @@ markerStops = function(data) {
 					$.each(potentialVsActual, function(i4, object4) {
 						// check for the routes with a lowercase c or v in their name, they are variation routes and should be ignored
 						if (/([cv])/.exec(potentialVsActual[i4]) == null) {
-							routeList = routeList + '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn icon-angle-right" id="' + potentialVsActual[i4] + '"><span class="ui-li-count">' + potentialVsActual[i4] + '</span><p>no prediction available</p></a></li>';
+							routeList = routeList + '<li class="topcoat-list__item"><a class="route-detail-btn icon-angle-right" id="' + potentialVsActual[i4] + '"><span class="ui-li-count">' + potentialVsActual[i4] + '</span><p>no prediction available</p></a></li>';
 						}
 						
 					});
@@ -2232,7 +2236,7 @@ markerStops = function(data) {
 					$.each(potentialRouteList, function(i4, object4) {
 						// check for the routes with a lowercase c or v in their name, they are variation routes and should be ignored
 						if (/([cv])/.exec(potentialRouteList[i4]) == null) {			
-							routeList = routeList + '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn icon-angle-right" id="' + potentialRouteList[i4] + '"><span class="ui-li-count">' + potentialRouteList[i4] + '</span><p>no prediction available</p></a></li>';
+							routeList = routeList + '<li class="topcoat-list__item"><a class="route-detail-btn icon-angle-right" id="' + potentialRouteList[i4] + '"><span class="ui-li-count">' + potentialRouteList[i4] + '</span><p>no prediction available</p></a></li>';
 						}
 					});
 					
@@ -2244,7 +2248,7 @@ markerStops = function(data) {
 				//console.log('potential routes for stop ' + stopIDfocus + ': ' + potentialRouteList + ' and actual routes: ' + actualRouteList);
 				//console.log(stopName);
 				var dt = new DateTime();
-				routeList = '<li data-role="list-divider" class="stopTitle topcoat-list__header" id="' + stopID + '" data-lat=' + stopLat + '" data-lon=' + stopLon + '"><span class="stopName">' + toTitleCase(stopName) + '</span></li>' + routeList + '<div class="updated">Updated ' + dt.formats.busTrackDateTime.b + ' - Pull to refresh</div>';
+				routeList = '<li class="stopTitle topcoat-list__header" id="' + stopID + '" data-lat=' + stopLat + '" data-lon=' + stopLon + '"><span class="stopName">' + toTitleCase(stopName) + '</span></li>' + routeList + '<div class="updated">Updated ' + dt.formats.busTrackDateTime.b + ' - Pull to refresh</div>';
 				//console.log(routeList);
 				
 	        }
@@ -2298,7 +2302,7 @@ markerStops = function(data) {
 					// weed out undefined routes
 					if (i3 != 'undefined'){
 						//console.log('i3= ' + i3);
-						routeList = routeList + '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn icon-angle-right" id="' + i3 + '"><span class="ui-li-count">' + i3 + '</span><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p></a></li>';
+						routeList = routeList + '<li class="topcoat-list__item"><a class="route-detail-btn icon-angle-right" id="' + i3 + '"><span class="ui-li-count">' + i3 + '</span><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p></a></li>';
 					actualRouteList.push(i3);
 					potentialVsActual = potentialRouteList.diff(actualRouteList);
 					}
@@ -2313,7 +2317,7 @@ markerStops = function(data) {
 			//console.log('potential routes for stop ' + stopIDfocus + ': ' + potentialRouteList + ' and actual routes: ' + actualRouteList);
 			//console.log(stopName);
 			var dt = new DateTime();
-			routeList = '<li data-role="list-divider" class="stopTitle topcoat-list__header" id="' + stopID + '" data-lat=' + notInRangeStopLat + '" data-lon=' + notInRangeStopLon + '"><span class="stopName">' + notInRangeStopName + '</span></li>' + routeList + '<div class="updated">Updated ' + dt.formats.busTrackDateTime.b + ' - Pull to refresh</div>';
+			routeList = '<li class="stopTitle topcoat-list__header" id="' + stopID + '" data-lat=' + notInRangeStopLat + '" data-lon=' + notInRangeStopLon + '"><span class="stopName">' + notInRangeStopName + '</span></li>' + routeList + '<div class="updated">Updated ' + dt.formats.busTrackDateTime.b + ' - Pull to refresh</div>';
 			//console.log(routeList);
 			
         }
@@ -2558,7 +2562,7 @@ markerRailStops = function(data) {
 								});
 								
 								$.each(railDirectionTracker, function(i, object) {
-									railRouteList = railRouteList + '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn icon-angle-right" id="' + object.Line + '"><span class="ui-li-count">' + object.Line + '</span><p>to ' + object.DestinationName + ' arrives in:</p><p><strong>' + object.Min + '</strong> minutes</p></a></li>';
+									railRouteList = railRouteList + '<li class="topcoat-list__item"><a class="route-detail-btn icon-angle-right" id="' + object.Line + '"><span class="ui-li-count">' + object.Line + '</span><p>to ' + object.DestinationName + ' arrives in:</p><p><strong>' + object.Min + '</strong> minutes</p></a></li>';
 								});
 								
 								// then after, loop through routes with no predictions and add to the end
@@ -2567,7 +2571,7 @@ markerRailStops = function(data) {
 									
 									$.each(missingRailRoutes, function(i, object) {
 										// check for the routes with a lowercase c or v in their name, they are variation routes and should be ignored
-										railRouteList = railRouteList + '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn icon-angle-right" id="' + object + '"><span class="ui-li-count">' + object + '</span><p>no prediction available</p></a></li>';
+										railRouteList = railRouteList + '<li class="topcoat-list__item"><a class="route-detail-btn icon-angle-right" id="' + object + '"><span class="ui-li-count">' + object + '</span><p>no prediction available</p></a></li>';
 										
 									});
 								}
@@ -2580,7 +2584,7 @@ markerRailStops = function(data) {
 								// if there are no predictions at all, just do the stops
 								//console.log('realRailTrains false');
 								$.each(potentialRailRouteList, function(i4, object4) {			
-									railRouteList = railRouteList + '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn icon-angle-right" id="' + object4 + '"><span class="ui-li-count">' + object4 + '</span><p>no prediction available</p></a></li>';
+									railRouteList = railRouteList + '<li class="topcoat-list__item"><a class="route-detail-btn icon-angle-right" id="' + object4 + '"><span class="ui-li-count">' + object4 + '</span><p>no prediction available</p></a></li>';
 								});
 								
 								actualRailRouteList.length = 0;
@@ -2593,7 +2597,7 @@ markerRailStops = function(data) {
 							//console.log(stopName);
 							console.log(stationList.join().toString());
 							var dt = new DateTime();
-							railRouteList = '<li data-role="list-divider" class="stopTitle topcoat-list__header" id="' + station + '" data-lat=' + railStopLat + '" data-lon=' + railStopLon + '"><span class="stopName">' + railStopName + '</span></li>' + railRouteList + '<div class="updated">Updated ' + dt.formats.busTrackDateTime.b + ' - Pull to refresh</div>';
+							railRouteList = '<li class="stopTitle topcoat-list__header" id="' + station + '" data-lat=' + railStopLat + '" data-lon=' + railStopLon + '"><span class="stopName">' + railStopName + '</span></li>' + railRouteList + '<div class="updated">Updated ' + dt.formats.busTrackDateTime.b + ' - Pull to refresh</div>';
 
 							//console.log(railRouteList);
 							
@@ -2879,7 +2883,7 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 									});
 								}
 								//console.log('i3= ' + i3);
-								circulatorRouteList = circulatorRouteList + '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn icon-angle-right" id="' + i3 + '"><span class="ui-li-count icon-refresh"><span>' + i3 + '</span></span><p>' + data.directionText[i3][0] + ' arrives in:</p><p><strong>' + circulatorMinutesArray.join(', ') + '</strong> minutes</p></a></li>';
+								circulatorRouteList = circulatorRouteList + '<li class="topcoat-list__item"><a class="route-detail-btn icon-angle-right" id="' + i3 + '"><span class="ui-li-count icon-refresh"><span>' + i3 + '</span></span><p>' + data.directionText[i3][0].replace(/Northbound/,'N').replace(/Southbound/,'S').replace(/Eastbound/,'E').replace(/Westbound/,'W') + ' arrives in:</p><p><strong>' + circulatorMinutesArray.join(', ') + '</strong> minutes</p></a></li>';
 								actualCirculatorRouteList.push(i3);
 								potentialCirculatorRouteList = potentialCirculatorRouteList.diff(actualCirculatorRouteList);
 								
@@ -2905,7 +2909,7 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 							if (typeof(data.minutes[i3][0]) == 'undefined') {
 								// don't show yellow line/georgetown pm line twice, only once
 								if (yellowLineFlag != true) {
-									circulatorRouteList = circulatorRouteList + '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn icon-angle-right" id="' + i3 + '"><span class="ui-li-count icon-refresh"><span>' + i3 + '</span></span><p>no prediction available</p></a></li>';
+									circulatorRouteList = circulatorRouteList + '<li class="topcoat-list__item"><a class="route-detail-btn icon-angle-right" id="' + i3 + '"><span class="ui-li-count icon-refresh"><span>' + i3 + '</span></span><p>no prediction available</p></a></li>';
 									if (i3 == 'gtownpm' || i3 == 'yellow') {
 										yellowLineFlag = true;
 									}
@@ -2913,7 +2917,7 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 								//	yellowLineFlag = true;
 								} else {
 									if (i3 != 'gtownpm' && i3 != 'yellow') {
-										circulatorRouteList = circulatorRouteList + '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn icon-angle-right" id="' + i3 + '"><span class="ui-li-count icon-refresh"><span>' + i3 + '</span></span><p>no prediction available</p></a></li>';
+										circulatorRouteList = circulatorRouteList + '<li class="topcoat-list__item"><a class="route-detail-btn icon-angle-right" id="' + i3 + '"><span class="ui-li-count icon-refresh"><span>' + i3 + '</span></span><p>no prediction available</p></a></li>';
 									}
 
 								}
@@ -2927,7 +2931,7 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 					$.each(circulatorPotentialVsActual, function(i4, object4) {
 						// don't show no prediction available for yellow line/georgetown pm line
 						if (potentialVsActual[i4] != 'gtownpm' && potentialVsActual[i4] != 'yellow') {
-							circulatorRouteList = circulatorRouteList + '<li data-theme="d" class="topcoat-list__item"><a data-transition="slide" class="route-detail-btn icon-angle-right" id="' + potentialVsActual[i4] + '"><span class="ui-li-count icon-refresh"><span>' + potentialVsActual[i4] + '</span></span><p>no prediction available</p></a></li>';
+							circulatorRouteList = circulatorRouteList + '<li class="topcoat-list__item"><a class="route-detail-btn icon-angle-right" id="' + potentialVsActual[i4] + '"><span class="ui-li-count icon-refresh"><span>' + potentialVsActual[i4] + '</span></span><p>no prediction available</p></a></li>';
 						}
 						
 						
@@ -2960,7 +2964,7 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 				//console.log('potential routes for stop ' + stopIDfocus + ': ' + potentialRouteList + ' and actual routes: ' + actualRouteList);
 				//console.log(stopName);
 				var dt = new DateTime();
-				circulatorRouteList = '<li data-role="list-divider" class="stopTitle topcoat-list__header" id="' + stopID + '" data-lat=' + stopLat + '" data-lon=' + stopLon + '"><span class="stopName">' + toTitleCase(stopName) + '</span></li>' + circulatorRouteList + '<div class="updated">Updated ' + dt.formats.busTrackDateTime.b + ' - Pull to refresh</div>';
+				circulatorRouteList = '<li class="stopTitle topcoat-list__header" id="' + stopID + '" data-lat=' + stopLat + '" data-lon=' + stopLon + '"><span class="stopName">' + toTitleCase(stopName) + '</span></li>' + circulatorRouteList + '<div class="updated">Updated ' + dt.formats.busTrackDateTime.b + ' - Pull to refresh</div>';
 				//console.log(routeList);
 				
 	        }
@@ -3255,13 +3259,21 @@ $('input').on('blur', function(){
 });
 */
 
+	
+	
+	if (device.platform == "iOS" && parseInt(device.version) < 7) {
+		$('body').addClass(device.platform).addClass(device.platform + device.version).addClass('iOS6_or_lower');
+	} else {
+		$('body').addClass(device.platform).addClass(device.platform + device.version);
+	}
+
 	$(document).on('touchmove', function (ev) {
 		//console.log($(ev.target));
-                if (!$(ev.target).parents('ul').hasClass('scroll')) {
-                	//console.log('div!');
-                    ev.preventDefault();
-                }
-            });
+        if (!$(ev.target).parents('ul').hasClass('scroll')) {
+        	//console.log('div!');
+            ev.preventDefault();
+        }
+    });
 
 	homePage = $("#gps_map"),
 	currentPage = homePage,
@@ -3356,7 +3368,7 @@ $('input').on('blur', function(){
 		window.GA.trackerWithTrackingId("UA-39138450-1");
 		window.GA.trackView("/index");
 	} else {
-		$.mobile.defaultPageTransition="none";
+		//$.mobile.defaultPageTransition="none";
 		 window.plugins.analytics.start(
             function(){
                 window.plugins.analytics.trackPageView(
@@ -3408,8 +3420,8 @@ $('input').on('blur', function(){
 	//favoritesStorage = '';
 	
 	// prevent some things from being scrollable
-	$(document).delegate('.ui-footer', 'touchmove', false);
-	$(document).delegate('.ui-header', 'touchmove', false);
+	//$(document).delegate('.ui-footer', 'touchmove', false);
+	//$(document).delegate('.ui-header', 'touchmove', false);
 	
 	//('#infowindow').popup({ history: false });
 
@@ -3647,6 +3659,7 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 			})
 			.disableSelection()
 			.bind( "sortstop", function(event, ui) {
+				//console.log('sortstop');
 		    	//$favorites_menu.listview('refresh');
 		    });
 		    
