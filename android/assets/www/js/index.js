@@ -2883,7 +2883,7 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 									});
 								}
 								//console.log('i3= ' + i3);
-								circulatorRouteList = circulatorRouteList + '<li class="topcoat-list__item"><a class="route-detail-btn icon-angle-right" id="' + i3 + '"><span class="ui-li-count icon-refresh"><span>' + i3 + '</span></span><p>' + data.directionText[i3][0] + ' arrives in:</p><p><strong>' + circulatorMinutesArray.join(', ') + '</strong> minutes</p></a></li>';
+								circulatorRouteList = circulatorRouteList + '<li class="topcoat-list__item"><a class="route-detail-btn icon-angle-right" id="' + i3 + '"><span class="ui-li-count icon-refresh"><span>' + i3 + '</span></span><p>' + data.directionText[i3][0].replace(/Northbound/,'N').replace(/Southbound/,'S').replace(/Eastbound/,'E').replace(/Westbound/,'W') + ' arrives in:</p><p><strong>' + circulatorMinutesArray.join(', ') + '</strong> minutes</p></a></li>';
 								actualCirculatorRouteList.push(i3);
 								potentialCirculatorRouteList = potentialCirculatorRouteList.diff(actualCirculatorRouteList);
 								
@@ -3259,7 +3259,13 @@ $('input').on('blur', function(){
 });
 */
 
-	$('body').addClass(device.platform).addClass(device.platform + device.version);
+	
+	
+	if (device.platform == "iOS" && parseInt(device.version) < 7) {
+		$('body').addClass(device.platform).addClass(device.platform + device.version).addClass('iOS6_or_lower');
+	} else {
+		$('body').addClass(device.platform).addClass(device.platform + device.version);
+	}
 
 	$(document).on('touchmove', function (ev) {
 		//console.log($(ev.target));

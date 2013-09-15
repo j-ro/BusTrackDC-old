@@ -77,7 +77,7 @@ body {
 .topcoat-navigation-bar {
 	position: fixed;
 	width: 100%;
-	padding-right: 1.5rem;
+	padding: 0rem;
 	z-index: 10;
 	background-color: #f8f8f8;
 }
@@ -99,17 +99,25 @@ body {
 	padding: 10px 0 0 0;
 }
 
-.Android .header {
+.topcoat-navigation-bar__item.left .icon {
+	padding-left: 1rem;
+}
+
+.topcoat-navigation-bar__item.right .icon {
+	padding-right: 1.5rem;
+}
+
+.Android .header, .iOS6_or_lower .header {
 	height: 2.75rem;
 }
 
-.Android .header .topcoat-navigation-bar__item {
+.Android .header .topcoat-navigation-bar__item, .iOS6_or_lower .header .topcoat-navigation-bar__item {
 	padding: 0px 0 0 0;
 	line-height: 2.75rem;
 	
 }
 
-.Android .header .topcoat-navigation-bar__item a {
+.Android .header .topcoat-navigation-bar__item a, .iOS6_or_lower .header .topcoat-navigation-bar__item a {
 	margin-top: 0.6rem;
 }
 
@@ -118,7 +126,7 @@ body {
 	margin-top: 0.95rem;
 }
 
-.Android .header .topcoat-navigation-bar__item a.icon-angle-left {
+.Android .header .topcoat-navigation-bar__item a.icon-angle-left, .iOS6_or_lower .header .topcoat-navigation-bar__item a.icon-angle-left {
 	font-size: 2rem;
 	margin-top: 0.35rem;
 }
@@ -171,7 +179,7 @@ body {
 	text-align: left;
 }
 
-.Android .page .content {
+.Android .page .content, .iOS6_or_lower .page .content {
 	top: 2.75rem;
 }
 
@@ -316,6 +324,10 @@ body {
 }
 
 .Android .topcoat-list__item a {
+	display: block;
+}
+
+.route-detail-btn {
 	display: block;
 }
 
