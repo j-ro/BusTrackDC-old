@@ -526,7 +526,9 @@ if (device.platform == "iOS") {
 			$.mobile.changePage( "#route_map", { transition: "none"} );
 		}
 */
-		pageHistory.push('#' + currentPage.attr('id'));
+		if ($(this).attr('href') != $(currentPage).attr('id')) {
+			pageHistory.push('#' + currentPage.attr('id'));
+		}
 		slidePageFrom('#route_map', 'right');
 			    
 	});
@@ -1725,11 +1727,11 @@ if (railStops.length) {
 				    
 				    
 				    // pass some variables to the next page if a button is clicked
-				    $('.route-detail-btn').click(function() {
+				    $('#infowindow-routes .topcoat-list__item').click(function() {
 				    
 				    	//console.log('route btn clicked');
 				
-				    	routeClicked = $(this).attr('id');
+				    	routeClicked = $(this).children('.route-detail-btn').attr('id');
 				    	$('#route_map_title').html('Route ' + routeClicked);
 				    	
 				    	/*
@@ -1739,7 +1741,9 @@ if (device.platform == "iOS") {
 							$.mobile.changePage( "#route_map", { transition: "none"} );
 						}
 */
-						pageHistory.push('#' + currentPage.attr('id'));
+						if ($(this).attr('href') != $(currentPage).attr('id')) {
+							pageHistory.push('#' + currentPage.attr('id'));
+						}
 						slidePageFrom('#route_map', 'right');
 				    	
 				    });
@@ -1758,7 +1762,9 @@ if (device.platform == "iOS") {
 					}
 */
 					if (!$('#infowindow').hasClass('center')) {
-						pageHistory.push('#' + currentPage.attr('id'));
+						if ($(this).attr('href') != $(currentPage).attr('id')) {
+							pageHistory.push('#' + currentPage.attr('id'));
+						}
 						slidePageFrom('#infowindow', 'right');
 					}
 					
@@ -1984,11 +1990,11 @@ if (stops.length) {
 				    
 				    
 				    // pass some variables to the next page if a button is clicked
-				    $('.route-detail-btn').click(function() {
+				    $('#infowindow-routes .topcoat-list__item').click(function() {
 				    
 				    	//console.log('route btn clicked');
 				
-				    	routeClicked = $(this).attr('id');
+				    	routeClicked = $(this).children('.route-detail-btn').attr('id');
 				    	
 				    	if (routeClicked == 'yellow') {
 					    	routeTitle = 'Yellow';
@@ -2013,7 +2019,9 @@ if (device.platform == "iOS") {
 							$.mobile.changePage( "#route_map", { transition: "none"} );
 						}
 */
-						pageHistory.push('#' + currentPage.attr('id'));
+						if ($(this).attr('href') != $(currentPage).attr('id')) {
+							pageHistory.push('#' + currentPage.attr('id'));
+						}
 						slidePageFrom('#route_map', 'right');
 
 				    });
@@ -2033,7 +2041,9 @@ if (device.platform == "iOS") {
 */
 
 					if (!$('#infowindow').hasClass('center')) {
-						pageHistory.push('#' + currentPage.attr('id'));
+						if ($(this).attr('href') != $(currentPage).attr('id')) {
+							pageHistory.push('#' + currentPage.attr('id'));
+						}
 						slidePageFrom('#infowindow', 'right');
 					}
 					
@@ -2611,12 +2621,12 @@ markerRailStops = function(data) {
 				    
 				    
 					    // pass some variables to the next page if a button is clicked
-					    $('.route-detail-btn').click(function() {
+					    $('#infowindow-routes .topcoat-list__item').click(function() {
 					    
 					    	//console.log('route btn clicked');
 					    	//console.log($(this).attr('id'));
 					
-					    	routeClicked = $(this).attr('id');
+					    	routeClicked = $(this).children('.route-detail-btn').attr('id');
 					    	
 					    	//console.log(routeClicked);
 					    	
@@ -2641,7 +2651,9 @@ if (device.platform == "iOS") {
 								$.mobile.changePage( "#route_map", { transition: "none"} );
 							}
 */
-							pageHistory.push('#' + currentPage.attr('id'));
+							if ($(this).attr('href') != $(currentPage).attr('id')) {
+								pageHistory.push('#' + currentPage.attr('id'));
+							}
 							slidePageFrom('#route_map', 'right');
 	
 					    });
@@ -2661,7 +2673,9 @@ if (device.platform == "iOS") {
 */
 						
 						if (!$('#infowindow').hasClass('center')) {
-							pageHistory.push('#' + currentPage.attr('id'));
+							if ($(this).attr('href') != $(currentPage).attr('id')) {
+								pageHistory.push('#' + currentPage.attr('id'));
+							}
 							slidePageFrom('#infowindow', 'right');
 						}
 						
@@ -3156,54 +3170,59 @@ function favoriteTap(favorite) {
 
 function slidePageFrom(page, from) {
 
-	transitionNavigationFlag = true;
-    
-	// new page show event
-	$(page).trigger({
-		type: "pagebeforeshow"
-	});
+	//never transition to yourself
+	if ($(page).attr('id') != $(currentPage).attr('id')) {
 
-    // Position the page at the starting position of the animation
-    $(page).removeClass('left right');
-    $(page).addClass(from);
-    $(page).css('display','block');
-    
-    // Position the new page and the current page at the ending position of their animation with a transition class indicating the duration of the animation
-    //this timeout is needed, not exactly sure why
-    window.setTimeout(function() {
-    	
-        $(page).addClass('transition center').removeClass(from);
-        window.setTimeout(function() {
-        	$(page).removeClass('transition');
-        }, 250);
-        
-        // current page hiding event
-        currentPage.trigger({
-			type: "pagebeforehide"
+		transitionNavigationFlag = true;
+	    
+		// new page show event
+		$(page).trigger({
+			type: "pagebeforeshow"
 		});
-        currentPage.addClass('transition').addClass(from === "left" ? "right" : "left").removeClass('center');
-        currentPageDelay = currentPage;
-        window.setTimeout(function() {
-        	currentPageDelay.removeClass('transition').removeClass(from);
-        	currentPageDelay.css('display','none');
-        }, 250);
-        
-        currentPage = $(page);
-        
-        // send init and show events, only send init once
-        if (pageInitHistory.indexOf(currentPage.attr('id')) == '-1') {
-        	currentPage.trigger({
-				type: "pageinit"
+	
+	    // Position the page at the starting position of the animation
+	    $(page).removeClass('left right');
+	    $(page).addClass(from);
+	    $(page).css('display','block');
+	    
+	    // Position the new page and the current page at the ending position of their animation with a transition class indicating the duration of the animation
+	    //this timeout is needed, not exactly sure why
+	    window.setTimeout(function() {
+	    	
+	        $(page).addClass('transition center').removeClass(from);
+	        window.setTimeout(function() {
+	        	$(page).removeClass('transition');
+	        }, 250);
+	        
+	        // current page hiding event
+	        currentPage.trigger({
+				type: "pagebeforehide"
 			});
-	        pageInitHistory.push(currentPage.attr('id'));
-        }
-        
-        currentPage.trigger({
-			type: "pageshow"
-		});
-		
-		transitionNavigationFlag = false;
-    }, 1);
+	        currentPage.addClass('transition').addClass(from === "left" ? "right" : "left").removeClass('center');
+	        currentPageDelay = currentPage;
+	        window.setTimeout(function() {
+	        	currentPageDelay.removeClass('transition').removeClass(from);
+	        	currentPageDelay.css('display','none');
+	        }, 250);
+	        //console.log('currentPage = ' + currentPage.attr('id');
+	        console.log('nextpage = ' + $(page).attr('id'));
+	        currentPage = $(page);
+	        
+	        // send init and show events, only send init once
+	        if (pageInitHistory.indexOf(currentPage.attr('id')) == '-1') {
+	        	currentPage.trigger({
+					type: "pageinit"
+				});
+		        pageInitHistory.push(currentPage.attr('id'));
+	        }
+	        
+	        currentPage.trigger({
+				type: "pageshow"
+			});
+			
+			transitionNavigationFlag = false;
+	    }, 1);
+	}
 }
 
 
@@ -3306,7 +3325,9 @@ $('input').on('blur', function(){
 		if (!transitionNavigationFlag) {
 			if ($(this).attr('href') != '#' && $(this).attr('href') != '#back') {
 			
-				pageHistory.push('#' + currentPage.attr('id'));
+				if ($(this).attr('href') != $(currentPage).attr('id')) {
+					pageHistory.push('#' + currentPage.attr('id'));
+				}
 				
 				if ($(this).attr('href') != '#gps_map') {
 					slidePageFrom($(this).attr('href'), 'right'); 
@@ -3318,7 +3339,9 @@ $('input').on('blur', function(){
 				
 				slidePageFrom(pageHistory[pageHistory.length - 1], 'left'); 
 				
-				pageHistory.pop();
+				if (pageHistory[pageHistory.length - 1] != $(currentPage).attr('id')) {
+					pageHistory.pop();
+				}
 			}
 		}
 	});
