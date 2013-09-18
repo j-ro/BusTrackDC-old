@@ -16,6 +16,12 @@
 		<dict>
 			<key>CFBundleIconFiles</key>
 			<array>
+				<string>icon-ios-80.png</string>
+				<string>icon-ios-58.png</string>
+				<string>icon-ios-29.png</string>
+				<string>icon-ios-120.png</string>
+				<string>icon-ios-114.png</string>
+				<string>icon-ios-57.png</string>
 				<string>icon-72.png</string>
 				<string>icon-72@2x.png</string>
 				<string>icon.png</string>
@@ -34,17 +40,19 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.4</string>
+	<string>1.6</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.4</string>
+	<string>1.6</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSMainNibFile</key>
-	<string></string>
 	<key>NSMainNibFile~ipad</key>
 	<string></string>
+	<key>UILaunchImageFile</key>
+	<string>Default</string>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleDefault</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>319BB1D8-6E77-46A8-92FB-61262E13BEB8</string>
+	<key>IDESourceControlProjectName</key>
+	<string>BusTrackDC</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>41552D1B-5177-4646-88DC-60D2A6C40B57</key>
+		<string>https://github.com/j-ro/WheresTheBusDC.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>BusTrackDC.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>41552D1B-5177-4646-88DC-60D2A6C40B57</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/j-ro/WheresTheBusDC.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>41552D1B-5177-4646-88DC-60D2A6C40B57</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>41552D1B-5177-4646-88DC-60D2A6C40B57</string>
+			<key>IDESourceControlWCCName</key>
+			<string>WheresTheBusDC</string>
+		</dict>
+	</array>
+</dict>
+</plist>
