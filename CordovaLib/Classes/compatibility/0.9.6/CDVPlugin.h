@@ -23,7 +23,7 @@
 #ifdef PHONEGAP_FRAMEWORK
     #import <PhoneGap/PGPlugin.h>
 #else
-   // #import "PGPlugin.h"
+    #import "PGPlugin.h"
 #endif
 
 typedef enum {
@@ -39,8 +39,8 @@ typedef enum {
     CDVCommandStatus_ERROR
 } CDVCommandStatus;
 
-//@interface CDVPlugin : PGPlugin
-//@end
+@interface CDVPlugin : PGPlugin
+@end
 
-//@interface CDVPluginResult : PluginResult
-//@end
+@interface CDVPluginResult : PluginResult
+@end

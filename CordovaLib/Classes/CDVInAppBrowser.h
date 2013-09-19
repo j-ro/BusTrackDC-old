@@ -51,8 +51,8 @@
 @property (nonatomic, strong) IBOutlet UIActivityIndicatorView* spinner;
 @property (nonatomic, strong) IBOutlet UIToolbar* toolbar;
 
-@property (nonatomic, assign) id <CDVScreenOrientationDelegate> orientationDelegate;
-@property (nonatomic, assign) id <CDVInAppBrowserNavigationDelegate> navigationDelegate;
+@property (nonatomic, weak) id <CDVScreenOrientationDelegate> orientationDelegate;
+@property (nonatomic, weak) id <CDVInAppBrowserNavigationDelegate> navigationDelegate;
 @property (nonatomic, strong) NSString* userAgent;
 
 - (void)close;
