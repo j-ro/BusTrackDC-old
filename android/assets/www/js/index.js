@@ -533,6 +533,11 @@ if (device.platform == "iOS") {
 			    
 	});
 	
+	if (device.platform != "iOS" && parseInt(device.version) < 3) {
+		touchScroll("route_list_content");
+	}
+
+	
 	//if (device.platform != "iOS") {
 		//var initialScreenSize = window.innerHeight;
 		//window.addEventListener("resize", function() {
@@ -3205,7 +3210,7 @@ function slidePageFrom(page, from) {
 	        	currentPageDelay.css('display','none');
 	        }, 250);
 	        //console.log('currentPage = ' + currentPage.attr('id');
-	        console.log('nextpage = ' + $(page).attr('id'));
+	        //console.log('nextpage = ' + $(page).attr('id'));
 	        currentPage = $(page);
 	        
 	        // send init and show events, only send init once
@@ -3278,6 +3283,34 @@ $('input').on('blur', function(){
 });
 */
 
+	// from here for scrolling divs on older android: http://chris-barr.com/2010/05/scrolling_a_overflowauto_element_on_a_touch_screen_device/
+	if (device.platform != "iOS" && parseInt(device.version) < 3) {
+		isTouchDevice = function(){
+			try{
+				document.createEvent("TouchEvent");
+				return true;
+			}catch(e){
+				return false;
+			}
+		}
+		
+		touchScroll = function(id){
+			if(isTouchDevice()){ //if touch events exist...
+				var el=document.getElementById(id);
+				var scrollStartPos=0;
+		 
+				document.getElementById(id).addEventListener("touchstart", function(event) {
+					scrollStartPos=this.scrollTop+event.touches[0].pageY;
+					event.preventDefault();
+				},false);
+		 
+				document.getElementById(id).addEventListener("touchmove", function(event) {
+					this.scrollTop=scrollStartPos-event.touches[0].pageY;
+					event.preventDefault();
+				},false);
+			}
+		}
+	}
 	
 	
 	if (device.platform == "iOS" && parseInt(device.version) < 7) {
@@ -3930,6 +3963,18 @@ $.mobile.loading( 'show', {
 		$('#favorites_menu').html('<h2 class="center">You haven\'t added any<br/>favorite stops yet!</h2><h2 class="center">Click the star icon<br/>when viewing a stop to<br/>add it as a favorite.</h2>');
 	}
 	
+	function isTouchDevice(){
+		try{
+			document.createEvent("TouchEvent");
+			return true;
+		}catch(e){
+			return false;
+		}
+	}
+
+	if (device.platform != "iOS" && parseInt(device.version) < 3) {
+		touchScroll("favorites_menu_content");
+	}
 	
 
 });

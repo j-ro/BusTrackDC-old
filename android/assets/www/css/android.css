@@ -61,3 +61,9 @@ textarea
 {
     -webkit-user-select: auto !important;
 }
+
+input {
+	-webkit-user-modify: read-write-plaintext-only;
+	-webkit-user-select: text !important;
+	z-index: 9999999999999999999999;
+}
