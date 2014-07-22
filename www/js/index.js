@@ -494,6 +494,9 @@ buildRouteMenu = function(dataBus, dataRail, dataCirculator) {
 	    	} else if (routeClicked == 'GR') {
 		    	routeTitle = 'Green';
 		    	$('#route_map_title').html(routeTitle + ' Line');
+	    	} else if (routeClicked == 'SV') {
+		    	routeTitle = 'Silver';
+		    	$('#route_map_title').html(routeTitle + ' Line');
 	    	} else if (routeClicked == 'yellow') {
 		    	routeTitle = 'Yellow';
 		    	$('#route_map_title').html(routeTitle + ' Route');
@@ -2504,7 +2507,7 @@ markerRailStops = function(data) {
 							
 							//search and make sure the predictions we're getting are for real trains, and not fake ones...
 							$.each(predictions.Trains, function(i, object) {
-								if (object.Line == 'RD' || object.Line == 'YL' || object.Line == 'GR' || object.Line == 'BL' || object.Line == 'OR') {
+								if (object.Line == 'RD' || object.Line == 'YL' || object.Line == 'GR' || object.Line == 'BL' || object.Line == 'OR' || object.Line == 'SV') {
 									actualRailRouteList.push(object.Line);
 								}
 							});
@@ -2645,6 +2648,8 @@ markerRailStops = function(data) {
 						    	routeTitle = 'Yellow';
 					    	} else if (routeClicked == 'GR') {
 						    	routeTitle = 'Green';
+					    	} else if (routeClicked == 'SV') {
+						    	routeTitle = 'Silver';
 					    	}
 					    	
 					    	$('#route_map_title').html(routeTitle + ' Line');
@@ -4079,7 +4084,7 @@ $(document).on('pagebeforeshow', '#route_map', function() {
 	
 	//console.log(routeClicked);
 	
-	if (routeClicked == 'RD' || routeClicked == 'BL' || routeClicked == 'OR' || routeClicked == 'YL' || routeClicked == 'GR') {
+	if (routeClicked == 'RD' || routeClicked == 'BL' || routeClicked == 'OR' || routeClicked == 'YL' || routeClicked == 'GR' || routeClicked == 'SV') {
 		getRailStopsForRoute(routeClicked);
 	} else if (routeClicked == 'yellow' || routeClicked == 'gtownpm' || routeClicked == 'green' || routeClicked == 'blue' || routeClicked == 'rosslyn' || routeClicked == 'potomac') {
 		getCirculatorStopsForRoute(routeClicked);

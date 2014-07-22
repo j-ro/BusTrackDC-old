@@ -457,6 +457,12 @@ body {
 	border: 1px solid #FFCDC0;
 }
 
+#SV .ui-li-count {
+	background-color: #838383;
+	text-shadow: 0 -1px rgba(0,0,0,0.2);
+	border: 1px solid #b8b8b8;
+}
+
 #YL .ui-li-count, #yellow .ui-li-count, #gtownpm .ui-li-count {
 	background-color: rgb(255, 210, 0);
 	text-shadow: 0 -1px rgba(0,0,0,0.1);
