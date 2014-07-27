@@ -3812,6 +3812,9 @@ if (typeof(currentLatitude) === 'undefined') {
 	}
 */
 	
+	if (typeof(currentLat) != 'undefined') {
+		getStops(currentLat, currentLong, mapOptions.diameter);
+	}
 
 	// put this here for android, does that work on iOS?
 	geo = window.geo || {};
