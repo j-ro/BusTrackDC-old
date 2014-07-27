@@ -2531,13 +2531,14 @@ markerRailStops = function(data) {
 								$.each(predictions.Trains, function(i3, object) {
 								
 									objDestName = object.DestinationCode;
+									objLine = object.Line;
 									//console.log(objDestName);
 									
-									//if (object.DestinationCode != null) {
+									if (object.DestinationCode != null || (object.Line == 'RD' || object.Line == 'YL' || object.Line == 'GR' || object.Line == 'BL' || object.Line == 'OR' || object.Line == 'SV')) {
 										if(object.Min != '') {
 											railPredictionMatches = jQuery.grep(railDirectionTracker, function(obj) {
 												// our match function to see if a pin already exists in the global pin array
-												return obj.DestinationCode == objDestName;
+												return (obj.DestinationCode == objDestName && obj.Line == objLine);
 											});
 										
 											/*
@@ -2573,16 +2574,18 @@ markerRailStops = function(data) {
 												});
 											} else {
 												$.each(railDirectionTracker, function(i, object2) {
-													if (railDirectionTracker[i].DestinationCode == object.DestinationCode) {
+													if (railDirectionTracker[i].DestinationCode == object.DestinationCode && railDirectionTracker[i].Line == object.Line ) {
 														object2.Min = object2.Min  + ', ' + object.Min;
 													}
 												});
 											}
+											
+											//console.log(railPredictionMatches);
 										}
 									
 										
 										
-									//}
+									}
 								});
 								
 								$.each(railDirectionTracker, function(i, object) {
@@ -2619,7 +2622,7 @@ markerRailStops = function(data) {
 							
 							//console.log('potential routes for stop ' + stopIDfocus + ': ' + potentialRouteList + ' and actual routes: ' + actualRouteList);
 							//console.log(stopName);
-							console.log(stationList.join().toString());
+							//console.log(stationList.join().toString());
 							var dt = new DateTime();
 							railRouteList = '<li class="stopTitle topcoat-list__header" id="' + station + '" data-lat=' + railStopLat + '" data-lon=' + railStopLon + '"><span class="stopName">' + railStopName + '</span></li>' + railRouteList + '<div class="updated">Updated ' + dt.formats.busTrackDateTime.b + ' - Pull to refresh</div>';
 
