@@ -2532,13 +2532,14 @@ markerRailStops = function(data) {
 								$.each(predictions.Trains, function(i3, object) {
 								
 									objDestName = object.DestinationCode;
+									objLine = object.Line;
 									//console.log(objDestName);
 									
-									//if (object.DestinationCode != null) {
+									if (object.DestinationCode != null || (object.Line == 'RD' || object.Line == 'YL' || object.Line == 'GR' || object.Line == 'BL' || object.Line == 'OR' || object.Line == 'SV')) {
 										if(object.Min != '') {
 											railPredictionMatches = jQuery.grep(railDirectionTracker, function(obj) {
 												// our match function to see if a pin already exists in the global pin array
-												return obj.DestinationCode == objDestName;
+												return (obj.DestinationCode == objDestName && obj.Line == objLine);
 											});
 										
 											/*
@@ -2574,7 +2575,7 @@ markerRailStops = function(data) {
 												});
 											} else {
 												$.each(railDirectionTracker, function(i, object2) {
-													if (railDirectionTracker[i].DestinationCode == object.DestinationCode) {
+													if (railDirectionTracker[i].DestinationCode == object.DestinationCode && railDirectionTracker[i].Line == object.Line ) {
 														object2.Min = object2.Min  + ', ' + object.Min;
 													}
 												});
@@ -2583,7 +2584,7 @@ markerRailStops = function(data) {
 									
 										
 										
-									//}
+									}
 								});
 								
 								$.each(railDirectionTracker, function(i, object) {
