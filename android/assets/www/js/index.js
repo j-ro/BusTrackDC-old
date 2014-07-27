@@ -2478,6 +2478,12 @@ markerRailStops = function(data) {
 									if (object2.LineCode2 != null) {
 										potentialRailRouteList.push(object2.LineCode2);
 									}
+									if (object2.LineCode3 != null) {
+										potentialRailRouteList.push(object2.LineCode3);
+									}
+									if (object2.LineCode4 != null) {
+										potentialRailRouteList.push(object2.LineCode4);
+									}
 									
 									//potentialRailRouteList.push(object2.LineCode3);
 									//potentialRailRouteList.push(object2.LineCode4);
@@ -2527,7 +2533,7 @@ markerRailStops = function(data) {
 									objDestName = object.DestinationCode;
 									//console.log(objDestName);
 									
-									if (object.DestinationCode != null) {
+									//if (object.DestinationCode != null) {
 										if(object.Min != '') {
 											railPredictionMatches = jQuery.grep(railDirectionTracker, function(obj) {
 												// our match function to see if a pin already exists in the global pin array
@@ -2576,7 +2582,7 @@ markerRailStops = function(data) {
 									
 										
 										
-									}
+									//}
 								});
 								
 								$.each(railDirectionTracker, function(i, object) {
