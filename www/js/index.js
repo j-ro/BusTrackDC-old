@@ -2166,6 +2166,8 @@ markerStops = function(data) {
 				actualRouteList = [];
 				potentialVsActual = [];
 				
+				//console.log(stops.Stops);
+				
 				// create a list of all possible routes at this stop
 				$.each(stops.Stops, function(i2, object2) {
 					if (stopID.toString().replace(/Metro Bus Stop #/,'') == stops.Stops[i2].StopID) {
@@ -3810,6 +3812,10 @@ if (typeof(currentLatitude) === 'undefined') {
 		
 	}
 */
+	
+	if (typeof(currentLat) != 'undefined') {
+		getStops(currentLat, currentLong, mapOptions.diameter);
+	}
 	
 
 	// put this here for android, does that work on iOS?
