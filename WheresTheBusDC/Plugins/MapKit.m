@@ -183,16 +183,24 @@
 	
 	CGRect webViewBounds = self.webView.bounds;
 	
-	CGRect mapBounds;
-  mapBounds = CGRectMake(
+	CGRect mapBoundsChildView;
+    CGRect mapBoundsMapView;
+  mapBoundsChildView = CGRectMake(
     webViewBounds.origin.x,
-    webViewBounds.origin.y + (offsetTop / 2),
+    webViewBounds.origin.y + (offsetTop),
+    webViewBounds.size.width,
+    webViewBounds.origin.y + height
+  );
+  mapBoundsMapView = CGRectMake(
+    webViewBounds.origin.x,
+    webViewBounds.origin.y,
     webViewBounds.size.width,
     webViewBounds.origin.y + height
   );
 		
-	[self.childView setFrame:mapBounds];
-	[self.mapView setFrame:mapBounds];
+	//[self setFrame:mapBounds];
+    [self.childView setFrame:mapBoundsChildView];
+	[self.mapView setFrame:mapBoundsMapView];
 	
 	MKCoordinateRegion region=[ self.mapView regionThatFits: MKCoordinateRegionMakeWithDistance(centerCoord, 
 																						   diameter*(height / webViewBounds.size.width), 
