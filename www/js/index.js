@@ -190,6 +190,10 @@ function cbMapCallback(lat,lon) {
     alert('youve clicked ' + lat + ',' + lon);
 }
 
+function swipeTriggered() {
+	console.log('swipe!');
+}
+
 
 
 // calculate the radius of the viewport in meters
@@ -3518,6 +3522,16 @@ if (device.platform != "iOS") {
 		$.mobile.changePage( "#gps_map", { transition: "none"} );
 	}
 */
+
+	var mc = new Hammer(document.getElementById('body'));
+	// listen to events...
+	mc.on("swiperight", function(ev) {
+	    slidePageFrom(pageHistory[pageHistory.length - 1], 'left'); 
+		
+		if (pageHistory[pageHistory.length - 1] != $(currentPage).attr('id')) {
+			pageHistory.pop();
+		} 
+	});
 	
 	pageFlash = true;
 
