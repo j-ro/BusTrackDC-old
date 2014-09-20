@@ -1491,7 +1491,7 @@ function annotationTap(text, latitude, longitude) {
 			        }
 			    }
 			    
-			    console.log('rail!')
+			    //console.log('rail!')
 			    
 			    
 			    ajaxCount++;
@@ -1619,7 +1619,7 @@ if (railStops.length) {
 			self2 = this;
 			//console.log('click!');
 			stopID = text;
-			console.log(stopID);
+			//console.log(stopID);
 			var self2 = this;
 			
 		
@@ -1643,7 +1643,7 @@ if (railStops.length) {
 			        }
 			    }
 			    
-			    console.log('bus!');
+			    //console.log('bus!');
 			    
 			    ajaxCount++;
 			    if (ajaxCount > 0) {
@@ -1820,7 +1820,7 @@ if (device.platform == "iOS") {
 			self3 = this;
 			//console.log('click!');
 			stopID = text;
-			console.log(stopID);
+			//console.log(stopID);
 			var self3 = this;
 			
 		
@@ -1844,7 +1844,7 @@ if (device.platform == "iOS") {
 			        }
 			    }
 			    
-			    console.log('circulator!');
+			    //console.log('circulator!');
 			    
 			    ajaxCount++;
 			    if (ajaxCount > 0) {
@@ -2191,7 +2191,7 @@ markerStops = function(data) {
 				// make HTML for infowindow for actual buses that are coming
 				if (predictions.Predictions.length) {
 					//console.log('true');
-					console.log(data);
+					//console.log(data);
 					dataWorld = data;
 
 					lowestMinute = 'start';
@@ -3130,7 +3130,11 @@ function favoriteTap(favorite) {
 			//console.log('match! remove');
 			$( "#favorite" ).removeClass('icon-star').addClass('icon-star-empty');
 			
-			favorites = favorites.filter(function(el){ console.log('favorite= ' + favorite); console.log('el.id= ' + el.id); return (el.id != favorite && 'Metro Bus Stop #' + el.id != favorite && 'Metro Rail Station #' + el.id != favorite); });
+			favorites = favorites.filter(function(el){ 
+				//console.log('favorite= ' + favorite); 
+				//console.log('el.id= ' + el.id); 
+				return (el.id != favorite && 'Metro Bus Stop #' + el.id != favorite && 'Metro Rail Station #' + el.id != favorite); 
+			});
 			
 			window.localStorage.setItem("favorites", JSON.stringify(favorites));
 			//favoritesStorage = JSON.stringify(favorites);
@@ -3527,6 +3531,16 @@ if (device.platform != "iOS") {
 			navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError, { maximumAge: 60000, timeout: 10000, enableHighAccuracy: true });
 		}
 		
+	});
+	
+	var mc = new Hammer(document.getElementById('body'));
+	// listen to events...
+	mc.on("swiperight", function(ev) {
+	    slidePageFrom(pageHistory[pageHistory.length - 1], 'left'); 
+		
+		if (pageHistory[pageHistory.length - 1] != $(currentPage).attr('id')) {
+			pageHistory.pop();
+		} 
 	});
 	
 	
