@@ -3523,15 +3523,7 @@ if (device.platform != "iOS") {
 	}
 */
 
-	var mc = new Hammer(document.getElementById('body'));
-	// listen to events...
-	mc.on("swiperight", function(ev) {
-	    slidePageFrom(pageHistory[pageHistory.length - 1], 'left'); 
-		
-		if (pageHistory[pageHistory.length - 1] != $(currentPage).attr('id')) {
-			pageHistory.pop();
-		} 
-	});
+
 	
 	pageFlash = true;
 
@@ -3548,7 +3540,15 @@ if (device.platform != "iOS") {
 		
 	});
 	
-	
+	var mc = new Hammer(document.getElementById('body'));
+	// listen to events...
+	mc.on("swiperight", function(ev) {
+	    slidePageFrom(pageHistory[pageHistory.length - 1], 'left'); 
+		
+		if (pageHistory[pageHistory.length - 1] != $(currentPage).attr('id')) {
+			pageHistory.pop();
+		} 
+	});
 	
 	
 
