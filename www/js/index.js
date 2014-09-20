@@ -190,6 +190,10 @@ function cbMapCallback(lat,lon) {
     alert('youve clicked ' + lat + ',' + lon);
 }
 
+function swipeTriggered() {
+	console.log('swipe!');
+}
+
 
 
 // calculate the radius of the viewport in meters
@@ -1491,7 +1495,7 @@ function annotationTap(text, latitude, longitude) {
 			        }
 			    }
 			    
-			    console.log('rail!')
+			    //console.log('rail!')
 			    
 			    
 			    ajaxCount++;
@@ -1619,7 +1623,7 @@ if (railStops.length) {
 			self2 = this;
 			//console.log('click!');
 			stopID = text;
-			console.log(stopID);
+			//console.log(stopID);
 			var self2 = this;
 			
 		
@@ -1643,7 +1647,7 @@ if (railStops.length) {
 			        }
 			    }
 			    
-			    console.log('bus!');
+			    //console.log('bus!');
 			    
 			    ajaxCount++;
 			    if (ajaxCount > 0) {
@@ -1820,7 +1824,7 @@ if (device.platform == "iOS") {
 			self3 = this;
 			//console.log('click!');
 			stopID = text;
-			console.log(stopID);
+			//console.log(stopID);
 			var self3 = this;
 			
 		
@@ -1844,7 +1848,7 @@ if (device.platform == "iOS") {
 			        }
 			    }
 			    
-			    console.log('circulator!');
+			    //console.log('circulator!');
 			    
 			    ajaxCount++;
 			    if (ajaxCount > 0) {
@@ -2193,7 +2197,7 @@ markerStops = function(data) {
 				// make HTML for infowindow for actual buses that are coming
 				if (predictions.Predictions.length) {
 					//console.log('true');
-					console.log(data);
+					//console.log(data);
 					dataWorld = data;
 
 					lowestMinute = 'start';
@@ -2623,7 +2627,7 @@ markerRailStops = function(data) {
 							
 							//console.log('potential routes for stop ' + stopIDfocus + ': ' + potentialRouteList + ' and actual routes: ' + actualRouteList);
 							//console.log(stopName);
-							console.log(stationList.join().toString());
+							//console.log(stationList.join().toString());
 							var dt = new DateTime();
 							railRouteList = '<li class="stopTitle topcoat-list__header" id="' + station + '" data-lat=' + railStopLat + '" data-lon=' + railStopLon + '"><span class="stopName">' + railStopName + '</span></li>' + railRouteList + '<div class="updated">Updated ' + dt.formats.busTrackDateTime.b + ' - Pull to refresh</div>';
 
@@ -3131,7 +3135,11 @@ function favoriteTap(favorite) {
 			//console.log('match! remove');
 			$( "#favorite" ).removeClass('icon-star').addClass('icon-star-empty');
 			
-			favorites = favorites.filter(function(el){ console.log('favorite= ' + favorite); console.log('el.id= ' + el.id); return (el.id != favorite && 'Metro Bus Stop #' + el.id != favorite && 'Metro Rail Station #' + el.id != favorite); });
+			favorites = favorites.filter(function(el){ 
+				//console.log('favorite= ' + favorite); 
+				//console.log('el.id= ' + el.id); 
+				return (el.id != favorite && 'Metro Bus Stop #' + el.id != favorite && 'Metro Rail Station #' + el.id != favorite); 
+			});
 			
 			window.localStorage.setItem("favorites", JSON.stringify(favorites));
 			//favoritesStorage = JSON.stringify(favorites);
@@ -3514,6 +3522,8 @@ if (device.platform != "iOS") {
 		$.mobile.changePage( "#gps_map", { transition: "none"} );
 	}
 */
+
+
 	
 	pageFlash = true;
 
@@ -3530,7 +3540,15 @@ if (device.platform != "iOS") {
 		
 	});
 	
-	
+	var mc = new Hammer(document.getElementById('body'));
+	// listen to events...
+	mc.on("swiperight", function(ev) {
+	    slidePageFrom(pageHistory[pageHistory.length - 1], 'left'); 
+		
+		if (pageHistory[pageHistory.length - 1] != $(currentPage).attr('id')) {
+			pageHistory.pop();
+		} 
+	});
 	
 	
 
@@ -3852,7 +3870,7 @@ geo.beforeMapMove = function(currentLat,currentLon,latitudeDelta,longitudeDelta)
 					calculateRadius(currentLat, currentLon, latitudeDelta, longitudeDelta, function(viewportLat, viewportLon, radius) {
 						// prevent huge radii in the viewport from crashing the app
 						//console.log(radius);
-						if (radius < 2000) {
+						if (radius < 3000) {
 							getStops(viewportLat, viewportLon, radius);
 							getRailStops(viewportLat, viewportLon, radius);
 							
