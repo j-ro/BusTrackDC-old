@@ -3852,7 +3852,7 @@ geo.beforeMapMove = function(currentLat,currentLon,latitudeDelta,longitudeDelta)
 					calculateRadius(currentLat, currentLon, latitudeDelta, longitudeDelta, function(viewportLat, viewportLon, radius) {
 						// prevent huge radii in the viewport from crashing the app
 						//console.log(radius);
-						if (radius < 2000) {
+						if (radius < 3000) {
 							getStops(viewportLat, viewportLon, radius);
 							getRailStops(viewportLat, viewportLon, radius);
 							
