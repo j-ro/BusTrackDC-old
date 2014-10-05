@@ -3291,6 +3291,8 @@ function zoomIn() {
 
 
 function onDeviceReady() {
+	
+	console.log('ready');
 
 //$(document).on('touchmove', function (ev) {ev.preventDefault();});
 

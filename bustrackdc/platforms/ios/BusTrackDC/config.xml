@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.jasonrosenbaum.bustrackdc" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.jasonrosenbaum.bustrackdc" version="1.8.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <preference name="AllowInlineMediaPlayback" value="false" />
     <preference name="AutoHideSplashScreen" value="true" />
     <preference name="BackupWebStorage" value="cloud" />
@@ -25,16 +25,17 @@
     <feature name="Geolocation">
         <param name="ios-package" value="CDVLocation" />
     </feature>
-    <name>BusTrackDC</name>
-    <description>
-        A sample Apache Cordova application that responds to the deviceready event.
-    </description>
-    <author email="dev@cordova.apache.org" href="http://cordova.io">
-        Apache Cordova Team
-    </author>
-    <content src="index.html" />
-    <access origin="*" />
     <feature name="Console">
         <param name="ios-package" value="CDVLogger" />
     </feature>
+    <name>BusTrackDC</name>
+    <description>
+        An app for iOS and Android to find out when your Metro or Circulator bus or Metro train is coming to a stop near you, using WMATA and NextBus prediction data.
+    </description>
+    <author email="seminal@theseminal.com" href="http://bustrackdc.com">
+        Jason Rosenbaum
+    </author>
+    <content src="index.html" />
+    <access origin="*" />
+    <preference name="DisallowOverscroll" value="true" />
 </widget>
