@@ -34,6 +34,9 @@
     <feature name="UniversalAnalytics">
         <param name="ios-package" value="UniversalAnalyticsPlugin" />
     </feature>
+    <feature name="Console">
+        <param name="ios-package" value="CDVLogger" />
+    </feature>
     <name>BusTrackDC</name>
     <description>
         A sample Apache Cordova application that responds to the deviceready event.

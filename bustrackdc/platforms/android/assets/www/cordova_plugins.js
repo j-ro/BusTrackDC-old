@@ -36,7 +36,8 @@ module.exports.metadata =
     "org.apache.cordova.geolocation": "0.3.10",
     "com.phonegap.plugins.mapkit": "0.9.3",
     "com.google.google-play-services": "1.0.0",
-    "com.danielcwilson.plugins.googleanalytics": "0.6.0"
+    "com.danielcwilson.plugins.googleanalytics": "0.6.0",
+    "org.apache.cordova.console": "0.2.11"
 }
 // BOTTOM OF METADATA
 });

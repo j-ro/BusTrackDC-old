@@ -137,6 +137,70 @@
 
 }
 
+/* custom addition */
+/**
+ * Set annotations and mapview settings
+ */
+- (void)setMapData:(NSMutableArray*)arguments withDict:(NSMutableDictionary*)options;\
+{	
+    if (!self.mapView) 
+	{
+		[self createView];
+	}
+	
+	// defaults
+    CGFloat height = 480.0f;
+    CGFloat offsetTop = 0.0f;
+		
+	if ([options objectForKey:@"height"]) 
+	{
+		height=[[options objectForKey:@"height"] floatValue];
+	}
+    if ([options objectForKey:@"offsetTop"]) 
+	{
+		offsetTop=[[options objectForKey:@"offsetTop"] floatValue];
+	}
+	if ([options objectForKey:@"buttonCallback"]) 
+	{
+		self.buttonCallback=[[options objectForKey:@"buttonCallback"] description];
+	}
+	
+	CLLocationCoordinate2D centerCoord = { [[options objectForKey:@"lat"] floatValue] , [[options objectForKey:@"lon"] floatValue] };
+	CLLocationDistance diameter = [[options objectForKey:@"diameter"] floatValue];
+	
+	CGRect webViewBounds = self.webView.bounds;
+	
+	CGRect mapBoundsChildView;
+    CGRect mapBoundsMapView;
+  mapBoundsChildView = CGRectMake(
+    webViewBounds.origin.x,
+    webViewBounds.origin.y + (offsetTop),
+    webViewBounds.size.width,
+    webViewBounds.origin.y + height
+  );
+  mapBoundsMapView = CGRectMake(
+    webViewBounds.origin.x,
+    webViewBounds.origin.y,
+    webViewBounds.size.width,
+    webViewBounds.origin.y + height
+  );
+		
+	//[self setFrame:mapBounds];
+    [self.childView setFrame:mapBoundsChildView];
+	[self.mapView setFrame:mapBoundsMapView];
+	
+	MKCoordinateRegion region=[ self.mapView regionThatFits: MKCoordinateRegionMakeWithDistance(centerCoord, 
+																						   diameter*(height / webViewBounds.size.width), 
+																						   diameter*(height / webViewBounds.size.width))];
+	[self.mapView setRegion:region animated:YES];
+	
+	CGRect frame = CGRectMake(285.0,12.0,  29.0, 29.0);
+	
+	[ self.imageButton setImage:[UIImage imageNamed:@"www/map-close-button.png"] forState:UIControlStateNormal];
+	[ self.imageButton setFrame:frame];
+	[ self.imageButton addTarget:self action:@selector(closeButton:) forControlEvents:UIControlEventTouchUpInside];
+}
+
 -(void)showMap:(CDVInvokedUrlCommand *)command
 {
     if (!self.mapView)

@@ -3257,28 +3257,48 @@ function slidePageFrom(page, from) {
 
 
 //our initial show map function
+var mapSuccess = function() {
+	console.log('map success');
+}
+
+var mapError = function() {
+	console.log('map error');
+}
+
 function showMap() {
+	
+	var options = {
+			height: 460,
+			diameter: 1000,
+			atBottom: true,
+			lat: 41.281468,
+			lon: -123.104446
+		};
 
 	mapVisible = true;
 	
-    window.plugins.mapKit.showMap();
+    mapKit.showMap(mapSuccess, mapError, options);
 }
 
 function hideMap() {
 	mapVisible = false;
-    window.plugins.mapKit.hideMap();
+    mapKit.hideMap();
 }
 
 function clearPins() {
-    window.plugins.mapKit.clearMapPins();
+    mapKit.clearMapPins();
 }
 
 function resizeMap() {
     var mapOptions = {
-        height:260
+        height: 460,
+			diameter: 1000,
+			atBottom: true,
+			lat: 49.281468,
+			lon: -123.104446
     }
     
-    window.plugins.mapKit.setMapData(mapOptions);
+    mapKit.setMapData(mapSuccess, mapError, mapOptions);
 }
 
 function zoomIn() {
@@ -3286,11 +3306,12 @@ function zoomIn() {
         diameter: 30
     }
     
-    window.plugins.mapKit.setMapData(mapOptions);
+    mapKit.setMapData(mapOptions);
 }
 
 
 function onDeviceReady() {
+	console.log('ready');
 
 //$(document).on('touchmove', function (ev) {ev.preventDefault();});
 
@@ -3443,7 +3464,7 @@ $('input').on('blur', function(){
 		}
 	});
 
-	//analytics.startTrackerWithId('UA-39138450-1')
+	analytics.startTrackerWithId('UA-39138450-1')
 	/*
 if (device.platform == "iOS") {
 		window.GA.trackerWithTrackingId("UA-39138450-1");

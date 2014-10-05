@@ -27,6 +27,10 @@
                         {
                             "xml": "<feature name=\"UniversalAnalytics\"><param name=\"ios-package\" value=\"UniversalAnalyticsPlugin\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Console\"><param name=\"ios-package\" value=\"CDVLogger\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -145,6 +149,9 @@
             "PACKAGE_NAME": "com.jasonrosenbaum.bustrackdc"
         },
         "com.danielcwilson.plugins.googleanalytics": {
+            "PACKAGE_NAME": "com.jasonrosenbaum.bustrackdc"
+        },
+        "org.apache.cordova.console": {
             "PACKAGE_NAME": "com.jasonrosenbaum.bustrackdc"
         }
     },

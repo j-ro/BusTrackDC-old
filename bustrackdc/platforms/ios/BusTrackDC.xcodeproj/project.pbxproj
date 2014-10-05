@@ -60,6 +60,7 @@
 		76727612DF154AB2B6541DC0 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FB2B5EDC3304B3896449FDD /* CoreData.framework */; };
 		267BE1E40C6A484B80755FFA /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DB64366C0F3149FDB39CB047 /* libz.dylib */; };
 		80C80CC9779F45CEA40E9C37 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A581D13167C49E48C13E8B7 /* libsqlite3.0.dylib */; };
+		4C72D19F1A9941618F8FBA5E /* CDVLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 58532BC365024898895C5BC7 /* CDVLogger.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -159,6 +160,8 @@
 		9FB2B5EDC3304B3896449FDD /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "CoreData.framework"; path = "System/Library/Frameworks/CoreData.framework"; sourceTree = SDKROOT; fileEncoding = 4; };
 		DB64366C0F3149FDB39CB047 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libz.dylib"; path = "usr/lib/libz.dylib"; sourceTree = SDKROOT; fileEncoding = 4; };
 		6A581D13167C49E48C13E8B7 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libsqlite3.0.dylib"; path = "usr/lib/libsqlite3.0.dylib"; sourceTree = SDKROOT; fileEncoding = 4; };
+		58532BC365024898895C5BC7 /* CDVLogger.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVLogger.m"; path = "org.apache.cordova.console/CDVLogger.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		24DEFB211345444C9026DE3C /* CDVLogger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVLogger.h"; path = "org.apache.cordova.console/CDVLogger.h"; sourceTree = "<group>"; fileEncoding = 4; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -328,6 +331,8 @@
 				E8B7D58FC8F84A34B83F4AF6 /* GAITrackedViewController.h */,
 				B5953715A588454DB190183C /* GAI.h */,
 				2EF94FCFE2944AA6B1CE1855 /* GAITracker.h */,
+				58532BC365024898895C5BC7 /* CDVLogger.m */,
+				24DEFB211345444C9026DE3C /* CDVLogger.h */,
 			);
 			name = Plugins;
 			path = "BusTrackDC/Plugins";
@@ -530,6 +535,7 @@
 				0B468030EFB44763B0366887 /* MapKit.m in Sources */,
 				255C9CE92E5A4384A3B79BCB /* AdmobAdPlugin.m in Sources */,
 				D7204625609D45CFBD35C146 /* UniversalAnalyticsPlugin.m in Sources */,
+				4C72D19F1A9941618F8FBA5E /* CDVLogger.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
