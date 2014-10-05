@@ -28,4 +28,10 @@
     </author>
     <content src="index.html" />
     <access origin="*" />
+    <feature name="Device">
+        <param name="ios-package" value="CDVDevice" />
+    </feature>
+    <feature name="Geolocation">
+        <param name="ios-package" value="CDVLocation" />
+    </feature>
 </widget>
