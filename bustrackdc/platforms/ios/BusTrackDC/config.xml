@@ -19,6 +19,21 @@
     <feature name="LocalStorage">
         <param name="ios-package" value="CDVLocalStorage" />
     </feature>
+    <feature name="Device">
+        <param name="ios-package" value="CDVDevice" />
+    </feature>
+    <feature name="Geolocation">
+        <param name="ios-package" value="CDVLocation" />
+    </feature>
+    <feature name="MapKit">
+        <param name="ios-package" value="MapKitView" />
+    </feature>
+    <feature name="AdmobPlugin">
+        <param name="ios-package" value="AdmobAdPlugin" />
+    </feature>
+    <feature name="UniversalAnalytics">
+        <param name="ios-package" value="UniversalAnalyticsPlugin" />
+    </feature>
     <name>BusTrackDC</name>
     <description>
         A sample Apache Cordova application that responds to the deviceready event.

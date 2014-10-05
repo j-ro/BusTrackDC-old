@@ -1,0 +1,32 @@
+{
+    "version": "1.0.0",
+    "name": "com.google.google-play-services",
+    "cordova_name": "Google-Play-Services",
+    "description": "\n    Google play service  Plugin of Admob ,base on admob ios sdk 6.10 and android google play service sdk 4.5 ,support ios and android,support all admob banner and Interstitial\n    project home:https://github.com/gooogleadmob/admob-phonegap\n    ",
+    "license": "Apache 2.0 License",
+    "keywords": [
+        "ad",
+        "admob",
+        "admob sdk ",
+        "console",
+        "file",
+        "network info",
+        "dialogs",
+        "camera",
+        "geolocation",
+        "google",
+        "google-play-service",
+        "iad",
+        "google play services",
+        "device",
+        "adwhirl",
+        "google play service",
+        "cordova",
+        "phonegap"
+    ],
+    "platforms": [
+        "android",
+        "ios"
+    ],
+    "engines": []
+}

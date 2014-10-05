@@ -1,0 +1,11 @@
+{
+    "version": "0.9.3",
+    "name": "com.phonegap.plugins.mapkit",
+    "cordova_name": "MapKit",
+    "license": "Apache",
+    "platforms": [
+        "android",
+        "ios"
+    ],
+    "engines": []
+}
