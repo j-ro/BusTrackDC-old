@@ -1,0 +1,38 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'install', '-g', 'ios-deploy' ]
+2 info using npm@1.4.28
+3 info using node@v0.10.32
+4 verbose cache add [ 'ios-deploy', null ]
+5 verbose cache add name=undefined spec="ios-deploy" args=["ios-deploy",null]
+6 verbose parsed url { protocol: null,
+6 verbose parsed url   slashes: null,
+6 verbose parsed url   auth: null,
+6 verbose parsed url   host: null,
+6 verbose parsed url   port: null,
+6 verbose parsed url   hostname: null,
+6 verbose parsed url   hash: null,
+6 verbose parsed url   search: null,
+6 verbose parsed url   query: null,
+6 verbose parsed url   pathname: 'ios-deploy',
+6 verbose parsed url   path: 'ios-deploy',
+6 verbose parsed url   href: 'ios-deploy' }
+7 silly lockFile 69149c11-ios-deploy ios-deploy
+8 verbose lock ios-deploy /Users/jasonrosenbaum/.npm/69149c11-ios-deploy.lock
+9 silly lockFile 69149c11-ios-deploy ios-deploy
+10 error Error: Attempt to unlock ios-deploy, which hasn't been locked
+10 error     at unlock (/usr/local/lib/node_modules/npm/lib/utils/locker.js:44:11)
+10 error     at cb (/usr/local/lib/node_modules/npm/lib/cache/add-local.js:30:5)
+10 error     at /usr/local/lib/node_modules/npm/lib/cache/add-local.js:47:20
+10 error     at /usr/local/lib/node_modules/npm/lib/utils/locker.js:30:7
+10 error     at cb (/usr/local/lib/node_modules/npm/node_modules/lockfile/lockfile.js:149:38)
+10 error     at /usr/local/lib/node_modules/npm/node_modules/lockfile/lockfile.js:177:38
+10 error     at Object.oncomplete (fs.js:107:15)
+11 error If you need help, you may report this *entire* log,
+11 error including the npm and node versions, at:
+11 error     <http://github.com/npm/npm/issues>
+12 error System Darwin 13.4.0
+13 error command "node" "/usr/local/bin/npm" "install" "-g" "ios-deploy"
+14 error cwd /Users/jasonrosenbaum/xcode/WheresTheBusDC/bustrackdc
+15 error node -v v0.10.32
+16 error npm -v 1.4.28
+17 verbose exit [ 1, true ]
