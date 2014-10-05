@@ -37,6 +37,9 @@
         },
         "org.apache.cordova.geolocation": {
             "PACKAGE_NAME": "com.jasonrosenbaum.bustrackdc"
+        },
+        "org.apache.cordova.console": {
+            "PACKAGE_NAME": "com.jasonrosenbaum.bustrackdc"
         }
     },
     "dependent_plugins": {}

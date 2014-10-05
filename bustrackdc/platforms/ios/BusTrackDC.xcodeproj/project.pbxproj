@@ -40,6 +40,7 @@
 		3F901408037C43EFBE6749A5 /* CDVDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 2061F1164E214791BB40CE40 /* CDVDevice.m */; };
 		32AEC9CE04274A62A0A3CC8D /* CDVLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EFF729900D24796831BE997 /* CDVLocation.m */; };
 		8E4C0093E8D8474E89B2FA40 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B63EE83171384E3A8E78C6D7 /* CoreLocation.framework */; };
+		3330277EB2724980A94962F6 /* CDVLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = F76CCF5F5DC248969B991D05 /* CDVLogger.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -108,6 +109,8 @@
 		1EFF729900D24796831BE997 /* CDVLocation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVLocation.m"; path = "org.apache.cordova.geolocation/CDVLocation.m"; sourceTree = "<group>"; fileEncoding = 4; };
 		69FE0131FB614AFABEDDECA8 /* CDVLocation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVLocation.h"; path = "org.apache.cordova.geolocation/CDVLocation.h"; sourceTree = "<group>"; fileEncoding = 4; };
 		B63EE83171384E3A8E78C6D7 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "CoreLocation.framework"; path = "System/Library/Frameworks/CoreLocation.framework"; sourceTree = SDKROOT; fileEncoding = 4; };
+		F76CCF5F5DC248969B991D05 /* CDVLogger.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVLogger.m"; path = "org.apache.cordova.console/CDVLogger.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		3C2409CB25994B168C01D0A5 /* CDVLogger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVLogger.h"; path = "org.apache.cordova.console/CDVLogger.h"; sourceTree = "<group>"; fileEncoding = 4; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -232,6 +235,8 @@
 				9D3D9EA4D09C44B09A04CBCD /* CDVDevice.h */,
 				1EFF729900D24796831BE997 /* CDVLocation.m */,
 				69FE0131FB614AFABEDDECA8 /* CDVLocation.h */,
+				F76CCF5F5DC248969B991D05 /* CDVLogger.m */,
+				3C2409CB25994B168C01D0A5 /* CDVLogger.h */,
 			);
 			name = Plugins;
 			path = "BusTrackDC/Plugins";
@@ -428,6 +433,7 @@
 				302D95F114D2391D003F00A1 /* MainViewController.m in Sources */,
 				3F901408037C43EFBE6749A5 /* CDVDevice.m in Sources */,
 				32AEC9CE04274A62A0A3CC8D /* CDVLocation.m in Sources */,
+				3330277EB2724980A94962F6 /* CDVLogger.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
