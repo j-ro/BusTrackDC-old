@@ -48,6 +48,13 @@ module.exports = [
         "clobbers": [
             "cordova.logger"
         ]
+    },
+    {
+        "file": "plugins/com.danielcwilson.plugins.googleanalytics/www/analytics.js",
+        "id": "com.danielcwilson.plugins.googleanalytics.UniversalAnalytics",
+        "clobbers": [
+            "analytics"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -55,7 +62,8 @@ module.exports.metadata =
 {
     "org.apache.cordova.device": "0.2.12",
     "org.apache.cordova.geolocation": "0.3.10",
-    "org.apache.cordova.console": "0.2.11"
+    "org.apache.cordova.console": "0.2.11",
+    "com.danielcwilson.plugins.googleanalytics": "0.6.0"
 }
 // BOTTOM OF METADATA
 });

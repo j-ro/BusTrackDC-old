@@ -28,6 +28,9 @@
     <feature name="Console">
         <param name="ios-package" value="CDVLogger" />
     </feature>
+    <feature name="UniversalAnalytics">
+        <param name="ios-package" value="UniversalAnalyticsPlugin" />
+    </feature>
     <name>BusTrackDC</name>
     <description>
         An app for iOS and Android to find out when your Metro or Circulator bus or Metro train is coming to a stop near you, using WMATA and NextBus prediction data.

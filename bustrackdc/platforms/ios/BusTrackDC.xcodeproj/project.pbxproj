@@ -41,6 +41,12 @@
 		7E7966E71810823500FA85AD /* icon-small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E7966DD1810823500FA85AD /* icon-small@2x.png */; };
 		8E4C0093E8D8474E89B2FA40 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B63EE83171384E3A8E78C6D7 /* CoreLocation.framework */; };
 		D4A0D8761607E02300AEF8BB /* Default-568h@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = D4A0D8751607E02300AEF8BB /* Default-568h@2x~iphone.png */; };
+		ACDE69E573E741188E26FEA9 /* UniversalAnalyticsPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = FC68C461DD3B4764BC893DA8 /* UniversalAnalyticsPlugin.m */; };
+		A117A48D29454B75BD51C0A8 /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 79681F32DCF445DABD203C13 /* libGoogleAnalyticsServices.a */; };
+		A68093A9A9A145C08779F3BD /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC1D753AE4144F2DB207155A /* SystemConfiguration.framework */; };
+		824A7AAD6A144DA6A2627F70 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72CC750CA4C34D37A1BC6DE2 /* CoreData.framework */; };
+		A7ADC2996D2B485C881FF8C1 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 95351A044C34446298FB06B6 /* libz.dylib */; };
+		8991F59960B948F1A7B467DD /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 048B65EF1830466FA0A454C2 /* libsqlite3.0.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -111,6 +117,19 @@
 		EB87FDF41871DAF40020F90C /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = ../../config.xml; sourceTree = "<group>"; };
 		F76CCF5F5DC248969B991D05 /* CDVLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDVLogger.m; path = org.apache.cordova.console/CDVLogger.m; sourceTree = "<group>"; };
 		F840E1F0165FE0F500CFE078 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = BusTrackDC/config.xml; sourceTree = "<group>"; };
+		FC68C461DD3B4764BC893DA8 /* UniversalAnalyticsPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "UniversalAnalyticsPlugin.m"; path = "com.danielcwilson.plugins.googleanalytics/UniversalAnalyticsPlugin.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		79681F32DCF445DABD203C13 /* libGoogleAnalyticsServices.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libGoogleAnalyticsServices.a"; path = "BusTrackDC/Plugins/com.danielcwilson.plugins.googleanalytics/libGoogleAnalyticsServices.a"; sourceTree = "<group>"; fileEncoding = 4; };
+		1B48256386944EB98E55B717 /* UniversalAnalyticsPlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "UniversalAnalyticsPlugin.h"; path = "com.danielcwilson.plugins.googleanalytics/UniversalAnalyticsPlugin.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		F30844FE853A4FD194343982 /* GAIDictionaryBuilder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "GAIDictionaryBuilder.h"; path = "com.danielcwilson.plugins.googleanalytics/GAIDictionaryBuilder.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		89CE8C13637C42B5BA03A4A1 /* GAIFields.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "GAIFields.h"; path = "com.danielcwilson.plugins.googleanalytics/GAIFields.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		212D9D53467540A496B42529 /* GAILogger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "GAILogger.h"; path = "com.danielcwilson.plugins.googleanalytics/GAILogger.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		10CAE90A4F80468B8E18E2EF /* GAITrackedViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "GAITrackedViewController.h"; path = "com.danielcwilson.plugins.googleanalytics/GAITrackedViewController.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		F9F61E6496F545C69FAE3ECD /* GAI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "GAI.h"; path = "com.danielcwilson.plugins.googleanalytics/GAI.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		737052FFC7BC423298176E0D /* GAITracker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "GAITracker.h"; path = "com.danielcwilson.plugins.googleanalytics/GAITracker.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		DC1D753AE4144F2DB207155A /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "SystemConfiguration.framework"; path = "System/Library/Frameworks/SystemConfiguration.framework"; sourceTree = SDKROOT; fileEncoding = 4; };
+		72CC750CA4C34D37A1BC6DE2 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "CoreData.framework"; path = "System/Library/Frameworks/CoreData.framework"; sourceTree = SDKROOT; fileEncoding = 4; };
+		95351A044C34446298FB06B6 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libz.dylib"; path = "usr/lib/libz.dylib"; sourceTree = SDKROOT; fileEncoding = 4; };
+		048B65EF1830466FA0A454C2 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libsqlite3.0.dylib"; path = "usr/lib/libsqlite3.0.dylib"; sourceTree = SDKROOT; fileEncoding = 4; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,6 +142,11 @@
 				288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */,
 				305D5FD1115AB8F900A74A75 /* MobileCoreServices.framework in Frameworks */,
 				8E4C0093E8D8474E89B2FA40 /* CoreLocation.framework in Frameworks */,
+				A117A48D29454B75BD51C0A8 /* libGoogleAnalyticsServices.a in Frameworks */,
+				A68093A9A9A145C08779F3BD /* SystemConfiguration.framework in Frameworks */,
+				824A7AAD6A144DA6A2627F70 /* CoreData.framework in Frameworks */,
+				A7ADC2996D2B485C881FF8C1 /* libz.dylib in Frameworks */,
+				8991F59960B948F1A7B467DD /* libsqlite3.0.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -216,6 +240,11 @@
 				288765FC0DF74451002DB57D /* CoreGraphics.framework */,
 				305D5FD0115AB8F900A74A75 /* MobileCoreServices.framework */,
 				B63EE83171384E3A8E78C6D7 /* CoreLocation.framework */,
+				79681F32DCF445DABD203C13 /* libGoogleAnalyticsServices.a */,
+				DC1D753AE4144F2DB207155A /* SystemConfiguration.framework */,
+				72CC750CA4C34D37A1BC6DE2 /* CoreData.framework */,
+				95351A044C34446298FB06B6 /* libz.dylib */,
+				048B65EF1830466FA0A454C2 /* libsqlite3.0.dylib */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -237,6 +266,14 @@
 				69FE0131FB614AFABEDDECA8 /* CDVLocation.h */,
 				F76CCF5F5DC248969B991D05 /* CDVLogger.m */,
 				3C2409CB25994B168C01D0A5 /* CDVLogger.h */,
+				FC68C461DD3B4764BC893DA8 /* UniversalAnalyticsPlugin.m */,
+				1B48256386944EB98E55B717 /* UniversalAnalyticsPlugin.h */,
+				F30844FE853A4FD194343982 /* GAIDictionaryBuilder.h */,
+				89CE8C13637C42B5BA03A4A1 /* GAIFields.h */,
+				212D9D53467540A496B42529 /* GAILogger.h */,
+				10CAE90A4F80468B8E18E2EF /* GAITrackedViewController.h */,
+				F9F61E6496F545C69FAE3ECD /* GAI.h */,
+				737052FFC7BC423298176E0D /* GAITracker.h */,
 			);
 			name = Plugins;
 			path = BusTrackDC/Plugins;
@@ -439,6 +476,7 @@
 				3F901408037C43EFBE6749A5 /* CDVDevice.m in Sources */,
 				32AEC9CE04274A62A0A3CC8D /* CDVLocation.m in Sources */,
 				3330277EB2724980A94962F6 /* CDVLogger.m in Sources */,
+				ACDE69E573E741188E26FEA9 /* UniversalAnalyticsPlugin.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -518,6 +556,10 @@
 				);
 				PRODUCT_NAME = BusTrackDC;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/BusTrackDC/Plugins/com.danielcwilson.plugins.googleanalytics\"",
+				);
 			};
 			name = Debug;
 		};
@@ -549,6 +591,10 @@
 				);
 				PRODUCT_NAME = BusTrackDC;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/BusTrackDC/Plugins/com.danielcwilson.plugins.googleanalytics\"",
+				);
 			};
 			name = Release;
 		};

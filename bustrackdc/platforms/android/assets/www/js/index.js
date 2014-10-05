@@ -3291,8 +3291,6 @@ function zoomIn() {
 
 
 function onDeviceReady() {
-	
-	console.log('ready');
 
 //$(document).on('touchmove', function (ev) {ev.preventDefault();});
 
@@ -3444,8 +3442,11 @@ $('input').on('blur', function(){
 			}
 		}
 	});
+	
+	analytics.startTrackerWithId('UA-39138450-1');
 
-	if (device.platform == "iOS") {
+	/*
+if (device.platform == "iOS") {
 		window.GA.trackerWithTrackingId("UA-39138450-1");
 		window.GA.trackView("/index");
 	} else {
@@ -3470,6 +3471,7 @@ $('input').on('blur', function(){
 		
 		navigator.splashscreen.hide();
 	}
+*/
 	
 	deviceReadyFlag = true;
 	//console.log('deviceready');

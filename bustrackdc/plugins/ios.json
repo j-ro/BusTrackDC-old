@@ -19,6 +19,10 @@
                         {
                             "xml": "<feature name=\"Console\"><param name=\"ios-package\" value=\"CDVLogger\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"UniversalAnalytics\"><param name=\"ios-package\" value=\"UniversalAnalyticsPlugin\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -26,6 +30,30 @@
             "framework": {
                 "parents": {
                     "CoreLocation.framework": [
+                        {
+                            "xml": "false",
+                            "count": 1
+                        }
+                    ],
+                    "SystemConfiguration.framework": [
+                        {
+                            "xml": "false",
+                            "count": 1
+                        }
+                    ],
+                    "CoreData.framework": [
+                        {
+                            "xml": "false",
+                            "count": 1
+                        }
+                    ],
+                    "libz.dylib": [
+                        {
+                            "xml": "false",
+                            "count": 1
+                        }
+                    ],
+                    "libsqlite3.0.dylib": [
                         {
                             "xml": "false",
                             "count": 1
@@ -53,6 +81,9 @@
             "PACKAGE_NAME": "com.jasonrosenbaum.bustrackdc"
         },
         "org.apache.cordova.console": {
+            "PACKAGE_NAME": "com.jasonrosenbaum.bustrackdc"
+        },
+        "com.danielcwilson.plugins.googleanalytics": {
             "PACKAGE_NAME": "com.jasonrosenbaum.bustrackdc"
         }
     },

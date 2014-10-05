@@ -91,7 +91,10 @@
 /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/assets/www/js/jquery.xml2json.js \
 /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/assets/www/js/MapKit.js \
 /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/assets/www/js/underscore-min.js \
+/Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/assets/www/plugins/com.danielcwilson.plugins.googleanalytics \
 /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/assets/www/plugins/org.apache.cordova.device \
+/Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/assets/www/plugins/com.danielcwilson.plugins.googleanalytics/www \
+/Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/assets/www/plugins/com.danielcwilson.plugins.googleanalytics/www/analytics.js \
 /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/assets/www/plugins/org.apache.cordova.device/www \
 /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/assets/www/plugins/org.apache.cordova.device/www/device.js \
 /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/ant-build/AndroidManifest.xml \
