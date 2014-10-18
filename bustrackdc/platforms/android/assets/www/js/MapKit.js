@@ -45,7 +45,7 @@
 			
 		},
 
-		addMapPins: function(pins, success, error) {
+		addMapPins: function(success, error, pins) {
 			cordovaRef.exec(success, error, 'MapKit', 'addMapPins', [pins]);
 		},
 
@@ -62,23 +62,11 @@
 		},
 		
 		setMapData: function(success, error, options) {
-			/*
-			buttonCallback: String, string callback function
-			height: Number, - pixels
-			diameter: Number, - meters
-			atBottom: Bool,
-			lat: Number,
-			lon: Number
-			*/
-			
-			for (var v in options) {
-				if (options.hasOwnProperty(v)) {
-					this.options[v] = options[v];
-				}
+			if (options) {
+				cordovaRef.exec(success, error, 'MapKit', 'setMapData', [options]);
+			} else {
+				cordovaRef.exec(success, error, 'MapKit', 'setMapData', [this.options]);
 			}
-			
-			console.log(this.options);
-			cordovaRef.exec(success, error, 'MapKit', 'setMapData', this.options);
 		}
 
 	};

@@ -18,6 +18,16 @@
 /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/ant-build/classes/com/phonegap/plugins/mapkit/MapKit$5.class \
 /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/ant-build/classes/com/phonegap/plugins/mapkit/MapKit.class \
 /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/ant-build/classes/org/apache/cordova/device/Device.class \
+/Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/ant-build/classes/org/JasonRosenbaum/WheresTheBusDC/BuildConfig.class \
+/Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/ant-build/classes/org/JasonRosenbaum/WheresTheBusDC/BusTrackDC.class \
+/Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/ant-build/classes/org/JasonRosenbaum/WheresTheBusDC/Manifest$permission.class \
+/Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/ant-build/classes/org/JasonRosenbaum/WheresTheBusDC/Manifest.class \
+/Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/ant-build/classes/org/JasonRosenbaum/WheresTheBusDC/R$attr.class \
+/Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/ant-build/classes/org/JasonRosenbaum/WheresTheBusDC/R$drawable.class \
+/Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/ant-build/classes/org/JasonRosenbaum/WheresTheBusDC/R$integer.class \
+/Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/ant-build/classes/org/JasonRosenbaum/WheresTheBusDC/R$string.class \
+/Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/ant-build/classes/org/JasonRosenbaum/WheresTheBusDC/R$xml.class \
+/Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/ant-build/classes/org/JasonRosenbaum/WheresTheBusDC/R.class \
 /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/ant-build/dexedLibs/classes-cb0f295c189573958e12ab4e89b1e4c7.jar \
 /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/ant-build/dexedLibs/libGoogleAnalyticsServices-f92097c64bd603433d44f2cd1301b6d7.jar \
 /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/ant-build/dexedLibs/google-play-services-6e652013f09e5a8d6df26ef946b507d3.jar \

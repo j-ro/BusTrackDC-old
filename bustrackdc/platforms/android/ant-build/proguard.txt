@@ -2,5 +2,5 @@
 -keep class com.google.android.gms.ads.AdActivity { <init>(...); }
 
 # view AndroidManifest.xml #generated:6
--keep class com.jasonrosenbaum.bustrackdc.BusTrackDC { <init>(...); }
+-keep class org.JasonRosenbaum.WheresTheBusDC.BusTrackDC { <init>(...); }
 

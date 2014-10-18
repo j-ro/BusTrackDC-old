@@ -185,13 +185,8 @@ function toTitleCase(str) {
 }
 
 
-
-function cbMapCallback(lat,lon) {
-    alert('youve clicked ' + lat + ',' + lon);
-}
-
 function swipeTriggered() {
-	console.log('swipe!');
+	//console.log('swipe!');
 }
 
 
@@ -716,7 +711,7 @@ getStopsForRoute = function(routeID) {
 		
 	    
 	    //console.log('call mapoptions');
-	    window.plugins.mapKit.setMapData(mapOptions2);
+	    mapKit.setMapData(mapSuccess, mapError, mapOptions2);
 		
 		markerStopPoints(stopsForRoute);
 
@@ -768,8 +763,8 @@ markerStopPoints = function(data) {
 				lat: data.Direction0.Stops[i].Lat,
 				lon: data.Direction0.Stops[i].Lon,
 				title: toTitleCase(data.Direction0.Stops[i].Name),
-				subTitle: 'Metro Bus Stop #' + data.Direction0.Stops[i].StopID,
-				pinColor: "green",
+				snippet: 'Metro Bus Stop #' + data.Direction0.Stops[i].StopID,
+				icon: mapKit.iconColors.HUE_GREEN,
 				selected: false,
 				index: i
 			}
@@ -784,9 +779,9 @@ markerStopPoints = function(data) {
 				lat: data.Direction1.Stops[i].Lat,
 				lon: data.Direction1.Stops[i].Lon,
 				title: toTitleCase(data.Direction1.Stops[i].Name),
-				subTitle: 'Metro Bus Stop #' + data.Direction1.Stops[i].StopID,
-				//pinColor: "70f270",
-				pinColor: "green",
+				snippet: 'Metro Bus Stop #' + data.Direction1.Stops[i].StopID,
+				//icon: "70f270",
+				icon: mapKit.iconColors.HUE_GREEN,
 				selected: false,
 				index: i
 			}
@@ -799,8 +794,8 @@ markerStopPoints = function(data) {
 	//console.log(inRangeLongitude + ',' + inRangeLatitude);
 	//console.log(pins0);
 	//console.log(pins1);
-	window.plugins.mapKit.addMapPins(pins0);
-	window.plugins.mapKit.addMapPins(pins1);
+	mapKit.addMapPins(mapSuccess, mapError, pins0);
+	mapKit.addMapPins(mapSuccess, mapError, pins1);
 	//console.log('markerstoppoints hide');
 	//$.mobile.loading( 'hide' );
 	//console.log(inRangeLongitude + ',' + inRangeLatitude);
@@ -959,7 +954,7 @@ getRailStopsForRoute = function(routeID) {
 		}
 	    
 	    //console.log('call mapoptions');
-	    window.plugins.mapKit.setMapData(mapOptions2);
+	    mapKit.setMapData(mapSuccess, mapError, mapOptions2);
 		
 		markerRailStopPoints(railStopsForRoute);
 
@@ -1017,8 +1012,8 @@ markerRailStopPoints = function(data) {
 				lat: object.Lat,
 				lon: object.Lon,
 				title: object.Name,
-				subTitle: 'Metro Rail Station #' + stationCode,
-				pinColor: "red",
+				snippet: 'Metro Rail Station #' + stationCode,
+				icon: mapKit.iconColors.HUE_RED,
 				selected: false,
 				index: i
 			}
@@ -1031,7 +1026,7 @@ markerRailStopPoints = function(data) {
 	//console.log(inRangeLongitude + ',' + inRangeLatitude);
 	//console.log(pins0);
 	//console.log(pins1);
-	window.plugins.mapKit.addMapPins(pins0);
+	mapKit.addMapPins(mapSuccess, mapError, pins0);
 	//console.log('markerstoppoints hide');
 	//$.mobile.loading( 'hide' );
 	//console.log(inRangeLongitude + ',' + inRangeLatitude);
@@ -1333,7 +1328,7 @@ getCirculatorStopsForRoute = function(routeID) {
 		}
 	    
 	    //console.log('call mapoptions');
-	    window.plugins.mapKit.setMapData(mapOptions2);
+	    mapKit.setMapData(mapSuccess, mapError, mapOptions2);
 		
 		markerCirculatorStopPoints(circulatorStopsForRoute);
 
@@ -1394,8 +1389,8 @@ markerCirculatorStopPoints = function(data) {
 					lat: object.lat,
 					lon: object.lon,
 					title: object.shortTitle,
-					subTitle: 'Circulator Stop #' + object.stopId,
-					pinColor: "purple",
+					snippet: 'Circulator Stop #' + object.stopId,
+					icon: mapKit.iconColors.HUE_VIOLET,
 					selected: false,
 					index: '##' + object.stopId
 				}
@@ -1407,9 +1402,9 @@ markerCirculatorStopPoints = function(data) {
 					lat: object.lat,
 					lon: object.lon,
 					title: object.shortTitle,
-					subTitle: 'Circulator Stop #' + object.stopId,
-					//pinColor: "bd91e5",
-					pinColor: "purple",
+					snippet: 'Circulator Stop #' + object.stopId,
+					//icon: "bd91e5",
+					icon: mapKit.iconColors.HUE_VIOLET,
 					selected: false,
 					index: '##' + object.stopId
 				}
@@ -1423,8 +1418,8 @@ markerCirculatorStopPoints = function(data) {
 	//console.log(inRangeLongitude + ',' + inRangeLatitude);
 	//console.log(pins0);
 	//console.log(pins1);
-	window.plugins.mapKit.addMapPins(pins0)
-	window.plugins.mapKit.addMapPins(pins1);
+	mapKit.addMapPins(mapSuccess, mapError, pins0)
+	mapKit.addMapPins(mapSuccess, mapError, pins1);
 	//console.log('markerstoppoints hide');
 	//$.mobile.loading( 'hide' );
 	//console.log(inRangeLongitude + ',' + inRangeLatitude);
@@ -2119,8 +2114,8 @@ markerStops = function(data) {
 	
 			// our match function to see if a pin already exists in the global pin array
 			matches = jQuery.grep(pins, function(obj) {
-				//console.log('Metro Bus Stop #' + data.Stops[i].StopID + ' == ' + obj.subTitle + '?');
-				return obj.subTitle == 'Metro Bus Stop #' + data.Stops[i].StopID;
+				//console.log('Metro Bus Stop #' + data.Stops[i].StopID + ' == ' + obj.snippet + '?');
+				return obj.snippet == 'Metro Bus Stop #' + data.Stops[i].StopID;
 			});
 			
 			if (matches.length == 0) {
@@ -2135,8 +2130,8 @@ markerStops = function(data) {
 							lat: data.Stops[i].Lat,
 							lon: data.Stops[i].Lon,
 							title: toTitleCase(data.Stops[i].Name),
-							subTitle: 'Metro Bus Stop #' + data.Stops[i].StopID,
-							pinColor: "green",
+							snippet: 'Metro Bus Stop #' + data.Stops[i].StopID,
+							icon: mapKit.iconColors.HUE_GREEN,
 							selected: false,
 							index: i
 						}
@@ -2147,8 +2142,8 @@ markerStops = function(data) {
 							lat: data.Stops[i].Lat,
 							lon: data.Stops[i].Lon,
 							title: toTitleCase(data.Stops[i].Name),
-							subTitle: 'Metro Bus Stop #' + data.Stops[i].StopID,
-							pinColor: "green",
+							snippet: 'Metro Bus Stop #' + data.Stops[i].StopID,
+							icon: mapKit.iconColors.HUE_GREEN,
 							selected: false,
 							index: i
 						}
@@ -2282,8 +2277,8 @@ markerStops = function(data) {
 		//console.log('add new pins');
 		// show the new pins, but only if this is a real stop get, and not a favorite button or route annotation being clicked
 		//if (favoriteBtnClickedFlag != true) {
-			//console.log(newPins);
-			window.plugins.mapKit.addMapPins(newPins);
+			console.log(newPins);
+			mapKit.addMapPins(mapSuccess, mapError, newPins);
 		//}
 		
 		// if we've clicked a favorite or route annotation, show the predictions
@@ -2390,8 +2385,8 @@ markerRailStops = function(data) {
 							lat: data.Entrances[i].Lat,
 							lon: data.Entrances[i].Lon,
 							title: data.Entrances[i].Name,
-							subTitle: 'Metro Rail Station #' + stationCode,
-							pinColor: "red",
+							snippet: 'Metro Rail Station #' + stationCode,
+							icon: mapKit.iconColors.HUE_RED,
 							selected: false,
 							index: '#' + data.Entrances[i].ID
 						}
@@ -2402,8 +2397,8 @@ markerRailStops = function(data) {
 							lat: data.Entrances[i].Lat,
 							lon: data.Entrances[i].Lon,
 							title: data.Entrances[i].Name,
-							subTitle: 'Metro Rail Station #' + stationCode,
-							pinColor: "red",
+							snippet: 'Metro Rail Station #' + stationCode,
+							icon: mapKit.iconColors.HUE_RED,
 							selected: false,
 							index: '#' + data.Entrances[i].ID
 						}
@@ -2751,7 +2746,7 @@ if (device.platform == "iOS") {
 		// show the new pins, but only if this is a real stop get, and not a favorite button or route annotation being clicked
 		//if (favoriteBtnClickedFlag != true) {
 			//console.log(newRailPins);
-			window.plugins.mapKit.addMapPins(newRailPins);
+			mapKit.addMapPins(mapSuccess, mapError, newRailPins);
 		//}
 		
 		// if we've clicked a favorite or route annotation, show the predictions
@@ -2829,8 +2824,8 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 								lat: object.lat,
 								lon: object.lon,
 								title: object.title,
-								subTitle: 'Circulator Stop #' + object.stopId,
-								pinColor: "purple",
+								snippet: 'Circulator Stop #' + object.stopId,
+								icon: mapKit.iconColors.HUE_VIOLET,
 								selected: false,
 								index: '##' + object.stopId
 							}
@@ -2841,8 +2836,8 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 								lat: object.lat,
 								lon: object.lon,
 								title: object.title,
-								subTitle: 'Circulator Stop #' + object.stopId,
-								pinColor: "purple",
+								snippet: 'Circulator Stop #' + object.stopId,
+								icon: mapKit.iconColors.HUE_VIOLET,
 								selected: false,
 								index: '##' + object.stopId
 							}
@@ -3014,7 +3009,7 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 		// show the new pins, but only if this is a real stop get, and not a favorite button or route annotation being clicked
 		//if (favoriteBtnClickedFlag != true) {
 			//console.log(newCirculatorPins);
-			window.plugins.mapKit.addMapPins(newCirculatorPins);
+			mapKit.addMapPins(mapSuccess, mapError, newCirculatorPins);
 		//}
 		
 		// if we've clicked a favorite or route annotation, show the predictions
@@ -3053,7 +3048,7 @@ onCurrentLocationSuccess = function(position) {
 	
 	if (device.platform == "iOS") {
 		mapOptions = {
-	        buttonCallback: "cbMapCallback",
+	        //buttonCallback: "cbMapCallback",
 	        height: mapHeight, // changed for android, does this work on ios?
 	        diameter: 400,
 	        offsetTop: mapOffsetTop, // changed for android, does this work on ios?
@@ -3062,7 +3057,7 @@ onCurrentLocationSuccess = function(position) {
 	    };
 	} else {
 		mapOptions = {
-	        buttonCallback: "cbMapCallback",
+	        //buttonCallback: "cbMapCallback",
 	        height: mapHeight, // changed for android, does this work on ios?
 	        diameter: 300,
 	        offsetTop: mapOffsetTop, // changed for android, does this work on ios?
@@ -3075,7 +3070,7 @@ onCurrentLocationSuccess = function(position) {
 	
     
     
-    window.plugins.mapKit.setMapData(mapOptions);
+    mapKit.setMapData(mapSuccess, mapError, mapOptions);
     
 
     
@@ -3126,7 +3121,7 @@ function favoriteTap(favorite) {
 		//var favorites = JSON.parse(favoritesStorage);
 		
 		var favoriteMatches = jQuery.grep(favorites, function(obj) {
-			//console.log(data.Stops[i].StopID + ' == ' + obj.subTitle + '?');
+			//console.log(data.Stops[i].StopID + ' == ' + obj.snippet + '?');
 			return (obj.id == favorite || 'Metro Bus Stop #' + obj.id == favorite || 'Metro Rail Station #' + obj.id == favorite);
 		});
 		
@@ -3258,11 +3253,11 @@ function slidePageFrom(page, from) {
 
 //our initial show map function
 var mapSuccess = function() {
-	console.log('map success');
+	//console.log('map success');
 }
 
 var mapError = function() {
-	console.log('map error');
+	//console.log('map error');
 }
 
 function showMap() {
@@ -3282,20 +3277,20 @@ function showMap() {
 
 function hideMap() {
 	mapVisible = false;
-    mapKit.hideMap();
+    mapKit.hideMap(mapSuccess, mapError);
 }
 
 function clearPins() {
-    mapKit.clearMapPins();
+    mapKit.clearMapPins(mapSuccess, mapError);
 }
 
 function resizeMap() {
     var mapOptions = {
         height: 460,
-			diameter: 1000,
-			atBottom: true,
-			lat: 49.281468,
-			lon: -123.104446
+		diameter: 1000,
+		atBottom: true,
+		lat: 49.281468,
+		lon: -123.104446
     }
     
     mapKit.setMapData(mapSuccess, mapError, mapOptions);
@@ -3306,12 +3301,12 @@ function zoomIn() {
         diameter: 30
     }
     
-    mapKit.setMapData(mapOptions);
+    mapKit.setMapData(mapSuccess, mapError, mapOptions);
 }
 
 
 function onDeviceReady() {
-	console.log('ready');
+	//console.log('ready');
 
 //$(document).on('touchmove', function (ev) {ev.preventDefault();});
 
@@ -3515,7 +3510,7 @@ if (device.platform == "iOS") {
 	        lon: -77.0089
 	    };
 	    
-	    //window.plugins.mapKit.setMapData(mapOptions);
+	    //mapKit.setMapData(mapOptions);
 	    
 	//} 
 	
@@ -3895,13 +3890,13 @@ geo.beforeMapMove = function(currentLat,currentLon,latitudeDelta,longitudeDelta)
 						// prevent huge radii in the viewport from crashing the app
 						//console.log(radius);
 						if (radius < 3000) {
-							getStops(viewportLat, viewportLon, radius);
+							//getStops(viewportLat, viewportLon, radius);
 							getRailStops(viewportLat, viewportLon, radius);
 							
 							if (ajaxCirculatorCount == circulatorStopsArray.length) {
 								if (window.localStorage.getItem("circulatorStopsDatestamp") && window.localStorage.getItem("circulatorStops")) {
 									//console.log('marker circ stops from geo.onmapmove');
-									markerCirculatorStops(circulatorLat,circulatorLon,circulatorLatDelta,circulatorLonDelta);
+									//markerCirculatorStops(circulatorLat,circulatorLon,circulatorLatDelta,circulatorLonDelta);
 								}
 							}
 		    	
@@ -4065,7 +4060,7 @@ $(document).on('pagebeforeshow', '#infowindow', function() {
 			//favorites = JSON.parse(favoritesStorage);
 			
 			var favoriteMatches = jQuery.grep(favorites, function(obj) {
-				//console.log(data.Stops[i].StopID + ' == ' + obj.subTitle + '?');
+				//console.log(data.Stops[i].StopID + ' == ' + obj.snippet + '?');
 				if (stopID) {
 					return (obj.id == stopID || 'Metro Bus Stop #' + obj.id == stopID || 'Metro Rail Station #' + obj.id == stopID || 'Circulator Stop #' + obj.id == stopID);
 				} else {
@@ -4123,7 +4118,7 @@ $(document).on('pagebeforeshow', '#route_map', function() {
   	//console.log(window.history);
   	
   	//console.log('route map show');
-  	window.plugins.mapKit.clearMapPins();
+  	mapKit.clearMapPins(mapSuccess, mapError);
     pins.length = 0;
   
     if (mapVisible == false) {
@@ -4204,7 +4199,7 @@ if (mapVisible == true) {
 $(document).on('pagebeforehide', '#route_map', function() {
 	routeMapView = false;
 	
-	window.plugins.mapKit.clearMapPins();
+	mapKit.clearMapPins(mapSuccess, mapError);
 	//console.log('getstopsjson abort!');
 	if (typeof(getStopsForRouteJSON) != 'undefined') {
 		getStopsForRouteJSON.abort();
@@ -4218,7 +4213,7 @@ $(document).on('pagebeforehide', '#route_map', function() {
 		getCirculatorStopsForRouteJSON.abort();
 	}
 	
-	window.plugins.mapKit.clearMapPins();
+	mapKit.clearMapPins(mapSuccess, mapError);
 	
 });
 

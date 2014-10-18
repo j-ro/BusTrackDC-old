@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.jasonrosenbaum.bustrackdc" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="org.JasonRosenbaum.WheresTheBusDC" version="1.8.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <preference name="loglevel" value="DEBUG" />
     <feature name="Device">
         <param name="android-package" value="org.apache.cordova.device.Device" />
@@ -15,10 +15,10 @@
     </feature>
     <name>BusTrackDC</name>
     <description>
-        A sample Apache Cordova application that responds to the deviceready event.
+        A bus tracking app for the Washington, DC metro rail and bus and circulator system.
     </description>
-    <author email="dev@cordova.apache.org" href="http://cordova.io">
-        Apache Cordova Team
+    <author email="seminal@theseminal.com" href="http://bustrackdc.com">
+        Jason Rosenbaum
     </author>
     <content src="index.html" />
     <access origin="*" />
