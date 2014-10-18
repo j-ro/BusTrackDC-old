@@ -6,10 +6,10 @@
 	var MapKit = function() {
 		this.options = {
 			height: 460,
-			diameter: 1000,
+			diameter: 400,
 			atBottom: true,
-			lat: 49.281468,
-			lon: -123.104446
+			lat: 38.8897,
+			lon: -77.0089
 		};
 
 		this.mapType = {
@@ -21,7 +21,7 @@
         };
 
         this.iconColors = {
-            HUE_RED: 0.0,
+            HUE_RED: 10.0,
             HUE_ORANGE: 30.0,
             HUE_YELLOW: 60.0,
             HUE_GREEN: 120.0,
@@ -62,6 +62,7 @@
 		},
 		
 		setMapData: function(success, error, options) {
+			
 			if (options) {
 				cordovaRef.exec(success, error, 'MapKit', 'setMapData', [options]);
 			} else {

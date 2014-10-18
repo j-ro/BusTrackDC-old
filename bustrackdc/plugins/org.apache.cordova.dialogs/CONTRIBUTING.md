@@ -1,5 +1,4 @@
-#! /bin/sh
-
+<!--
 #
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
@@ -18,7 +17,21 @@
 # specific language governing permissions and limitations
 # under the License.
 #
+-->
 
-# outputs the highest level of OS X sdk installed
-OS_X_VERSIONS=$(xcodebuild -showsdks | sed -e '/./{H;$!d;}' -e 'x;/OS X SDKs/!d;' | grep -o '[0-9]*\.[0-9]* ');
-echo $OS_X_VERSIONS | tr " " "\n" | sort -g | tail -1;
+# Contributing to Apache Cordova
+
+Anyone can contribute to Cordova. And we need your contributions.
+
+There are multiple ways to contribute: report bugs, improve the docs, and
+contribute code.
+
+For instructions on this, start with the 
+[contribution overview](http://cordova.apache.org/#contribute).
+
+The details are explained there, but the important items are:
+ - Sign and submit an Apache ICLA (Contributor License Agreement).
+ - Have a Jira issue open that corresponds to your contribution.
+ - Run the tests so your patch doesn't break existing functionality.
+
+We look forward to your contributions!

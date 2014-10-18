@@ -128,6 +128,7 @@
         }
         
         CDVAnnotation *annotation = [[CDVAnnotation alloc] initWithCoordinate:pinCoord index:index title:title subTitle:subTitle imageURL:imageURL];
+        //NSLog(pinColor);
         annotation.pinColor=pinColor;
         annotation.selected = selected;
         
@@ -220,7 +221,7 @@
     
     annView.animatesDrop=YES;
     annView.canShowCallout = YES;
-    NSLog(phAnnotation.pinColor);
+    //NSLog(phAnnotation.pinColor);
     if ([phAnnotation.pinColor isEqualToString:@"120"])
     annView.pinColor = MKPinAnnotationColorGreen;
     else if ([phAnnotation.pinColor isEqualToString:@"270"])
@@ -278,7 +279,7 @@
 
 - (void)mapView:(MKMapView *)theMapView regionDidChangeAnimated: (BOOL)animated
 {
-    NSLog(@"region did change animated");
+    //NSLog(@"region did change animated");
     float currentLat = theMapView.region.center.latitude;
     float currentLon = theMapView.region.center.longitude;
     float latitudeDelta = theMapView.region.span.latitudeDelta;

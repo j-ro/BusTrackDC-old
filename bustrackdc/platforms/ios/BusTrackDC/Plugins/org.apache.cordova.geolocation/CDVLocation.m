@@ -78,9 +78,11 @@
             return (authStatus == kCLAuthorizationStatusAuthorizedWhenInUse) || (authStatus == kCLAuthorizationStatusAuthorizedAlways) || (authStatus == kCLAuthorizationStatusNotDetermined);
         }
 #endif
+        
         return (authStatus == kCLAuthorizationStatusAuthorized) || (authStatus == kCLAuthorizationStatusNotDetermined);
     }
-
+    
+    
     // by default, assume YES (for iOS < 4.2)
     return YES;
 }
@@ -101,6 +103,7 @@
 
 - (void)startLocation:(BOOL)enableHighAccuracy
 {
+    //NSLog(@"start");
     if (![self isLocationServicesEnabled]) {
         [self returnLocationError:PERMISSIONDENIED withMessage:@"Location services are not enabled."];
         return;

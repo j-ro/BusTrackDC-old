@@ -766,7 +766,7 @@ markerStopPoints = function(data) {
 				snippet: 'Metro Bus Stop #' + data.Direction0.Stops[i].StopID,
 				icon: mapKit.iconColors.HUE_GREEN,
 				selected: false,
-				index: i
+				index: '0' + i
 			}
 		);
 	});
@@ -783,7 +783,7 @@ markerStopPoints = function(data) {
 				//icon: "70f270",
 				icon: mapKit.iconColors.HUE_GREEN,
 				selected: false,
-				index: i
+				index: '0' + i
 			}
 		);
 	});
@@ -1392,7 +1392,7 @@ markerCirculatorStopPoints = function(data) {
 					snippet: 'Circulator Stop #' + object.stopId,
 					icon: mapKit.iconColors.HUE_VIOLET,
 					selected: false,
-					index: '##' + object.stopId
+					index: '00' + object.stopId
 				}
 			);
 		} else if ($.inArray(object.tag, pins1stopArray) != -1){
@@ -1406,7 +1406,7 @@ markerCirculatorStopPoints = function(data) {
 					//icon: "bd91e5",
 					icon: mapKit.iconColors.HUE_VIOLET,
 					selected: false,
-					index: '##' + object.stopId
+					index: '00' + object.stopId
 				}
 			);
 		}
@@ -2277,7 +2277,7 @@ markerStops = function(data) {
 		//console.log('add new pins');
 		// show the new pins, but only if this is a real stop get, and not a favorite button or route annotation being clicked
 		//if (favoriteBtnClickedFlag != true) {
-			console.log(newPins);
+			//console.log(newPins);
 			mapKit.addMapPins(mapSuccess, mapError, newPins);
 		//}
 		
@@ -2362,7 +2362,7 @@ markerRailStops = function(data) {
 			// rail matching query
 			railMatches = jQuery.grep(pins, function(obj) {
 				// our match function to see if a pin already exists in the global pin array
-				return obj.index == '#' + data.Entrances[i].ID;
+				return obj.index == '0' + data.Entrances[i].ID;
 			});
 			
 			if (railMatches.length == 0) {
@@ -2388,7 +2388,7 @@ markerRailStops = function(data) {
 							snippet: 'Metro Rail Station #' + stationCode,
 							icon: mapKit.iconColors.HUE_RED,
 							selected: false,
-							index: '#' + data.Entrances[i].ID
+							index: '0' + data.Entrances[i].ID
 						}
 					);
 					
@@ -2400,7 +2400,7 @@ markerRailStops = function(data) {
 							snippet: 'Metro Rail Station #' + stationCode,
 							icon: mapKit.iconColors.HUE_RED,
 							selected: false,
-							index: '#' + data.Entrances[i].ID
+							index: '0' + data.Entrances[i].ID
 						}
 					);
 				}
@@ -2806,7 +2806,7 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 					// our match function to see if a pin already exists in the global pin array
 					//console.log(obj.index);
 					//console.log(object.stopId);
-					return obj.index == '##' + object.stopId;
+					return obj.index == '00' + object.stopId;
 				});
 				
 				//console.log(circulatorMatches);
@@ -2827,7 +2827,7 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 								snippet: 'Circulator Stop #' + object.stopId,
 								icon: mapKit.iconColors.HUE_VIOLET,
 								selected: false,
-								index: '##' + object.stopId
+								index: '00' + object.stopId
 							}
 						);
 						
@@ -2839,7 +2839,7 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 								snippet: 'Circulator Stop #' + object.stopId,
 								icon: mapKit.iconColors.HUE_VIOLET,
 								selected: false,
-								index: '##' + object.stopId
+								index: '00' + object.stopId
 							}
 						);
 					}
@@ -3089,6 +3089,7 @@ onCurrentLocationSuccess = function(position) {
 
 // if we can't get current position, callback receives a PositionError object
 function onCurrentLocationError(error) {
+	console.log(error);
 	//console.log('currloc error');
 	if (device.platform == "iOS") {
 		navigator.notification.alert(
@@ -3263,11 +3264,11 @@ var mapError = function() {
 function showMap() {
 	
 	var options = {
-			height: 460,
-			diameter: 1000,
-			atBottom: true,
-			lat: 41.281468,
-			lon: -123.104446
+			height: 400,
+			diameter: 400,
+			offsetTop: 0,
+			lat: 38.8897,
+	        lon: -77.0089
 		};
 
 	mapVisible = true;
@@ -3510,7 +3511,7 @@ if (device.platform == "iOS") {
 	        lon: -77.0089
 	    };
 	    
-	    //mapKit.setMapData(mapOptions);
+	    mapKit.setMapData(mapSuccess, mapError, mapOptions);
 	    
 	//} 
 	
@@ -3548,13 +3549,13 @@ if (device.platform != "iOS") {
 
     
     // get current position (which also shows nearby stops)
-	navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError, { maximumAge: 60000, timeout: 10000, enableHighAccuracy: true });
+	navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError, { maximumAge: 60000, timeout: 100000, enableHighAccuracy: true });
 	
 	// this needs to be in deviceReady so as not to make weird this website needs access to your location notices in the app...
 	$(document).on('pageinit', '#gps_map', function() {
 		
 		if (deviceReadyFlag = true) {
-			navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError, { maximumAge: 60000, timeout: 10000, enableHighAccuracy: true });
+			navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError, { maximumAge: 60000, timeout: 100000, enableHighAccuracy: true });
 		}
 		
 	});
@@ -3623,7 +3624,7 @@ if ($('#favorites_menu_content').css('display') != 'none') {
     	if (mapVisible == false) {
 			showMap();
 		}
-    	navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError, { maximumAge: 60000, timeout: 10000, enableHighAccuracy: true });
+    	navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError, { maximumAge: 6, timeout: 100000, enableHighAccuracy: true });
     });
 
 });
@@ -3890,13 +3891,13 @@ geo.beforeMapMove = function(currentLat,currentLon,latitudeDelta,longitudeDelta)
 						// prevent huge radii in the viewport from crashing the app
 						//console.log(radius);
 						if (radius < 3000) {
-							//getStops(viewportLat, viewportLon, radius);
+							getStops(viewportLat, viewportLon, radius);
 							getRailStops(viewportLat, viewportLon, radius);
 							
 							if (ajaxCirculatorCount == circulatorStopsArray.length) {
 								if (window.localStorage.getItem("circulatorStopsDatestamp") && window.localStorage.getItem("circulatorStops")) {
 									//console.log('marker circ stops from geo.onmapmove');
-									//markerCirculatorStops(circulatorLat,circulatorLon,circulatorLatDelta,circulatorLonDelta);
+									markerCirculatorStops(circulatorLat,circulatorLon,circulatorLatDelta,circulatorLonDelta);
 								}
 							}
 		    	

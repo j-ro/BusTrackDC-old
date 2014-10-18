@@ -31,6 +31,10 @@
                         {
                             "xml": "<feature name=\"Console\"><param name=\"ios-package\" value=\"CDVLogger\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Notification\"><param name=\"ios-package\" value=\"CDVNotification\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -101,6 +105,10 @@
                         {
                             "xml": "false",
                             "count": 1
+                        },
+                        {
+                            "xml": "true",
+                            "count": 1
                         }
                     ],
                     "CoreData.framework": [
@@ -153,6 +161,9 @@
         },
         "org.apache.cordova.console": {
             "PACKAGE_NAME": "com.jasonrosenbaum.bustrackdc"
+        },
+        "org.apache.cordova.dialogs": {
+            "PACKAGE_NAME": "org.JasonRosenbaum.WheresTheBusDC"
         }
     },
     "dependent_plugins": {}

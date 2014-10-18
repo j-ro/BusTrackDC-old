@@ -37,6 +37,9 @@
     <feature name="Console">
         <param name="ios-package" value="CDVLogger" />
     </feature>
+    <feature name="Notification">
+        <param name="ios-package" value="CDVNotification" />
+    </feature>
     <name>BusTrackDC</name>
     <description>
         A bus tracking app for the Washington, DC metro rail and bus and circulator system.
@@ -46,4 +49,5 @@
     </author>
     <content src="index.html" />
     <access origin="*" />
+    <gap:config-file overwrite="false" parent="NSLocationAlwaysUsageDescription" platform="ios" />
 </widget>

@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		0B468030EFB44763B0366887 /* MapKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E57C39949044CC09E3301F4 /* MapKit.m */; };
 		1C9AE1558AE747C38FF9E1A3 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6204150D7B8141E78128E744 /* StoreKit.framework */; };
@@ -62,6 +61,8 @@
 		E280710F30E34A429CB494A3 /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FBECFAD0B6874F28871A2152 /* libGoogleAnalyticsServices.a */; };
 		E3602C45D175469E8640F88C /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0729A6C46CC146A58A3EA83E /* AVFoundation.framework */; };
 		E875FBE049D7452CA99AE70B /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84EDAAA0C010480E85B08D8E /* AudioToolbox.framework */; };
+		99F78F46E7E3497CBDFCEA66 /* CDVNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D3F6A6B716E42A3891F64BD /* CDVNotification.m */; };
+		332A267794E74249879D1FFE /* CDVNotification.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E5620D890B6C4A42853E3E20 /* CDVNotification.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -163,6 +164,9 @@
 		F840E1F0165FE0F500CFE078 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = BusTrackDC/config.xml; sourceTree = "<group>"; };
 		FBECFAD0B6874F28871A2152 /* libGoogleAnalyticsServices.a */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = archive.ar; name = libGoogleAnalyticsServices.a; path = BusTrackDC/Plugins/com.danielcwilson.plugins.googleanalytics/libGoogleAnalyticsServices.a; sourceTree = "<group>"; };
 		FF904AF023C2403CB93CF16B /* CDVDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDVDevice.m; path = org.apache.cordova.device/CDVDevice.m; sourceTree = "<group>"; };
+		6D3F6A6B716E42A3891F64BD /* CDVNotification.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVNotification.m"; path = "org.apache.cordova.dialogs/CDVNotification.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		F91258455B5F4419AC31B6D1 /* CDVNotification.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVNotification.h"; path = "org.apache.cordova.dialogs/CDVNotification.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		E5620D890B6C4A42853E3E20 /* CDVNotification.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = "CDVNotification.bundle"; path = "CDVNotification.bundle"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -271,6 +275,7 @@
 				308D05311370CCF300D202BF /* splash */,
 				8D1107310486CEB800E47090 /* BusTrackDC-Info.plist */,
 				E0CD807C63FB436FAFC5BD43 /* icon.png */,
+				E5620D890B6C4A42853E3E20 /* CDVNotification.bundle */,
 			);
 			name = Resources;
 			path = BusTrackDC/Resources;
@@ -334,6 +339,8 @@
 				2EF94FCFE2944AA6B1CE1855 /* GAITracker.h */,
 				58532BC365024898895C5BC7 /* CDVLogger.m */,
 				24DEFB211345444C9026DE3C /* CDVLogger.h */,
+				6D3F6A6B716E42A3891F64BD /* CDVNotification.m */,
+				F91258455B5F4419AC31B6D1 /* CDVNotification.h */,
 			);
 			name = Plugins;
 			path = BusTrackDC/Plugins;
@@ -503,6 +510,7 @@
 				7E7966E51810823500FA85AD /* icon-76@2x.png in Resources */,
 				30FC414916E50CA1004E6F35 /* icon-72@2x.png in Resources */,
 				78EA602E735844C4B1D8E190 /* icon.png in Resources */,
+				332A267794E74249879D1FFE /* CDVNotification.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -542,6 +550,7 @@
 				255C9CE92E5A4384A3B79BCB /* AdmobAdPlugin.m in Sources */,
 				D7204625609D45CFBD35C146 /* UniversalAnalyticsPlugin.m in Sources */,
 				4C72D19F1A9941618F8FBA5E /* CDVLogger.m in Sources */,
+				99F78F46E7E3497CBDFCEA66 /* CDVNotification.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
