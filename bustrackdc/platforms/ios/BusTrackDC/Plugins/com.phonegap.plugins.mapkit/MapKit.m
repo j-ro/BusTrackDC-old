@@ -313,6 +313,13 @@
 	}
 	// disable location services, if we no longer need it.
 	self.mapView.showsUserLocation = NO;
+    
+    //close annotations
+    NSArray *selectedAnnotations = mapView.selectedAnnotations;
+    for(id annotation in selectedAnnotations) {
+        [mapView deselectAnnotation:annotation animated:NO];
+    }
+    
 	self.childView.hidden = YES;
     [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
 }

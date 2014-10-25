@@ -693,7 +693,8 @@ getStopsForRoute = function(routeID) {
 		
 		if (device.platform == "iOS") {
 			mapOptions2 = {
-				
+				height: mapHeight,
+				offsetTop: mapOffsetTop,
 		        diameter: 1500,
 		        lat: currentLatitude,
 		        lon: currentLongitude
@@ -766,9 +767,11 @@ markerStopPoints = function(data) {
 				snippet: 'Metro Bus Stop #' + data.Direction0.Stops[i].StopID,
 				icon: mapKit.iconColors.HUE_GREEN,
 				selected: false,
-				index: '0' + i
+				index: global_pin_index
 			}
 		);
+		
+		global_pin_index++;
 	});
 	
 	$.each(data.Direction1.Stops, function(i, object) {
@@ -783,9 +786,11 @@ markerStopPoints = function(data) {
 				//icon: "70f270",
 				icon: mapKit.iconColors.HUE_GREEN,
 				selected: false,
-				index: '0' + i
+				index: global_pin_index
 			}
 		);
+		
+		global_pin_index++;
 	});
 
 
@@ -937,7 +942,8 @@ getRailStopsForRoute = function(routeID) {
 		
 		if (device.platform == "iOS") {
 			mapOptions2 = {
-				
+				height: mapHeight,
+				offsetTop: mapOffsetTop,
 		        diameter: 1500,
 		        lat: currentLatitude,
 		        lon: currentLongitude
@@ -989,7 +995,7 @@ getRailStopsForRoute = function(routeID) {
 
 // make markers for each stop on a route (different functions for coming and going to do different colors)
 markerRailStopPoints = function(data) {
-	//console.log('start markerStopPoints');
+	//console.log('start markerRailStopPoints');
 	var pins0 = [];
 	var pins1 = [];
 	
@@ -998,7 +1004,7 @@ markerRailStopPoints = function(data) {
 
 	
 	$.each(data.Stations, function(i, object) {
-
+		//console.log(object);
 		//console.log('done with pin0 ' + i);
 		
 		if (object.StationTogether1 != "") {
@@ -1015,9 +1021,11 @@ markerRailStopPoints = function(data) {
 				snippet: 'Metro Rail Station #' + stationCode,
 				icon: mapKit.iconColors.HUE_RED,
 				selected: false,
-				index: i
+				index: global_pin_index
 			}
 		);
+		
+		global_pin_index++;
 	});
 
 
@@ -1311,7 +1319,8 @@ getCirculatorStopsForRoute = function(routeID) {
 		
 		if (device.platform == "iOS") {
 			mapOptions2 = {
-				
+				height: mapHeight,
+				offsetTop: mapOffsetTop,
 		        diameter: 1500,
 		        lat: currentLatitude,
 		        lon: currentLongitude
@@ -1392,9 +1401,11 @@ markerCirculatorStopPoints = function(data) {
 					snippet: 'Circulator Stop #' + object.stopId,
 					icon: mapKit.iconColors.HUE_VIOLET,
 					selected: false,
-					index: '00' + object.stopId
+					index: global_pin_index
 				}
 			);
+			
+			global_pin_index++;
 		} else if ($.inArray(object.tag, pins1stopArray) != -1){
 			//console.log(pin1);
 			pins1.push(
@@ -1406,9 +1417,11 @@ markerCirculatorStopPoints = function(data) {
 					//icon: "bd91e5",
 					icon: mapKit.iconColors.HUE_VIOLET,
 					selected: false,
-					index: '00' + object.stopId
+					index: global_pin_index
 				}
 			);
+			
+			global_pin_index++;
 		}
 	});
 
@@ -1440,6 +1453,7 @@ function annotationDeselect() {
 
 // when a pin is clicked...
 function annotationTap(text, latitude, longitude) {
+	//console.log(text + ', ' + latitude + ', ' + longitude);
 	//console.log('annotation tap');
 	//console.log(latitude);
 	
@@ -1665,6 +1679,9 @@ if (railStops.length) {
 						$('.topcoat-navigation-bar__title').css('margin-left','0');
 						$('.spinner').css('display','none');
 					}
+					
+					//console.log(data2);
+					//console.log(self4);
 				
 					//console.log('predictions=' + data2.Predictions.length);
 					//sorted = data2.Predictions.sort(function(a,b) {return b - a; });
@@ -1706,6 +1723,7 @@ if (railStops.length) {
 				    }
 				
 				    // this function needs nearby stops already loaded to load all stops for the route, not just predictions, but maybe it shouldn't in case you want to see your favorite stops and they're not in range? Right now, I'll just make it load only routes with predictions, but eventually would be nice to do the second AJAX call to load this stop into memory
+				    //console.log(stops);
 				    if (stops.length) {
 				    	//console.log(stops.length);
 				    	var 
@@ -2133,7 +2151,7 @@ markerStops = function(data) {
 							snippet: 'Metro Bus Stop #' + data.Stops[i].StopID,
 							icon: mapKit.iconColors.HUE_GREEN,
 							selected: false,
-							index: i
+							index: global_pin_index
 						}
 					);
 					
@@ -2145,9 +2163,11 @@ markerStops = function(data) {
 							snippet: 'Metro Bus Stop #' + data.Stops[i].StopID,
 							icon: mapKit.iconColors.HUE_GREEN,
 							selected: false,
-							index: i
+							index: global_pin_index
 						}
 					);
+					
+					global_pin_index++;
 				}
 			
 			}
@@ -2362,7 +2382,7 @@ markerRailStops = function(data) {
 			// rail matching query
 			railMatches = jQuery.grep(pins, function(obj) {
 				// our match function to see if a pin already exists in the global pin array
-				return obj.index == '0' + data.Entrances[i].ID;
+				return obj.title == data.Entrances[i].Name;
 			});
 			
 			if (railMatches.length == 0) {
@@ -2388,7 +2408,7 @@ markerRailStops = function(data) {
 							snippet: 'Metro Rail Station #' + stationCode,
 							icon: mapKit.iconColors.HUE_RED,
 							selected: false,
-							index: '0' + data.Entrances[i].ID
+							index: global_pin_index
 						}
 					);
 					
@@ -2400,9 +2420,11 @@ markerRailStops = function(data) {
 							snippet: 'Metro Rail Station #' + stationCode,
 							icon: mapKit.iconColors.HUE_RED,
 							selected: false,
-							index: '0' + data.Entrances[i].ID
+							index: global_pin_index
 						}
 					);
+					
+					global_pin_index++;
 				}
 			
 			}
@@ -2806,7 +2828,7 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 					// our match function to see if a pin already exists in the global pin array
 					//console.log(obj.index);
 					//console.log(object.stopId);
-					return obj.index == '00' + object.stopId;
+					return obj.title == object.title;
 				});
 				
 				//console.log(circulatorMatches);
@@ -2827,7 +2849,7 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 								snippet: 'Circulator Stop #' + object.stopId,
 								icon: mapKit.iconColors.HUE_VIOLET,
 								selected: false,
-								index: '00' + object.stopId
+								index: global_pin_index
 							}
 						);
 						
@@ -2839,9 +2861,11 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 								snippet: 'Circulator Stop #' + object.stopId,
 								icon: mapKit.iconColors.HUE_VIOLET,
 								selected: false,
-								index: '00' + object.stopId
+								index: global_pin_index
 							}
 						);
+						
+						global_pin_index++;
 					}
 				
 				}
@@ -3371,7 +3395,8 @@ $('input').on('blur', function(){
 	currentPage = homePage,
 	pageHistory = [],
 	pageInitHistory = [],
-	mapVisible = true;;
+	global_pin_index = 0,
+	mapVisible = true;
 	
 	currentPage.css('display','block');
 	
@@ -3460,7 +3485,15 @@ $('input').on('blur', function(){
 		}
 	});
 
-	analytics.startTrackerWithId('UA-39138450-1')
+	analyticsSuccess = function() {
+		console.log('success');
+	}
+	
+	analyticsError = function() {
+		console.log('error');
+	}
+	//analytics.debugMode()
+	analytics.startTrackerWithId('UA-39138450-1');
 	/*
 if (device.platform == "iOS") {
 		window.GA.trackerWithTrackingId("UA-39138450-1");
@@ -3822,7 +3855,7 @@ $(document).on('pageinit', '#route_list', function() {
 
 //page show functions
 $(document).on('pagebeforeshow', '#gps_map', function() {
-
+	analytics.trackView('Map View');
 	//console.log(window.history);
 	if (mapVisible == false) {
 		showMap();
@@ -3851,9 +3884,11 @@ if (typeof(currentLatitude) === 'undefined') {
 	}
 */
 	
-	if (typeof(currentLat) != 'undefined') {
+	/*
+if (typeof(currentLat) != 'undefined') {
 		getStops(currentLat, currentLong, mapOptions.diameter);
 	}
+*/
 	
 
 	// put this here for android, does that work on iOS?
@@ -3891,6 +3926,7 @@ geo.beforeMapMove = function(currentLat,currentLon,latitudeDelta,longitudeDelta)
 						// prevent huge radii in the viewport from crashing the app
 						//console.log(radius);
 						if (radius < 3000) {
+							//console.log(viewportLat + ', ' + viewportLon + ', ' + radius);
 							getStops(viewportLat, viewportLon, radius);
 							getRailStops(viewportLat, viewportLon, radius);
 							
@@ -3931,7 +3967,7 @@ if (deviceReadyFlag = true) {
 
 
 $(document).on('pagebeforeshow', '#favorite_menu_page', function() {
-	
+	analytics.trackView('Favorites View');
 	//console.log(window.localStorage.getItem("favorites"));
 	
 	if (mapVisible == true) {
@@ -4048,6 +4084,7 @@ $(document).on('pageshow', '#favorite_menu_page', function() {
 
 $(document).on('pagebeforeshow', '#infowindow', function() {
 	
+	analytics.trackView('Info Window View');
 	//console.log(window.history);
 	
 	//only do this after the page flash we have to do to avoid android flickering
@@ -4116,6 +4153,7 @@ $('#infowindow-routes').listview('refresh');
 
 $(document).on('pagebeforeshow', '#route_map', function() {
   	
+  	analytics.trackView('Route Map View');
   	//console.log(window.history);
   	
   	//console.log('route map show');
@@ -4164,6 +4202,8 @@ $(document).on('pageshow', '#route_map', function() {
 
 // way to slow on jQuery mobile do to huge listview, so commenting out for now...
 $(document).on('pagebeforeshow', '#route_list', function() {
+	
+	analytics.trackView('Route List View');
 	
 	//console.log(window.localStorage.getItem("favorites"));
 	

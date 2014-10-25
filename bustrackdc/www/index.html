@@ -28,7 +28,7 @@
          
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" charset="utf-8" src="js/MapKit.js"></script>
-        <script type="text/javascript" src="js/GoogleAnalyticsPlugin.js"></script>
+<!--         <script type="text/javascript" src="js/GoogleAnalyticsPlugin.js"></script> -->
         
         <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
         <script type="text/javascript" src="js/underscore-min.js"></script>
@@ -315,16 +315,6 @@
 			</div>
 
         </div><!-- /page -->
-        
-        <script type="text/javascript">
-		 $('[data-role=page]').on('pageshow', function (event, ui) {
-		  try {
-		    _gaq.push( ['_trackPageview', event.target.id] );
-		    console.log(event.target.id);
-		  } catch(err) {
-		  }
-		});
-		</script>
 
     </body>
 </html>

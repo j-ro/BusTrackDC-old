@@ -40,6 +40,26 @@
     <feature name="Notification">
         <param name="ios-package" value="CDVNotification" />
     </feature>
+    <icon height="180" src="www/img/icon-ios-180.png" width="180" />
+    <icon height="60" src="www/img/icon-ios-60.png" width="60" />
+    <icon height="120" src="www/img/icon-ios-120.png" width="120" />
+    <icon height="76" src="www/img/icon-ios-76.png" width="76" />
+    <icon height="152" src="www/img/icon-ios-152.png" width="152" />
+    <icon height="40" src="www/img/icon-ios-40.png" width="40" />
+    <icon height="80" src="www/img/icon-ios-80.png" width="80" />
+    <icon height="57" src="www/img/icon-ios-57.png" width="57" />
+    <icon height="114" src="www/img/icon-ios-114.png" width="114" />
+    <icon height="72" src="www/img/icon-ios-72.png" width="72" />
+    <icon height="144" src="www/img/icon-ios-144.png" width="144" />
+    <icon height="29" src="www/img/icon-ios-29.png" width="29" />
+    <icon height="58" src="www/img/icon-ios-58.png" width="58" />
+    <icon height="50" src="www/img/icon-ios-50.png" width="50" />
+    <icon height="100" src="www/img/icon-ios-100.png" width="100" />
+    <splash height="480" src="www/img/splash-ios-320x480.png" width="320" />
+    <splash height="960" src="www/img/splash-ios-640x960.png" width="640" />
+    <splash height="1136" src="www/img/splash-ios-640x1136.png" width="640" />
+    <splash height="1334" src="www/img/splash-ios-750x1334.png" width="750" />
+    <splash height="2208" src="www/img/splash-ios-1242x2208.png" width="1242" />
     <name>BusTrackDC</name>
     <description>
         A bus tracking app for the Washington, DC metro rail and bus and circulator system.
