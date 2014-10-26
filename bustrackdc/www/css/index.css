@@ -193,6 +193,14 @@ body {
 	background-color: #dfe2e2;
 }
 
+.center-left {
+	padding-left: 5px;
+}
+
+.center-right {
+	padding-right: 5px;
+}
+
 
 
 /* list styles */

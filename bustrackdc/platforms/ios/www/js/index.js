@@ -476,7 +476,7 @@ buildRouteMenu = function(dataBus, dataRail, dataCirculator) {
 	$('#route_list_content .route_menu_btn').click(function() {
 		routeClicked = $(this).data('routeid');
 		
-		if (isNaN(routeClicked)) {
+		//if (isNaN(routeClicked)) {
 			
 			if (routeClicked == 'RD') {
 		    	routeTitle = 'Red';
@@ -514,11 +514,8 @@ buildRouteMenu = function(dataBus, dataRail, dataCirculator) {
 	    	} else if (routeClicked == 'potomac') {
 		    	routeTitle = 'Orange';
 		    	$('#route_map_title').html(routeTitle + ' Route');
-	    	}
-	    	
-	    	
-		} else {
-			$('#route_map_title').html('Route ' + routeClicked);
+	    	} else {
+				$('#route_map_title').html('Route ' + routeClicked);
 		}
 		
 		/*
@@ -535,9 +532,17 @@ if (device.platform == "iOS") {
 			    
 	});
 	
-	if (device.platform != "iOS" && parseInt(device.version) < 3) {
+	/*
+if (device.platform != "iOS" && parseInt(device.version) < 3) {
 		touchScroll("route_list_content");
 	}
+*/
+	
+	route_list_scroll = new iScroll('route_list_content', {useTransition: true});
+	
+	$('#route_list_filter_wrap .filter').on('keyup change', function() {
+		route_list_scroll.refresh();
+	});
 
 	
 	//if (device.platform != "iOS") {
@@ -3447,9 +3452,7 @@ $('input').on('blur', function(){
 	
 	// pull to refresh from http://cubiq.org/dropbox/iscroll4/examples/pull-to-refresh/
 	pullDownEl = document.getElementById('pullDown');
-	pullDownOffset = $(pullDownEl).outerHeight();
-	pullUpEl = document.getElementById('pullUp');	
-	pullUpOffset = $(pullUpEl).outerHeight();	
+	pullDownOffset = $(pullDownEl).outerHeight();	
 	
 	myScroll = new iScroll('infowindow-content', {
 		useTransition: true,
@@ -3468,10 +3471,6 @@ $('input').on('blur', function(){
 				pullDownEl.className = '';
 				//pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Pull down to refresh...';
 				this.minScrollY = -pullDownOffset;
-			} else if (this.y < (this.maxScrollY - 5) && !pullUpEl.className.match('flip')) {
-				this.maxScrollY = this.maxScrollY;
-			} else if (this.y > (this.maxScrollY + 5) && pullUpEl.className.match('flip')) {
-				this.maxScrollY = pullUpOffset;
 			}
 		},
 		onScrollEnd: function () {
@@ -3800,9 +3799,21 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 				 scroll: false
 			})
 			.disableSelection()
+			.bind('sort', function(event, ui) {
+				favorites_list_scroll.disable();
+				$('.ui-sortable-helper').offset({ top: parseFloat($('.ui-sortable-helper').css('top')) - favorites_list_scroll.y + $('.ui-sortable-helper').height() });
+				
+				//favorites_list_scroll.destroy();
+			})
 			.bind( "sortstop", function(event, ui) {
-				//console.log('sortstop');
-		    	//$favorites_menu.listview('refresh');
+				favorites_list_scroll.enable();
+				/*
+favorites_list_scroll = new iScroll('favorites_menu_content', {useTransition: true});
+	
+				$('#favorites_filter_wrap .filter').on('keyup change', function() {
+					favorites_list_scroll.refresh();
+				});
+*/
 		    });
 		    
 		    // take off the click handler while in edit mode to allow clicking on the delete button
@@ -3829,6 +3840,9 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 		    	if (!favorites.length) {
 			    	$('#favorites_menu').html('<h2 class="center">You haven\'t added any<br/>favorite stops yet!</h2><h2 class="center">Click the star icon<br/>when viewing a stop to<br/>add it as a favorite.</h2>');
 		    	}
+		    	
+		    	favorites_list_scroll.refresh();
+
 		    });
 
 		    
@@ -4050,6 +4064,12 @@ $.mobile.loading( 'show', {
 
 		});
 		
+		favorites_list_scroll = new iScroll('favorites_menu_content', {useTransition: true});
+	
+		$('#favorites_filter_wrap .filter').on('keyup change', function() {
+			favorites_list_scroll.refresh();
+		});
+		
 	} else {
 		//console.log('nothing');
 		//$('#favorites_menu').html('<h2 class="center">You haven\'t added any<br/>favorite stops yet!</h2><h2 class="center">Click the star icon<br/>when viewing a stop to<br/>add it as a favorite.</h2>').listview('refresh');
@@ -4065,9 +4085,11 @@ $.mobile.loading( 'show', {
 		}
 	}
 
-	if (device.platform != "iOS" && parseInt(device.version) < 3) {
+	/*
+if (device.platform != "iOS" && parseInt(device.version) < 3) {
 		touchScroll("favorites_menu_content");
 	}
+*/
 	
 
 });
@@ -4078,6 +4100,7 @@ $(document).on('pageshow', '#favorite_menu_page', function() {
 	//if (favoriteListfilterInit) {
 		//$('ul#favorites_menu').listfilter("refresh");
 	//}
+	favorites_list_scroll.refresh();
 });
 
 
@@ -4230,6 +4253,104 @@ if (mapVisible == true) {
 */
 	
 	$('#route_list_filter_wrap .filter').val('');
+	
+	//getRoutes();
+});
+
+
+
+$(document).on('pagebeforeshow', '#directions', function() {
+	
+	analytics.trackView('Directions View');
+	
+	//console.log(window.localStorage.getItem("favorites"));
+	
+	if (mapVisible == true) {
+		hideMap();
+		
+	}
+	
+
+	
+	//getRoutes();
+});
+
+$(document).on('pageinit', '#directions', function() {	
+	$('#directions-content .clear').click(function() {
+		$(this).siblings('input').val('');
+	});
+	
+	var service = new google.maps.places.AutocompleteService();
+	
+	function start_autocomplete_callback(predictions, status) {
+	  if (status != google.maps.places.PlacesServiceStatus.OK) {
+	    alert(status);
+	    return;
+	  }
+	
+	  var results = document.getElementById('results');
+	  
+	  $('#start_autocomplete_results').html('');
+	
+	  for (var i = 0, prediction; prediction = predictions[i]; i++) {
+	    $('#start_autocomplete_results').append('<li class="topcoat-list__item"><a class="route_menu_btn icon-angle-right"><p><strong>' + prediction.description + '</strong></p></a>');
+	  }
+	}
+	
+	function end_autocomplete_callback(predictions, status) {
+	  if (status != google.maps.places.PlacesServiceStatus.OK) {
+	    alert(status);
+	    return;
+	  }
+	
+	  var results = document.getElementById('results');
+	  
+	  $('#end_autocomplete_results').html('');
+	
+	  for (var i = 0, prediction; prediction = predictions[i]; i++) {
+	    $('#end_autocomplete_results').append('<li class="topcoat-list__item"><a class="route_menu_btn icon-angle-right"><p><strong>' + prediction.description + '</strong></p></a>');
+	  }
+	}
+	
+	$('#directions_start_wrap .filter').on('focusin', function() {
+		$('#directions_end_wrap').addClass('hide');
+		$('#start_autocomplete_results').removeClass('hide');
+	});
+	
+	$('#directions_start_wrap .filter').on('focusout', function() {
+		$('#directions_end_wrap').removeClass('hide');
+		$('#start_autocomplete_results').addClass('hide');
+	});
+	
+	$('#directions_end_wrap .filter').on('focusin', function() {
+		$('#end_autocomplete_results').removeClass('hide');
+	});
+	
+	$('#directions_end_wrap .filter').on('focusout', function() {
+		$('#end_autocomplete_results').addClass('hide');
+	});
+	
+	$('#directions_start_wrap .filter').on('keyup change', function() {
+		service.getQueryPredictions({ input: $(this).val() }, start_autocomplete_callback);
+	});
+	
+	$('#directions_end_wrap .filter').on('keyup change', function() {
+		service.getQueryPredictions({ input: $(this).val() }, end_autocomplete_callback);
+	});
+    
+});
+
+$(document).on('pagebeforehide', '#directions', function() {
+	
+	//console.log(window.localStorage.getItem("favorites"));
+	
+	/*
+if (mapVisible == true) {
+		hideMap();
+	}
+*/
+	
+	//$('#route_list_filter_wrap .filter').val('');
 	
 	//getRoutes();
 });

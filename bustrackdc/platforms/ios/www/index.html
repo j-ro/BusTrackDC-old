@@ -38,6 +38,7 @@
         <script type="text/javascript" src="js/jquery.xml2json.js"></script>
         <script type="text/javascript" src="js/jquery.listfilter.js"></script>
         <script type="text/javascript" src="js/hammer.min.js"></script>
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&v=3.exp"></script>
         
         
         <script type="text/javascript" charset="utf-8" src="js/config.js"></script>       
@@ -89,17 +90,21 @@
 			</div>
 			
 			<div class="topcoat-navigation-bar footer">
-				<div class="topcoat-navigation-bar__item left third">
+				<div class="topcoat-navigation-bar__item left quarter">
 					<a href="#" class="refresh_location icon-location-arrow icon"></a>
 
 				</div>
 				
-				<div class="topcoat-navigation-bar__item center third">
+				<div class="topcoat-navigation-bar__item left quarter center-left">
                		<a href="#favorite_menu_page" class="favorites_menu_btn icon icon-star" id="favorites_menu_home"></a>
 
 				</div>
 				
-				<div class="topcoat-navigation-bar__item right third">
+				<div class="topcoat-navigation-bar__item center quarter center-right">
+               		<a href="#directions" class="directions_btn icon icon-level-down icon-rotate-270"></a>
+				</div>
+				
+				<div class="topcoat-navigation-bar__item center quarter">
 			     	<a href="#route_list" class="icon icon-list"></a> 
 
 				</div>
@@ -145,17 +150,21 @@
     		</div>
 			
 			<div class="topcoat-navigation-bar footer">
-				<div class="topcoat-navigation-bar__item left third">
+				<div class="topcoat-navigation-bar__item left quarter">
 					<a href="#gps_map" class="current_location icon-home icon"></a>
 
 				</div>
 				
-				<div class="topcoat-navigation-bar__item center third">
+				<div class="topcoat-navigation-bar__item left quarter center-left">
                		<a href="#favorite_menu_page" class="favorites_menu_btn icon icon-star"></a>
 
 				</div>
 				
-				<div class="topcoat-navigation-bar__item right third">
+				<div class="topcoat-navigation-bar__item center quarter center-right">
+               		<a href="#directions" class="directions_btn icon icon-level-down icon-rotate-270"></a>
+				</div>
+				
+				<div class="topcoat-navigation-bar__item center quarter">
 			     	<a href="#route_list" class="icon icon-list"></a> 
 
 				</div>
@@ -189,17 +198,21 @@
             </div>
 
 			<div class="topcoat-navigation-bar footer">
-				<div class="topcoat-navigation-bar__item left third">
+				<div class="topcoat-navigation-bar__item left quarter">
 					<a href="#gps_map" class="current_location icon-home icon"></a>
 
 				</div>
 				
-				<div class="topcoat-navigation-bar__item center third">
+				<div class="topcoat-navigation-bar__item left center-left quarter">
                		<a href="#favorite_menu_page" class="favorites_menu_btn icon icon-star"></a>
 
 				</div>
 				
-				<div class="topcoat-navigation-bar__item right third">
+				<div class="topcoat-navigation-bar__item center quarter center-right">
+               		<a href="#directions" class="directions_btn icon icon-level-down icon-rotate-270"></a>
+				</div>
+				
+				<div class="topcoat-navigation-bar__item center quarter">
 			     	<a href="#route_list" class="icon icon-list"></a> 
 
 				</div>
@@ -230,27 +243,34 @@
 			</div>
         	
         	<div id="route_list_content" class="content">
-        		<div id="route_list_filter_wrap" class="filter_wrap">
-					<input type="search" class="topcoat-search-input filter" placeholder="Search routes by name">
-					<a class="clear icon-remove-sign"></a>
+        		<div id="route_scroller">
+	        		<div id="route_list_filter_wrap" class="filter_wrap">
+						<input type="search" class="topcoat-search-input filter" placeholder="Search routes by name">
+						<a class="clear icon-remove-sign"></a>
+					</div>
+					
+	        		<ul id="route_list_content_list" class="topcoat-list">
+		        		<h2 class="center">No routes available at this time.<br/>Try again later.</h2>
+	        		</ul>
 				</div>
-        		<ul id="route_list_content_list" class="topcoat-list scroll">
-	        		<h2 class="center">No routes available at this time.<br/>Try again later.</h2>
-        		</ul>
         	</div>
 
 			<div class="topcoat-navigation-bar footer">
-				<div class="topcoat-navigation-bar__item left third">
+				<div class="topcoat-navigation-bar__item left quarter">
 					<a href="#gps_map" class="current_location icon-home icon"></a>
 
 				</div>
 				
-				<div class="topcoat-navigation-bar__item center third">
+				<div class="topcoat-navigation-bar__item left quarter center-left">
                		<a href="#favorite_menu_page" class="favorites_menu_btn icon icon-star"></a>
 
 				</div>
 				
-				<div class="topcoat-navigation-bar__item right third">
+				<div class="topcoat-navigation-bar__item center quarter center-right">
+               		<a href="#directions" class="directions_btn icon icon-level-down icon-rotate-270"></a>
+				</div>
+				
+				<div class="topcoat-navigation-bar__item center quarter">
 			     	<a href="#" class="icon icon-list active"></a> 
 
 				</div>
@@ -278,35 +298,106 @@
 				</div>
 				
 				<div class="topcoat-navigation-bar__item right quarter">
-					<a href="#" class="icon-edit icon" id="edit"></a>
+					<a href="#" class="icon-pencil icon" id="edit"></a>
 				</div>
 			</div>
         	
         	<div id="favorites_menu_content" class="content">
-        		<div id="favorites_filter_wrap" class="filter_wrap">
-					<input type="search" class="topcoat-search-input filter" placeholder="Search favorites by name">
-					<a class="clear icon-remove-sign"></a>
-				</div>
-				
-	        	<ul id="favorites_menu" class="topcoat-list scroll">
-	        		<h2 class="center">You haven't added any<br/>favorite stops yet!</h2>
-	        		<h2 class="center">Click the star icon<br/>when viewing a stop to<br/>add it as a favorite.</h2>
-	        	</ul>
-				
+	        	<div id="favorite_scroller">
+	        		<div id="favorites_filter_wrap" class="filter_wrap">
+						<input type="search" class="topcoat-search-input filter" placeholder="Search favorites by name">
+						<a class="clear icon-remove-sign"></a>
+					</div>
+					
+		        	<ul id="favorites_menu" class="topcoat-list">
+		        		<h2 class="center">You haven't added any<br/>favorite stops yet!</h2>
+		        		<h2 class="center">Click the star icon<br/>when viewing a stop to<br/>add it as a favorite.</h2>
+		        	</ul>
+	        	</div>
         	</div>
             
             <div class="topcoat-navigation-bar footer">
-				<div class="topcoat-navigation-bar__item left third">
+				<div class="topcoat-navigation-bar__item left quarter">
 					<a href="#gps_map" class="current_location icon-home icon"></a>
 
 				</div>
 				
-				<div class="topcoat-navigation-bar__item center third">
+				<div class="topcoat-navigation-bar__item left quarter center-left">
                		<a href="#" class="favorites_menu_btn icon icon-star active"></a>
 
 				</div>
 				
-				<div class="topcoat-navigation-bar__item right third">
+				<div class="topcoat-navigation-bar__item center quarter center-right">
+               		<a href="#directions" class="directions_btn icon icon-level-down icon-rotate-270"></a>
+				</div>
+				
+				<div class="topcoat-navigation-bar__item center quarter">
+			     	<a href="#route_list" class="icon icon-list"></a> 
+
+				</div>
+				
+				
+			</div>
+
+        </div><!-- /page -->
+        
+        <div id="directions" class="page">
+            
+            <div class="topcoat-navigation-bar header">
+            	<div class="topcoat-navigation-bar__item left quarter">
+					<a href="#back" class="back icon-angle-left icon"></a>
+				</div>
+				
+				<div class="topcoat-navigation-bar__item center half">
+					<h1 class="topcoat-navigation-bar__title">
+						Directions
+					</h1>
+					
+					<span class="spinner icon-refresh icon-spin"></span>
+				</div>
+				
+				<div class="topcoat-navigation-bar__item right quarter">
+				</div>
+			</div>
+
+    		<div id="directions-content" class="content">
+	    		<div id="directions_scroller">
+	    			<div id="directions_start_wrap" class="filter_wrap">
+						<input type="search" class="topcoat-search-input filter" placeholder="Start">
+						<a class="clear icon-remove-sign"></a>
+					</div>
+					<div id="directions_end_wrap" class="filter_wrap">
+						<input type="search" class="topcoat-search-input filter" placeholder="End">
+						<a class="clear icon-remove-sign"></a>
+					</div>
+	        		<input type="submit" value="Route" />
+	        		
+	        		<ul id="start_autocomplete_results" class="topcoat-list hide">
+		        		<h2>Start typing for suggestions.</h2>
+	        		</ul>
+	        		
+	        		<ul id="end_autocomplete_results" class="topcoat-list hide">
+	        			<h2>Start typing for suggestions.</h2>
+	        		</ul>
+	    		</div>
+    		</div>
+			
+			<div class="topcoat-navigation-bar footer">
+				<div class="topcoat-navigation-bar__item left quarter">
+					<a href="#gps_map" class="current_location icon-home icon"></a>
+
+				</div>
+				
+				<div class="topcoat-navigation-bar__item left quarter center-left">
+               		<a href="#favorite_menu_page" class="favorites_menu_btn icon icon-star"></a>
+
+				</div>
+				
+				<div class="topcoat-navigation-bar__item center quarter center-right">
+               		<a href="#directions" class="directions_btn icon icon-level-down icon-rotate-270 active"></a>
+				</div>
+				
+				<div class="topcoat-navigation-bar__item center quarter">
 			     	<a href="#route_list" class="icon icon-list"></a> 
 
 				</div>

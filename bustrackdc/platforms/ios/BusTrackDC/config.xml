@@ -70,4 +70,5 @@
     <content src="index.html" />
     <access origin="*" />
     <gap:config-file overwrite="false" parent="NSLocationAlwaysUsageDescription" platform="ios" />
+    <preference name="DisallowOverscroll" value="true" />
 </widget>
