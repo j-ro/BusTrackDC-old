@@ -35,6 +35,10 @@
                         {
                             "xml": "<feature name=\"Notification\"><param name=\"ios-package\" value=\"CDVNotification\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Keyboard\"><param name=\"ios-package\" onload=\"true\" value=\"IonicKeyboard\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -163,6 +167,9 @@
             "PACKAGE_NAME": "com.jasonrosenbaum.bustrackdc"
         },
         "org.apache.cordova.dialogs": {
+            "PACKAGE_NAME": "org.JasonRosenbaum.WheresTheBusDC"
+        },
+        "com.ionic.keyboard": {
             "PACKAGE_NAME": "org.JasonRosenbaum.WheresTheBusDC"
         }
     },

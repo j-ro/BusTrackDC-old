@@ -38,7 +38,7 @@
         <script type="text/javascript" src="js/jquery.xml2json.js"></script>
         <script type="text/javascript" src="js/jquery.listfilter.js"></script>
         <script type="text/javascript" src="js/hammer.min.js"></script>
-        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&v=3.exp"></script>
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
         
         
         <script type="text/javascript" charset="utf-8" src="js/config.js"></script>       
@@ -68,24 +68,6 @@
 			</div>
 			
 			<div class="content">
-
-<!--
-        		<div id="filter_wrap" class="">
-					<input id="filter" type="search" class="topcoat-search-input" placeholder="Search routes by name/number">
-					<a class="clear icon-remove"></a>
-				</div>
-		<ul id="route_list_content_list" class="topcoat-list">
-	        		
-		    			<li class="needsclick topcoat-list__item"><a data-routeid="12345" class="route_menu_btn icon-angle-right"><p><strong>Skyland Bus Route</strong></p></a></li>
-		    			<h2 class="center">No routes available at this time.<br/>Try again later.</h2>
-        		</ul>
--->
-			
-		    		<!--
-<ul data-role="listview" id="infowindow-routes" class="topcoat-list">
-		    			<li class="needsclick topcoat-list__item"><a class="favorite-stop-detail-btn"><p class="favoriteMenuStopTitle"><strong>Columbia and connecticut blah blah blah blah</strong></p><p>Stop number whatever blah blah blah blah</p><span class="delete-handle icon-remove"><span>Delete</span></span><span class="drag-handle icon-reorder"><span>Sort</span></span></a></li>
-		    		</ul>
--->
 			
 			</div>
 			
@@ -245,11 +227,13 @@
         	<div id="route_list_content" class="content">
         		<div id="route_scroller">
 	        		<div id="route_list_filter_wrap" class="filter_wrap">
-						<input type="search" class="topcoat-search-input filter" placeholder="Search routes by name">
-						<a class="clear icon-remove-sign"></a>
+		        		<form>
+							<input type="search" class="topcoat-search-input filter" placeholder="Search routes by name">
+							<a class="clear icon-remove-sign"></a>
+		        		</form>
 					</div>
 					
-	        		<ul id="route_list_content_list" class="topcoat-list">
+	        		<ul id="route_list_content_list" class="topcoat-list small_list">
 		        		<h2 class="center">No routes available at this time.<br/>Try again later.</h2>
 	        		</ul>
 				</div>
@@ -305,8 +289,10 @@
         	<div id="favorites_menu_content" class="content">
 	        	<div id="favorite_scroller">
 	        		<div id="favorites_filter_wrap" class="filter_wrap">
-						<input type="search" class="topcoat-search-input filter" placeholder="Search favorites by name">
-						<a class="clear icon-remove-sign"></a>
+		        		<form>
+							<input type="search" class="topcoat-search-input filter" placeholder="Search favorites by name">
+							<a class="clear icon-remove-sign"></a>
+		        		</form>
 					</div>
 					
 		        	<ul id="favorites_menu" class="topcoat-list">
@@ -361,24 +347,44 @@
 			</div>
 
     		<div id="directions-content" class="content">
-	    		<div id="directions_scroller">
-	    			<div id="directions_start_wrap" class="filter_wrap">
-						<input type="search" class="topcoat-search-input filter" placeholder="Start">
-						<a class="clear icon-remove-sign"></a>
-					</div>
-					<div id="directions_end_wrap" class="filter_wrap">
-						<input type="search" class="topcoat-search-input filter" placeholder="End">
-						<a class="clear icon-remove-sign"></a>
-					</div>
-	        		<input type="submit" value="Route" />
-	        		
-	        		<ul id="start_autocomplete_results" class="topcoat-list hide">
-		        		<h2>Start typing for suggestions.</h2>
-	        		</ul>
-	        		
-	        		<ul id="end_autocomplete_results" class="topcoat-list hide">
-	        			<h2>Start typing for suggestions.</h2>
-	        		</ul>
+	    		<div id="directions_ui_wrap">
+		    		<form id="directions_form">
+			    		<div id="directions_search" class="floatleft topcoat-navigation-bar__item small_nav">
+				    		
+			    			<div id="directions_start_wrap" class="filter_wrap floatleft half topcoat-navigation-bar__item small_nav">
+								<input type="search" class="topcoat-search-input filter" placeholder="Start">
+							</div>
+							<div id="directions_end_wrap" class="filter_wrap floatleft half topcoat-navigation-bar__item small_nav">
+								<input type="search" class="topcoat-search-input filter" placeholder="End">
+							</div>
+				    		
+			    		</div>
+			    		<div id="directions_button" class="floatleft topcoat-navigation-bar__item small_nav">
+			        		<button class="topcoat-button icon-level-down icon-rotate-270"></button>
+			    		</div>
+		    		</form>
+		    		
+		    		<div class="clear"></div>
+	    		</div>
+	    		
+	    		<div id="directions_autocomplete">
+		    		<div id="directions_autocomplete_scroller">
+        		
+		        		<ul id="start_autocomplete_results" class="topcoat-list hide small_list">
+			        		<li class="topcoat-list__item directions_currloc"><span class="icon-location-arrow pr5"></span>Current Location</li>
+		        		</ul>
+		        		
+		        		<ul id="end_autocomplete_results" class="topcoat-list hide small_list">
+		        			<li class="topcoat-list__item directions_currloc"><span class="icon-location-arrow pr5"></span>Current Location</li>
+		        		</ul>
+		    		</div>
+	    		</div>
+	    		
+	    		<div id="directions_routes" class="hide">
+		    		<div id="directions_routes_scroller">
+			    		<div id="directions_routes_info">
+			    		</div>
+		    		</div>
 	    		</div>
     		</div>
 			

@@ -41,6 +41,13 @@ module.exports = [
         "merges": [
             "navigator.notification"
         ]
+    },
+    {
+        "file": "plugins/com.ionic.keyboard/www/keyboard.js",
+        "id": "com.ionic.keyboard.keyboard",
+        "clobbers": [
+            "cordova.plugins.Keyboard"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -52,7 +59,8 @@ module.exports.metadata =
     "com.google.google-play-services": "1.0.0",
     "com.danielcwilson.plugins.googleanalytics": "0.6.0",
     "org.apache.cordova.console": "0.2.11",
-    "org.apache.cordova.dialogs": "0.2.10"
+    "org.apache.cordova.dialogs": "0.2.10",
+    "com.ionic.keyboard": "1.0.3"
 }
 // BOTTOM OF METADATA
 });
