@@ -255,7 +255,7 @@ getRoutes = function() {
     	
     }
 	
-	getRoutesJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JRoutes?api_key=' + wmata_api_key + '&callback=?', function(data) {
+	getRoutesJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JRoutes?api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key + '&callback=?', function(data) {
 	
 		/*
 		if (ajaxCount > 0 ) {
@@ -282,7 +282,7 @@ ajaxCount++;
 	    }
 */
 		
-		getRailRoutesJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JLines?api_key=' + wmata_api_key + '&callback=?', function(data) {
+		getRailRoutesJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JLines?api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key + '&callback=?', function(data) {
 		
 			/*
 if (ajaxCount > 0 ) {
@@ -540,7 +540,21 @@ if (device.platform != "iOS" && parseInt(device.version) < 3) {
 	
 	route_list_scroll = new iScroll('route_list_content', {useTransition: true});
 	
-	$('#route_list_filter_wrap .filter').on('keyup change', function() {
+	$('#route_list_filter_wrap .clear').click(function() {
+		console.log('clear');
+		$('#route_list_content').height(window.innerHeight - $('#route_list .header').height() - $('#route_list .footer').height());
+		route_list_scroll.refresh();
+	});
+	
+	$('#route_list_filter_wrap .filter').on('keyup change focusin', function() {
+		console.log('focusin');
+		$('#route_list_content').height(window.innerHeight - $('#route_list .header').height());
+		route_list_scroll.refresh();
+	});
+	
+	$('#route_list_filter_wrap .filter').on('focusout', function() {
+		console.log('focusout');
+		$('#route_list_content').height(window.innerHeight - $('#route_list .header').height() - $('#route_list .footer').height());
 		route_list_scroll.refresh();
 	});
 
@@ -578,7 +592,7 @@ getStops = function(latitude,longitude,radius) {
     	
     }
 	
-	getStopsJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JStops?lat=' + latitude + '&lon=' + longitude + '&radius=' + radius + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
+	getStopsJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JStops?lat=' + latitude + '&lon=' + longitude + '&radius=' + radius + '&api_key=' + wmata_api_key  + '&subscription-key=' + wmata_api_key + '&callback=?', function(data) {
 		//console.log('ajax call done');
 		//$.mobile.loading( 'hide' );
 		
@@ -661,7 +675,7 @@ getStopsForRoute = function(routeID) {
     	
     }
 		
-	getStopsForRouteJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JRouteDetails?routeID=' + routeID + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
+	getStopsForRouteJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JRouteDetails?routeID=' + routeID + '&api_key=' + wmata_api_key  + '&subscription-key=' + wmata_api_key + '&callback=?', function(data) {
 		
 		if (ajaxCount > 0 ) {
     		ajaxCount--;
@@ -838,7 +852,7 @@ getRailStops = function(latitude,longitude,radius) {
     	
     }
 	
-	getRailStopsJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JStationEntrances?lat=' + latitude + '&lon=' + longitude + '&radius=' + radius + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
+	getRailStopsJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JStationEntrances?lat=' + latitude + '&lon=' + longitude + '&radius=' + radius + '&api_key=' + wmata_api_key  + '&subscription-key=' + wmata_api_key + '&callback=?', function(data) {
 	
 		if (ajaxCount > 0 ) {
     		ajaxCount--;
@@ -920,7 +934,7 @@ getRailStopsForRoute = function(routeID) {
     	
     }
 		
-	getRailStopsForRouteJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JStations?LineCode=' + routeID + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
+	getRailStopsForRouteJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JStations?LineCode=' + routeID + '&api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key + '&callback=?', function(data) {
 		
 		if (ajaxCount > 0 ) {
     		ajaxCount--;
@@ -1521,7 +1535,7 @@ function annotationTap(text, latitude, longitude) {
 				}
 				//console.log('http://api.wmata.com/StationPrediction.svc/json/GetPrediction/' + stopID.toString().replace(/Metro Rail Station #/,'') + '?api_key=' + wmata_api_key + '&callback=?');
 				
-				annotationTapJSON = $.getJSON('http://api.wmata.com/StationPrediction.svc/json/GetPrediction/' + stopID.toString().replace(/Metro Rail Station #/,'') + '?api_key=' + wmata_api_key + '&callback=?', function(data2, self4) {
+				annotationTapJSON = $.getJSON('http://api.wmata.com/StationPrediction.svc/json/GetPrediction/' + stopID.toString().replace(/Metro Rail Station #/,'') + '?api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key + '&callback=?', function(data2, self4) {
 					
 					if (ajaxCount > 0 ) {
 			    		ajaxCount--;
@@ -1671,7 +1685,7 @@ if (railStops.length) {
 					
 				}
 				
-				annotationTapJSON = $.getJSON('http://api.wmata.com/NextBusService.svc/json/JPredictions?StopID=' + stopID.toString().replace(/Metro Bus Stop #/,'') + '&api_key=' + wmata_api_key + '&callback=?', function(data2, self4) {
+				annotationTapJSON = $.getJSON('http://api.wmata.com/NextBusService.svc/json/JPredictions?StopID=' + stopID.toString().replace(/Metro Bus Stop #/,'') + '&api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key + '&callback=?', function(data2, self4) {
 					
 					if (ajaxCount > 0 ) {
 			    		ajaxCount--;
@@ -2071,6 +2085,7 @@ if (device.platform == "iOS") {
 */
 
 					if (!$('#infowindow').hasClass('center')) {
+						console.log('circulator show');
 						if ($(this).attr('href') != $(currentPage).attr('id')) {
 							pageHistory.push('#' + currentPage.attr('id'));
 						}
@@ -2473,7 +2488,7 @@ markerRailStops = function(data) {
 				    }
 				    
 					//console.log('start each');
-					getRailStationInfoJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JStationInfo?StationCode=' + object + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
+					getRailStationInfoJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JStationInfo?StationCode=' + object + '&api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key + '&callback=?', function(data) {
 						//console.log(data);
 					
 						if (ajaxCount > 0 ) {
@@ -3145,7 +3160,7 @@ function start_autocomplete_callback(predictions, status) {
   if (status != google.maps.places.PlacesServiceStatus.OK) {
     $('#start_autocomplete_results').html('<li class="topcoat-list__item directions_currloc"><span class="icon-location-arrow pr5"></span>Current Location</li>');
     directions_scroll.refresh();
-    console.log(status);
+    //console.log(status);
     return;
   }
 
@@ -3164,7 +3179,7 @@ function end_autocomplete_callback(predictions, status) {
   if (status != google.maps.places.PlacesServiceStatus.OK) {
 	$('#end_autocomplete_results').html('<li class="topcoat-list__item directions_currloc"><span class="icon-location-arrow pr5"></span>Current Location</li>');
 	directions_scroll.refresh();
-    console.log(status);
+    //console.log(status);
     return;
   }
 
@@ -3189,9 +3204,11 @@ function gmaps_directions_initialize() {
 function get_directions(start, end) {
 	
 	function getDirectionsConfirm(buttonIndex) {
-        if (buttonIndex == 1) {
+        /*
+if (buttonIndex == 1) {
         	get_directions(start, end);
         }
+*/
     }
     
     ajaxCount++;
@@ -3253,10 +3270,10 @@ function get_directions(start, end) {
 			
 			//if (errorThrown != 'abort') {
 				navigator.notification.confirm(
-				    'No directions were found.',  // message
+				    'Please try a different start and end location.',  // message
 				    getDirectionsConfirm,         // callback
-				    "There was an error",            // title
-				    'Try again,Cancel'                  // buttonName
+				    "No directions were found",            // title
+				    'OK'                  // buttonName
 			    ); 
 			//}
 		}
@@ -3907,7 +3924,7 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 			}
 			
 			// rebind the click handler
-			$('.favorite-stop-detail-btn').click(function() {
+			$('.favorite-stop-detail-btn').one('click', function() {
 
 				
 				
@@ -4010,6 +4027,8 @@ favorites_list_scroll = new iScroll('favorites_menu_content', {useTransition: tr
 		    	if (!favorites.length) {
 			    	$('#favorites_menu').html('<h2 class="center">You haven\'t added any<br/>favorite stops yet!</h2><h2 class="center">Click the star icon<br/>when viewing a stop to<br/>add it as a favorite.</h2>');
 		    	}
+		    	
+		    	$('#favorites_menu_content').height(window.innerHeight - $('#favorite_menu_page .header').height() - $('#favorite_menu_page .footer').height());
 		    	
 		    	favorites_list_scroll.refresh();
 
@@ -4152,6 +4171,8 @@ if (deviceReadyFlag = true) {
 
 
 $(document).on('pagebeforeshow', '#favorite_menu_page', function() {
+	//console.log('favorites');
+	
 	analytics.trackView('Favorites View');
 	//console.log(window.localStorage.getItem("favorites"));
 	
@@ -4194,8 +4215,12 @@ $(document).on('pagebeforeshow', '#favorite_menu_page', function() {
 			'clearlink': $('#favorites_filter_wrap a.clear'),
 			'alternate': false
 		});
+		
+		//console.log('off');
+		
+		$('.favorite-stop-detail-btn').off();
 
-		$('.favorite-stop-detail-btn').click(function() {
+		$('.favorite-stop-detail-btn').one('click', function() {
 
 			//console.log($(this).data('stopid'));
 			
@@ -4218,10 +4243,13 @@ $.mobile.loading( 'show', {
 			// if we click a favorite, get the stop and populate the stops array really quick, so we can view all the data about the predictions
 			favoriteBtnClickedFlag = true;
 			if ((/Metro Bus Stop #/).test(notInRangeStopID)) {
+				//console.log('getbus');
 				getStops(notInRangeStopLat, notInRangeStopLon, '50');
 			} else if ((/Metro Rail Station #/).test(notInRangeStopID)) {
+				//console.log('getrail');
 				getRailStops(notInRangeStopLat, notInRangeStopLon, '500');
 			} else if ((/Circulator Stop #/).test(notInRangeStopID)) {
+				//console.log('getcirc');
 				//console.log('marker circ stops from favorite button');
 				markerCirculatorStops(notInRangeStopLat,notInRangeStopLon,.01,.01);
 			} else if (isNaN(notInRangeStopID)) {
@@ -4235,9 +4263,21 @@ $.mobile.loading( 'show', {
 
 		});
 		
+		$('#favorites_menu_content').height(window.innerHeight - $('#favorite_menu_page .header').height() - $('#favorite_menu_page .footer').height());
 		favorites_list_scroll = new iScroll('favorites_menu_content', {useTransition: true});
+		
+		$('#favorites_filter_wrap .clear').click(function() {
+			$('#favorites_menu_content').height(window.innerHeight - $('#favorite_menu_page .header').height() - $('#favorite_menu_page .footer').height());
+			favorites_list_scroll.refresh();
+		});
 	
-		$('#favorites_filter_wrap .filter').on('keyup change', function() {
+		$('#favorites_filter_wrap .filter').on('keyup change focusin', function() {
+			$('#favorites_menu_content').height(window.innerHeight - $('#favorite_menu_page .header').height());
+			favorites_list_scroll.refresh();
+		});
+		
+		$('#favorites_filter_wrap .filter').on('focusout', function() {
+			$('#favorites_menu_content').height(window.innerHeight - $('#favorite_menu_page .header').height() - $('#favorite_menu_page .footer').height());
 			favorites_list_scroll.refresh();
 		});
 		
@@ -4271,7 +4311,10 @@ $(document).on('pageshow', '#favorite_menu_page', function() {
 	//if (favoriteListfilterInit) {
 		//$('ul#favorites_menu').listfilter("refresh");
 	//}
-	favorites_list_scroll.refresh();
+	if (typeof(favorites_list_scroll) != 'undefined') {
+		favorites_list_scroll.refresh();
+	}
+	
 });
 
 

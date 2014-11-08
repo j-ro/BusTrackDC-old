@@ -91,12 +91,18 @@ body {
 	padding: 10px 0 0 0;
 }
 
+.header .topcoat-navigation-bar__item.center.half,
+.header .topcoat-navigation-bar__item.center.full {
+	margin-left: -0.3rem;
+	padding-top: 0.4rem;
+}
+
 .topcoat-navigation-bar__item.left .icon {
 	padding-left: 1rem;
 }
 
 .topcoat-navigation-bar__item.right .icon {
-	padding-right: 1.5rem;
+	padding-right: 1.3rem;
 }
 
 .Android .header, .iOS6_or_lower .header {
@@ -114,8 +120,8 @@ body {
 }
 
 .header .icon-angle-left {
-	font-size: 2rem;
-	margin-top: 0.95rem;
+	font-size: 2.2rem;
+	margin-top: 0.65rem;
 }
 
 .Android .header .topcoat-navigation-bar__item a.icon-angle-left, .iOS6_or_lower .header .topcoat-navigation-bar__item a.icon-angle-left {
@@ -225,6 +231,10 @@ body {
 	padding: 0.75rem;
 	min-height: 2.5rem;
 	background-color: rgb(223, 226, 226);
+}
+
+.stopTitle {
+	padding: 4px 0.85rem;
 }
 
 .small_list .topcoat-list__item {
