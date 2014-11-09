@@ -228,7 +228,7 @@
         		<div id="route_scroller">
 	        		<div id="route_list_filter_wrap" class="filter_wrap">
 		        		<form>
-							<input type="search" class="topcoat-search-input filter" placeholder="Search routes by name">
+							<input type="search" class="topcoat-search-input filter" placeholder="Search routes by name"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
 							<a class="clear icon-remove-sign"></a>
 		        		</form>
 					</div>
@@ -290,7 +290,7 @@
 	        	<div id="favorite_scroller">
 	        		<div id="favorites_filter_wrap" class="filter_wrap">
 		        		<form>
-							<input type="search" class="topcoat-search-input filter" placeholder="Search favorites by name">
+							<input type="search" class="topcoat-search-input filter" placeholder="Search favorites by name"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
 							<a class="clear icon-remove-sign"></a>
 		        		</form>
 					</div>
@@ -352,10 +352,10 @@
 			    		<div id="directions_search" class="floatleft topcoat-navigation-bar__item small_nav">
 				    		
 			    			<div id="directions_start_wrap" class="filter_wrap floatleft half topcoat-navigation-bar__item small_nav">
-								<input type="search" class="topcoat-search-input filter" placeholder="Start">
+								<input type="search" class="topcoat-search-input filter" placeholder="Start" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
 							</div>
 							<div id="directions_end_wrap" class="filter_wrap floatleft half topcoat-navigation-bar__item small_nav">
-								<input type="search" class="topcoat-search-input filter" placeholder="End">
+								<input type="search" class="topcoat-search-input filter" placeholder="End"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
 							</div>
 				    		
 			    		</div>
@@ -380,9 +380,12 @@
 		    		</div>
 	    		</div>
 	    		
-	    		<div id="directions_routes" class="hide">
+	    		<div id="directions_routes">
 		    		<div id="directions_routes_scroller">
 			    		<div id="directions_routes_info">
+				    		<ul class="topcoat-list">
+				    			<h2 class="center">Enter start and end locations above<br/>to get transit directions.</h2>
+				    		</ul>
 			    		</div>
 		    		</div>
 	    		</div>

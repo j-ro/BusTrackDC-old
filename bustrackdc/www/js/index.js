@@ -3267,6 +3267,11 @@ if (buttonIndex == 1) {
 		    	$('.topcoat-navigation-bar__title').css('margin-left','0');
 		    	$('.spinner').css('display','none');
 		    }
+		    
+		    $('#directions_routes_info').html('<ul class="topcoat-list"><h2 class="center">Enter start and end locations above<br/>to get transit directions.</h2></ul>');
+		    
+		    directions_routes_scroll.destroy();
+		    directions_routes_scroll = undefined;
 			
 			//if (errorThrown != 'abort') {
 				navigator.notification.confirm(
@@ -3291,13 +3296,117 @@ function parse_directions(data) {
 	$(data.routes).each(function(i, route) {
 		i_padded = i + 1;
 		
+		if (i == 0) {
+			$directions_route_info.append(''
+				+ '<p class="directions_heading">'
+				+ '<span><strong>Start:</strong></span>'
+				+ route.legs[0].start_address
+				+ '<br/>'
+				+ '<span><strong>End:</strong></span>'
+				+ route.legs[0].end_address
+				+ '</p>'
+			);
+		}
+		
 		$directions_route_info.append(''
 			+ '<ul id="route_' + i_padded + '" class="topcoat-list directions_route_list">'
-			+ '<li class="topcoat-list__header"><span class="stopName">Route ' + i_padded + '</span></li>'
+			+ '<li class="topcoat-list__header stopTitle"><span class="stopName">Route ' + i_padded + '</span><span class="floatright">' + route.legs[0].distance.text + ', ' + route.legs[0].duration.text + '</span></li>'
 		);
 		
-		$(route.legs[0].steps).each(function(i_2, steps) {
-			$('ul#route_' + i_padded).append('<li class="topcoat-list__item">' + steps.instructions + '</li>');
+		$(route.legs[0].steps).each(function(i_2, step) {
+			var badge = '<span class="ui-li-count">&nbsp;&nbsp;</span>';
+			var subway_id = '';
+			var instructions = '';
+			var circulator_flag = false;
+			var instructions_summary = step.instructions;
+			
+			if (step.travel_mode == 'WALKING') {
+				badge = '<span class="ui-li-count icon-male walking"></span>';
+				instructions = '<p class="instructions"><strong>' + instructions_summary + '</strong></p>';
+			} else if (step.travel_mode == 'TRANSIT') {
+				
+				if (step.transit.line.vehicle.type == 'BUS' || step.transit.line.vehicle.type == 'INTERCITY_BUS' || step.transit.line.vehicle.type == 'TROLLEYBUS') {
+				
+					//check blue, potomac, and georgetown PM lines for correct strings when busses are running!
+					if (step.transit.line.name == 'DC Circulator: Georgetown-Union Station') {
+						badge = '<span class="ui-li-count icon-refresh"><span>georgetown</span></span>';
+						subway_id = 'yellow';
+						circulator_flag = true;
+					} else if (step.transit.line.name == 'DC Circulator: Dupont - Georgetown - Rosslyn') {
+						badge = '<span class="ui-li-count icon-refresh"><span>rosslyn</span></span>';
+						subway_id = 'rosslyn';
+						circulator_flag = true;
+					} else if (step.transit.line.name == 'DC Circulator: Woodley Park - Adams Morgan-McPherson Square Metro') {
+						badge = '<span class="ui-li-count icon-refresh"><span>green</span></span>';
+						subway_id = 'green';
+						circulator_flag = true;
+					} else if (step.transit.line.name == 'DC Circulator: Union Station - Navy Yard') {
+						badge = '<span class="ui-li-count icon-refresh"><span>blue</span></span>';
+						subway_id = 'blue';
+						circulator_flag = true;
+					} else if (step.transit.line.name == 'DC Circulator: Potomac Avenue Metro - Skyland via Barracks Row') {
+						badge = '<span class="ui-li-count icon-refresh"><span>potomac</span></span>';
+						subway_id = 'potomac';
+						circulator_flag = true;
+					} else {
+						badge = '<span class="ui-li-count">' + step.transit.line.short_name + '</span>';
+					}
+
+				} else if (step.transit.line.vehicle.type == 'SUBWAY' || step.transit.line.vehicle.type == 'METRO_RAIL' || step.transit.line.vehicle.type == 'TRAM' || step.transit.line.vehicle.type == 'RAIL') {
+					if (step.transit.line.short_name == 'Red') {
+						badge = '<span class="ui-li-count">RD</span>';
+						subway_id = 'RD'; 
+					} else if (step.transit.line.short_name == 'Orange') {
+						badge = '<span class="ui-li-count">OR</span>';
+						subway_id = 'OR'; 
+					} else if (step.transit.line.short_name == 'Blue') {
+						badge = '<span class="ui-li-count">BL</span>';
+						subway_id = 'BL'; 
+					} else if (step.transit.line.short_name == 'Yellow') {
+						badge = '<span class="ui-li-count">YL</span>';
+						subway_id = 'YL'; 
+					} else if (step.transit.line.short_name == 'Green') {
+						badge = '<span class="ui-li-count">GR</span>';
+						subway_id = 'GR'; 
+					} else if (step.transit.line.short_name == 'Silver') {
+						badge = '<span class="ui-li-count">SV</span>';
+						subway_id = 'SV'; 
+					} else {
+						badge = '<span class="ui-li-count">' + step.transit.line.short_name + '</span>';
+					}
+				}
+				
+				if (badge == '<span class="ui-li-count">&nbsp;&nbsp;</span>') {
+					badge = '<span class="ui-li-count icon-arrow-right"></span>';
+				}
+				
+				if (circulator_flag == true) {
+					instructions_summary = instructions_summary.replace('Bus','Circulator');
+				}
+				
+				instructions = ''
+					+ '<p class="instructions"><strong>' + instructions_summary + '</strong></p>'
+					+ '<div class="transit_divider clear"></div>'
+					+ '<div class="transit_stop_wrap">'
+					+ '<span class="clear floatleft transit_stop_title"><strong>Get on:</strong></span>'
+					+ '<p class="transit_stop_instructions">'
+					+ step.transit.departure_stop.name
+					+ ', '
+					+ step.transit.departure_time.text
+					+ '</p>'
+					+ '</div>'
+					+ '<div class="transit_stop_wrap">'
+					+ '<span class="clear floatleft transit_stop_title"><strong>Get off:</strong></span>'
+					+ '<p class="transit_stop_instructions">'
+					+ step.transit.arrival_stop.name
+					+ ', '
+					+ step.transit.arrival_time.text
+					+ '</p>'
+					+ '</div>';
+			}
+			
+			
+			$('ul#route_' + i_padded).append('<li class="topcoat-list__item"><span id="' + subway_id + '">' + badge + instructions + '</span></li>');
 		});
 	});
 	
@@ -3525,6 +3634,11 @@ $('input').on('blur', function(){
 		if ($(this).attr('id') == 'directions_form') {
 			if ($('#directions_start_wrap .filter').val() != '' && $('#directions_end_wrap .filter').val() != '') {
 				cordova.plugins.Keyboard.close();
+				
+				if (typeof(directions_routes_scroll) == 'undefined') {
+					directions_routes_scroll = new iScroll('directions_routes', {useTransition: true});
+				}
+				
 				get_directions($('#directions_start_wrap .filter').val(), $('#directions_end_wrap .filter').val());
 			} else if ($('#directions_start_wrap .filter').val() == '') {
 				$('#directions_start_wrap .filter').focus();
@@ -4491,7 +4605,6 @@ $(document).on('pagebeforeshow', '#directions', function() {
 
 $(document).on('pageinit', '#directions', function() {	
 	directions_scroll = new iScroll('directions_autocomplete', {useTransition: true});
-	directions_routes_scroll = new iScroll('directions_routes', {useTransition: true});
 	
 	$('#directions_start_wrap .filter').on('focusin', function() {
 		$('#directions_routes').addClass('hide');
