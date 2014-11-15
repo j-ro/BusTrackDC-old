@@ -3169,6 +3169,7 @@ function start_autocomplete_callback(predictions, status) {
   $('#start_autocomplete_results').html('<li class="topcoat-list__item directions_currloc"><span class="icon-location-arrow pr5"></span>Current Location</li>');
 
   for (var i = 0, prediction; prediction = predictions[i]; i++) {
+	  console.log(prediction);
     $('#start_autocomplete_results').append('<li class="topcoat-list__item">' + prediction.description + '</li>');
   }
   
@@ -3287,7 +3288,7 @@ if (buttonIndex == 1) {
 
 
 function parse_directions(data) {
-	console.log(data);
+	//console.log(data);
 	
 	var $directions_route_info = $('#directions_routes_info');
 	
@@ -3299,12 +3300,12 @@ function parse_directions(data) {
 		if (i == 0) {
 			$directions_route_info.append(''
 				+ '<p class="directions_heading">'
-				+ '<span><strong>Start:</strong></span>'
+				+ '<span class="directions_heading_title"><strong>Start:</strong></span><span class="directions_heading_start">'
 				+ route.legs[0].start_address
-				+ '<br/>'
-				+ '<span><strong>End:</strong></span>'
+				+ '</span><br/>'
+				+ '<span class="directions_heading_title"><strong>End:</strong></span><span class="directions_heading_end">'
 				+ route.legs[0].end_address
-				+ '</p>'
+				+ '</span></p>'
 			);
 		}
 		
@@ -3340,11 +3341,11 @@ function parse_directions(data) {
 						badge = '<span class="ui-li-count icon-refresh"><span>green</span></span>';
 						subway_id = 'green';
 						circulator_flag = true;
-					} else if (step.transit.line.name == 'DC Circulator: Union Station - Navy Yard') {
+					} else if (step.transit.line.name == 'DC Circulator: Union Station - Navy Yard via Capitol Hill') {
 						badge = '<span class="ui-li-count icon-refresh"><span>blue</span></span>';
 						subway_id = 'blue';
 						circulator_flag = true;
-					} else if (step.transit.line.name == 'DC Circulator: Potomac Avenue Metro - Skyland via Barracks Row') {
+					} else if (step.transit.line.short_name == 'DCPOTSKY') {
 						badge = '<span class="ui-li-count icon-refresh"><span>potomac</span></span>';
 						subway_id = 'potomac';
 						circulator_flag = true;
@@ -3410,8 +3411,23 @@ function parse_directions(data) {
 		});
 	});
 	
+	if (device.platform != "iOS") {
+	
+	} else {
+		var start = encodeURI($('.directions_heading .directions_heading_start').text());
+		var end = encodeURI($('.directions_heading .directions_heading_end').text());
+		$('#directions_routes_info').append(''
+			+ '<div class="center" id="directions_maps_button">'
+			+ '<a class="topcoat-button" href="comgooglemaps://?saddr=' + start + '&daddr=' + end + '&directionsmode=transit">Open in Google Maps</a>'
+			+ '<div class="updated">' + data.routes[0].copyrights + '</div>'
+			+ '</div>'
+		);
+	}
+	
 	$('#directions_routes').height(window.innerHeight - $('#directions .header').height() - $('#directions_ui_wrap').height() - $('#directions .footer').height() - 5);
 	directions_routes_scroll.refresh();
+	
+	directions_routes_scroll.scrollTo(0, 0, 500);
 }
 
 
@@ -4102,7 +4118,10 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 			.disableSelection()
 			.bind('sort', function(event, ui) {
 				favorites_list_scroll.disable();
-				$('.ui-sortable-helper').offset({ top: parseFloat($('.ui-sortable-helper').css('top')) - favorites_list_scroll.y + $('.ui-sortable-helper').height() });
+				//console.log(event.pageX);
+				//$('.ui-sortable-helper').offset({ top: parseFloat($('.ui-sortable-helper').css('top')) + favorites_list_scroll.y + $('.ui-sortable-helper').height() });
+				
+				$('.ui-sortable-helper').offset({ top: event.pageY - favorites_list_scroll.y });
 				
 				//favorites_list_scroll.destroy();
 			})
@@ -4636,7 +4655,7 @@ $(document).on('pageinit', '#directions', function() {
 	
 	$('#directions_start_wrap .filter').on('keyup change', function() {
 		if ($(this).val() != '') {
-			prediction_service.getQueryPredictions(
+			prediction_service.getPlacePredictions(
 				{ 
 					input: $(this).val(),
 					location: new google.maps.LatLng(currentLatitude, currentLongitude),
@@ -4652,7 +4671,7 @@ $(document).on('pageinit', '#directions', function() {
 	
 	$('#directions_end_wrap .filter').on('keyup change', function() {
 		if ($(this).val() != '') {
-			prediction_service.getQueryPredictions(
+			prediction_service.getPlacePredictions(
 				{ 
 					input: $(this).val(),
 					location: new google.maps.LatLng(currentLatitude, currentLongitude),
@@ -4666,6 +4685,10 @@ $(document).on('pageinit', '#directions', function() {
 	});
 	
 	$('#start_autocomplete_results, #end_autocomplete_results').on('click', 'li', function() {
+		if ($(this).text() == 'Current Location') {
+    		navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError, { maximumAge: 6, timeout: 100000, enableHighAccuracy: true });
+		}
+		
 		if ($(this).parent().attr('id') == 'start_autocomplete_results') {
 			$('#directions_start_wrap .filter').val($(this).text());
 		}
@@ -4678,6 +4701,8 @@ $(document).on('pageinit', '#directions', function() {
 			$('#directions_start_wrap .filter').focus();
 		} else if ($('#directions_end_wrap .filter').val() == '') {
 			$('#directions_end_wrap .filter').focus();
+		} else {
+			$('#directions_form').submit();
 		}
 	});
     

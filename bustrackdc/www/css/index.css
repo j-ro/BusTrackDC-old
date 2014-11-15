@@ -353,9 +353,22 @@ body {
 
 /* list filters and directions filters */
 
-.filter_wrap, #directions_ui_wrap {
+.filter_wrap, #directions_ui_wrap, #directions_maps_button {
 	background-color: #ff3600;
 	padding: 0.25rem;
+}
+
+#directions_maps_button {
+	padding: 2rem 0 1rem 0;
+}
+
+#directions_maps_button .updated {
+	color: #454545;
+}
+
+#directions_maps_button a {
+	display: inline-block;
+	text-decoration: none;
 }
 
 #directions_ui_wrap .filter_wrap {
@@ -424,7 +437,7 @@ body {
 	text-overflow: ellipsis;
 }
 
-.directions_heading span {
+.directions_heading .directions_heading_title {
 	width: 45px;
 	display: inline-block;
 }
