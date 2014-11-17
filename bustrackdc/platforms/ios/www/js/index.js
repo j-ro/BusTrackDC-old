@@ -3133,7 +3133,8 @@ onCurrentLocationSuccess = function(position) {
 
 // if we can't get current position, callback receives a PositionError object
 function onCurrentLocationError(error) {
-	console.log(error);
+	console.log(error.code);
+	console.log(error.message);
 	//console.log('currloc error');
 	if (device.platform == "iOS") {
 		navigator.notification.alert(
@@ -3583,12 +3584,13 @@ var mapError = function() {
 }
 
 function showMap() {
-	
+
+    //if (device.platform != "iOS") {
 	var options = {
-			height: 400,
-			diameter: 400,
-			offsetTop: 0,
-			lat: 38.8897,
+			height: $('html').height() - $('.header').height() - $('.footer').height(),
+	        diameter: 400,
+	        offsetTop: $('.header').height(), // changed for android, does this work on ios?
+	        lat: 38.8897,
 	        lon: -77.0089
 		};
 
@@ -3842,8 +3844,11 @@ if (device.platform == "iOS") {
 	
 	// add an on resume event to call an autorefresh if the app becomes active again...
 	document.addEventListener("resume", onResume, false);
+	
+	
     
     showMap();
+
     
     mapHeight = $('html').height() - $('.header').height() - $('.footer').height(); // changed for android, does this work on ios?
     //console.log(mapHeight);
@@ -3860,7 +3865,7 @@ if (device.platform == "iOS") {
 	    };
 	    
 	    mapKit.setMapData(mapSuccess, mapError, mapOptions);
-	    
+	        
 	//} 
 	
 	//used for locally simulating local storage, comment out when not needed for debugging
@@ -3904,6 +3909,7 @@ if (device.platform != "iOS") {
 	$(document).on('pageinit', '#gps_map', function() {
 		
 		if (deviceReadyFlag = true) {
+			console.log('getting location...');
 			navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError, { maximumAge: 60000, timeout: 100000, enableHighAccuracy: true });
 		}
 		
@@ -3920,7 +3926,7 @@ if (device.platform != "iOS") {
 	});
 	
 	
-
+//console.log('now6');
     
 }
 

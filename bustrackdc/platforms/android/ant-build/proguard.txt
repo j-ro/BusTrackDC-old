@@ -1,4 +1,4 @@
-# view AndroidManifest.xml #generated:15
+# view AndroidManifest.xml #generated:14
 -keep class com.google.android.gms.ads.AdActivity { <init>(...); }
 
 # view AndroidManifest.xml #generated:6

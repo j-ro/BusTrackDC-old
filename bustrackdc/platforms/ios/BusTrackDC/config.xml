@@ -63,6 +63,7 @@
     <splash height="1136" src="www/img/splash-ios-640x1136.png" width="640" />
     <splash height="1334" src="www/img/splash-ios-750x1334.png" width="750" />
     <splash height="2208" src="www/img/splash-ios-1242x2208.png" width="1242" />
+    <gap:config-file overwrite="false" parent="NSLocationAlwaysUsageDescription" platform="ios" />
     <name>BusTrackDC</name>
     <description>
         A bus tracking app for the Washington, DC metro rail and bus and circulator system.
@@ -72,6 +73,5 @@
     </author>
     <content src="index.html" />
     <access origin="*" />
-    <gap:config-file overwrite="false" parent="NSLocationAlwaysUsageDescription" platform="ios" />
     <preference name="DisallowOverscroll" value="true" />
 </widget>

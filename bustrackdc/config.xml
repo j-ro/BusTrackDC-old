@@ -9,7 +9,6 @@
     </author>
     <content src="index.html" />
     <access origin="*" />
-    <gap:config-file platform="ios" parent="NSLocationAlwaysUsageDescription" overwrite="false"></gap:config-file>
     <platform name="ios">
 		<!-- iOS 8.0+ -->
 		<!-- iPhone 6 Plus  -->
@@ -43,6 +42,7 @@
 		<splash src="www/img/splash-ios-640x1136.png" width="640" height="1136"/>
 		<splash src="www/img/splash-ios-750x1334.png" width="750" height="1334"/>
 		<splash src="www/img/splash-ios-1242x2208.png" width="1242" height="2208"/>
+		<gap:config-file platform="ios" parent="NSLocationAlwaysUsageDescription" overwrite="false"></gap:config-file>
 	</platform> 
 	<preference name="DisallowOverscroll" value="true"/>
 	<feature name="Keyboard">

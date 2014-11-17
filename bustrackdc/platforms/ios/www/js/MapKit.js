@@ -62,6 +62,7 @@
 		},
 		
 		setMapData: function(success, error, options) {
+			//console.log(options);
 			
 			if (options) {
 				cordovaRef.exec(success, error, 'MapKit', 'setMapData', [options]);

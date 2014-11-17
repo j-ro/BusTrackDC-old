@@ -255,7 +255,7 @@ getRoutes = function() {
     	
     }
 	
-	getRoutesJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JRoutes?api_key=' + wmata_api_key + '&callback=?', function(data) {
+	getRoutesJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JRoutes?api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key + '&callback=?', function(data) {
 	
 		/*
 		if (ajaxCount > 0 ) {
@@ -282,7 +282,7 @@ ajaxCount++;
 	    }
 */
 		
-		getRailRoutesJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JLines?api_key=' + wmata_api_key + '&callback=?', function(data) {
+		getRailRoutesJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JLines?api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key + '&callback=?', function(data) {
 		
 			/*
 if (ajaxCount > 0 ) {
@@ -476,7 +476,7 @@ buildRouteMenu = function(dataBus, dataRail, dataCirculator) {
 	$('#route_list_content .route_menu_btn').click(function() {
 		routeClicked = $(this).data('routeid');
 		
-		if (isNaN(routeClicked)) {
+		//if (isNaN(routeClicked)) {
 			
 			if (routeClicked == 'RD') {
 		    	routeTitle = 'Red';
@@ -514,11 +514,8 @@ buildRouteMenu = function(dataBus, dataRail, dataCirculator) {
 	    	} else if (routeClicked == 'potomac') {
 		    	routeTitle = 'Orange';
 		    	$('#route_map_title').html(routeTitle + ' Route');
-	    	}
-	    	
-	    	
-		} else {
-			$('#route_map_title').html('Route ' + routeClicked);
+	    	} else {
+				$('#route_map_title').html('Route ' + routeClicked);
 		}
 		
 		/*
@@ -535,9 +532,31 @@ if (device.platform == "iOS") {
 			    
 	});
 	
-	if (device.platform != "iOS" && parseInt(device.version) < 3) {
+	/*
+if (device.platform != "iOS" && parseInt(device.version) < 3) {
 		touchScroll("route_list_content");
 	}
+*/
+	
+	route_list_scroll = new iScroll('route_list_content', {useTransition: true});
+	
+	$('#route_list_filter_wrap .clear').click(function() {
+		console.log('clear');
+		$('#route_list_content').height(window.innerHeight - $('#route_list .header').height() - $('#route_list .footer').height());
+		route_list_scroll.refresh();
+	});
+	
+	$('#route_list_filter_wrap .filter').on('keyup change focusin', function() {
+		console.log('focusin');
+		$('#route_list_content').height(window.innerHeight - $('#route_list .header').height());
+		route_list_scroll.refresh();
+	});
+	
+	$('#route_list_filter_wrap .filter').on('focusout', function() {
+		console.log('focusout');
+		$('#route_list_content').height(window.innerHeight - $('#route_list .header').height() - $('#route_list .footer').height());
+		route_list_scroll.refresh();
+	});
 
 	
 	//if (device.platform != "iOS") {
@@ -573,7 +592,7 @@ getStops = function(latitude,longitude,radius) {
     	
     }
 	
-	getStopsJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JStops?lat=' + latitude + '&lon=' + longitude + '&radius=' + radius + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
+	getStopsJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JStops?lat=' + latitude + '&lon=' + longitude + '&radius=' + radius + '&api_key=' + wmata_api_key  + '&subscription-key=' + wmata_api_key + '&callback=?', function(data) {
 		//console.log('ajax call done');
 		//$.mobile.loading( 'hide' );
 		
@@ -656,7 +675,7 @@ getStopsForRoute = function(routeID) {
     	
     }
 		
-	getStopsForRouteJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JRouteDetails?routeID=' + routeID + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
+	getStopsForRouteJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JRouteDetails?routeID=' + routeID + '&api_key=' + wmata_api_key  + '&subscription-key=' + wmata_api_key + '&callback=?', function(data) {
 		
 		if (ajaxCount > 0 ) {
     		ajaxCount--;
@@ -693,7 +712,8 @@ getStopsForRoute = function(routeID) {
 		
 		if (device.platform == "iOS") {
 			mapOptions2 = {
-				
+				height: mapHeight,
+				offsetTop: mapOffsetTop,
 		        diameter: 1500,
 		        lat: currentLatitude,
 		        lon: currentLongitude
@@ -766,9 +786,11 @@ markerStopPoints = function(data) {
 				snippet: 'Metro Bus Stop #' + data.Direction0.Stops[i].StopID,
 				icon: mapKit.iconColors.HUE_GREEN,
 				selected: false,
-				index: i
+				index: global_pin_index
 			}
 		);
+		
+		global_pin_index++;
 	});
 	
 	$.each(data.Direction1.Stops, function(i, object) {
@@ -783,9 +805,11 @@ markerStopPoints = function(data) {
 				//icon: "70f270",
 				icon: mapKit.iconColors.HUE_GREEN,
 				selected: false,
-				index: i
+				index: global_pin_index
 			}
 		);
+		
+		global_pin_index++;
 	});
 
 
@@ -828,7 +852,7 @@ getRailStops = function(latitude,longitude,radius) {
     	
     }
 	
-	getRailStopsJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JStationEntrances?lat=' + latitude + '&lon=' + longitude + '&radius=' + radius + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
+	getRailStopsJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JStationEntrances?lat=' + latitude + '&lon=' + longitude + '&radius=' + radius + '&api_key=' + wmata_api_key  + '&subscription-key=' + wmata_api_key + '&callback=?', function(data) {
 	
 		if (ajaxCount > 0 ) {
     		ajaxCount--;
@@ -910,7 +934,7 @@ getRailStopsForRoute = function(routeID) {
     	
     }
 		
-	getRailStopsForRouteJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JStations?LineCode=' + routeID + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
+	getRailStopsForRouteJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JStations?LineCode=' + routeID + '&api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key + '&callback=?', function(data) {
 		
 		if (ajaxCount > 0 ) {
     		ajaxCount--;
@@ -937,7 +961,8 @@ getRailStopsForRoute = function(routeID) {
 		
 		if (device.platform == "iOS") {
 			mapOptions2 = {
-				
+				height: mapHeight,
+				offsetTop: mapOffsetTop,
 		        diameter: 1500,
 		        lat: currentLatitude,
 		        lon: currentLongitude
@@ -989,7 +1014,7 @@ getRailStopsForRoute = function(routeID) {
 
 // make markers for each stop on a route (different functions for coming and going to do different colors)
 markerRailStopPoints = function(data) {
-	//console.log('start markerStopPoints');
+	//console.log('start markerRailStopPoints');
 	var pins0 = [];
 	var pins1 = [];
 	
@@ -998,7 +1023,7 @@ markerRailStopPoints = function(data) {
 
 	
 	$.each(data.Stations, function(i, object) {
-
+		//console.log(object);
 		//console.log('done with pin0 ' + i);
 		
 		if (object.StationTogether1 != "") {
@@ -1015,9 +1040,11 @@ markerRailStopPoints = function(data) {
 				snippet: 'Metro Rail Station #' + stationCode,
 				icon: mapKit.iconColors.HUE_RED,
 				selected: false,
-				index: i
+				index: global_pin_index
 			}
 		);
+		
+		global_pin_index++;
 	});
 
 
@@ -1311,7 +1338,8 @@ getCirculatorStopsForRoute = function(routeID) {
 		
 		if (device.platform == "iOS") {
 			mapOptions2 = {
-				
+				height: mapHeight,
+				offsetTop: mapOffsetTop,
 		        diameter: 1500,
 		        lat: currentLatitude,
 		        lon: currentLongitude
@@ -1392,9 +1420,11 @@ markerCirculatorStopPoints = function(data) {
 					snippet: 'Circulator Stop #' + object.stopId,
 					icon: mapKit.iconColors.HUE_VIOLET,
 					selected: false,
-					index: '##' + object.stopId
+					index: global_pin_index
 				}
 			);
+			
+			global_pin_index++;
 		} else if ($.inArray(object.tag, pins1stopArray) != -1){
 			//console.log(pin1);
 			pins1.push(
@@ -1406,9 +1436,11 @@ markerCirculatorStopPoints = function(data) {
 					//icon: "bd91e5",
 					icon: mapKit.iconColors.HUE_VIOLET,
 					selected: false,
-					index: '##' + object.stopId
+					index: global_pin_index
 				}
 			);
+			
+			global_pin_index++;
 		}
 	});
 
@@ -1440,6 +1472,7 @@ function annotationDeselect() {
 
 // when a pin is clicked...
 function annotationTap(text, latitude, longitude) {
+	//console.log(text + ', ' + latitude + ', ' + longitude);
 	//console.log('annotation tap');
 	//console.log(latitude);
 	
@@ -1502,7 +1535,7 @@ function annotationTap(text, latitude, longitude) {
 				}
 				//console.log('http://api.wmata.com/StationPrediction.svc/json/GetPrediction/' + stopID.toString().replace(/Metro Rail Station #/,'') + '?api_key=' + wmata_api_key + '&callback=?');
 				
-				annotationTapJSON = $.getJSON('http://api.wmata.com/StationPrediction.svc/json/GetPrediction/' + stopID.toString().replace(/Metro Rail Station #/,'') + '?api_key=' + wmata_api_key + '&callback=?', function(data2, self4) {
+				annotationTapJSON = $.getJSON('http://api.wmata.com/StationPrediction.svc/json/GetPrediction/' + stopID.toString().replace(/Metro Rail Station #/,'') + '?api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key + '&callback=?', function(data2, self4) {
 					
 					if (ajaxCount > 0 ) {
 			    		ajaxCount--;
@@ -1652,7 +1685,7 @@ if (railStops.length) {
 					
 				}
 				
-				annotationTapJSON = $.getJSON('http://api.wmata.com/NextBusService.svc/json/JPredictions?StopID=' + stopID.toString().replace(/Metro Bus Stop #/,'') + '&api_key=' + wmata_api_key + '&callback=?', function(data2, self4) {
+				annotationTapJSON = $.getJSON('http://api.wmata.com/NextBusService.svc/json/JPredictions?StopID=' + stopID.toString().replace(/Metro Bus Stop #/,'') + '&api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key + '&callback=?', function(data2, self4) {
 					
 					if (ajaxCount > 0 ) {
 			    		ajaxCount--;
@@ -1665,6 +1698,9 @@ if (railStops.length) {
 						$('.topcoat-navigation-bar__title').css('margin-left','0');
 						$('.spinner').css('display','none');
 					}
+					
+					//console.log(data2);
+					//console.log(self4);
 				
 					//console.log('predictions=' + data2.Predictions.length);
 					//sorted = data2.Predictions.sort(function(a,b) {return b - a; });
@@ -1706,6 +1742,7 @@ if (railStops.length) {
 				    }
 				
 				    // this function needs nearby stops already loaded to load all stops for the route, not just predictions, but maybe it shouldn't in case you want to see your favorite stops and they're not in range? Right now, I'll just make it load only routes with predictions, but eventually would be nice to do the second AJAX call to load this stop into memory
+				    //console.log(stops);
 				    if (stops.length) {
 				    	//console.log(stops.length);
 				    	var 
@@ -2048,6 +2085,7 @@ if (device.platform == "iOS") {
 */
 
 					if (!$('#infowindow').hasClass('center')) {
+						console.log('circulator show');
 						if ($(this).attr('href') != $(currentPage).attr('id')) {
 							pageHistory.push('#' + currentPage.attr('id'));
 						}
@@ -2133,7 +2171,7 @@ markerStops = function(data) {
 							snippet: 'Metro Bus Stop #' + data.Stops[i].StopID,
 							icon: mapKit.iconColors.HUE_GREEN,
 							selected: false,
-							index: i
+							index: global_pin_index
 						}
 					);
 					
@@ -2145,9 +2183,11 @@ markerStops = function(data) {
 							snippet: 'Metro Bus Stop #' + data.Stops[i].StopID,
 							icon: mapKit.iconColors.HUE_GREEN,
 							selected: false,
-							index: i
+							index: global_pin_index
 						}
 					);
+					
+					global_pin_index++;
 				}
 			
 			}
@@ -2277,7 +2317,7 @@ markerStops = function(data) {
 		//console.log('add new pins');
 		// show the new pins, but only if this is a real stop get, and not a favorite button or route annotation being clicked
 		//if (favoriteBtnClickedFlag != true) {
-			console.log(newPins);
+			//console.log(newPins);
 			mapKit.addMapPins(mapSuccess, mapError, newPins);
 		//}
 		
@@ -2362,7 +2402,7 @@ markerRailStops = function(data) {
 			// rail matching query
 			railMatches = jQuery.grep(pins, function(obj) {
 				// our match function to see if a pin already exists in the global pin array
-				return obj.index == '#' + data.Entrances[i].ID;
+				return obj.title == data.Entrances[i].Name;
 			});
 			
 			if (railMatches.length == 0) {
@@ -2388,7 +2428,7 @@ markerRailStops = function(data) {
 							snippet: 'Metro Rail Station #' + stationCode,
 							icon: mapKit.iconColors.HUE_RED,
 							selected: false,
-							index: '#' + data.Entrances[i].ID
+							index: global_pin_index
 						}
 					);
 					
@@ -2400,9 +2440,11 @@ markerRailStops = function(data) {
 							snippet: 'Metro Rail Station #' + stationCode,
 							icon: mapKit.iconColors.HUE_RED,
 							selected: false,
-							index: '#' + data.Entrances[i].ID
+							index: global_pin_index
 						}
 					);
+					
+					global_pin_index++;
 				}
 			
 			}
@@ -2446,7 +2488,7 @@ markerRailStops = function(data) {
 				    }
 				    
 					//console.log('start each');
-					getRailStationInfoJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JStationInfo?StationCode=' + object + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
+					getRailStationInfoJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JStationInfo?StationCode=' + object + '&api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key + '&callback=?', function(data) {
 						//console.log(data);
 					
 						if (ajaxCount > 0 ) {
@@ -2806,7 +2848,7 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 					// our match function to see if a pin already exists in the global pin array
 					//console.log(obj.index);
 					//console.log(object.stopId);
-					return obj.index == '##' + object.stopId;
+					return obj.title == object.title;
 				});
 				
 				//console.log(circulatorMatches);
@@ -2827,7 +2869,7 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 								snippet: 'Circulator Stop #' + object.stopId,
 								icon: mapKit.iconColors.HUE_VIOLET,
 								selected: false,
-								index: '##' + object.stopId
+								index: global_pin_index
 							}
 						);
 						
@@ -2839,9 +2881,11 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 								snippet: 'Circulator Stop #' + object.stopId,
 								icon: mapKit.iconColors.HUE_VIOLET,
 								selected: false,
-								index: '##' + object.stopId
+								index: global_pin_index
 							}
 						);
+						
+						global_pin_index++;
 					}
 				
 				}
@@ -3089,6 +3133,8 @@ onCurrentLocationSuccess = function(position) {
 
 // if we can't get current position, callback receives a PositionError object
 function onCurrentLocationError(error) {
+	console.log(error.code);
+	console.log(error.message);
 	//console.log('currloc error');
 	if (device.platform == "iOS") {
 		navigator.notification.alert(
@@ -3106,6 +3152,283 @@ function onCurrentLocationError(error) {
 		);
 	}
     
+}
+
+//direction place predictions
+var prediction_service = new google.maps.places.AutocompleteService();
+	
+function start_autocomplete_callback(predictions, status) {
+  if (status != google.maps.places.PlacesServiceStatus.OK) {
+    $('#start_autocomplete_results').html('<li class="topcoat-list__item directions_currloc"><span class="icon-location-arrow pr5"></span>Current Location</li>');
+    directions_scroll.refresh();
+    //console.log(status);
+    return;
+  }
+
+  var results = document.getElementById('results');
+  
+  $('#start_autocomplete_results').html('<li class="topcoat-list__item directions_currloc"><span class="icon-location-arrow pr5"></span>Current Location</li>');
+
+  for (var i = 0, prediction; prediction = predictions[i]; i++) {
+	  console.log(prediction);
+    $('#start_autocomplete_results').append('<li class="topcoat-list__item">' + prediction.description + '</li>');
+  }
+  
+  directions_scroll.refresh();
+}
+
+function end_autocomplete_callback(predictions, status) {
+  if (status != google.maps.places.PlacesServiceStatus.OK) {
+	$('#end_autocomplete_results').html('<li class="topcoat-list__item directions_currloc"><span class="icon-location-arrow pr5"></span>Current Location</li>');
+	directions_scroll.refresh();
+    //console.log(status);
+    return;
+  }
+
+  var results = document.getElementById('results');
+  
+  $('#end_autocomplete_results').html('<li class="topcoat-list__item directions_currloc"><span class="icon-location-arrow pr5"></span>Current Location</li>');
+
+  for (var i = 0, prediction; prediction = predictions[i]; i++) {
+    $('#end_autocomplete_results').append('<li class="topcoat-list__item">' + prediction.description + '</li>');
+  }
+  
+  directions_scroll.refresh();
+}
+
+var directionsService;
+
+function gmaps_directions_initialize() {
+  	// Instantiate a directions service.
+  	directionsService = new google.maps.DirectionsService();
+}
+
+function get_directions(start, end) {
+	
+	function getDirectionsConfirm(buttonIndex) {
+        /*
+if (buttonIndex == 1) {
+        	get_directions(start, end);
+        }
+*/
+    }
+    
+    ajaxCount++;
+    if (ajaxCount > 0) {
+    	/// this goes back in $.mobile.loading( 'show' );
+    	$('.topcoat-navigation-bar__title').css('margin-left','24px');
+    	$('.spinner').css('display','inline-block');
+    	
+    }
+    
+    if (start == 'Current Location') {
+	    start = currentLatitude + ',' + currentLongitude;
+    }
+    
+    if (end == 'Current Location') {
+	    end = currentLatitude + ',' + currentLongitude;
+    }
+
+	// Retrieve the start and end locations and create
+	// a DirectionsRequest using WALKING directions.
+	var request = {
+		origin: start,
+		destination: end,
+		travelMode: google.maps.TravelMode.TRANSIT,
+		region: 'us',
+		provideRouteAlternatives: true
+	};
+	
+	// Route the directions and pass the response to a
+	// function to create markers for each step.
+	//console.log(request);
+	directionsService.route(request, function(response, status) {
+		if (status == google.maps.DirectionsStatus.OK) {
+			if (ajaxCount > 0 ) {
+	    		ajaxCount--;
+	    	} else {
+		    	ajaxCount = 0;
+	    	}
+			    	
+		    if (ajaxCount == 0) {
+		    	/// this goes back in $.mobile.loading( 'hide' );
+		    	$('.topcoat-navigation-bar__title').css('margin-left','0');
+		    	$('.spinner').css('display','none');
+		    }
+		  
+			parse_directions(response);
+		} else {
+			if (ajaxCount > 0 ) {
+	    		ajaxCount--;
+	    	} else {
+		    	ajaxCount = 0;
+	    	}
+			    	
+		    if (ajaxCount == 0) {
+		    	/// this goes back in $.mobile.loading( 'hide' );
+		    	$('.topcoat-navigation-bar__title').css('margin-left','0');
+		    	$('.spinner').css('display','none');
+		    }
+		    
+		    $('#directions_routes_info').html('<ul class="topcoat-list"><h2 class="center">Enter start and end locations above<br/>to get transit directions.</h2></ul>');
+		    
+		    directions_routes_scroll.destroy();
+		    directions_routes_scroll = undefined;
+			
+			//if (errorThrown != 'abort') {
+				navigator.notification.confirm(
+				    'Please try a different start and end location.',  // message
+				    getDirectionsConfirm,         // callback
+				    "No directions were found",            // title
+				    'OK'                  // buttonName
+			    ); 
+			//}
+		}
+	});
+}
+
+
+function parse_directions(data) {
+	//console.log(data);
+	
+	var $directions_route_info = $('#directions_routes_info');
+	
+	$directions_route_info.html('');
+	
+	$(data.routes).each(function(i, route) {
+		i_padded = i + 1;
+		
+		if (i == 0) {
+			$directions_route_info.append(''
+				+ '<p class="directions_heading">'
+				+ '<span class="directions_heading_title"><strong>Start:</strong></span><span class="directions_heading_start">'
+				+ route.legs[0].start_address
+				+ '</span><br/>'
+				+ '<span class="directions_heading_title"><strong>End:</strong></span><span class="directions_heading_end">'
+				+ route.legs[0].end_address
+				+ '</span></p>'
+			);
+		}
+		
+		$directions_route_info.append(''
+			+ '<ul id="route_' + i_padded + '" class="topcoat-list directions_route_list">'
+			+ '<li class="topcoat-list__header stopTitle"><span class="stopName">Route ' + i_padded + '</span><span class="floatright">' + route.legs[0].distance.text + ', ' + route.legs[0].duration.text + '</span></li>'
+		);
+		
+		$(route.legs[0].steps).each(function(i_2, step) {
+			var badge = '<span class="ui-li-count">&nbsp;&nbsp;</span>';
+			var subway_id = '';
+			var instructions = '';
+			var circulator_flag = false;
+			var instructions_summary = step.instructions;
+			
+			if (step.travel_mode == 'WALKING') {
+				badge = '<span class="ui-li-count icon-male walking"></span>';
+				instructions = '<p class="instructions"><strong>' + instructions_summary + '</strong></p>';
+			} else if (step.travel_mode == 'TRANSIT') {
+				
+				if (step.transit.line.vehicle.type == 'BUS' || step.transit.line.vehicle.type == 'INTERCITY_BUS' || step.transit.line.vehicle.type == 'TROLLEYBUS') {
+				
+					//check blue, potomac, and georgetown PM lines for correct strings when busses are running!
+					if (step.transit.line.name == 'DC Circulator: Georgetown-Union Station') {
+						badge = '<span class="ui-li-count icon-refresh"><span>georgetown</span></span>';
+						subway_id = 'yellow';
+						circulator_flag = true;
+					} else if (step.transit.line.name == 'DC Circulator: Dupont - Georgetown - Rosslyn') {
+						badge = '<span class="ui-li-count icon-refresh"><span>rosslyn</span></span>';
+						subway_id = 'rosslyn';
+						circulator_flag = true;
+					} else if (step.transit.line.name == 'DC Circulator: Woodley Park - Adams Morgan-McPherson Square Metro') {
+						badge = '<span class="ui-li-count icon-refresh"><span>green</span></span>';
+						subway_id = 'green';
+						circulator_flag = true;
+					} else if (step.transit.line.name == 'DC Circulator: Union Station - Navy Yard via Capitol Hill') {
+						badge = '<span class="ui-li-count icon-refresh"><span>blue</span></span>';
+						subway_id = 'blue';
+						circulator_flag = true;
+					} else if (step.transit.line.short_name == 'DCPOTSKY') {
+						badge = '<span class="ui-li-count icon-refresh"><span>potomac</span></span>';
+						subway_id = 'potomac';
+						circulator_flag = true;
+					} else {
+						badge = '<span class="ui-li-count">' + step.transit.line.short_name + '</span>';
+					}
+
+				} else if (step.transit.line.vehicle.type == 'SUBWAY' || step.transit.line.vehicle.type == 'METRO_RAIL' || step.transit.line.vehicle.type == 'TRAM' || step.transit.line.vehicle.type == 'RAIL') {
+					if (step.transit.line.short_name == 'Red') {
+						badge = '<span class="ui-li-count">RD</span>';
+						subway_id = 'RD'; 
+					} else if (step.transit.line.short_name == 'Orange') {
+						badge = '<span class="ui-li-count">OR</span>';
+						subway_id = 'OR'; 
+					} else if (step.transit.line.short_name == 'Blue') {
+						badge = '<span class="ui-li-count">BL</span>';
+						subway_id = 'BL'; 
+					} else if (step.transit.line.short_name == 'Yellow') {
+						badge = '<span class="ui-li-count">YL</span>';
+						subway_id = 'YL'; 
+					} else if (step.transit.line.short_name == 'Green') {
+						badge = '<span class="ui-li-count">GR</span>';
+						subway_id = 'GR'; 
+					} else if (step.transit.line.short_name == 'Silver') {
+						badge = '<span class="ui-li-count">SV</span>';
+						subway_id = 'SV'; 
+					} else {
+						badge = '<span class="ui-li-count">' + step.transit.line.short_name + '</span>';
+					}
+				}
+				
+				if (badge == '<span class="ui-li-count">&nbsp;&nbsp;</span>') {
+					badge = '<span class="ui-li-count icon-arrow-right"></span>';
+				}
+				
+				if (circulator_flag == true) {
+					instructions_summary = instructions_summary.replace('Bus','Circulator');
+				}
+				
+				instructions = ''
+					+ '<p class="instructions"><strong>' + instructions_summary + '</strong></p>'
+					+ '<div class="transit_divider clear"></div>'
+					+ '<div class="transit_stop_wrap">'
+					+ '<span class="clear floatleft transit_stop_title"><strong>Get on:</strong></span>'
+					+ '<p class="transit_stop_instructions">'
+					+ step.transit.departure_stop.name
+					+ ', '
+					+ step.transit.departure_time.text
+					+ '</p>'
+					+ '</div>'
+					+ '<div class="transit_stop_wrap">'
+					+ '<span class="clear floatleft transit_stop_title"><strong>Get off:</strong></span>'
+					+ '<p class="transit_stop_instructions">'
+					+ step.transit.arrival_stop.name
+					+ ', '
+					+ step.transit.arrival_time.text
+					+ '</p>'
+					+ '</div>';
+			}
+			
+			
+			$('ul#route_' + i_padded).append('<li class="topcoat-list__item"><span id="' + subway_id + '">' + badge + instructions + '</span></li>');
+		});
+	});
+	
+	if (device.platform != "iOS") {
+	
+	} else {
+		var start = encodeURI($('.directions_heading .directions_heading_start').text());
+		var end = encodeURI($('.directions_heading .directions_heading_end').text());
+		$('#directions_routes_info').append(''
+			+ '<div class="center" id="directions_maps_button">'
+			+ '<a class="topcoat-button" href="comgooglemaps://?saddr=' + start + '&daddr=' + end + '&directionsmode=transit">Open in Google Maps</a>'
+			+ '<div class="updated">' + data.routes[0].copyrights + '</div>'
+			+ '</div>'
+		);
+	}
+	
+	$('#directions_routes').height(window.innerHeight - $('#directions .header').height() - $('#directions_ui_wrap').height() - $('#directions .footer').height() - 5);
+	directions_routes_scroll.refresh();
+	
+	directions_routes_scroll.scrollTo(0, 0, 500);
 }
 
 
@@ -3261,13 +3584,14 @@ var mapError = function() {
 }
 
 function showMap() {
-	
+
+    //if (device.platform != "iOS") {
 	var options = {
-			height: 460,
-			diameter: 1000,
-			atBottom: true,
-			lat: 41.281468,
-			lon: -123.104446
+			height: $('html').height() - $('.header').height() - $('.footer').height(),
+	        diameter: 400,
+	        offsetTop: $('.header').height(), // changed for android, does this work on ios?
+	        lat: 38.8897,
+	        lon: -77.0089
 		};
 
 	mapVisible = true;
@@ -3321,7 +3645,31 @@ $('input').on('blur', function(){
     $('.footer').css({position:'fixed'});
 });
 */
-
+	gmaps_directions_initialize();
+	cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+	
+	$('form').submit(function() {
+		if ($(this).attr('id') == 'directions_form') {
+			if ($('#directions_start_wrap .filter').val() != '' && $('#directions_end_wrap .filter').val() != '') {
+				cordova.plugins.Keyboard.close();
+				
+				if (typeof(directions_routes_scroll) == 'undefined') {
+					directions_routes_scroll = new iScroll('directions_routes', {useTransition: true});
+				}
+				
+				get_directions($('#directions_start_wrap .filter').val(), $('#directions_end_wrap .filter').val());
+			} else if ($('#directions_start_wrap .filter').val() == '') {
+				$('#directions_start_wrap .filter').focus();
+			} else {
+				$('#directions_end_wrap .filter').focus();
+			}
+		} else {
+			cordova.plugins.Keyboard.close();
+		}
+		
+		return false;
+	});
+	
 	// from here for scrolling divs on older android: http://chris-barr.com/2010/05/scrolling_a_overflowauto_element_on_a_touch_screen_device/
 	if (device.platform != "iOS" && parseInt(device.version) < 3) {
 		isTouchDevice = function(){
@@ -3370,7 +3718,8 @@ $('input').on('blur', function(){
 	currentPage = homePage,
 	pageHistory = [],
 	pageInitHistory = [],
-	mapVisible = true;;
+	global_pin_index = 0,
+	mapVisible = true;
 	
 	currentPage.css('display','block');
 	
@@ -3421,9 +3770,7 @@ $('input').on('blur', function(){
 	
 	// pull to refresh from http://cubiq.org/dropbox/iscroll4/examples/pull-to-refresh/
 	pullDownEl = document.getElementById('pullDown');
-	pullDownOffset = $(pullDownEl).outerHeight();
-	pullUpEl = document.getElementById('pullUp');	
-	pullUpOffset = $(pullUpEl).outerHeight();	
+	pullDownOffset = $(pullDownEl).outerHeight();	
 	
 	myScroll = new iScroll('infowindow-content', {
 		useTransition: true,
@@ -3442,10 +3789,6 @@ $('input').on('blur', function(){
 				pullDownEl.className = '';
 				//pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Pull down to refresh...';
 				this.minScrollY = -pullDownOffset;
-			} else if (this.y < (this.maxScrollY - 5) && !pullUpEl.className.match('flip')) {
-				this.maxScrollY = this.maxScrollY;
-			} else if (this.y > (this.maxScrollY + 5) && pullUpEl.className.match('flip')) {
-				this.maxScrollY = pullUpOffset;
 			}
 		},
 		onScrollEnd: function () {
@@ -3459,7 +3802,15 @@ $('input').on('blur', function(){
 		}
 	});
 
-	analytics.startTrackerWithId('UA-39138450-1')
+	analyticsSuccess = function() {
+		console.log('success');
+	}
+	
+	analyticsError = function() {
+		console.log('error');
+	}
+	//analytics.debugMode()
+	analytics.startTrackerWithId('UA-39138450-1');
 	/*
 if (device.platform == "iOS") {
 		window.GA.trackerWithTrackingId("UA-39138450-1");
@@ -3493,8 +3844,11 @@ if (device.platform == "iOS") {
 	
 	// add an on resume event to call an autorefresh if the app becomes active again...
 	document.addEventListener("resume", onResume, false);
+	
+	
     
     showMap();
+
     
     mapHeight = $('html').height() - $('.header').height() - $('.footer').height(); // changed for android, does this work on ios?
     //console.log(mapHeight);
@@ -3510,8 +3864,8 @@ if (device.platform == "iOS") {
 	        lon: -77.0089
 	    };
 	    
-	    //mapKit.setMapData(mapOptions);
-	    
+	    mapKit.setMapData(mapSuccess, mapError, mapOptions);
+	        
 	//} 
 	
 	//used for locally simulating local storage, comment out when not needed for debugging
@@ -3529,6 +3883,7 @@ if (device.platform == "iOS") {
 
 	currentLatitude = mapOptions.lat;
 	currentLongitude = mapOptions.lon;
+	currentRadius = 400;
 	
 	currlocsuccess = 0;
 	
@@ -3548,13 +3903,14 @@ if (device.platform != "iOS") {
 
     
     // get current position (which also shows nearby stops)
-	navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError, { maximumAge: 60000, timeout: 10000, enableHighAccuracy: true });
+	navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError, { maximumAge: 60000, timeout: 100000, enableHighAccuracy: true });
 	
 	// this needs to be in deviceReady so as not to make weird this website needs access to your location notices in the app...
 	$(document).on('pageinit', '#gps_map', function() {
 		
 		if (deviceReadyFlag = true) {
-			navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError, { maximumAge: 60000, timeout: 10000, enableHighAccuracy: true });
+			console.log('getting location...');
+			navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError, { maximumAge: 60000, timeout: 100000, enableHighAccuracy: true });
 		}
 		
 	});
@@ -3570,7 +3926,7 @@ if (device.platform != "iOS") {
 	});
 	
 	
-
+//console.log('now6');
     
 }
 
@@ -3623,7 +3979,7 @@ if ($('#favorites_menu_content').css('display') != 'none') {
     	if (mapVisible == false) {
 			showMap();
 		}
-    	navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError, { maximumAge: 60000, timeout: 10000, enableHighAccuracy: true });
+    	navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError, { maximumAge: 6, timeout: 100000, enableHighAccuracy: true });
     });
 
 });
@@ -3704,7 +4060,7 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 			}
 			
 			// rebind the click handler
-			$('.favorite-stop-detail-btn').click(function() {
+			$('.favorite-stop-detail-btn').one('click', function() {
 
 				
 				
@@ -3766,9 +4122,24 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 				 scroll: false
 			})
 			.disableSelection()
+			.bind('sort', function(event, ui) {
+				favorites_list_scroll.disable();
+				//console.log(event.pageX);
+				//$('.ui-sortable-helper').offset({ top: parseFloat($('.ui-sortable-helper').css('top')) + favorites_list_scroll.y + $('.ui-sortable-helper').height() });
+				
+				$('.ui-sortable-helper').offset({ top: event.pageY - favorites_list_scroll.y });
+				
+				//favorites_list_scroll.destroy();
+			})
 			.bind( "sortstop", function(event, ui) {
-				//console.log('sortstop');
-		    	//$favorites_menu.listview('refresh');
+				favorites_list_scroll.enable();
+				/*
+favorites_list_scroll = new iScroll('favorites_menu_content', {useTransition: true});
+	
+				$('#favorites_filter_wrap .filter').on('keyup change', function() {
+					favorites_list_scroll.refresh();
+				});
+*/
 		    });
 		    
 		    // take off the click handler while in edit mode to allow clicking on the delete button
@@ -3795,6 +4166,11 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 		    	if (!favorites.length) {
 			    	$('#favorites_menu').html('<h2 class="center">You haven\'t added any<br/>favorite stops yet!</h2><h2 class="center">Click the star icon<br/>when viewing a stop to<br/>add it as a favorite.</h2>');
 		    	}
+		    	
+		    	$('#favorites_menu_content').height(window.innerHeight - $('#favorite_menu_page .header').height() - $('#favorite_menu_page .footer').height());
+		    	
+		    	favorites_list_scroll.refresh();
+
 		    });
 
 		    
@@ -3821,7 +4197,7 @@ $(document).on('pageinit', '#route_list', function() {
 
 //page show functions
 $(document).on('pagebeforeshow', '#gps_map', function() {
-
+	analytics.trackView('Map View');
 	//console.log(window.history);
 	if (mapVisible == false) {
 		showMap();
@@ -3850,9 +4226,11 @@ if (typeof(currentLatitude) === 'undefined') {
 	}
 */
 	
-	if (typeof(currentLat) != 'undefined') {
+	/*
+if (typeof(currentLat) != 'undefined') {
 		getStops(currentLat, currentLong, mapOptions.diameter);
 	}
+*/
 	
 
 	// put this here for android, does that work on iOS?
@@ -3889,14 +4267,16 @@ geo.beforeMapMove = function(currentLat,currentLon,latitudeDelta,longitudeDelta)
 					calculateRadius(currentLat, currentLon, latitudeDelta, longitudeDelta, function(viewportLat, viewportLon, radius) {
 						// prevent huge radii in the viewport from crashing the app
 						//console.log(radius);
+						currentRadius = radius;
 						if (radius < 3000) {
-							//getStops(viewportLat, viewportLon, radius);
+							//console.log(viewportLat + ', ' + viewportLon + ', ' + radius);
+							getStops(viewportLat, viewportLon, radius);
 							getRailStops(viewportLat, viewportLon, radius);
 							
 							if (ajaxCirculatorCount == circulatorStopsArray.length) {
 								if (window.localStorage.getItem("circulatorStopsDatestamp") && window.localStorage.getItem("circulatorStops")) {
 									//console.log('marker circ stops from geo.onmapmove');
-									//markerCirculatorStops(circulatorLat,circulatorLon,circulatorLatDelta,circulatorLonDelta);
+									markerCirculatorStops(circulatorLat,circulatorLon,circulatorLatDelta,circulatorLonDelta);
 								}
 							}
 		    	
@@ -3930,7 +4310,9 @@ if (deviceReadyFlag = true) {
 
 
 $(document).on('pagebeforeshow', '#favorite_menu_page', function() {
+	//console.log('favorites');
 	
+	analytics.trackView('Favorites View');
 	//console.log(window.localStorage.getItem("favorites"));
 	
 	if (mapVisible == true) {
@@ -3972,8 +4354,12 @@ $(document).on('pagebeforeshow', '#favorite_menu_page', function() {
 			'clearlink': $('#favorites_filter_wrap a.clear'),
 			'alternate': false
 		});
+		
+		//console.log('off');
+		
+		$('.favorite-stop-detail-btn').off();
 
-		$('.favorite-stop-detail-btn').click(function() {
+		$('.favorite-stop-detail-btn').one('click', function() {
 
 			//console.log($(this).data('stopid'));
 			
@@ -3996,10 +4382,13 @@ $.mobile.loading( 'show', {
 			// if we click a favorite, get the stop and populate the stops array really quick, so we can view all the data about the predictions
 			favoriteBtnClickedFlag = true;
 			if ((/Metro Bus Stop #/).test(notInRangeStopID)) {
+				//console.log('getbus');
 				getStops(notInRangeStopLat, notInRangeStopLon, '50');
 			} else if ((/Metro Rail Station #/).test(notInRangeStopID)) {
+				//console.log('getrail');
 				getRailStops(notInRangeStopLat, notInRangeStopLon, '500');
 			} else if ((/Circulator Stop #/).test(notInRangeStopID)) {
+				//console.log('getcirc');
 				//console.log('marker circ stops from favorite button');
 				markerCirculatorStops(notInRangeStopLat,notInRangeStopLon,.01,.01);
 			} else if (isNaN(notInRangeStopID)) {
@@ -4011,6 +4400,24 @@ $.mobile.loading( 'show', {
 			}
 			
 
+		});
+		
+		$('#favorites_menu_content').height(window.innerHeight - $('#favorite_menu_page .header').height() - $('#favorite_menu_page .footer').height());
+		favorites_list_scroll = new iScroll('favorites_menu_content', {useTransition: true});
+		
+		$('#favorites_filter_wrap .clear').click(function() {
+			$('#favorites_menu_content').height(window.innerHeight - $('#favorite_menu_page .header').height() - $('#favorite_menu_page .footer').height());
+			favorites_list_scroll.refresh();
+		});
+	
+		$('#favorites_filter_wrap .filter').on('keyup change focusin', function() {
+			$('#favorites_menu_content').height(window.innerHeight - $('#favorite_menu_page .header').height());
+			favorites_list_scroll.refresh();
+		});
+		
+		$('#favorites_filter_wrap .filter').on('focusout', function() {
+			$('#favorites_menu_content').height(window.innerHeight - $('#favorite_menu_page .header').height() - $('#favorite_menu_page .footer').height());
+			favorites_list_scroll.refresh();
 		});
 		
 	} else {
@@ -4028,9 +4435,11 @@ $.mobile.loading( 'show', {
 		}
 	}
 
-	if (device.platform != "iOS" && parseInt(device.version) < 3) {
+	/*
+if (device.platform != "iOS" && parseInt(device.version) < 3) {
 		touchScroll("favorites_menu_content");
 	}
+*/
 	
 
 });
@@ -4041,12 +4450,17 @@ $(document).on('pageshow', '#favorite_menu_page', function() {
 	//if (favoriteListfilterInit) {
 		//$('ul#favorites_menu').listfilter("refresh");
 	//}
+	if (typeof(favorites_list_scroll) != 'undefined') {
+		favorites_list_scroll.refresh();
+	}
+	
 });
 
 
 
 $(document).on('pagebeforeshow', '#infowindow', function() {
 	
+	analytics.trackView('Info Window View');
 	//console.log(window.history);
 	
 	//only do this after the page flash we have to do to avoid android flickering
@@ -4115,6 +4529,7 @@ $('#infowindow-routes').listview('refresh');
 
 $(document).on('pagebeforeshow', '#route_map', function() {
   	
+  	analytics.trackView('Route Map View');
   	//console.log(window.history);
   	
   	//console.log('route map show');
@@ -4164,6 +4579,8 @@ $(document).on('pageshow', '#route_map', function() {
 // way to slow on jQuery mobile do to huge listview, so commenting out for now...
 $(document).on('pagebeforeshow', '#route_list', function() {
 	
+	analytics.trackView('Route List View');
+	
 	//console.log(window.localStorage.getItem("favorites"));
 	
 	if (mapVisible == true) {
@@ -4189,6 +4606,125 @@ if (mapVisible == true) {
 */
 	
 	$('#route_list_filter_wrap .filter').val('');
+	
+	//getRoutes();
+});
+
+
+
+$(document).on('pagebeforeshow', '#directions', function() {
+	
+	analytics.trackView('Directions View');
+	
+	//console.log(window.localStorage.getItem("favorites"));
+	
+	if (mapVisible == true) {
+		hideMap();
+		
+	}
+	
+
+	
+	//getRoutes();
+});
+
+$(document).on('pageinit', '#directions', function() {	
+	directions_scroll = new iScroll('directions_autocomplete', {useTransition: true});
+	
+	$('#directions_start_wrap .filter').on('focusin', function() {
+		$('#directions_routes').addClass('hide');
+		$('#directions_autocomplete').removeClass('hide');
+		$('#start_autocomplete_results').removeClass('hide');
+		$('#directions_autocomplete').height(window.innerHeight - $('#directions .topcoat-navigation-bar').height() - $('#directions_ui_wrap').height());
+		directions_scroll.refresh();
+	});
+	
+	$('#directions_start_wrap .filter').on('focusout', function() {
+		$('#directions_routes').removeClass('hide');
+		$('#directions_autocomplete').addClass('hide');
+		$('#start_autocomplete_results').addClass('hide');
+	});
+	
+	$('#directions_end_wrap .filter').on('focusin', function() {
+		$('#directions_routes').addClass('hide');
+		$('#directions_autocomplete').removeClass('hide');
+		$('#end_autocomplete_results').removeClass('hide');
+		$('#directions_autocomplete').height(window.innerHeight - $('#directions .topcoat-navigation-bar').height() - $('#directions_ui_wrap').height());
+		directions_scroll.refresh();
+	});
+	
+	$('#directions_end_wrap .filter').on('focusout', function() {
+		$('#directions_routes').removeClass('hide');
+		$('#directions_autocomplete').addClass('hide');
+		$('#end_autocomplete_results').addClass('hide');
+	});
+	
+	$('#directions_start_wrap .filter').on('keyup change', function() {
+		if ($(this).val() != '') {
+			prediction_service.getPlacePredictions(
+				{ 
+					input: $(this).val(),
+					location: new google.maps.LatLng(currentLatitude, currentLongitude),
+					radius: currentRadius 
+				}, 
+				start_autocomplete_callback
+			);
+		} else {
+			$('#start_autocomplete_results').html('<li class="topcoat-list__item directions_currloc"><span class="icon-location-arrow pr5"></span>Current Location</li>');
+		}
+		
+	});
+	
+	$('#directions_end_wrap .filter').on('keyup change', function() {
+		if ($(this).val() != '') {
+			prediction_service.getPlacePredictions(
+				{ 
+					input: $(this).val(),
+					location: new google.maps.LatLng(currentLatitude, currentLongitude),
+					radius: currentRadius  
+				}, 
+				end_autocomplete_callback
+			);
+		} else {
+			$('#end_autocomplete_results').html('<li class="topcoat-list__item directions_currloc"><span class="icon-location-arrow pr5"></span>Current Location</li>');
+		}
+	});
+	
+	$('#start_autocomplete_results, #end_autocomplete_results').on('click', 'li', function() {
+		if ($(this).text() == 'Current Location') {
+    		navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError, { maximumAge: 6, timeout: 100000, enableHighAccuracy: true });
+		}
+		
+		if ($(this).parent().attr('id') == 'start_autocomplete_results') {
+			$('#directions_start_wrap .filter').val($(this).text());
+		}
+		
+		if ($(this).parent().attr('id') == 'end_autocomplete_results') {
+			$('#directions_end_wrap .filter').val($(this).text());
+		}
+		
+		if ($('#directions_start_wrap .filter').val() == '') {
+			$('#directions_start_wrap .filter').focus();
+		} else if ($('#directions_end_wrap .filter').val() == '') {
+			$('#directions_end_wrap .filter').focus();
+		} else {
+			$('#directions_form').submit();
+		}
+	});
+    
+});
+
+$(document).on('pagebeforehide', '#directions', function() {
+	
+	//console.log(window.localStorage.getItem("favorites"));
+	
+	/*
+if (mapVisible == true) {
+		hideMap();
+	}
+*/
+	
+	//$('#route_list_filter_wrap .filter').val('');
 	
 	//getRoutes();
 });
