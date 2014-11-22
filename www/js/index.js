@@ -260,7 +260,7 @@ getRoutes = function() {
     	
     }
 	
-	getRoutesJSON = $.getJSON('https://wmataapibeta.azure-api.net/Bus.svc/json/JRoutes?api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key + '&callback=?', function(data) {
+	getRoutesJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JRoutes?api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key + '&callback=?', function(data) {
 	
 		/*
 		if (ajaxCount > 0 ) {
@@ -287,7 +287,7 @@ ajaxCount++;
 	    }
 */
 		
-		getRailRoutesJSON = $.getJSON('https://wmataapibeta.azure-api.net/Rail.svc/json/JLines?api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key + '&callback=?', function(data) {
+		getRailRoutesJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JLines?api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key + '&callback=?', function(data) {
 		
 			/*
 if (ajaxCount > 0 ) {
@@ -578,7 +578,7 @@ getStops = function(latitude,longitude,radius) {
     	
     }
 	
-	getStopsJSON = $.getJSON('https://wmataapibeta.azure-api.net/Bus.svc/json/JStops?lat=' + latitude + '&lon=' + longitude + '&radius=' + radius + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
+	getStopsJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JStops?lat=' + latitude + '&lon=' + longitude + '&radius=' + radius + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
 		//console.log('ajax call done');
 		//$.mobile.loading( 'hide' );
 		
@@ -661,7 +661,7 @@ getStopsForRoute = function(routeID) {
     	
     }
 		
-	getStopsForRouteJSON = $.getJSON('https://wmataapibeta.azure-api.net/Bus.svc/json/JRouteDetails?routeID=' + routeID + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
+	getStopsForRouteJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JRouteDetails?routeID=' + routeID + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
 		
 		if (ajaxCount > 0 ) {
     		ajaxCount--;
@@ -833,7 +833,7 @@ getRailStops = function(latitude,longitude,radius) {
     	
     }
 	
-	getRailStopsJSON = $.getJSON('https://wmataapibeta.azure-api.net/Rail.svc/json/JStationEntrances?lat=' + latitude + '&lon=' + longitude + '&radius=' + radius + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
+	getRailStopsJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JStationEntrances?lat=' + latitude + '&lon=' + longitude + '&radius=' + radius + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
 	
 		if (ajaxCount > 0 ) {
     		ajaxCount--;
@@ -915,7 +915,7 @@ getRailStopsForRoute = function(routeID) {
     	
     }
 		
-	getRailStopsForRouteJSON = $.getJSON('https://wmataapibeta.azure-api.net/Rail.svc/json/JStations?LineCode=' + routeID + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
+	getRailStopsForRouteJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JStations?LineCode=' + routeID + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
 		
 		if (ajaxCount > 0 ) {
     		ajaxCount--;
@@ -1505,9 +1505,9 @@ function annotationTap(text, latitude, longitude) {
 				    $('.spinner').css('display','inline-block');
 					
 				}
-				//console.log('https://wmataapibeta.azure-api.net/StationPrediction.svc/json/GetPrediction/' + stopID.toString().replace(/Metro Rail Station #/,'') + '?api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key + '&callback=?');
+				//console.log('http://api.wmata.com/StationPrediction.svc/json/GetPrediction/' + stopID.toString().replace(/Metro Rail Station #/,'') + '?api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key + '&callback=?');
 				
-				annotationTapJSON = $.getJSON('https://wmataapibeta.azure-api.net/StationPrediction.svc/json/GetPrediction/' + stopID.toString().replace(/Metro Rail Station #/,'') + '?api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key + '&callback=?', function(data2, self4) {
+				annotationTapJSON = $.getJSON('http://api.wmata.com/StationPrediction.svc/json/GetPrediction/' + stopID.toString().replace(/Metro Rail Station #/,'') + '?api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key + '&callback=?', function(data2, self4) {
 					
 					if (ajaxCount > 0 ) {
 			    		ajaxCount--;
@@ -1657,7 +1657,7 @@ if (railStops.length) {
 					
 				}
 				
-				annotationTapJSON = $.getJSON('https://wmataapibeta.azure-api.net/NextBusService.svc/json/JPredictions?StopID=' + stopID.toString().replace(/Metro Bus Stop #/,'') + '&api_key=' + wmata_api_key + '&callback=?', function(data2, self4) {
+				annotationTapJSON = $.getJSON('http://api.wmata.com/NextBusService.svc/json/JPredictions?StopID=' + stopID.toString().replace(/Metro Bus Stop #/,'') + '&api_key=' + wmata_api_key + '&callback=?', function(data2, self4) {
 					
 					if (ajaxCount > 0 ) {
 			    		ajaxCount--;
@@ -2451,7 +2451,7 @@ markerRailStops = function(data) {
 				    }
 				    
 					//console.log('start each');
-					getRailStationInfoJSON = $.getJSON('https://wmataapibeta.azure-api.net/Rail.svc/json/JStationInfo?StationCode=' + object + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
+					getRailStationInfoJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JStationInfo?StationCode=' + object + '&api_key=' + wmata_api_key + '&callback=?', function(data) {
 						//console.log(data);
 					
 						if (ajaxCount > 0 ) {
