@@ -1,0 +1,36 @@
+dependencies: \
+  /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/ios/BusTrackDC/Plugins/com.google.google-play-services/AdmobAdPlugin.m \
+  BusTrackDC/Plugins/com.google.google-play-services/AdmobAdPlugin.h \
+  /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/ios/build/emulator/include/Cordova/CDV.h \
+  /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/ios/build/emulator/include/Cordova/CDVAvailability.h \
+  /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/ios/build/emulator/include/Cordova/CDVPlugin.h \
+  /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/ios/build/emulator/include/Cordova/CDVPluginResult.h \
+  /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/ios/build/emulator/include/Cordova/NSMutableArray+QueueAdditions.h \
+  /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/ios/build/emulator/include/Cordova/CDVCommandDelegate.h \
+  /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/ios/build/emulator/include/Cordova/CDVInvokedUrlCommand.h \
+  /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/ios/build/emulator/include/Cordova/CDVViewController.h \
+  /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/ios/build/emulator/include/Cordova/CDVCommandQueue.h \
+  /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/ios/build/emulator/include/Cordova/CDVWhitelist.h \
+  /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/ios/build/emulator/include/Cordova/CDVScreenOrientationDelegate.h \
+  /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/ios/build/emulator/include/Cordova/CDVURLProtocol.h \
+  /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/ios/build/emulator/include/Cordova/CDVDebug.h \
+  /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/ios/build/emulator/include/Cordova/CDVLocalStorage.h \
+  /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/ios/build/emulator/include/Cordova/CDVTimer.h \
+  /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/ios/build/emulator/include/Cordova/NSArray+Comparisons.h \
+  /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/ios/build/emulator/include/Cordova/NSData+Base64.h \
+  /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/ios/build/emulator/include/Cordova/NSDictionary+Extensions.h \
+  /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/ios/build/emulator/include/Cordova/UIDevice+Extensions.h \
+  /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/ios/build/emulator/include/Cordova/CDVJSON.h \
+  BusTrackDC/Plugins/com.google.google-play-services/AdmobAPI.framework/Headers/AdmobAPI.h \
+  BusTrackDC/Plugins/com.google.google-play-services/AdmobAPI.framework/Headers/AdmobWebPluginDelegate.h \
+  BusTrackDC/Plugins/com.google.google-play-services/AdmobAPI.framework/Headers/GADBannerView.h \
+  BusTrackDC/Plugins/com.google.google-play-services/AdmobAPI.framework/Headers/GADAdSize.h \
+  BusTrackDC/Plugins/com.google.google-play-services/AdmobAPI.framework/Headers/GADModules.h \
+  BusTrackDC/Plugins/com.google.google-play-services/AdmobAPI.framework/Headers/GADBannerViewDelegate.h \
+  BusTrackDC/Plugins/com.google.google-play-services/AdmobAPI.framework/Headers/GADInAppPurchaseDelegate.h \
+  BusTrackDC/Plugins/com.google.google-play-services/AdmobAPI.framework/Headers/GADRequest.h \
+  BusTrackDC/Plugins/com.google.google-play-services/AdmobAPI.framework/Headers/GADRequestError.h \
+  BusTrackDC/Plugins/com.google.google-play-services/AdmobAPI.framework/Headers/GADInterstitial.h \
+  BusTrackDC/Plugins/com.google.google-play-services/AdmobAPI.framework/Headers/GADInterstitialDelegate.h \
+  BusTrackDC/Plugins/com.google.google-play-services/AdmobAPI.framework/Headers/AdmobMD5Encoder.h \
+  BusTrackDC/Plugins/com.google.google-play-services/AdmobAPI.framework/Headers/AdmobBase64Encoder.h

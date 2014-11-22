@@ -11,17 +11,17 @@
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>0B967C4381034E6A0105573915F3A17D67DCD5B3</key>
-		<string>https://github.com/j-ro/WheresTheBusDC.git</string>
+		<string>https://github.com/j-ro/BusTrackDC.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>BusTrackDC.xcodeproj/project.xcworkspace</string>
+	<string>BusTrackDC.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>0B967C4381034E6A0105573915F3A17D67DCD5B3</key>
 		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/j-ro/WheresTheBusDC.git</string>
+	<string>https://github.com/j-ro/BusTrackDC.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
@@ -34,7 +34,7 @@
 			<key>IDESourceControlWCCIdentifierKey</key>
 			<string>0B967C4381034E6A0105573915F3A17D67DCD5B3</string>
 			<key>IDESourceControlWCCName</key>
-			<string>WheresTheBusDC</string>
+			<string>BusTrackDC</string>
 		</dict>
 	</array>
 </dict>

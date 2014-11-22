@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="org.JasonRosenbaum.WheresTheBusDC" version="1.8.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <preference name="AllowInlineMediaPlayback" value="false" />
+    <preference name="AutoHideSplashScreen" value="true" />
+    <preference name="BackupWebStorage" value="cloud" />
+    <preference name="DisallowOverscroll" value="false" />
+    <preference name="EnableViewportScale" value="false" />
+    <preference name="FadeSplashScreen" value="true" />
+    <preference name="FadeSplashScreenDuration" value=".25" />
+    <preference name="KeyboardDisplayRequiresUserAction" value="true" />
+    <preference name="MediaPlaybackRequiresUserAction" value="false" />
+    <preference name="ShowSplashScreenSpinner" value="true" />
+    <preference name="SuppressesIncrementalRendering" value="false" />
+    <preference name="TopActivityIndicator" value="gray" />
+    <preference name="GapBetweenPages" value="0" />
+    <preference name="PageLength" value="0" />
+    <preference name="PaginationBreakingMode" value="page" />
+    <preference name="PaginationMode" value="unpaginated" />
+    <feature name="LocalStorage">
+        <param name="ios-package" value="CDVLocalStorage" />
+    </feature>
+    <feature name="Device">
+        <param name="ios-package" value="CDVDevice" />
+    </feature>
+    <feature name="Geolocation">
+        <param name="ios-package" value="CDVLocation" />
+    </feature>
+    <feature name="MapKit">
+        <param name="ios-package" value="MapKitView" />
+    </feature>
+    <feature name="AdmobPlugin">
+        <param name="ios-package" value="AdmobAdPlugin" />
+    </feature>
+    <feature name="UniversalAnalytics">
+        <param name="ios-package" value="UniversalAnalyticsPlugin" />
+    </feature>
+    <feature name="Console">
+        <param name="ios-package" value="CDVLogger" />
+    </feature>
+    <feature name="Notification">
+        <param name="ios-package" value="CDVNotification" />
+    </feature>
+    <feature name="Keyboard">
+        <param name="ios-package" onload="true" value="IonicKeyboard" />
+    </feature>
+    <icon height="180" src="www/img/icon-ios-180.png" width="180" />
+    <icon height="60" src="www/img/icon-ios-60.png" width="60" />
+    <icon height="120" src="www/img/icon-ios-120.png" width="120" />
+    <icon height="76" src="www/img/icon-ios-76.png" width="76" />
+    <icon height="152" src="www/img/icon-ios-152.png" width="152" />
+    <icon height="40" src="www/img/icon-ios-40.png" width="40" />
+    <icon height="80" src="www/img/icon-ios-80.png" width="80" />
+    <icon height="57" src="www/img/icon-ios-57.png" width="57" />
+    <icon height="114" src="www/img/icon-ios-114.png" width="114" />
+    <icon height="72" src="www/img/icon-ios-72.png" width="72" />
+    <icon height="144" src="www/img/icon-ios-144.png" width="144" />
+    <icon height="29" src="www/img/icon-ios-29.png" width="29" />
+    <icon height="58" src="www/img/icon-ios-58.png" width="58" />
+    <icon height="50" src="www/img/icon-ios-50.png" width="50" />
+    <icon height="100" src="www/img/icon-ios-100.png" width="100" />
+    <splash height="480" src="www/img/splash-ios-320x480.png" width="320" />
+    <splash height="960" src="www/img/splash-ios-640x960.png" width="640" />
+    <splash height="1136" src="www/img/splash-ios-640x1136.png" width="640" />
+    <splash height="1334" src="www/img/splash-ios-750x1334.png" width="750" />
+    <splash height="2208" src="www/img/splash-ios-1242x2208.png" width="1242" />
+    <gap:config-file overwrite="false" parent="NSLocationAlwaysUsageDescription" platform="ios" />
+    <name>BusTrackDC</name>
+    <description>
+        A bus tracking app for the Washington, DC metro rail and bus and circulator system.
+    </description>
+    <author email="seminal@theseminal.com" href="http://bustrackdc.com">
+        Jason Rosenbaum
+    </author>
+    <content src="index.html" />
+    <access origin="*" />
+    <preference name="DisallowOverscroll" value="true" />
+</widget>
