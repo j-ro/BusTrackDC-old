@@ -1,5 +1,3 @@
-Version 1.8
-
 An app for iOS and Android to find out when your bus, Circulator, or train is coming to a stop near you, using WMATA and NextBus prediction data. 
 
 Download at http://bustrackdc.com
