@@ -2,7 +2,7 @@
 <html>
     <head>
         <!-- Change this if you want to allow scaling -->
-        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=yes" />
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
         <meta http-equiv="Content-type" content="text/html; charset=utf-8">
             
         <title>BusTrackDC</title>
@@ -26,11 +26,11 @@
         
         <link rel="stylesheet" href="css/index.css" />
          
-        <script type="text/javascript" src="cordova.js"></script>
+		<script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" charset="utf-8" src="js/MapKit.js"></script>
 <!--         <script type="text/javascript" src="js/GoogleAnalyticsPlugin.js"></script> -->
         
-        <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+        <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script> 
         <script type="text/javascript" src="js/underscore-min.js"></script>
         <script type="text/javascript" src="js/jquery-ui-1.10.1.custom.min.js"></script>
         <script type="text/javascript" src="js/jquery.ui.touch-punch.min.js"></script>
@@ -41,8 +41,9 @@
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
         
         
-        <script type="text/javascript" charset="utf-8" src="js/config.js"></script>       
+        <script type="text/javascript" charset="utf-8" src="js/config.js"></script>    
         <script type="text/javascript" charset="utf-8" src="js/index.js"></script>
+      
         <!-- <script type="text/javascript" src="js/jquery.mobile-1.3.0/jquery.mobile-1.3.0.min.js"></script> -->
         
         <script src="js/iscroll.js" type="text/javascript"></script>
@@ -225,17 +226,19 @@
 			</div>
         	
         	<div id="route_list_content" class="content">
-        		<div id="route_scroller">
-	        		<div id="route_list_filter_wrap" class="filter_wrap">
-		        		<form>
-							<input type="search" class="topcoat-search-input filter" placeholder="Search routes by name"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-							<a class="clear icon-remove-sign"></a>
-		        		</form>
+        		
+        		<div id="route_list_filter_wrap" class="filter_wrap">
+	        		<form>
+						<input type="search" class="topcoat-search-input filter" placeholder="Search routes by name"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+						<a class="clear icon-remove-sign"></a>
+	        		</form>
+				</div>
+				<div id="route_list_wrap">
+					<div id="route_scroller">
+		        		<ul id="route_list_content_list" class="topcoat-list small_list">
+			        		<h2 class="center">No routes available at this time.<br/>Try again later.</h2>
+		        		</ul>
 					</div>
-					
-	        		<ul id="route_list_content_list" class="topcoat-list small_list">
-		        		<h2 class="center">No routes available at this time.<br/>Try again later.</h2>
-	        		</ul>
 				</div>
         	</div>
 
@@ -287,19 +290,21 @@
 			</div>
         	
         	<div id="favorites_menu_content" class="content">
-	        	<div id="favorite_scroller">
+	        	
 	        		<div id="favorites_filter_wrap" class="filter_wrap">
 		        		<form>
 							<input type="search" class="topcoat-search-input filter" placeholder="Search favorites by name"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
 							<a class="clear icon-remove-sign"></a>
 		        		</form>
 					</div>
-					
-		        	<ul id="favorites_menu" class="topcoat-list">
-		        		<h2 class="center">You haven't added any<br/>favorite stops yet!</h2>
-		        		<h2 class="center">Click the star icon<br/>when viewing a stop to<br/>add it as a favorite.</h2>
-		        	</ul>
-	        	</div>
+				<div id="favorites_menu_wrap">
+					<div id="favorite_scroller">	
+			        	<ul id="favorites_menu" class="topcoat-list">
+			        		<h2 class="center">You haven't added any<br/>favorite stops yet!</h2>
+			        		<h2 class="center">Click the star icon<br/>when viewing a stop to<br/>add it as a favorite.</h2>
+			        	</ul>
+		        	</div>
+				</div>
         	</div>
             
             <div class="topcoat-navigation-bar footer">
@@ -336,7 +341,7 @@
 				
 				<div class="topcoat-navigation-bar__item center half">
 					<h1 class="topcoat-navigation-bar__title">
-						Directions
+						Trip Planner
 					</h1>
 					
 					<span class="spinner icon-refresh icon-spin"></span>
@@ -415,6 +420,5 @@
 			</div>
 
         </div><!-- /page -->
-
     </body>
 </html>

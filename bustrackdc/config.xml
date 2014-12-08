@@ -42,10 +42,24 @@
 		<splash src="www/img/splash-ios-640x1136.png" width="640" height="1136"/>
 		<splash src="www/img/splash-ios-750x1334.png" width="750" height="1334"/>
 		<splash src="www/img/splash-ios-1242x2208.png" width="1242" height="2208"/>
-		<gap:config-file platform="ios" parent="NSLocationAlwaysUsageDescription" overwrite="false"></gap:config-file>
-	</platform> 
+		<preference name="ShowSplashScreenSpinner" value="false" />
+		<preference name="KeyboardDisplayRequiresUserAction" value="false" />
+	</platform>
+	
+	<platform name="android">
+		<preference name="SplashScreen" value="screen" />
+		<icon src="www/img/icon-android-mdpi.png" density="mdpi" />
+		<icon src="www/img/icon-android-hdpi.png" density="hdpi" />
+		<icon src="www/img/icon-android-xhdpi.png" density="xhdpi" />
+		
+		<splash src="www/img/splash-android-mdpi.9.png" density="port-mdpi" />
+		<splash src="www/img/splash-android-hdpi.9.png" density="port-hdpi" />
+		<splash src="www/img/splash-android-xhdpi.9.png" density="port-xhdpi" />
+	</platform>
+
 	<preference name="DisallowOverscroll" value="true"/>
 	<feature name="Keyboard">
         <param name="ios-package" value="IonicKeyboard" onload="true" />
+        <param name="android-package" value="IonicKeyboard" onload="true" />
     </feature>
 </widget>

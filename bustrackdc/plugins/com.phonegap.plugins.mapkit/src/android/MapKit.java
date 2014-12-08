@@ -39,6 +39,7 @@ public class MapKit extends CordovaPlugin {
     protected MapView mapView;
     private CallbackContext cCtx;
     private String TAG = "MapKitPlugin";
+    private Marker lastClicked;
 
     double latitude = 0, longitude = 0;
     int height = 460;
@@ -127,6 +128,9 @@ public class MapKit extends CordovaPlugin {
 											", " + 
 													marker.getPosition().longitude + 
 											");");
+							        
+							        //set variable so we can close it later
+							        lastClicked = marker;
 //									Log.d("MYTAG", "on Marker click: " + marker.getSnippet());
 //									Log.d("MYTAG", "on Marker click: " +  marker.getPosition().latitude);
 //									Log.d("MYTAG", "on Marker click: " +  marker.getPosition().longitude);
@@ -275,6 +279,9 @@ public class MapKit extends CordovaPlugin {
 //						AlphaAnimation animation2 = new AlphaAnimation(1.0f, 0.0f);
 //						animation2.setDuration(1000);
 //						mapView.startAnimation(animation2);
+						if (lastClicked != null) {
+							lastClicked.hideInfoWindow();
+						}
 						mapView.setVisibility(mapView.GONE);
 						cCtx.success();
 					} else {

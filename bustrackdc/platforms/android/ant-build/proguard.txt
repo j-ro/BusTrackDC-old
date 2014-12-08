@@ -1,6 +1,6 @@
+# view AndroidManifest.xml #generated:6
+-keep class com.JasonRosenbaum.BusTrackDC.BusTrackDC { <init>(...); }
+
 # view AndroidManifest.xml #generated:14
 -keep class com.google.android.gms.ads.AdActivity { <init>(...); }
-
-# view AndroidManifest.xml #generated:6
--keep class org.JasonRosenbaum.WheresTheBusDC.BusTrackDC { <init>(...); }
 

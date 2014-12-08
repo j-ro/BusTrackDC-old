@@ -35,6 +35,9 @@
 - (void)addMapPins:(CDVInvokedUrlCommand *)command;
 
 /* custom addition */
-- (void)setMapData:(NSMutableArray*)arguments withDict:(NSMutableDictionary*)options;
+- (void)setViewWithOptions:(NSDictionary *)options;
+
+- (void)setMapData:(CDVInvokedUrlCommand *)command;
+/* end custom addition */
 
 @end
