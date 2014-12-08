@@ -47,6 +47,7 @@
 /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/ant-build/classes/org/apache/cordova/dialogs/Notification$6.class \
 /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/ant-build/classes/org/apache/cordova/dialogs/Notification.class \
 /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/ant-build/classes/org/apache/cordova/splashscreen/SplashScreen.class \
+/Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/ant-build/classes/org/JasonRosenbaum/BusTrackDC/BusTrackDC.class \
 /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/ant-build/classes/org/JasonRosenbaum/WheresTheBusDC/BusTrackDC.class \
 /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/ant-build/classes/org/JasonRosenbaum/WheresTheBusDC2/BusTrackDC.class \
 /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/ant-build/dexedLibs/classes-cb0f295c189573958e12ab4e89b1e4c7.jar \

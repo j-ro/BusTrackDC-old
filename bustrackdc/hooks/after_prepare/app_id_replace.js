@@ -19,12 +19,14 @@ function replace_string_in_file(filename, to_replace, replace_with) {
 
 function update_app_id(rootdir, platform, configobj) {
     var appId = configobj[platform].app_id,
-        stringToReplace = "org.JasonRosenbaum.WheresTheBusDC";
+        stringToReplace = "com.JasonRosenbaum.BusTrackDC";
 
     if (platform === "android") {
 
-        replace_string_in_file(path.join(rootdir, "platforms/android/AndroidManifest.xml"), stringToReplace, appId);
+       /*
+ replace_string_in_file(path.join(rootdir, "platforms/android/AndroidManifest.xml"), stringToReplace, appId);
         replace_string_in_file(path.join(rootdir, "platforms/android/res/xml/config.xml"), stringToReplace, appId);
+*/
 
     } else if (platform === "ios") {
 

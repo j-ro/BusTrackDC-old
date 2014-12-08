@@ -3733,6 +3733,8 @@ $('input').on('blur', function(){
 			if ($('#directions_start_wrap .filter').val() != '' && $('#directions_end_wrap .filter').val() != '') {
 				cordova.plugins.Keyboard.close();
 				
+				$('#directions_start_wrap .filter, #directions_end_wrap .filter').blur();
+				
 				if (typeof(directions_routes_scroll) == 'undefined') {
 					directions_routes_scroll = new iScroll('directions_routes', {useTransition: true});
 				}

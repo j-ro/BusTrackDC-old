@@ -17,7 +17,7 @@
        under the License.
  */
 
-package com.jasonrosenbaum.bustrackdc;
+package com.JasonRosenbaum.BusTrackDC;
 
 import android.os.Bundle;
 import org.apache.cordova.*;

@@ -9,6 +9,7 @@
       <module fileurl="file://$PROJECT_DIR$/plugins/com.phonegap.plugins.mapkit/src/com.phonegap.plugins.mapkit.iml" filepath="$PROJECT_DIR$/plugins/com.phonegap.plugins.mapkit/src/com.phonegap.plugins.mapkit.iml" />
       <module fileurl="file://$PROJECT_DIR$/plugins/org.apache.cordova.device/src/org.apache.cordova.device.iml" filepath="$PROJECT_DIR$/plugins/org.apache.cordova.device/src/org.apache.cordova.device.iml" />
       <module fileurl="file://$PROJECT_DIR$/plugins/org.apache.cordova.dialogs/src/org.apache.cordova.dialogs.iml" filepath="$PROJECT_DIR$/plugins/org.apache.cordova.dialogs/src/org.apache.cordova.dialogs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plugins/org.apache.cordova.splashscreen/src/org.apache.cordova.splashscreen.iml" filepath="$PROJECT_DIR$/plugins/org.apache.cordova.splashscreen/src/org.apache.cordova.splashscreen.iml" />
     </modules>
   </component>
 </project>
