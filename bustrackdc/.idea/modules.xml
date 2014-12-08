@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/platforms/android/CordovaLib/CordovaLib.iml" filepath="$PROJECT_DIR$/platforms/android/CordovaLib/CordovaLib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/platforms/android/android.iml" filepath="$PROJECT_DIR$/platforms/android/android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plugins/com.danielcwilson.plugins.googleanalytics/com.danielcwilson.plugins.googleanalytics.iml" filepath="$PROJECT_DIR$/plugins/com.danielcwilson.plugins.googleanalytics/com.danielcwilson.plugins.googleanalytics.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plugins/com.ionic.keyboard/src/com.ionic.keyboard.iml" filepath="$PROJECT_DIR$/plugins/com.ionic.keyboard/src/com.ionic.keyboard.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plugins/com.phonegap.plugins.mapkit/src/com.phonegap.plugins.mapkit.iml" filepath="$PROJECT_DIR$/plugins/com.phonegap.plugins.mapkit/src/com.phonegap.plugins.mapkit.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plugins/org.apache.cordova.device/src/org.apache.cordova.device.iml" filepath="$PROJECT_DIR$/plugins/org.apache.cordova.device/src/org.apache.cordova.device.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plugins/org.apache.cordova.dialogs/src/org.apache.cordova.dialogs.iml" filepath="$PROJECT_DIR$/plugins/org.apache.cordova.dialogs/src/org.apache.cordova.dialogs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plugins/org.apache.cordova.splashscreen/src/org.apache.cordova.splashscreen.iml" filepath="$PROJECT_DIR$/plugins/org.apache.cordova.splashscreen/src/org.apache.cordova.splashscreen.iml" />
+    </modules>
+  </component>
+</project>
+

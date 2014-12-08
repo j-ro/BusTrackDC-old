@@ -1,0 +1,10 @@
+{ 
+    "android": 
+    {
+        "app_id": "com.JasonRosenbaum.BusTrackDC"
+    },
+    "ios": 
+    {
+        "app_id": "org.JasonRosenbaum.WheresTheBusDC"
+    }
+}

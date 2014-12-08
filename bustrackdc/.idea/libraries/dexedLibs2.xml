@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="dexedLibs">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/platforms/android/ant-build/dexedLibs/libGoogleAnalyticsServices-f92097c64bd603433d44f2cd1301b6d7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/platforms/android/ant-build/dexedLibs/classes-cb0f295c189573958e12ab4e89b1e4c7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/platforms/android/ant-build/dexedLibs/google-play-services-6e652013f09e5a8d6df26ef946b507d3.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
