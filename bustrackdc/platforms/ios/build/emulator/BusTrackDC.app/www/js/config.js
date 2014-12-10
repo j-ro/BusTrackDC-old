@@ -1,1 +1,2 @@
-wmata_api_key = 'your_api_key_here'; // get an API key at http://developer.wmata.com/
+wmata_api_key = '5ktfjmr3uvvjkzdykbqp5mrk'; // get an API key at http://developer.wmata.com/
+gmaps_api_key = 'AIzaSyCMH-MRpzVj7tdDTEUe-9STP8PsDDOJdY8'; // get a key at https://developers.google.com/maps/signup

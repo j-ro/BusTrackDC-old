@@ -1568,7 +1568,7 @@ function annotationTap(text, latitude, longitude) {
 				    $('.spinner').css('display','inline-block');
 					
 				}
-				//console.log('http://api.wmata.com/StationPrediction.svc/json/GetPrediction/' + stopID.toString().replace(/Metro Rail Station #/,'') + '?api_key=' + wmata_api_key + '&callback=?');
+				//console.log('http://api.wmata.com/StationPrediction.svc/json/GetPrediction/' + stopID.toString().replace(/Metro Rail Station #/,'') + '?api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key + '&callback=?');
 				
 				annotationTapJSON = $.getJSON('http://api.wmata.com/StationPrediction.svc/json/GetPrediction/' + stopID.toString().replace(/Metro Rail Station #/,'') + '?api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key + '&callback=?', function(data2, self4) {
 					
