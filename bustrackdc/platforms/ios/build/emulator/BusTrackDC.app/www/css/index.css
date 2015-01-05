@@ -34,6 +34,10 @@ body.Android {
 	text-rendering: auto;
 }
 
+.centertext {
+	text-align: center;
+}
+
 /* main UI *************************************************/
 
 body {
@@ -248,6 +252,11 @@ body {
 #directions_autocomplete,
 #directions_routes {
 	position: relative;
+}
+
+.route-list-retry {
+	display: inline-block;
+	margin-top: 10px;
 }
 
 #favorites_menu_wrap > div,

@@ -268,7 +268,10 @@ getRoutes = function() {
     	
     }
 	
-	getRoutesJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JRoutes?api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key + '&callback=?', function(data) {
+	getRoutesJSON = $.ajax({
+		url: 'http://api.wmata.com/Bus.svc/json/JRoutes?api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key,
+		jsonp: false,
+		success: function(data) {
 	
 		/*
 		if (ajaxCount > 0 ) {
@@ -295,7 +298,10 @@ ajaxCount++;
 	    }
 */
 		
-		getRailRoutesJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JLines?api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key + '&callback=?', function(data) {
+		getRailRoutesJSON = $.ajax({
+			url: 'http://api.wmata.com/Rail.svc/json/JLines?api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key, 
+			jsonp: false,
+			success: function(data) {
 		
 			/*
 if (ajaxCount > 0 ) {
@@ -354,18 +360,25 @@ ajaxCount++;
 			    }
 				
 				//$('#route_list_menu').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>').listview('refresh');
-				$('#route_list_content_list').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>');
+				//$('#route_list_content_list').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>');
 				
 				if (errorThrown != 'abort') {
-					navigator.notification.confirm(
+					$('#route_list_content_list').html('<ul class="topcoat-list centertext"><h2 class="center">An error occured.</h2><br/><a class="route-list-retry topcoat-button">Try Again</a></ul>');
+					
+					$('.route-list-retry').click(function() {
+						getRoutes();
+					});
+					/*
+navigator.notification.confirm(
 					    'An error occured fetching the data you requested.',  // message
 					    getRoutesConfirm,         // callback
 					    "There was an error",            // title
 					    'Try again,Cancel'                  // buttonName
 				    ); 
+*/
 				}
 			});
-		}).error(function(jqXHR, textStatus, errorThrown) {
+		}}).error(function(jqXHR, textStatus, errorThrown) {
 			//$.mobile.loading( 'hide' );
 			
 			if (ajaxCount > 0 ) {
@@ -384,19 +397,27 @@ ajaxCount++;
 			$('#route_list_content_list').html('<h2 class="center">No routes available at this time.<br/>Please try again later.</h2>');
 			
 			if (errorThrown != 'abort') {
-				navigator.notification.confirm(
+				$('#route_list_content_list').html('<ul class="topcoat-list centertext"><h2 class="center">An error occured.</h2><br/><a class="route-list-retry topcoat-button">Try Again</a></ul>');
+					
+				$('.route-list-retry').click(function() {
+					getRoutes();
+				});
+				
+				/*
+navigator.notification.confirm(
 				    'An error occured fetching the data you requested.',  // message
 				    getRoutesConfirm,         // callback
 				    "There was an error",            // title
 				    'Try again,Cancel'                  // buttonName
 			    ); 
+*/
 			}
 		});
 
 		//console.log(stops.Stops[0].Lat);
 
 		
-	}).error(function(jqXHR, textStatus, errorThrown) {
+	}}).error(function(jqXHR, textStatus, errorThrown) {
 		//$.mobile.loading( 'hide' );
 		
 		if (ajaxCount > 0 ) {
@@ -416,12 +437,19 @@ ajaxCount++;
 		
 		
 		if (errorThrown != 'abort') {
-			navigator.notification.confirm(
+			$('#route_list_content_list').html('<ul class="topcoat-list centertext"><h2 class="center">An error occured.</h2><br/><a class="route-list-retry topcoat-button">Try Again</a></ul>');
+				
+				$('.route-list-retry').click(function() {
+					getRoutes();
+				});
+			/*
+navigator.notification.confirm(
 			    'An error occured fetching the data you requested.',  // message
 			    getRoutesConfirm,         // callback
 			    "There was an error",            // title
 			    'Try again,Cancel'                  // buttonName
 		    ); 
+*/
 		}
 	});
 }
@@ -627,7 +655,10 @@ getStops = function(latitude,longitude,radius) {
     	
     }
 	
-	getStopsJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JStops?lat=' + latitude + '&lon=' + longitude + '&radius=' + radius + '&api_key=' + wmata_api_key  + '&subscription-key=' + wmata_api_key + '&callback=?', function(data) {
+	getStopsJSON = $.ajax({
+	url: 'http://api.wmata.com/Bus.svc/json/JStops?lat=' + latitude + '&lon=' + longitude + '&radius=' + radius + '&api_key=' + wmata_api_key  + '&subscription-key=' + wmata_api_key, 
+	jsonp: false,
+	success: function(data) {
 		//console.log('ajax call done');
 		//$.mobile.loading( 'hide' );
 		
@@ -654,7 +685,7 @@ getStops = function(latitude,longitude,radius) {
 		//console.log(stops.Stops[0].Lat);
 
 		
-	}).error(function(jqXHR, textStatus, errorThrown) {
+	}}).error(function(jqXHR, textStatus, errorThrown) {
 		//$.mobile.loading( 'hide' );
 		
 		if (ajaxCount > 0 ) {
@@ -710,7 +741,10 @@ getStopsForRoute = function(routeID) {
     	
     }
 		
-	getStopsForRouteJSON = $.getJSON('http://api.wmata.com/Bus.svc/json/JRouteDetails?routeID=' + routeID + '&api_key=' + wmata_api_key  + '&subscription-key=' + wmata_api_key + '&callback=?', function(data) {
+	getStopsForRouteJSON = $.ajax({
+	url: 'http://api.wmata.com/Bus.svc/json/JRouteDetails?routeID=' + routeID + '&api_key=' + wmata_api_key  + '&subscription-key=' + wmata_api_key, 
+	jsonp: false,
+	success: function(data) {
 		
 		if (ajaxCount > 0 ) {
     		ajaxCount--;
@@ -770,7 +804,7 @@ getStopsForRoute = function(routeID) {
 		
 		markerStopPoints(stopsForRoute);
 
-	}).error(function(jqXHR, textStatus, errorThrown) {
+	}}).error(function(jqXHR, textStatus, errorThrown) {
 		//$.mobile.loading( 'hide' );
 		
 		if (ajaxCount > 0 ) {
@@ -887,7 +921,10 @@ getRailStops = function(latitude,longitude,radius) {
     	
     }
 	
-	getRailStopsJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JStationEntrances?lat=' + latitude + '&lon=' + longitude + '&radius=' + radius + '&api_key=' + wmata_api_key  + '&subscription-key=' + wmata_api_key + '&callback=?', function(data) {
+	getRailStopsJSON = $.ajax({
+	url: 'http://api.wmata.com/Rail.svc/json/JStationEntrances?lat=' + latitude + '&lon=' + longitude + '&radius=' + radius + '&api_key=' + wmata_api_key  + '&subscription-key=' + wmata_api_key, 
+	jsonp: false,
+	success: function(data) {
 	
 		if (ajaxCount > 0 ) {
     		ajaxCount--;
@@ -913,7 +950,7 @@ getRailStops = function(latitude,longitude,radius) {
 		//console.log(stops.Stops[0].Lat);
 
 		
-	}).error(function(jqXHR, textStatus, errorThrown) {
+	}}).error(function(jqXHR, textStatus, errorThrown) {
 		//$.mobile.loading( 'hide' );
 		
 		if (ajaxCount > 0 ) {
@@ -969,7 +1006,10 @@ getRailStopsForRoute = function(routeID) {
     	
     }
 		
-	getRailStopsForRouteJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JStations?LineCode=' + routeID + '&api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key + '&callback=?', function(data) {
+	getRailStopsForRouteJSON = $.ajax({
+	url: 'http://api.wmata.com/Rail.svc/json/JStations?LineCode=' + routeID + '&api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key, 
+	jsonp: false,
+	success: function(data) {
 		
 		if (ajaxCount > 0 ) {
     		ajaxCount--;
@@ -1018,7 +1058,7 @@ getRailStopsForRoute = function(routeID) {
 		
 		markerRailStopPoints(railStopsForRoute);
 
-	}).error(function(jqXHR, textStatus, errorThrown) {
+	}}).error(function(jqXHR, textStatus, errorThrown) {
 		//$.mobile.loading( 'hide' );
 		
 		if (ajaxCount > 0 ) {
@@ -1568,9 +1608,12 @@ function annotationTap(text, latitude, longitude) {
 				    $('.spinner').css('display','inline-block');
 					
 				}
-				//console.log('http://api.wmata.com/StationPrediction.svc/json/GetPrediction/' + stopID.toString().replace(/Metro Rail Station #/,'') + '?api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key + '&callback=?');
+				//console.log('http://api.wmata.com/StationPrediction.svc/json/GetPrediction/' + stopID.toString().replace(/Metro Rail Station #/,'') + '?api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key);
 				
-				annotationTapJSON = $.getJSON('http://api.wmata.com/StationPrediction.svc/json/GetPrediction/' + stopID.toString().replace(/Metro Rail Station #/,'') + '?api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key + '&callback=?', function(data2, self4) {
+				annotationTapJSON = $.ajax({
+				url: 'http://api.wmata.com/StationPrediction.svc/json/GetPrediction/' + stopID.toString().replace(/Metro Rail Station #/,'') + '?api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key, 
+				jsonp: false,
+				success: function(data2, self4) {
 					
 					if (ajaxCount > 0 ) {
 			    		ajaxCount--;
@@ -1655,7 +1698,7 @@ if (railStops.length) {
 				    createRailRouteList(routeTimes,stopID);
 				    
 				    	
-			    }).error(function(jqXHR, textStatus, errorThrown) {
+			    }}).error(function(jqXHR, textStatus, errorThrown) {
 					//$.mobile.loading( 'hide' );
 					console.log(errorThrown);
 					if (ajaxCount > 0 ) {
@@ -1671,12 +1714,34 @@ if (railStops.length) {
 					}
 					
 					if (errorThrown != 'abort') {
-						navigator.notification.confirm(
+						$('#infowindow-routes').html('<ul class="topcoat-list"><li class="stopTitle topcoat-list__header" id="' + stopID + '"></li><h2 class="center">An error occured.<br/> Pull to refresh and try again.</h2></ul>');
+						
+						if (!$('#infowindow').hasClass('center')) {
+							if ($(this).attr('href') != $(currentPage).attr('id')) {
+								pageHistory.push('#' + currentPage.attr('id'));
+							}
+							slidePageFrom('#infowindow', 'right');
+						}
+						
+						
+						if (mapVisible == true) {
+							hideMap();
+						}
+					    
+					    //$('#infowindow-routes').listview('refresh').iscrollview("refresh").css('height', $('#infowindow').css('min-height'));
+					    
+					    //$('#infowindow-routes').iscrollview("refresh").css('height', $('#infowindow').css('min-height'));
+					    //pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Pull down to refresh...';
+					    $('.pullDownIcon').removeClass('icon-refresh').addClass('icon-angle-down');
+					    myScroll.refresh();
+						/*
+navigator.notification.confirm(
 						    'An error occured fetching the data you requested.',  // message
 						    annotationTapJSONConfirm,         // callback
 						    "There was an error",            // title
 						    'Try again,Cancel'                  // buttonName
 					    ); 
+*/
 					}
 				});
 
@@ -1720,7 +1785,10 @@ if (railStops.length) {
 					
 				}
 				
-				annotationTapJSON = $.getJSON('http://api.wmata.com/NextBusService.svc/json/JPredictions?StopID=' + stopID.toString().replace(/Metro Bus Stop #/,'') + '&api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key + '&callback=?', function(data2, self4) {
+				annotationTapJSON = $.ajax({
+				url: 'http://api.wmata.com/NextBusService.svc/json/JPredictions?StopID=' + stopID.toString().replace(/Metro Bus Stop #/,'') + '&api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key, 
+				jsonp: false,
+				success: function(data2, self4) {
 					
 					if (ajaxCount > 0 ) {
 			    		ajaxCount--;
@@ -1860,9 +1928,9 @@ if (device.platform == "iOS") {
 				    myScroll.refresh();
 				    
 				    	
-			    }).error(function(jqXHR, textStatus, errorThrown) {
+			    }}).error(function(jqXHR, textStatus, errorThrown) {
 					//$.mobile.loading( 'hide' );
-					//console.log(errorThrown);
+					//console.log(jqXHR);
 					if (ajaxCount > 0 ) {
 			    		ajaxCount--;
 			    	} else {
@@ -1876,12 +1944,34 @@ if (device.platform == "iOS") {
 					}
 					
 					if (errorThrown != 'abort') {
-						navigator.notification.confirm(
+						$('#infowindow-routes').html('<ul class="topcoat-list"><li class="stopTitle topcoat-list__header" id="' + stopID + '"></li><h2 class="center">An error occured.<br/> Pull to refresh and try again.</h2></ul>');
+						
+						if (!$('#infowindow').hasClass('center')) {
+							if ($(this).attr('href') != $(currentPage).attr('id')) {
+								pageHistory.push('#' + currentPage.attr('id'));
+							}
+							slidePageFrom('#infowindow', 'right');
+						}
+						
+						
+						if (mapVisible == true) {
+							hideMap();
+						}
+					    
+					    //$('#infowindow-routes').listview('refresh').iscrollview("refresh").css('height', $('#infowindow').css('min-height'));
+					    
+					    //$('#infowindow-routes').iscrollview("refresh").css('height', $('#infowindow').css('min-height'));
+					    //pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Pull down to refresh...';
+					    $('.pullDownIcon').removeClass('icon-refresh').addClass('icon-angle-down');
+					    myScroll.refresh();
+						/*
+navigator.notification.confirm(
 						    'An error occured fetching the data you requested.',  // message
 						    annotationTapJSONConfirm,         // callback
 						    "There was an error",            // title
 						    'Try again,Cancel'                  // buttonName
 					    ); 
+*/
 					}	
 				});
 			}
@@ -2154,12 +2244,36 @@ if (device.platform == "iOS") {
 					}
 					
 					if (errorThrown != 'abort') {
-						navigator.notification.confirm(
+						
+						$('#infowindow-routes').html('<ul class="topcoat-list"><li class="stopTitle topcoat-list__header" id="' + stopID + '"></li><h2 class="center">An error occured.<br/> Pull to refresh and try again.</h2></ul>');
+						
+						if (!$('#infowindow').hasClass('center')) {
+							if ($(this).attr('href') != $(currentPage).attr('id')) {
+								pageHistory.push('#' + currentPage.attr('id'));
+							}
+							slidePageFrom('#infowindow', 'right');
+						}
+						
+						
+						if (mapVisible == true) {
+							hideMap();
+						}
+					    
+					    //$('#infowindow-routes').listview('refresh').iscrollview("refresh").css('height', $('#infowindow').css('min-height'));
+					    
+					    //$('#infowindow-routes').iscrollview("refresh").css('height', $('#infowindow').css('min-height'));
+					    //pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Pull down to refresh...';
+					    $('.pullDownIcon').removeClass('icon-refresh').addClass('icon-angle-down');
+					    myScroll.refresh();
+					    
+						/*
+navigator.notification.confirm(
 						    'An error occured fetching the data you requested.',  // message
 						    annotationTapJSONConfirm,         // callback
 						    "There was an error",            // title
 						    'Try again,Cancel'                  // buttonName
 					    ); 
+*/
 					}	
 				});
 			}
@@ -2523,7 +2637,10 @@ markerRailStops = function(data) {
 				    }
 				    
 					//console.log('start each');
-					getRailStationInfoJSON = $.getJSON('http://api.wmata.com/Rail.svc/json/JStationInfo?StationCode=' + object + '&api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key + '&callback=?', function(data) {
+					getRailStationInfoJSON = $.ajax({
+					url: 'http://api.wmata.com/Rail.svc/json/JStationInfo?StationCode=' + object + '&api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key, 
+					jsonp: false,
+					success: function(data) {
 						//console.log(data);
 					
 						if (ajaxCount > 0 ) {
@@ -2785,7 +2902,7 @@ if (device.platform == "iOS") {
 					    $('.pullDownIcon').removeClass('icon-refresh').addClass('icon-angle-down');
 						myScroll.refresh();
 						
-					}).error(function(jqXHR, textStatus, errorThrown) {
+					}}).error(function(jqXHR, textStatus, errorThrown) {
 						//$.mobile.loading( 'hide' );
 						
 						if (ajaxCount > 0 ) {
@@ -3236,7 +3353,7 @@ function end_autocomplete_callback(predictions, status) {
 	  if (prediction.types.indexOf('geocode') == -1) {
 	  	  $('#end_autocomplete_results').append('<li class="topcoat-list__item" data-placeid="' + prediction.place_id + '">' + prediction.description + '</li>');
 	  } else {
-		  $('#start_autocomplete_results').append('<li class="topcoat-list__item">' + prediction.description + '</li>');
+		  $('#end_autocomplete_results').append('<li class="topcoat-list__item">' + prediction.description + '</li>');
 	  }
   }
   
@@ -3881,6 +3998,7 @@ $('input').on('blur', function(){
 				$('.pullDownIcon').removeClass('icon-angle-down').addClass('icon-refresh');
 				//pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Loading...';				
 				refreshStopID = $('.stopTitle').attr('id');
+				console.log(refreshStopID);
 				annotationTap(refreshStopID); 
 			}
 		}
