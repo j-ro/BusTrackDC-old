@@ -269,7 +269,7 @@ getRoutes = function() {
     }
 	
 	getRoutesJSON = $.ajax({
-		url: 'http://api.wmata.com/Bus.svc/json/JRoutes?api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key,
+		url: 'http://api.wmata.com/Bus.svc/json/JRoutes?apid_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key,
 		jsonp: false,
 		success: function(data) {
 	
@@ -3842,6 +3842,13 @@ $('input').on('blur', function(){
     $('.footer').css({position:'fixed'});
 });
 */
+	// Track basic JavaScript errors
+	
+	// Track AJAX errors (jQuery API)
+	$(document).ajaxError(function(e, request, settings) {
+		analytics.trackEvent('Ajax error', settings.url, request.responseText);
+	});
+
 	gmaps_directions_initialize();
 	cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
 	
@@ -4134,8 +4141,15 @@ if (device.platform != "iOS") {
     
 }
 
+
+
+//console.log(noready);
+
 jQuery(document).ready(function($) {
 	document.addEventListener("deviceready", onDeviceReady);
+	window.addEventListener('error', function(e) {
+		analytics.trackEvent('JavaScript Error', e.message, e.filename + ':  ' + e.lineno);
+	});
 });
 
 /*
