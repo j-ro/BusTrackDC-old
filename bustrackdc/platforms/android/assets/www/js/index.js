@@ -1785,6 +1785,17 @@ navigator.notification.confirm(
 					
 				}
 				
+/*
+				var random = Math.floor((Math.random() * 10) + 1);
+				var stopper = '';
+				
+				if (random > 5) {
+					stopper = 'stop';
+				} else {
+					stopper = '';
+				}
+*/
+				
 				annotationTapJSON = $.ajax({
 				url: 'http://api.wmata.com/NextBusService.svc/json/JPredictions?StopID=' + stopID.toString().replace(/Metro Bus Stop #/,'') + '&api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key, 
 				jsonp: false,
@@ -1803,6 +1814,7 @@ navigator.notification.confirm(
 					}
 					
 					//console.log(data2);
+					//console.log(stops);
 					//console.log(self4);
 				
 					//console.log('predictions=' + data2.Predictions.length);
@@ -1812,36 +1824,42 @@ navigator.notification.confirm(
 					// thanks to Vlad Lyga for this part: http://stackoverflow.com/questions/14308149/how-do-i-merge-two-json-objects-in-javascript-jquery
 					predictions = data2;
 					
-					routeTimes = {
+					var routeTimes = {
 						minutes: {},
 						directionText: {}
 					};
+					
+					//console.log(routeTimes);
 		
 			
 					for (var index in predictions.Predictions) {
+						if (index != 'diff') {
 			
-				        if(!routeTimes.minutes.hasOwnProperty(predictions.Predictions[index].RouteID)) {
-			
-				            routeTimes.minutes[predictions.Predictions[index].RouteID] = [];
-				            routeTimes.directionText[predictions.Predictions[index].RouteID] = [];
-			
-				            if (predictions.Predictions[index].Minutes != 'undefined') {
-			
-				            	routeTimes.minutes[predictions.Predictions[index].RouteID].push(predictions.Predictions[index].Minutes);
-			
-				            }
-				            routeTimes.directionText[predictions.Predictions[index].RouteID].push(predictions.Predictions[index].DirectionText);
-			
-				        } else {
-			
-				        	if (predictions.Predictions[index].Minutes != 'undefined') {
-			
-				        		routeTimes.minutes[predictions.Predictions[index].RouteID].push(predictions.Predictions[index].Minutes);
-			
-				        	}
-				            routeTimes.directionText[predictions.Predictions[index].RouteID].push(predictions.Predictions[index].DirectionText);
-			
-				        }
+					        if(!routeTimes.minutes.hasOwnProperty(predictions.Predictions[index].RouteID + ' num:' + predictions.Predictions[index].DirectionNum)) {
+				
+					            routeTimes.minutes[predictions.Predictions[index].RouteID  + ' num:' + predictions.Predictions[index].DirectionNum] = [];
+					            routeTimes.directionText[predictions.Predictions[index].RouteID  + ' num:' + predictions.Predictions[index].DirectionNum] = [];
+					            
+				
+					            if (predictions.Predictions[index].Minutes != 'undefined') {
+				
+					            	routeTimes.minutes[predictions.Predictions[index].RouteID  + ' num:' + predictions.Predictions[index].DirectionNum].push(predictions.Predictions[index].Minutes);
+				
+					            }
+					            
+					            routeTimes.directionText[predictions.Predictions[index].RouteID  + ' num:' + predictions.Predictions[index].DirectionNum].push(predictions.Predictions[index].DirectionText);
+				
+					        } else {
+				
+					        	if (predictions.Predictions[index].Minutes != 'undefined') {
+				
+					        		routeTimes.minutes[predictions.Predictions[index].RouteID  + ' num:' + predictions.Predictions[index].DirectionNum].push(predictions.Predictions[index].Minutes);
+				
+					        	}
+					            routeTimes.directionText[predictions.Predictions[index].RouteID  + ' num:' + predictions.Predictions[index].DirectionNum].push(predictions.Predictions[index].DirectionText);
+				
+					        }
+					    }
 				    }
 				
 				    // this function needs nearby stops already loaded to load all stops for the route, not just predictions, but maybe it shouldn't in case you want to see your favorite stops and they're not in range? Right now, I'll just make it load only routes with predictions, but eventually would be nice to do the second AJAX call to load this stop into memory
@@ -2395,7 +2413,8 @@ markerStops = function(data) {
 						if (i3 != 'undefined'){
 							//console.log('i3= ' + i3);
 							if (lowestMinute == 'start') {
-								routeListArray.push('<li class="topcoat-list__item"><a class="route-detail-btn icon-angle-right" id="' + i3 + '"><span class="ui-li-count">' + i3 + '</span><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p></a></li>');
+								//console.log(data.directionText);
+								routeListArray.push('<li class="topcoat-list__item"><a class="route-detail-btn icon-angle-right" id="' + i3.replace(' num:0','').replace(' num:1','') + '"><span class="ui-li-count">' + i3.replace(' num:0','').replace(' num:1','') + '</span><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p></a></li>');
 								
 								lowestMinute = data.minutes[i3][0];
 								lowestMinuteArray.push(data.minutes[i3][0]);
@@ -2404,18 +2423,21 @@ markerStops = function(data) {
 									$.each(lowestMinuteArray, function(i, object) {
 										if (data.minutes[i3][0] < object) {
 											lowestMinuteArray.splice(i, 0, data.minutes[i3][0]);
-											routeListArray.splice(i, 0, '<li class="topcoat-list__item"><a class="route-detail-btn icon-angle-right" id="' + i3 + '"><span class="ui-li-count">' + i3 + '</span><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p></a></li>');
+											//console.log(data.directionText);
+											routeListArray.splice(i, 0, '<li class="topcoat-list__item"><a class="route-detail-btn icon-angle-right" id="' + i3.replace(' num:0','').replace(' num:1','') + '"><span class="ui-li-count">' + i3.replace(' num:0','').replace(' num:1','') + '</span><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p></a></li>');
 											routePlaced = true;
 										}
 									});
 									
 									if (routePlaced == false) {
-										routeListArray.push('<li class="topcoat-list__item"><a class="route-detail-btn icon-angle-right" id="' + i3 + '"><span class="ui-li-count">' + i3 + '</span><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p></a></li>');
+										//console.log(data.directionText);
+										routeListArray.push('<li class="topcoat-list__item"><a class="route-detail-btn icon-angle-right" id="' + i3.replace(' num:0','').replace(' num:1','') + '"><span class="ui-li-count">' + i3.replace(' num:0','').replace(' num:1','') + '</span><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p></a></li>');
 									} else {
 										routePlaced == false;
 									}
 								} else {
-									routeListArray.unshift('<li class="topcoat-list__item"><a class="route-detail-btn icon-angle-right" id="' + i3 + '"><span class="ui-li-count">' + i3 + '</span><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p></a></li>');
+									//console.log(data.directionText);
+									routeListArray.unshift('<li class="topcoat-list__item"><a class="route-detail-btn icon-angle-right" id="' + i3.replace(' num:0','').replace(' num:1','') + '"><span class="ui-li-count">' + i3.replace(' num:0','').replace(' num:1','') + '</span><p>' + data.directionText[i3][0].replace(/North/,'N').replace(/South/,'S').replace(/East/,'E').replace(/West/,'W') + ' arrives in:</p><p><strong>' + data.minutes[i3].join(', ') + '</strong> minutes</p></a></li>');
 									
 									lowestMinute = data.minutes[i3][0];
 									lowestMinuteArray.unshift(data.minutes[i3][0]);
@@ -2423,7 +2445,7 @@ markerStops = function(data) {
 							}
 							
 							
-						actualRouteList.push(i3);
+						actualRouteList.push(i3.replace(' num:0','').replace(' num:1',''));
 						potentialVsActual = potentialRouteList.diff(actualRouteList);
 						}
 					});
@@ -3842,6 +3864,13 @@ $('input').on('blur', function(){
     $('.footer').css({position:'fixed'});
 });
 */
+	// Track basic JavaScript errors
+	
+	// Track AJAX errors (jQuery API)
+	$(document).ajaxError(function(e, request, settings, thrownError) {
+		analytics.trackEvent('Ajax error', settings.url, "Status: " + request.status + ", Status Text: " + request.statusText + ", Response Text: " + request.responseText + ", Error Thrown: " + thrownError + ", Headers: " + request.getAllResponseHeaders());
+	});
+
 	gmaps_directions_initialize();
 	cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
 	
@@ -4134,8 +4163,15 @@ if (device.platform != "iOS") {
     
 }
 
+
+
+//console.log(noready);
+
 jQuery(document).ready(function($) {
 	document.addEventListener("deviceready", onDeviceReady);
+	window.addEventListener('error', function(e) {
+		analytics.trackEvent('JavaScript Error', e.message, e.filename + ':  ' + e.lineno);
+	});
 });
 
 /*

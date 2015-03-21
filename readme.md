@@ -30,7 +30,6 @@ This app uses the following Cordova plugins:
 * org.apache.cordova.device
 * com.phonegap.plugins.mapkit (custom fork at https://github.com/j-ro/MapKit)
 * com.danielcwilson.plugins.googleanalytics
-* org.apache.cordova.console
 * org.apache.cordova.dialogs
 * com.ionic.keyboard
 * org.apache.cordova.splashscreen
@@ -43,7 +42,7 @@ Please direct all bug reports or feature requests to the issue tracker.
 
 Source available at https://github.com/j-ro/BusTrackDC
 
-Version 1.8.1
+Version 1.8.2
 
 ## License
 

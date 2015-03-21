@@ -29,20 +29,6 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/org.apache.cordova.console/www/console-via-logger.js",
-        "id": "org.apache.cordova.console.console",
-        "clobbers": [
-            "console"
-        ]
-    },
-    {
-        "file": "plugins/org.apache.cordova.console/www/logger.js",
-        "id": "org.apache.cordova.console.logger",
-        "clobbers": [
-            "cordova.logger"
-        ]
-    },
-    {
         "file": "plugins/org.apache.cordova.device/www/device.js",
         "id": "org.apache.cordova.device.device",
         "clobbers": [
@@ -99,7 +85,6 @@ module.exports.metadata =
     "com.google.google-play-services": "1.0.0",
     "com.ionic.keyboard": "1.0.3",
     "com.phonegap.plugins.mapkit": "0.9.3",
-    "org.apache.cordova.console": "0.2.11",
     "org.apache.cordova.device": "0.2.12",
     "org.apache.cordova.dialogs": "0.2.10",
     "org.apache.cordova.geolocation": "0.3.10",

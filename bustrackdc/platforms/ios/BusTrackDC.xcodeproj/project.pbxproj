@@ -62,7 +62,6 @@
 		CE3F939D95B44EE286F5EB7C /* MapKit.m in Sources */ = {isa = PBXBuildFile; fileRef = D666EFD58046438982709D0C /* MapKit.m */; };
 		D4A0D8761607E02300AEF8BB /* Default-568h@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = D4A0D8751607E02300AEF8BB /* Default-568h@2x~iphone.png */; };
 		D8F2C269EBD7416B9146E71D /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F68DF4289F024ACD92FF4C31 /* CoreLocation.framework */; };
-		E57458FD7B2C48ABA0E1B14B /* CDVLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = D0188DA45EA14C5CB97D0B49 /* CDVLogger.m */; };
 		E779D7D2E499461C8EC147E1 /* CDVNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 639E568049C742FAA3BE3D9F /* CDVNotification.m */; };
 		F09ACF723DCB40D8A34E5F53 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 517BFF95711E4B73B76DB320 /* libsqlite3.0.dylib */; };
 		FC54980EBCAF4A308DDFA8AC /* CDVLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 617A253EF02B4521A6F61D32 /* CDVLocation.m */; };
@@ -564,7 +563,6 @@
 				23C992E521974B0AB64C31F8 /* AsyncImageView.m in Sources */,
 				A12D6269491F4A668DDDFED9 /* CDVAnnotation.m in Sources */,
 				CE3F939D95B44EE286F5EB7C /* MapKit.m in Sources */,
-				E57458FD7B2C48ABA0E1B14B /* CDVLogger.m in Sources */,
 				35861F568A6148A280CEBC01 /* CDVDevice.m in Sources */,
 				E779D7D2E499461C8EC147E1 /* CDVNotification.m in Sources */,
 				FC54980EBCAF4A308DDFA8AC /* CDVLocation.m in Sources */,

@@ -127,9 +127,6 @@
         "com.danielcwilson.plugins.googleanalytics": {
             "PACKAGE_NAME": "com.jasonrosenbaum.bustrackdc"
         },
-        "org.apache.cordova.console": {
-            "PACKAGE_NAME": "com.jasonrosenbaum.bustrackdc"
-        },
         "org.apache.cordova.dialogs": {
             "PACKAGE_NAME": "org.JasonRosenbaum.WheresTheBusDC"
         },
