@@ -271,6 +271,7 @@ getRoutes = function() {
 	getRoutesJSON = $.ajax({
 		url: 'http://api.wmata.com/Bus.svc/json/JRoutes?api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key,
 		jsonp: false,
+		jsonpCallback: 'bustrackdccallback',
 		success: function(data) {
 	
 		/*
@@ -301,6 +302,7 @@ ajaxCount++;
 		getRailRoutesJSON = $.ajax({
 			url: 'http://api.wmata.com/Rail.svc/json/JLines?api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key, 
 			jsonp: false,
+			jsonpCallback: 'bustrackdccallback',
 			success: function(data) {
 		
 			/*
@@ -324,7 +326,11 @@ ajaxCount++;
 		    }
 */
 		    
-		    getCirculatorRoutesJSON = $.get('http://webservices.nextbus.com/service/publicXMLFeed?command=routeList&a=dc-circulator', function(data) {
+		    getCirculatorRoutesJSON = $.ajax({
+			    url: 'http://webservices.nextbus.com/service/publicXMLFeed?command=routeList&a=dc-circulator',
+			    jsonp: false,
+			    jsonpCallback: 'bustrackdccallback'
+			}).success(function(data) {
 		    
 		    	if (ajaxCount > 0 ) {
 		    		ajaxCount--;
@@ -658,6 +664,7 @@ getStops = function(latitude,longitude,radius) {
 	getStopsJSON = $.ajax({
 	url: 'http://api.wmata.com/Bus.svc/json/JStops?lat=' + latitude + '&lon=' + longitude + '&radius=' + radius + '&api_key=' + wmata_api_key  + '&subscription-key=' + wmata_api_key, 
 	jsonp: false,
+	jsonpCallback: 'bustrackdccallback',
 	success: function(data) {
 		//console.log('ajax call done');
 		//$.mobile.loading( 'hide' );
@@ -744,6 +751,7 @@ getStopsForRoute = function(routeID) {
 	getStopsForRouteJSON = $.ajax({
 	url: 'http://api.wmata.com/Bus.svc/json/JRouteDetails?routeID=' + routeID + '&api_key=' + wmata_api_key  + '&subscription-key=' + wmata_api_key, 
 	jsonp: false,
+	jsonpCallback: 'bustrackdccallback',
 	success: function(data) {
 		
 		if (ajaxCount > 0 ) {
@@ -924,6 +932,7 @@ getRailStops = function(latitude,longitude,radius) {
 	getRailStopsJSON = $.ajax({
 	url: 'http://api.wmata.com/Rail.svc/json/JStationEntrances?lat=' + latitude + '&lon=' + longitude + '&radius=' + radius + '&api_key=' + wmata_api_key  + '&subscription-key=' + wmata_api_key, 
 	jsonp: false,
+	jsonpCallback: 'bustrackdccallback',
 	success: function(data) {
 	
 		if (ajaxCount > 0 ) {
@@ -1009,6 +1018,7 @@ getRailStopsForRoute = function(routeID) {
 	getRailStopsForRouteJSON = $.ajax({
 	url: 'http://api.wmata.com/Rail.svc/json/JStations?LineCode=' + routeID + '&api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key, 
 	jsonp: false,
+	jsonpCallback: 'bustrackdccallback',
 	success: function(data) {
 		
 		if (ajaxCount > 0 ) {
@@ -1179,7 +1189,11 @@ getCirculatorStops = function(latitude,longitude,radius) {
 		    
 		    ajaxCirculatorCount++;
 		    
-	    	getCirculatorStopsJSON = $.get('http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a=dc-circulator&r=' + lineTag + '', function(data) {
+	    	getCirculatorStopsJSON = $.ajax({
+		    	url: 'http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a=dc-circulator&r=' + lineTag + '',
+		    	jsonp: false,
+		    	jsonpCallback: 'bustrackdccallback'
+		    }).success(function(data) {
 	    		if (ajaxCount > 0 ) {
 		    		ajaxCount--;
 		    	} else {
@@ -1386,7 +1400,11 @@ getCirculatorStopsForRoute = function(routeID) {
     	
     }
 		
-	getCirculatorStopsForRouteJSON = $.get('http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a=dc-circulator&r=' + routeID, function(data) {
+	getCirculatorStopsForRouteJSON = $.ajax({
+		url: 'http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a=dc-circulator&r=' + routeID,
+		jsonp: false,
+		jsonpCallback: 'bustrackdccallback'
+	}).success(function(data) {
 		
 		if (ajaxCount > 0 ) {
     		ajaxCount--;
@@ -1613,6 +1631,7 @@ function annotationTap(text, latitude, longitude) {
 				annotationTapJSON = $.ajax({
 				url: 'http://api.wmata.com/StationPrediction.svc/json/GetPrediction/' + stopID.toString().replace(/Metro Rail Station #/,'') + '?api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key, 
 				jsonp: false,
+				jsonpCallback: 'bustrackdccallback',
 				success: function(data2, self4) {
 					
 					if (ajaxCount > 0 ) {
@@ -1799,6 +1818,7 @@ navigator.notification.confirm(
 				annotationTapJSON = $.ajax({
 				url: 'http://api.wmata.com/NextBusService.svc/json/JPredictions?StopID=' + stopID.toString().replace(/Metro Bus Stop #/,'') + '&api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key, 
 				jsonp: false,
+				jsonpCallback: 'bustrackdccallback',
 				success: function(data2, self4) {
 					
 					if (ajaxCount > 0 ) {
@@ -2033,7 +2053,11 @@ navigator.notification.confirm(
 					
 				}
 				
-				annotationTapJSON = $.get('http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=dc-circulator&stopId=' + stopID.toString().replace(/Circulator Stop #/,'') + '', function(data) {
+				annotationTapJSON = $.ajax({
+					url: 'http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=dc-circulator&stopId=' + stopID.toString().replace(/Circulator Stop #/,'') + '',
+					jsonp: false,
+					jsonpCallback: 'bustrackdccallback'
+				}).success(function(data) {
 			    
 			    
 					
@@ -2662,6 +2686,7 @@ markerRailStops = function(data) {
 					getRailStationInfoJSON = $.ajax({
 					url: 'http://api.wmata.com/Rail.svc/json/JStationInfo?StationCode=' + object + '&api_key=' + wmata_api_key + '&subscription-key=' + wmata_api_key, 
 					jsonp: false,
+					jsonpCallback: 'bustrackdccallback',
 					success: function(data) {
 						//console.log(data);
 					
@@ -3850,6 +3875,9 @@ function zoomIn() {
 
 function onDeviceReady() {
 	//console.log('ready');
+	// put this here for android, does that work on iOS?
+	geo = window.geo || {};
+	geo.onMapMove = {};
 
 //$(document).on('touchmove', function (ev) {ev.preventDefault();});
 
@@ -4496,10 +4524,6 @@ if (typeof(currentLat) != 'undefined') {
 		getStops(currentLat, currentLong, mapOptions.diameter);
 	}
 */
-	
-
-	// put this here for android, does that work on iOS?
-	geo = window.geo || {};
 	 // timeout needed to prevent UI lock -- the onMapMove function is called a lot during initialization, so we want to bypass that
     window.setTimeout(function() {
 
@@ -5000,7 +5024,12 @@ $(document).on('pageinit', '#directions', function() {
 		if ($(this).parent().attr('id') == 'start_autocomplete_results') {
 			$('#directions_start_wrap .filter').val($(this).text());
 			if ($(this).text() != 'Current Location' && $(this).data('placeid')) {
-				$.getJSON('https://maps.googleapis.com/maps/api/place/details/json?key=' + gmaps_api_key + '&placeid=' + $(this).data('placeid'), start_place_service_callback);
+				$.ajax({
+					url: 'https://maps.googleapis.com/maps/api/place/details/json?key=' + gmaps_api_key + '&placeid=' + $(this).data('placeid'),
+					json: false,
+					jsonpCallback: 'bustrackdccallback',
+					success: start_place_service_callback
+				});
 			} else if ($('#directions_start_wrap .filter').val() != '' && $('#directions_end_wrap .filter').val() != '') {
 				$('#directions_form').submit();
 			}
@@ -5009,7 +5038,12 @@ $(document).on('pageinit', '#directions', function() {
 		if ($(this).parent().attr('id') == 'end_autocomplete_results') {
 			$('#directions_end_wrap .filter').val($(this).text());
 			if ($(this).text() != 'Current Location' && $(this).data('placeid')) {
-				$.getJSON('https://maps.googleapis.com/maps/api/place/details/json?key=' + gmaps_api_key + '&placeid=' + $(this).data('placeid'), end_place_service_callback);
+				$.ajax({
+					url: 'https://maps.googleapis.com/maps/api/place/details/json?key=' + gmaps_api_key + '&placeid=' + $(this).data('placeid'),
+					jsonp: false,
+					jsonpCallback: 'bustrackdccallback',
+					success: end_place_service_callback
+				});
 			} else if ($('#directions_start_wrap .filter').val() != '' && $('#directions_end_wrap .filter').val() != '') {
 				$('#directions_form').submit();
 			}

@@ -7,14 +7,14 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>D61B9167-B0F8-49E0-9C92-AB236E4531A2</string>
 	<key>IDESourceControlProjectName</key>
-	<string>BusTrackDC</string>
+	<string>project</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>0B967C4381034E6A0105573915F3A17D67DCD5B3</key>
 		<string>https://github.com/j-ro/BusTrackDC.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>bustrackdc/platforms/ios/BusTrackDC.xcodeproj</string>
+	<string>bustrackdc/platforms/ios/BusTrackDC.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>0B967C4381034E6A0105573915F3A17D67DCD5B3</key>
