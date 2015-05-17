@@ -1484,6 +1484,7 @@ getCirculatorStopsForRoute = function(routeID) {
 
 // make markers for each stop on a route (different functions for coming and going to do different colors)
 markerCirculatorStopPoints = function(data) {
+	//console.log(data);
 	//console.log('start markerStopPoints');
 	var pins0 = [];
 	var pins1 = [];
@@ -1496,6 +1497,7 @@ markerCirculatorStopPoints = function(data) {
 	// grab the direction tag information so we can compare it to the stops later
 	var pins0stopArray = _.pluck(data.route.direction[0].stop, 'tag');
 	var pins1stopArray = _.pluck(data.route.direction[1].stop, 'tag');
+	
 	//console.log(pins0stopArray);
 	//console.log(pins1stopArray);
 	
@@ -1510,7 +1512,7 @@ markerCirculatorStopPoints = function(data) {
 					lat: object.lat,
 					lon: object.lon,
 					title: object.shortTitle,
-					snippet: 'Circulator Stop #' + object.stopId,
+					snippet: 'Circulator Stop #' + routePointData.route.tag + '|' + object.tag,
 					icon: mapKit.iconColors.HUE_VIOLET,
 					selected: false,
 					index: global_pin_index
@@ -1525,7 +1527,7 @@ markerCirculatorStopPoints = function(data) {
 					lat: object.lat,
 					lon: object.lon,
 					title: object.shortTitle,
-					snippet: 'Circulator Stop #' + object.stopId,
+					snippet: 'Circulator Stop #' + routePointData.route.tag + '|' + object.tag,
 					//icon: "bd91e5",
 					icon: mapKit.iconColors.HUE_VIOLET,
 					selected: false,
@@ -1537,8 +1539,43 @@ markerCirculatorStopPoints = function(data) {
 		}
 	});
 
-
+	if (window.localStorage.getItem("circulatorStops") != null) {
+		var circulatorData = JSON.parse(window.localStorage.getItem("circulatorStops"));
+	}
 	
+	$.each(circulatorData, function(i, object) {
+		pins0 = $.map(pins0, function(obj) {
+			//this works better, we're seeing the missing stops, but stops that are actually the same have slightly different lat/lon, so we get double pins, and thus no index match here
+			if ((obj.snippet.indexOf('Circulator Stop #') != -1) && (parseFloat(obj.lat) + .00009 > object.lat && parseFloat(obj.lat) - .00009 < object.lat) && (parseFloat(obj.lon) + .00009 > object.lon && parseFloat(obj.lon) - .00009 < object.lon)) {
+				//console.log(obj.snippet);
+				//console.log(object.route + '|' + object.tag);
+				//console.log(obj.snippet.indexOf(object.route + '|' + object.tag));
+				if (obj.snippet.indexOf(object.route + '|' + object.tag) == -1) {
+				
+					obj.snippet = obj.snippet + '&stops=' + object.route + '|' + object.tag;
+					//console.log(obj.snippet);
+				}
+			}
+			
+			return obj;
+		});
+		
+		pins1 = $.map(pins1, function(obj) {
+			//this works better, we're seeing the missing stops, but stops that are actually the same have slightly different lat/lon, so we get double pins, and thus no index match here
+			if ((obj.snippet.indexOf('Circulator Stop #') != -1) && (parseFloat(obj.lat) + .00009 > object.lat && parseFloat(obj.lat) - .00009 < object.lat) && (parseFloat(obj.lon) + .00009 > object.lon && parseFloat(obj.lon) - .00009 < object.lon)) {
+				//console.log(obj.snippet);
+				//console.log(object.route + '|' + object.tag);
+				//console.log(obj.snippet.indexOf(object.route + '|' + object.tag));
+				if (obj.snippet.indexOf(object.route + '|' + object.tag) == -1) {
+				
+					obj.snippet = obj.snippet + '&stops=' + object.route + '|' + object.tag;
+					//console.log(obj.snippet);
+				}
+			}
+			
+			return obj;
+		});
+	});
 	
 	//console.log(inRangeLongitude + ',' + inRangeLatitude);
 	//console.log(pins0);
@@ -2035,289 +2072,301 @@ navigator.notification.confirm(
 					html: ""
 				});
 	*/
+	
+				if (stopID.indexOf('|') != -1) {
 				
-				// retry function on error
-				function annotationTapJSONConfirm(buttonIndex) {
-			        if (buttonIndex == 1) {
-			        	annotationTap(text, latitude, longitude);
-			        }
-			    }
-			    
-			    //console.log('circulator!');
-			    
-			    ajaxCount++;
-			    if (ajaxCount > 0) {
-				    /// this goes back in $.mobile.loading( 'show' );
-				    $('.topcoat-navigation-bar__title').css('margin-left','24px');
-				    $('.spinner').css('display','inline-block');
-					
-				}
-				
-				annotationTapJSON = $.ajax({
-					url: 'http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=dc-circulator&stopId=' + stopID.toString().replace(/Circulator Stop #/,'') + '',
-					jsonp: false,
-					jsonpCallback: 'bustrackdccallback'
-				}).success(function(data) {
-			    
-			    
-					
-					if (ajaxCount > 0 ) {
-			    		ajaxCount--;
-			    	} else {
-				    	ajaxCount = 0;
-			    	}
-		    	
-					if (ajaxCount == 0) {
-						/// this goes back in $.mobile.loading( 'hide' );
-						$('.topcoat-navigation-bar__title').css('margin-left','0');
-						$('.spinner').css('display','none');
+					// retry function on error
+					function annotationTapJSONConfirm(buttonIndex) {
+				        if (buttonIndex == 1) {
+				        	annotationTap(text, latitude, longitude);
+				        }
+				    }
+				    
+				    //console.log('circulator!');
+				    
+				    ajaxCount++;
+				    if (ajaxCount > 0) {
+					    /// this goes back in $.mobile.loading( 'show' );
+					    $('.topcoat-navigation-bar__title').css('margin-left','24px');
+					    $('.spinner').css('display','inline-block');
+						
 					}
-				
-					//console.log('predictions=' + data2.Predictions.length);
-					//sorted = data2.Predictions.sort(function(a,b) {return b - a; });
 					
-					//$.mobile.loading( 'hide' );
-					// thanks to Vlad Lyga for this part: http://stackoverflow.com/questions/14308149/how-do-i-merge-two-json-objects-in-javascript-jquery
-					predictions = $.xml2json(data);
+					//console.log(stopID);
 					
-					//console.log(predictions);
+					annotationTapJSON = $.ajax({
+						url: 'http://webservices.nextbus.com/service/publicXMLFeed?command=predictionsForMultiStops&a=dc-circulator&stops=' + stopID.toString().replace(/Circulator Stop #/,'') + '',
+						jsonp: false,
+						jsonpCallback: 'bustrackdccallback'
+					}).success(function(data) {
+				    
+				    
+						
+						if (ajaxCount > 0 ) {
+				    		ajaxCount--;
+				    	} else {
+					    	ajaxCount = 0;
+				    	}
+			    	
+						if (ajaxCount == 0) {
+							/// this goes back in $.mobile.loading( 'hide' );
+							$('.topcoat-navigation-bar__title').css('margin-left','0');
+							$('.spinner').css('display','none');
+						}
 					
-					routeTimes = {
-						minutes: {},
-						directionText: {}
-					};
-		
-					// if there's more than one route at this stop...
-					if (typeof(predictions.predictions.length) != 'undefined') {
-						//console.log('true');
-						for (var index in predictions.predictions) {
+						//console.log('predictions=' + data2.Predictions.length);
+						//sorted = data2.Predictions.sort(function(a,b) {return b - a; });
+						
+						//$.mobile.loading( 'hide' );
+						// thanks to Vlad Lyga for this part: http://stackoverflow.com/questions/14308149/how-do-i-merge-two-json-objects-in-javascript-jquery
+						predictions = $.xml2json(data);
+						
+						//console.log(predictions);
+						
+						routeTimes = {
+							minutes: {},
+							directionText: {}
+						};
+			
+						// if there's more than one route at this stop...
+						if (typeof(predictions.predictions.length) != 'undefined') {
+							//console.log('true');
+							for (var index in predictions.predictions) {
+					
+						        if(!routeTimes.minutes.hasOwnProperty(predictions.predictions[index].routeTag)) {
+					
+						            routeTimes.minutes[predictions.predictions[index].routeTag] = [];
+						            routeTimes.directionText[predictions.predictions[index].routeTag] = [];
+					
+						            if (typeof(predictions.predictions[index].direction) !== 'undefined') {
+					
+						            	routeTimes.minutes[predictions.predictions[index].routeTag].push(predictions.predictions[index].direction.prediction);
+						            	
+					
+						            }
+						            
+						           
+					            	if (typeof(predictions.predictions[index].direction) !== 'undefined') {
+					            		 routeTimes.directionText[predictions.predictions[index].routeTag].push(predictions.predictions[index].direction.title + ' ' + predictions.predictions[index].routeTitle);
+					            	} else {
+					            		 routeTimes.directionText[predictions.predictions[index].routeTag].push(predictions.predictions[index].routeTitle);
+					            	}
+					
+						        } else {
+					
+						        	if (typeof(predictions.predictions[index].direction) !== 'undefined') {
+					
+						        		routeTimes.minutes[predictions.predictions[index].routeTag].push(predictions.predictions[index].direction.prediction);
+						        		
+					
+						        	}
+						        	
+						        	if (typeof(predictions.predictions[index].direction) !== 'undefined') {
+					            		 routeTimes.directionText[predictions.predictions[index].routeTag].push(predictions.predictions[index].direction.title + ' ' + predictions.predictions[index].routeTitle);
+					            	} else {
+					            		 routeTimes.directionText[predictions.predictions[index].routeTag].push(predictions.predictions[index].routeTitle);
+					            	}
+						            
+					
+						        }
+						    }
+					    } else {
+	
+						    //console.log('false');
+					        if(!routeTimes.minutes.hasOwnProperty(predictions.predictions.routeTag)) {
 				
-					        if(!routeTimes.minutes.hasOwnProperty(predictions.predictions[index].routeTag)) {
+					            routeTimes.minutes[predictions.predictions.routeTag] = [];
+					            routeTimes.directionText[predictions.predictions.routeTag] = [];
 				
-					            routeTimes.minutes[predictions.predictions[index].routeTag] = [];
-					            routeTimes.directionText[predictions.predictions[index].routeTag] = [];
+					            if (typeof(predictions.predictions.direction) !== 'undefined') {
 				
-					            if (typeof(predictions.predictions[index].direction) !== 'undefined') {
-				
-					            	routeTimes.minutes[predictions.predictions[index].routeTag].push(predictions.predictions[index].direction.prediction);
+					            	routeTimes.minutes[predictions.predictions.routeTag].push(predictions.predictions.direction.prediction);
 					            	
 				
 					            }
 					            
-					           
-				            	if (typeof(predictions.predictions[index].direction) !== 'undefined') {
-				            		 routeTimes.directionText[predictions.predictions[index].routeTag].push(predictions.predictions[index].direction.title + ' ' + predictions.predictions[index].routeTitle);
-				            	} else {
-				            		 routeTimes.directionText[predictions.predictions[index].routeTag].push(predictions.predictions[index].routeTitle);
-				            	}
-				
-					        } else {
-				
-					        	if (typeof(predictions.predictions[index].direction) !== 'undefined') {
-				
-					        		routeTimes.minutes[predictions.predictions[index].routeTag].push(predictions.predictions[index].direction.prediction);
-					        		
-				
-					        	}
-					        	
-					        	if (typeof(predictions.predictions[index].direction) !== 'undefined') {
-				            		 routeTimes.directionText[predictions.predictions[index].routeTag].push(predictions.predictions[index].direction.title + ' ' + predictions.predictions[index].routeTitle);
-				            	} else {
-				            		 routeTimes.directionText[predictions.predictions[index].routeTag].push(predictions.predictions[index].routeTitle);
-				            	}
-					            
-				
-					        }
-					    }
-				    } else {
-
-					    //console.log('false');
-				        if(!routeTimes.minutes.hasOwnProperty(predictions.predictions.routeTag)) {
-			
-				            routeTimes.minutes[predictions.predictions.routeTag] = [];
-				            routeTimes.directionText[predictions.predictions.routeTag] = [];
-			
-				            if (typeof(predictions.predictions.direction) !== 'undefined') {
-			
-				            	routeTimes.minutes[predictions.predictions.routeTag].push(predictions.predictions.direction.prediction);
-				            	
-			
-				            }
-				            
-				            if (typeof(predictions.predictions.direction) !== 'undefined') {
-			            		 routeTimes.directionText[predictions.predictions.routeTag].push(predictions.predictions.direction.title + ' ' + predictions.predictions.routeTitle);
-			            	} else {
-			            		 routeTimes.directionText[predictions.predictions.routeTag].push(predictions.predictions.routeTitle);
-			            	}
-			
-				        } else {
-			
-				        	if (typeof(predictions.predictions.direction) !== 'undefined') {
-			
-				        		routeTimes.minutes[predictions.predictions.routeTag].push(predictions.predictions.direction.prediction);
-				        		
-			
-				        	}
-				        	
-				        	if (typeof(predictions.predictions.direction) !== 'undefined') {
+					            if (typeof(predictions.predictions.direction) !== 'undefined') {
 				            		 routeTimes.directionText[predictions.predictions.routeTag].push(predictions.predictions.direction.title + ' ' + predictions.predictions.routeTitle);
 				            	} else {
 				            		 routeTimes.directionText[predictions.predictions.routeTag].push(predictions.predictions.routeTitle);
 				            	}
-				            
-			
-				        }
-
-				    }
 				
-				    // this function needs nearby stops already loaded to load all stops for the route, not just predictions, but maybe it shouldn't in case you want to see your favorite stops and they're not in range? Right now, I'll just make it load only routes with predictions, but eventually would be nice to do the second AJAX call to load this stop into memory
-				    /*
-if (stops.length) {
-				    	//console.log(stops.length);
-				    	var 
-				        	routes = stops.Stops[0].Routes,
-				        	routesVsMinutes = {};
-				    }
-				    
-				    if (stops.length) {
-					    for(var i in routes) {
-					        if (!routesVsMinutes.hasOwnProperty(routes[i])) {
-					            routesVsMinutes[routes[i]] = {Minutes: []};
-					        } 
-					        if (routeTimes[routes[i]]) {
-					            routesVsMinutes[routes[i]].Minutes = routeTimes[routes[i]];
+					        } else {
+				
+					        	if (typeof(predictions.predictions.direction) !== 'undefined') {
+				
+					        		routeTimes.minutes[predictions.predictions.routeTag].push(predictions.predictions.direction.prediction);
+					        		
+				
+					        	}
+					        	
+					        	if (typeof(predictions.predictions.direction) !== 'undefined') {
+					            		 routeTimes.directionText[predictions.predictions.routeTag].push(predictions.predictions.direction.title + ' ' + predictions.predictions.routeTitle);
+					            	} else {
+					            		 routeTimes.directionText[predictions.predictions.routeTag].push(predictions.predictions.routeTitle);
+					            	}
+					            
+				
 					        }
-					    } 
-					} 
-*/    
-				    
-				    //stops.Stops[0].Routes = routesVsMinutes;
-				    //console.log(routeTimes);
-				    //console.log('now to creatRouteList');
-				    // create HTML for the infowindow
-				    createCirculatorRouteList(routeTimes);
-				    //console.log(routeList);
-				    $('#infowindow-routes').html(circulatorRouteList);
-				    
-				    
-				    // pass some variables to the next page if a button is clicked
-				    $('#infowindow-routes .topcoat-list__item').click(function() {
-				    
-				    	//console.log('route btn clicked');
-				
-				    	routeClicked = $(this).children('.route-detail-btn').attr('id');
-				    	
-				    	if (routeClicked == 'yellow') {
-					    	routeTitle = 'Yellow';
-				    	} else if (routeClicked == 'gtownpm') {
-					    	routeTitle = 'Yellow';
-				    	} else if (routeClicked == 'green') {
-					    	routeTitle = 'Green';
-				    	} else if (routeClicked == 'blue') {
-					    	routeTitle = 'Blue';
-				    	} else if (routeClicked == 'rosslyn') {
-					    	routeTitle = 'Light Blue';
-				    	} else if (routeClicked == 'potomac') {
-					    	routeTitle = 'Orange';
-				    	}
-				    	
-				    	$('#route_map_title').html(routeTitle + ' Route');
-				    
-				    	/*
-if (device.platform == "iOS") {
-							$.mobile.changePage( "#route_map", { transition: "fade"} );
+	
+					    }
+					
+					    // this function needs nearby stops already loaded to load all stops for the route, not just predictions, but maybe it shouldn't in case you want to see your favorite stops and they're not in range? Right now, I'll just make it load only routes with predictions, but eventually would be nice to do the second AJAX call to load this stop into memory
+					    /*
+	if (stops.length) {
+					    	//console.log(stops.length);
+					    	var 
+					        	routes = stops.Stops[0].Routes,
+					        	routesVsMinutes = {};
+					    }
+					    
+					    if (stops.length) {
+						    for(var i in routes) {
+						        if (!routesVsMinutes.hasOwnProperty(routes[i])) {
+						            routesVsMinutes[routes[i]] = {Minutes: []};
+						        } 
+						        if (routeTimes[routes[i]]) {
+						            routesVsMinutes[routes[i]].Minutes = routeTimes[routes[i]];
+						        }
+						    } 
+						} 
+	*/    
+					    
+					    //stops.Stops[0].Routes = routesVsMinutes;
+					    //console.log(routeTimes);
+					    //console.log('now to creatRouteList');
+					    // create HTML for the infowindow
+					    createCirculatorRouteList(routeTimes);
+					    //console.log(routeList);
+					    $('#infowindow-routes').html(circulatorRouteList);
+					    
+					    
+					    // pass some variables to the next page if a button is clicked
+					    $('#infowindow-routes .topcoat-list__item').click(function() {
+					    
+					    	//console.log('route btn clicked');
+					
+					    	routeClicked = $(this).children('.route-detail-btn').attr('id');
+					    	
+					    	if (routeClicked == 'yellow') {
+						    	routeTitle = 'Yellow';
+					    	} else if (routeClicked == 'gtownpm') {
+						    	routeTitle = 'Yellow';
+					    	} else if (routeClicked == 'green') {
+						    	routeTitle = 'Green';
+					    	} else if (routeClicked == 'blue') {
+						    	routeTitle = 'Blue';
+					    	} else if (routeClicked == 'rosslyn') {
+						    	routeTitle = 'Light Blue';
+					    	} else if (routeClicked == 'potomac') {
+						    	routeTitle = 'Orange';
+					    	}
+					    	
+					    	$('#route_map_title').html(routeTitle + ' Route');
+					    
+					    	/*
+	if (device.platform == "iOS") {
+								$.mobile.changePage( "#route_map", { transition: "fade"} );
+							} else {
+								$.mobile.changePage( "#route_map", { transition: "none"} );
+							}
+	*/
+							if ($(this).attr('href') != $(currentPage).attr('id')) {
+								pageHistory.push('#' + currentPage.attr('id'));
+							}
+							slidePageFrom('#route_map', 'right');
+	
+					    });
+					    
+					    //$( "#infowindow" ).popup( "open" );
+					    
+					    //console.log('show page');
+					    // show the page
+					    annotationTapJSON.abort();
+					    
+					    /*
+	if (device.platform == "iOS") {
+							$.mobile.changePage( "#infowindow", { transition: "fade"} );
 						} else {
-							$.mobile.changePage( "#route_map", { transition: "none"} );
+							$.mobile.changePage( "#infowindow", { transition: "none"} );
 						}
-*/
-						if ($(this).attr('href') != $(currentPage).attr('id')) {
-							pageHistory.push('#' + currentPage.attr('id'));
-						}
-						slidePageFrom('#route_map', 'right');
-
-				    });
-				    
-				    //$( "#infowindow" ).popup( "open" );
-				    
-				    //console.log('show page');
-				    // show the page
-				    annotationTapJSON.abort();
-				    
-				    /*
-if (device.platform == "iOS") {
-						$.mobile.changePage( "#infowindow", { transition: "fade"} );
-					} else {
-						$.mobile.changePage( "#infowindow", { transition: "none"} );
-					}
-*/
-
-					if (!$('#infowindow').hasClass('center')) {
-						console.log('circulator show');
-						if ($(this).attr('href') != $(currentPage).attr('id')) {
-							pageHistory.push('#' + currentPage.attr('id'));
-						}
-						slidePageFrom('#infowindow', 'right');
-					}
-					
-					if (mapVisible == true) {
-						hideMap();
-					}
-					
-				    //$('#infowindow-routes').listview('refresh').iscrollview("refresh").css('height', $('#infowindow').css('min-height'));
-				    
-				    //pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Pull down to refresh...';
-				    $('.pullDownIcon').removeClass('icon-refresh').addClass('icon-angle-down');
-				    myScroll.refresh();
-				    
-				    	
-			    }).error(function(jqXHR, textStatus, errorThrown) {
-					//$.mobile.loading( 'hide' );
-					//console.log(errorThrown);
-					if (ajaxCount > 0 ) {
-			    		ajaxCount--;
-			    	} else {
-				    	ajaxCount = 0;
-			    	}
-		    	
-					if (ajaxCount == 0) {
-						/// this goes back in $.mobile.loading( 'hide' );
-						$('.topcoat-navigation-bar__title').css('margin-left','0');
-						$('.spinner').css('display','none');
-					}
-					
-					if (errorThrown != 'abort') {
-						
-						$('#infowindow-routes').html('<ul class="topcoat-list"><li class="stopTitle topcoat-list__header" id="' + stopID + '"></li><h2 class="center">An error occured.<br/> Pull to refresh and try again.</h2></ul>');
-						
+	*/
+	
 						if (!$('#infowindow').hasClass('center')) {
+							//console.log('circulator show');
 							if ($(this).attr('href') != $(currentPage).attr('id')) {
 								pageHistory.push('#' + currentPage.attr('id'));
 							}
 							slidePageFrom('#infowindow', 'right');
 						}
 						
-						
 						if (mapVisible == true) {
 							hideMap();
 						}
-					    
+						
 					    //$('#infowindow-routes').listview('refresh').iscrollview("refresh").css('height', $('#infowindow').css('min-height'));
 					    
-					    //$('#infowindow-routes').iscrollview("refresh").css('height', $('#infowindow').css('min-height'));
 					    //pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Pull down to refresh...';
 					    $('.pullDownIcon').removeClass('icon-refresh').addClass('icon-angle-down');
 					    myScroll.refresh();
 					    
-						/*
-navigator.notification.confirm(
-						    'An error occured fetching the data you requested.',  // message
-						    annotationTapJSONConfirm,         // callback
-						    "There was an error",            // title
-						    'Try again,Cancel'                  // buttonName
-					    ); 
-*/
-					}	
-				});
+					    	
+				    }).error(function(jqXHR, textStatus, errorThrown) {
+						//$.mobile.loading( 'hide' );
+						//console.log(errorThrown);
+						if (ajaxCount > 0 ) {
+				    		ajaxCount--;
+				    	} else {
+					    	ajaxCount = 0;
+				    	}
+			    	
+						if (ajaxCount == 0) {
+							/// this goes back in $.mobile.loading( 'hide' );
+							$('.topcoat-navigation-bar__title').css('margin-left','0');
+							$('.spinner').css('display','none');
+						}
+						
+						if (errorThrown != 'abort') {
+							
+							$('#infowindow-routes').html('<ul class="topcoat-list"><li class="stopTitle topcoat-list__header" id="' + stopID + '"></li><h2 class="center">An error occured.<br/> Pull to refresh and try again.</h2></ul>');
+							
+							if (!$('#infowindow').hasClass('center')) {
+								if ($(this).attr('href') != $(currentPage).attr('id')) {
+									pageHistory.push('#' + currentPage.attr('id'));
+								}
+								slidePageFrom('#infowindow', 'right');
+							}
+							
+							
+							if (mapVisible == true) {
+								hideMap();
+							}
+						    
+						    //$('#infowindow-routes').listview('refresh').iscrollview("refresh").css('height', $('#infowindow').css('min-height'));
+						    
+						    //$('#infowindow-routes').iscrollview("refresh").css('height', $('#infowindow').css('min-height'));
+						    //pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Pull down to refresh...';
+						    $('.pullDownIcon').removeClass('icon-refresh').addClass('icon-angle-down');
+						    myScroll.refresh();
+						    
+							/*
+	navigator.notification.confirm(
+							    'An error occured fetching the data you requested.',  // message
+							    annotationTapJSONConfirm,         // callback
+							    "There was an error",            // title
+							    'Try again,Cancel'                  // buttonName
+						    ); 
+	*/
+						}	
+					});
+				} else {
+					navigator.notification.alert(
+					    'Due to NextBus API changes, previously saved Circulator favorites no longer work. Please remove this favorite and re-add it. Sorry for the inconvenience!',  // message
+					    console.log('faveerror'),         // callback, this needs to be something, otherwise this doesn't work.
+					    "Old Circulator Favorite Detected",            // title
+					    'OK'                  // buttonName
+					);
+				}
 			}
 		}
 	}
@@ -3047,8 +3096,47 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 					// our match function to see if a pin already exists in the global pin array
 					//console.log(obj.index);
 					//console.log(object.stopId);
-					return obj.title == object.title;
+					//if (obj.title == object.title) {
+						//object.snippet = 'hit'
+						//console.log(obj);
+						//this works better, we're seeing the missing stops, but stops that are actually the same have slightly different lat/lon, so we get double pins
+						return ((parseFloat(obj.lat) + .00009 > object.lat && parseFloat(obj.lat) - .00009 < object.lat) && (parseFloat(obj.lon) + .00009 > object.lon && parseFloat(obj.lon) - .00009 < object.lon));
+					//}
 				});
+				
+				pins = $.map(pins, function(obj) {
+					//this works better, we're seeing the missing stops, but stops that are actually the same have slightly different lat/lon, so we get double pins, and thus no index match here
+					if ((obj.snippet.indexOf('Circulator Stop #') != -1) && (parseFloat(obj.lat) + .00009 > object.lat && parseFloat(obj.lat) - .00009 < object.lat) && (parseFloat(obj.lon) + .00009 > object.lon && parseFloat(obj.lon) - .00009 < object.lon)) {
+						//console.log(obj.snippet);
+						//console.log(object.route + '|' + object.tag);
+						//console.log(obj.snippet.indexOf(object.route + '|' + object.tag));
+						if (obj.snippet.indexOf(object.route + '|' + object.tag) == -1) {
+						
+							obj.snippet = obj.snippet + '&stops=' + object.route + '|' + object.tag;
+							//console.log(obj.snippet);
+						}
+					}
+					
+					return obj;
+				});
+				
+				newCirculatorPins = $.map(newCirculatorPins, function(obj) {
+					//this works better, we're seeing the missing stops, but stops that are actually the same have slightly different lat/lon, so we get double pins, and thus no index match here
+					if ((obj.snippet.indexOf('Circulator Stop #') != -1) && (parseFloat(obj.lat) + .00009 > object.lat && parseFloat(obj.lat) - .00009 < object.lat) && (parseFloat(obj.lon) + .00009 > object.lon && parseFloat(obj.lon) - .00009 < object.lon)) {
+						//console.log(obj.snippet);
+						//console.log(object.route + '|' + object.tag);
+						//console.log(obj.snippet.indexOf(object.route + '|' + object.tag));
+						if (obj.snippet.indexOf(object.route + '|' + object.tag) == -1) {
+						
+							obj.snippet = obj.snippet + '&stops=' + object.route + '|' + object.tag;
+							//console.log(obj.snippet);
+						}
+					}
+					
+					return obj;
+				});
+				
+				//console.log(pins);
 				
 				//console.log(circulatorMatches);
 				
@@ -3065,7 +3153,7 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 								lat: object.lat,
 								lon: object.lon,
 								title: object.title,
-								snippet: 'Circulator Stop #' + object.stopId,
+								snippet: 'Circulator Stop #' + object.route + '|' + object.tag,
 								icon: mapKit.iconColors.HUE_VIOLET,
 								selected: false,
 								index: global_pin_index
@@ -3077,7 +3165,7 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 								lat: object.lat,
 								lon: object.lon,
 								title: object.title,
-								snippet: 'Circulator Stop #' + object.stopId,
+								snippet: 'Circulator Stop #' + object.route + '|' + object.tag,
 								icon: mapKit.iconColors.HUE_VIOLET,
 								selected: false,
 								index: global_pin_index
@@ -3109,7 +3197,9 @@ latPlusDelta = parseFloat(latitude) + parseFloat(latitudeDelta);
 				// create a list of all possible routes at this stop
 				
 				$.each(circulatorData, function(i2, object2) {
-					if (stopID == 'Circulator Stop #' + object2.stopId) {
+					//console.log(stopID);
+					//console.log(object2.stopId);
+					if (stopID.indexOf(object2.route + '|' + object2.tag) != -1) {
 						stopIDfocus = object2.stopId;
 						stopName = object2.title;
 						//potentialRouteList = stops.Stops[i2].Routes;
@@ -4055,7 +4145,7 @@ $('input').on('blur', function(){
 				$('.pullDownIcon').removeClass('icon-angle-down').addClass('icon-refresh');
 				//pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Loading...';				
 				refreshStopID = $('.stopTitle').attr('id');
-				console.log(refreshStopID);
+				//console.log(refreshStopID);
 				annotationTap(refreshStopID); 
 			}
 		}

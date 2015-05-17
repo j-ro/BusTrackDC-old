@@ -42,7 +42,7 @@ Please direct all bug reports or feature requests to the issue tracker.
 
 Source available at https://github.com/j-ro/BusTrackDC
 
-Version 1.8.2
+Version 1.8.4
 
 ## License
 
