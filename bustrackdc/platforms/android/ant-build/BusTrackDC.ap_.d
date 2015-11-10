@@ -2,9 +2,9 @@
  : /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/res/drawable/icon.png \
 /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/res/drawable-hdpi/icon.png \
 /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/res/drawable-mdpi/icon.png \
-/Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/res/drawable-port-hdpi/screen.9.png \
-/Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/res/drawable-port-mdpi/screen.9.png \
-/Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/res/drawable-port-xhdpi/screen.9.png \
+/Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/res/drawable-port-hdpi/screen.png \
+/Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/res/drawable-port-mdpi/screen.png \
+/Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/res/drawable-port-xhdpi/screen.png \
 /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/res/drawable-xhdpi/icon.png \
 /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/res/values/strings.xml \
 /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/res/values/version.xml \
@@ -12,9 +12,9 @@
 /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/ant-build/res/drawable/icon.png \
 /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/ant-build/res/drawable-hdpi/icon.png \
 /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/ant-build/res/drawable-mdpi/icon.png \
-/Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/ant-build/res/drawable-port-hdpi/screen.9.png \
-/Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/ant-build/res/drawable-port-mdpi/screen.9.png \
-/Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/ant-build/res/drawable-port-xhdpi/screen.9.png \
+/Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/ant-build/res/drawable-port-hdpi/screen.png \
+/Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/ant-build/res/drawable-port-mdpi/screen.png \
+/Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/ant-build/res/drawable-port-xhdpi/screen.png \
 /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/ant-build/res/drawable-xhdpi/icon.png \
 /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/assets/_where-is-www.txt \
 /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/assets/www \
@@ -99,6 +99,8 @@
 /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/assets/www/js/GoogleAnalyticsPlugin.js \
 /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/assets/www/js/hammer.min.js \
 /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/assets/www/js/index.js \
+/Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/assets/www/js/iscroll-lite.js \
+/Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/assets/www/js/iscroll-probe.js \
 /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/assets/www/js/iscroll.js \
 /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/assets/www/js/jquery-1.9.1.min.js \
 /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/android/assets/www/js/jquery-ui-1.10.1.custom.min.js \

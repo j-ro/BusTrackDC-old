@@ -375,6 +375,10 @@ body {
 	font-size: 1rem;
 }
 
+.topcoat-list p.error {
+	padding: 2em 2em 0em 2em;
+}
+
 .topcoat-list__item p.favorite-list-item-edit {
 	margin-right: 4.5rem !important;
 }
@@ -393,6 +397,11 @@ body {
 .filter_wrap, #directions_ui_wrap, #directions_maps_button {
 	background-color: #ff3600;
 	padding: 0.25rem;
+}
+
+#directions_ui_wrap, .filter_wrap {
+	position: relative;
+	z-index: 10;
 }
 
 #directions_maps_button {
@@ -624,6 +633,16 @@ body {
     transition-duration: 0.25s;
 }
 
+.pullDown {
+	margin-top:-35px !important;	/* Should match the totalt height (i.e. height + paddings + borders) of #pullDown set above */
+}
+
+/*
+.pullDown.flip {
+	margin-top: -35px !important;
+}
+*/
+
 
 /* rail and circulator button colors */
 
@@ -645,7 +664,7 @@ body {
 	border: 1px solid #C2E6FF;
 }
 
-#RD .ui-li-count {
+#RD .ui-li-count, #mall .ui-li-count {
 	background-color: #ff3600;
 	text-shadow: 0 -1px rgba(0,0,0,0.2);
 	border: 1px solid #FFCDC0;
@@ -673,6 +692,6 @@ body {
 
 }
 
-#yellow .ui-li-count span, #green .ui-li-count span, #gtownpm .ui-li-count span, #rosslyn .ui-li-count span, #blue .ui-li-count span, #potomac .ui-li-count span {
+#yellow .ui-li-count span, #green .ui-li-count span, #gtownpm .ui-li-count span, #rosslyn .ui-li-count span, #blue .ui-li-count span, #potomac .ui-li-count span, #mall .ui-li-count span {
 	display: none;
 }

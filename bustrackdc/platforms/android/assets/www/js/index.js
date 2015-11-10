@@ -561,6 +561,9 @@ buildRouteMenu = function(dataBus, dataRail, dataCirculator) {
 	    	} else if (routeClicked == 'potomac') {
 		    	routeTitle = 'Orange';
 		    	$('#route_map_title').html(routeTitle + ' Route');
+	    	} else if (routeClicked == 'mall') {
+		    	routeTitle = 'Red';
+		    	$('#route_map_title').html(routeTitle + ' Route');
 	    	} else {
 				$('#route_map_title').html('Route ' + routeClicked);
 		}
@@ -585,7 +588,10 @@ if (device.platform != "iOS" && parseInt(device.version) < 3) {
 	}
 */
 	
-	route_list_scroll = new iScroll('route_list_wrap', {useTransition: true});
+	route_list_scroll = new IScroll('#route_list_wrap', {useTransition: true, scrollbars: true, 
+				mouseWheel:false,
+				fadeScrollbars:true,
+				interactiveScrollbars:false });
 	
 	$(window).on("resize", function() {
 		$('#route_list_wrap').height(window.innerHeight - $('#route_list .header').height() - $('#route_list .footer').height() - $('#route_list .filter_wrap').height());
@@ -1272,6 +1278,7 @@ getCirculatorStops = function(latitude,longitude,radius) {
 	    getCirculatorLineStops('blue');
 	    getCirculatorLineStops('rosslyn');
 	    getCirculatorLineStops('potomac');
+	    getCirculatorLineStops('mall');
 
 		
 		/* we don't use this big AJAX-in-AJAX loop anymore because it tends to block the UI...
@@ -1346,6 +1353,7 @@ getCirculatorLineListJSON = $.get('http://webservices.nextbus.com/service/public
     
     var currentTime = new Date();
     var lastWeek = new Date(currentTime.getTime() - 7 * 24 * 60 * 60 * 1000);
+    var reset = new Date('Sun Nov 08 2015 09:26:21 GMT-0800 (PST)');
     var datestamp = new Date(window.localStorage.getItem("circulatorStopsDatestamp"));
     
     // check for cached circulator data. If there is none, get it.
@@ -1353,7 +1361,7 @@ getCirculatorLineListJSON = $.get('http://webservices.nextbus.com/service/public
     	//console.log('first if');
     
     	// if our circulator data is a week old, get new data
-    	if (datestamp < lastWeek ) {
+    	if (datestamp < lastWeek || datestamp < reset ) {
 			//console.log('circulator data is old! get new data!');
 			window.localStorage.setItem("circulatorStopsDatestamp", currentTime);
 			getNewCirculatorData();
@@ -1770,7 +1778,7 @@ if (railStops.length) {
 					}
 					
 					if (errorThrown != 'abort') {
-						$('#infowindow-routes').html('<ul class="topcoat-list"><li class="stopTitle topcoat-list__header" id="' + stopID + '"></li><h2 class="center">An error occured.<br/> Pull to refresh and try again.</h2></ul>');
+						$('#infowindow-routes').html('<ul class="topcoat-list"><li class="stopTitle topcoat-list__header" id="' + stopID + '"></li><h2 class="center">An error occured.<br/> Pull to refresh and try again.</h2><p class="center error">This can happen when WMATA\'s data feed is having technical difficulties, or when WMATA changes stop names.</p><p class="center error">If this error occured when clicking a favorite, remove the favorite and re-add it to fix.</p></ul>');
 						
 						if (!$('#infowindow').hasClass('center')) {
 							if ($(this).attr('href') != $(currentPage).attr('id')) {
@@ -1789,7 +1797,12 @@ if (railStops.length) {
 					    //$('#infowindow-routes').iscrollview("refresh").css('height', $('#infowindow').css('min-height'));
 					    //pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Pull down to refresh...';
 					    $('.pullDownIcon').removeClass('icon-refresh').addClass('icon-angle-down');
-					    myScroll.refresh();
+/*
+					    myScroll.destroy();
+					    myScrollInit();
+*/
+						me.myScroll.refresh();
+					    $('#pullDown').removeClass('loading');
 						/*
 navigator.notification.confirm(
 						    'An error occured fetching the data you requested.',  // message
@@ -2000,7 +2013,12 @@ if (device.platform == "iOS") {
 				    //$('#infowindow-routes').iscrollview("refresh").css('height', $('#infowindow').css('min-height'));
 				    //pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Pull down to refresh...';
 				    $('.pullDownIcon').removeClass('icon-refresh').addClass('icon-angle-down');
-				    myScroll.refresh();
+/*
+				    myScroll.destroy();
+				    myScrollInit();
+*/
+				    me.myScroll.refresh()
+				    $('#pullDown').removeClass('loading');
 				    
 				    	
 			    }}).error(function(jqXHR, textStatus, errorThrown) {
@@ -2019,7 +2037,7 @@ if (device.platform == "iOS") {
 					}
 					
 					if (errorThrown != 'abort') {
-						$('#infowindow-routes').html('<ul class="topcoat-list"><li class="stopTitle topcoat-list__header" id="' + stopID + '"></li><h2 class="center">An error occured.<br/> Pull to refresh and try again.</h2></ul>');
+						$('#infowindow-routes').html('<ul class="topcoat-list"><li class="stopTitle topcoat-list__header" id="' + stopID + '"></li><h2 class="center">An error occured.<br/> Pull to refresh and try again.</h2><p class="center error">This can happen when WMATA\'s data feed is having technical difficulties, or when WMATA changes stop names.</p><p class="center error">If this error occured when clicking a favorite, remove the favorite and re-add it to fix.</p></ul>');
 						
 						if (!$('#infowindow').hasClass('center')) {
 							if ($(this).attr('href') != $(currentPage).attr('id')) {
@@ -2038,7 +2056,12 @@ if (device.platform == "iOS") {
 					    //$('#infowindow-routes').iscrollview("refresh").css('height', $('#infowindow').css('min-height'));
 					    //pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Pull down to refresh...';
 					    $('.pullDownIcon').removeClass('icon-refresh').addClass('icon-angle-down');
-					    myScroll.refresh();
+/*
+					    myScroll.destroy();
+					    myScrollInit();
+*/
+						me.myScroll.refresh()
+					    $('#pullDown').removeClass('loading');
 						/*
 navigator.notification.confirm(
 						    'An error occured fetching the data you requested.',  // message
@@ -2260,6 +2283,8 @@ navigator.notification.confirm(
 						    	routeTitle = 'Light Blue';
 					    	} else if (routeClicked == 'potomac') {
 						    	routeTitle = 'Orange';
+					    	} else if (routeClicked == 'mall') {
+						    	routeTitle = 'Red';
 					    	}
 					    	
 					    	$('#route_map_title').html(routeTitle + ' Route');
@@ -2308,7 +2333,12 @@ navigator.notification.confirm(
 					    
 					    //pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Pull down to refresh...';
 					    $('.pullDownIcon').removeClass('icon-refresh').addClass('icon-angle-down');
-					    myScroll.refresh();
+/*
+					    myScroll.destroy();
+					    myScrollInit();
+*/
+						me.myScroll.refresh()
+					    $('#pullDown').removeClass('loading');
 					    
 					    	
 				    }).error(function(jqXHR, textStatus, errorThrown) {
@@ -2328,7 +2358,7 @@ navigator.notification.confirm(
 						
 						if (errorThrown != 'abort') {
 							
-							$('#infowindow-routes').html('<ul class="topcoat-list"><li class="stopTitle topcoat-list__header" id="' + stopID + '"></li><h2 class="center">An error occured.<br/> Pull to refresh and try again.</h2></ul>');
+							$('#infowindow-routes').html('<ul class="topcoat-list"><li class="stopTitle topcoat-list__header" id="' + stopID + '"></li><h2 class="center">An error occured.<br/> Pull to refresh and try again.</h2><p class="center error">This can happen when WMATA\'s data feed is having technical difficulties, or when WMATA changes stop names.</p><p class="center error">If this error occured when clicking a favorite, remove the favorite and re-add it to fix.</p></ul>');
 							
 							if (!$('#infowindow').hasClass('center')) {
 								if ($(this).attr('href') != $(currentPage).attr('id')) {
@@ -2347,7 +2377,12 @@ navigator.notification.confirm(
 						    //$('#infowindow-routes').iscrollview("refresh").css('height', $('#infowindow').css('min-height'));
 						    //pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Pull down to refresh...';
 						    $('.pullDownIcon').removeClass('icon-refresh').addClass('icon-angle-down');
-						    myScroll.refresh();
+/*
+						    myScroll.destroy();
+						    myScrollInit();
+*/
+							me.myScroll.refresh();
+						    $('#pullDown').removeClass('loading');
 						    
 							/*
 	navigator.notification.confirm(
@@ -2996,7 +3031,12 @@ if (device.platform == "iOS") {
 					    
 					    //pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Pull down to refresh...';
 					    $('.pullDownIcon').removeClass('icon-refresh').addClass('icon-angle-down');
-						myScroll.refresh();
+/*
+						myScroll.destroy();
+						myScrollInit();
+*/
+						me.myScroll.refresh();
+						$('#pullDown').removeClass('loading');
 						
 					}}).error(function(jqXHR, textStatus, errorThrown) {
 						//$.mobile.loading( 'hide' );
@@ -3447,7 +3487,7 @@ function onCurrentLocationError(error) {
 var prediction_service = new google.maps.places.AutocompleteService();
 
 function place_service_callback(place) {
-	console.log(place);
+	//console.log(place);
 }
 	
 function start_autocomplete_callback(predictions, status) {
@@ -3649,7 +3689,8 @@ function parse_directions(data) {
 			} else if (step.travel_mode == 'TRANSIT') {
 				
 				if (step.transit.line.vehicle.type == 'BUS' || step.transit.line.vehicle.type == 'INTERCITY_BUS' || step.transit.line.vehicle.type == 'TROLLEYBUS') {
-				
+					//console.log(step.transit.line.short_name);
+					//console.log(step.transit.line);
 					//check blue, potomac, and georgetown PM lines for correct strings when busses are running!
 					if (step.transit.line.name == 'DC Circulator: Georgetown-Union Station') {
 						badge = '<span class="ui-li-count icon-refresh"><span>georgetown</span></span>';
@@ -3670,6 +3711,10 @@ function parse_directions(data) {
 					} else if (step.transit.line.short_name == 'DCPOTSKY') {
 						badge = '<span class="ui-li-count icon-refresh"><span>potomac</span></span>';
 						subway_id = 'potomac';
+						circulator_flag = true;
+					} else if (step.transit.line.short_name == 'DCMALL') { // this one isn't on the directions API yet
+						badge = '<span class="ui-li-count icon-refresh"><span>mall</span></span>';
+						subway_id = 'mall';
 						circulator_flag = true;
 					} else {
 						badge = '<span class="ui-li-count">' + step.transit.line.short_name + '</span>';
@@ -3964,10 +4009,13 @@ function zoomIn() {
 
 
 function onDeviceReady() {
+	
 	//console.log('ready');
 	// put this here for android, does that work on iOS?
 	geo = window.geo || {};
 	geo.onMapMove = {};
+	
+	
 
 //$(document).on('touchmove', function (ev) {ev.preventDefault();});
 
@@ -3990,6 +4038,7 @@ $('input').on('blur', function(){
 	});
 
 	gmaps_directions_initialize();
+	
 	cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
 	
 	$('form').submit(function() {
@@ -4000,7 +4049,10 @@ $('input').on('blur', function(){
 				$('#directions_start_wrap .filter, #directions_end_wrap .filter').blur();
 				
 				if (typeof(directions_routes_scroll) == 'undefined') {
-					directions_routes_scroll = new iScroll('directions_routes', {useTransition: true});
+					directions_routes_scroll = new IScroll('#directions_routes', {useTransition: true, scrollbars: true, 
+				mouseWheel:false,
+				fadeScrollbars:true,
+				interactiveScrollbars:false });
 				}
 				
 				get_directions($('#directions_start_wrap .filter').val(), $('#directions_end_wrap .filter').val());
@@ -4117,12 +4169,224 @@ $('input').on('blur', function(){
 	
 	
 	// pull to refresh from http://cubiq.org/dropbox/iscroll4/examples/pull-to-refresh/
+
+/*
 	pullDownEl = document.getElementById('pullDown');
-	pullDownOffset = $(pullDownEl).outerHeight();	
+	pullDownOffset = $(pullDownEl).outerHeight();
+	var scroll_in_progress = false;
+*/
 	
-	myScroll = new iScroll('infowindow-content', {
+	function pullDownAction(theScroller) {	
+		$('#pullDown').removeClass('scrolledUp');		
+				refreshStopID = $('.stopTitle').attr('id');
+				//console.log(refreshStopID);
+				annotationTap(refreshStopID); 
+			}
+
+	
+	//myScrollInit = function() {
+		var IScrollPullUpDown = function (wrapperName,iScrollConfig,pullDownActionHandler) {
+				var iScrollConfig,pullDownActionHandler,pullDownEl,pullDownOffset,scrollStartPos;
+				var pullThreshold=35;
+				me=this;
+			
+				function showPullDownElNow(className) {
+					// Shows pullDownEl with a given className
+					pullDownEl.style.transitionDuration='';
+					pullDownEl.style.marginTop='';
+					pullDownEl.className = 'pullDown '+className;
+				}
+				var hidePullDownEl = function (time,refresh) {
+					// Hides pullDownEl
+					pullDownEl.style.transitionDuration=(time>0?time+'ms':'');
+					pullDownEl.style.marginTop='';
+					pullDownEl.className = 'pullDown scrolledUp';
+			
+					// If refresh==true, refresh again after time+10 ms to update iScroll's "scroller.offsetHeight" after the pull-down-bar is really hidden...
+					// Don't refresh when the user is still dragging, as this will cause the content to jump (i.e. don't refresh while dragging)
+					if (refresh) setTimeout(function(){me.myScroll.refresh();},time+10);
+				}
+			
+				function init() {
+					var wrapperObj = document.querySelector('#'+wrapperName);
+					var scrollerObj = wrapperObj.children[0];
+			
+					if (pullDownActionHandler) {
+						// If a pullDownActionHandler-function is supplied, add a pull-down bar at the top and enable pull-down-to-refresh.
+						// (if pullDownActionHandler==null this iScroll will have no pull-down-functionality)
+						pullDownEl=document.createElement('div');
+						pullDownEl.className='pullDown scrolledUp';
+						pullDownEl.id='pullDown';
+						pullDownEl.innerHTML='<span class="pullDownIcon icon-angle-down center full"></span>';
+						scrollerObj.insertBefore(pullDownEl, scrollerObj.firstChild);
+						//pullDownEl = document.querySelector('#'+wrapperName + '.pullDown')
+						pullDownOffset = pullDownEl.offsetHeight;
+					}
+			
+					me.myScroll = new IScroll(wrapperObj,iScrollConfig);
+			
+					me.myScroll.on('refresh',function() {
+						if ((pullDownEl)&&(pullDownEl.className.match('loading'))) {
+							//pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Pull down to refresh...';
+							if (this.y>=0) {
+								// The pull-down-bar is fully visible:
+								// Hide it with a simple 250ms animation
+								hidePullDownEl(250,true);
+			
+							} else if (this.y>-pullDownOffset) {
+								// The pull-down-bar is PARTLY visible:
+								// Set up a shorter animation to hide it
+			
+								// Firt calculate a new margin-top for pullDownEl that matches the current scroll position
+								pullDownEl.style.marginTop=this.y+'px';
+			
+								// CSS-trick to force webkit to render/update any CSS-changes immediately: Access the offsetHeight property...
+								pullDownEl.offsetHeight;
+			
+								// Calculate the animation time (shorter, dependant on the new distance to animate) from here to completely 'scrolledUp' (hidden)
+								// Needs to be done before adjusting the scroll-positon (if we want to read this.y)
+								var animTime=(250*(pullDownOffset+this.y)/pullDownOffset);
+			
+								// Set scroll positon to top
+								// (this is the same as adjusting the scroll postition to match the exact movement pullDownEl made due to the change of margin-top above, so the content will not "jump")
+								this.scrollTo(0,0,0);
+			
+								// Hide pullDownEl with the new (shorter) animation (and reset the inline style again).
+								setTimeout(function() {	// Do this in a new thread to avoid glitches in iOS webkit (will make sure the immediate margin-top change above is rendered)...
+									hidePullDownEl(animTime,true);
+								},0);
+			
+							} else {
+								// The pull-down-bar is completely off screen:
+								// Hide it immediately
+								hidePullDownEl(0,true);
+								// And adjust the scroll postition to match the exact movement pullDownEl made due to change of margin-top above, so the content will not "jump"
+								this.scrollBy(0,pullDownOffset,0);
+							}
+						}
+					});
+			
+					me.myScroll.on('scrollStart',function() {
+						scrollStartPos=this.y; // Store the scroll starting point to be able to track movement in 'scroll' below
+					});
+						
+					me.myScroll.on('scroll',function() {
+						if (pullDownEl) {
+							if((scrollStartPos==0)&&(this.y==0)) {
+								// 'scroll' called, but scroller is not moving!
+								// Probably because the content inside wrapper is small and fits the screen, so drag/scroll is disabled by iScroll
+								
+								// Fix this by a hack: Setting "myScroll.hasVerticalScroll=true" tricks iScroll to believe
+								// that there is a vertical scrollbar, and iScroll will enable dragging/scrolling again...
+								this.hasVerticalScroll=true;
+								
+								// Set scrollStartPos to -1000 to be able to detect this state later...
+								scrollStartPos=-1000;
+							} else if ((scrollStartPos==-1000) && 
+								         (((!pullDownEl.className.match('flip'))&&(this.y<0)) ||
+												  ((!pullDownEl)&&(this.y>0)))) {
+								// Scroller was not moving at first (and the trick above was applied), but now it's moving in the wrong direction.
+								// I.e. the user is either scrolling up while having no "pull-up-bar",
+								// or scrolling down while having no "pull-down-bar" => Disable the trick again and reset values...
+								this.hasVerticalScroll=false;
+								scrollStartPos=0;
+								this.scrollBy(0,-this.y, 0);	// Adjust scrolling position to undo this "invalid" movement
+							}
+						}
+				
+						if (pullDownEl) {
+							if (this.y > pullDownOffset+pullThreshold && !pullDownEl.className.match('flip')) {
+								showPullDownElNow('flip');
+								this.scrollBy(0,-pullDownOffset, 0);	// Adjust scrolling position to match the change in pullDownEl's margin-top
+								//pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Release to refresh...';
+							} else if (this.y < 0 && pullDownEl.className.match('flip')) { // User changes his mind...
+								hidePullDownEl(0,false);
+								this.scrollBy(0,pullDownOffset, 0);	// Adjust scrolling position to match the change in pullDownEl's margin-top
+								//pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Pull down to refresh...';
+							}
+						}
+					});			
+			
+					me.myScroll.on('scrollEnd',function() {
+						if ((pullDownEl)&&(pullDownEl.className.match('flip'))) {
+							showPullDownElNow('loading');
+							$('.pullDownIcon').removeClass('icon-angle-down').addClass('icon-refresh');
+							//pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Loading...';
+							pullDownActionHandler(this);	// Execute custom function (ajax call?)
+						}
+						if (scrollStartPos=-1000) {
+							// If scrollStartPos=-1000: Recalculate the true value of "hasVerticalScroll" as it may have been
+							// altered in 'scroll' to enable pull-to-refresh/load when the content fits the screen...
+							this.hasVerticalScroll = this.options.scrollY && this.maxScrollY < 0;
+						}
+					});
+			
+				}
+				window.addEventListener('load', function() {init()}, false);
+			};
+			
+			myScroll = new IScrollPullUpDown('infowindow-content',{
+				probeType:2,
+				mouseWheel:false,
+				scrollbars:true,
+				fadeScrollbars:true,
+				interactiveScrollbars:false
+			},pullDownAction);
+
+/*
+	myScroll.on('scrollStart', function () {
+		scroll_in_progress = true;
+	});
+	myScroll.on('scroll', function () {
+		console.log('scroll');
+		
+		scroll_in_progress = true;
+		
+		//if ($('#wrapper ul > li').length >= items_per_page) {
+			if (this.y >= 5 && pullDownEl && !pullDownEl.className.match('flip')) {
+				pullDownEl.className = 'pullDown flip';
+				//pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Release to refresh';
+				this.minScrollY = 0;
+			} else if (this.y <= 5 && pullDownEl && pullDownEl.className.match('flip')) {
+				pullDownEl.className = 'pullDown';
+				//pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Pull down to refresh';
+				this.minScrollY = pullDownOffset;
+			}
+			
+			console.log(this.y);
+			pullActionDetect.check(0);
+			
+		//}
+	});
+	myScroll.on('scrollEnd', function () {
+		console.log('scroll ended');
+		setTimeout(function() {
+			scroll_in_progress = false;
+		}, 100);
+		//if ($('#wrapper ul > li').length >= items_per_page) {
+			if (pullDownEl && pullDownEl.className.match('flip')) {
+				pullDownEl.className = 'pullDown loading';
+				$('.pullDownIcon').removeClass('icon-angle-down').addClass('icon-refresh');
+				//pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Loading...';
+				pullDownAction();
+				
+			}
+			// We let the momentum scroll finish, and if reached the end - loading the next page
+			pullActionDetect.check(0);
+		//}
+	});	
+*/
+	
+	//}
+	
+	//myScrollInit();
+
+	
+/*
+	myScroll = new IScroll('#infowindow-content', {
 		useTransition: true,
-		topOffset: pullDownOffset,
+		scrollbars: true,
+		startY: pullDownOffset,
 		onRefresh: function () {
 				pullDownEl.className = '';
 				//pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Pull down to refresh...';
@@ -4150,6 +4414,7 @@ $('input').on('blur', function(){
 			}
 		}
 	});
+*/
 
 	analyticsSuccess = function() {
 		console.log('success');
@@ -4286,6 +4551,7 @@ if (device.platform != "iOS") {
 //console.log(noready);
 
 jQuery(document).ready(function($) {
+
 	document.addEventListener("deviceready", onDeviceReady);
 	window.addEventListener('error', function(e) {
 		analytics.trackEvent('JavaScript Error', e.message, e.filename + ':  ' + e.lineno);
@@ -4361,7 +4627,10 @@ $(document).on('pageinit', '#infowindow', function() {
 
 $(document).on('pageinit', '#favorite_menu_page', function() {
 	
-	favorites_list_scroll = new iScroll('favorites_menu_wrap', {useTransition: true});
+	favorites_list_scroll = new IScroll('#favorites_menu_wrap', {useTransition: true, scrollbars: true, 
+				mouseWheel:false,
+				fadeScrollbars:true,
+				interactiveScrollbars:false });
 	$('#favorites_menu_wrap').height(window.innerHeight - $('#favorite_menu_page .header').height() - $('#favorite_menu_page .footer').height() - $('#favorites_filter_wrap').height());
 	favorites_list_scroll.refresh();
 	
@@ -4451,31 +4720,47 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 					html: ""
 				});
 	*/
-		
-
-				// store a variable on this stop's name in case we need to retrieve it later...
-				notInRangeStopID = $(this).data('stopid');
-				notInRangeStopName = $(this).data('stopname');
-				notInRangeStopLat = $(this).data('lat');
-				notInRangeStopLon = $(this).data('lon');
-				
-				//console.log(notInRangeStopID + ' ' + notInRangeStopName  + ' ' + notInRangeStopLat  + ' ' + notInRangeStopLon);
-		
-				// if we click a favorite, get the stop and populate the stops array really quick, so we can view all the data about the predictions
-				favoriteBtnClickedFlag = true;
-				if ((/Metro Bus Stop #/).test(notInRangeStopID)) {
-					getStops(notInRangeStopLat, notInRangeStopLon, '50');
-				} else if ((/Metro Rail Station #/).test(notInRangeStopID)) {
-					getRailStops(notInRangeStopLat, notInRangeStopLon, '500');
-				} else if ((/Circulator Stop #/).test(notInRangeStopID)) {
-					//console.log('marker circ stops from favoritebuton click');
-					markerCirculatorStops(notInRangeStopLat,notInRangeStopLon,.01,.01);
-				} else if (isNaN(notInRangeStopID)) {
-					notInRangeStopID = 'Metro Rail Station #' + notInRangeStopID;
-					getRailStops(notInRangeStopLat, notInRangeStopLon, '500');
+				if (
+					typeof($(this).data('lat')) == "undefined" 
+					|| $(this).data('lat') == '' 
+					|| typeof($(this).data('lon')) == "undefined" 
+					|| $(this).data('lon') == '' 
+					|| typeof($(this).data('stopid')) == "undefined" 
+					|| $(this).data('stopid') == '' 
+					|| typeof($(this).data('stopname')) == "undefined" 
+					|| $(this).data('stopname') == ''
+				) {
+					navigator.notification.alert(
+					    'This favorite is broken. (This sometimes happens when WMATA changes stop names.) To get it back, remove it and re-add it.',  // message
+					    undefined,         // callback
+					    "Woops! This favorite is broken."            // title
+				    ); 
 				} else {
-					notInRangeStopID = 'Metro Bus Stop #' + notInRangeStopID;
-					getStops(notInRangeStopLat, notInRangeStopLon, '50');
+
+					// store a variable on this stop's name in case we need to retrieve it later...
+					notInRangeStopID = $(this).data('stopid');
+					notInRangeStopName = $(this).data('stopname');
+					notInRangeStopLat = $(this).data('lat');
+					notInRangeStopLon = $(this).data('lon');
+					
+					//console.log(notInRangeStopID + ' ' + notInRangeStopName  + ' ' + notInRangeStopLat  + ' ' + notInRangeStopLon);
+			
+					// if we click a favorite, get the stop and populate the stops array really quick, so we can view all the data about the predictions
+					favoriteBtnClickedFlag = true;
+					if ((/Metro Bus Stop #/).test(notInRangeStopID)) {
+						getStops(notInRangeStopLat, notInRangeStopLon, '50');
+					} else if ((/Metro Rail Station #/).test(notInRangeStopID)) {
+						getRailStops(notInRangeStopLat, notInRangeStopLon, '500');
+					} else if ((/Circulator Stop #/).test(notInRangeStopID)) {
+						//console.log('marker circ stops from favoritebuton click');
+						markerCirculatorStops(notInRangeStopLat,notInRangeStopLon,.01,.01);
+					} else if (isNaN(notInRangeStopID)) {
+						notInRangeStopID = 'Metro Rail Station #' + notInRangeStopID;
+						getRailStops(notInRangeStopLat, notInRangeStopLon, '500');
+					} else {
+						notInRangeStopID = 'Metro Bus Stop #' + notInRangeStopID;
+						getStops(notInRangeStopLat, notInRangeStopLon, '50');
+					}
 				}
 	
 			});
@@ -4504,16 +4789,22 @@ $(document).on('pageinit', '#favorite_menu_page', function() {
 			})
 			.disableSelection()
 			.bind('sort', function(event, ui) {
-				favorites_list_scroll.disable();
+				//console.log(favorites_list_scroll.y);
+				$('.ui-sortable-helper').offset({ top: event.pageY - favorites_list_scroll.y });
+				favorites_list_scroll.destroy();
 				//console.log(event.pageX);
 				//$('.ui-sortable-helper').offset({ top: parseFloat($('.ui-sortable-helper').css('top')) + favorites_list_scroll.y + $('.ui-sortable-helper').height() });
 				
-				$('.ui-sortable-helper').offset({ top: event.pageY - favorites_list_scroll.y });
+				
 				
 				//favorites_list_scroll.destroy();
 			})
 			.bind( "sortstop", function(event, ui) {
-				favorites_list_scroll.enable();
+				favorites_list_scroll = new IScroll('#favorites_menu_wrap', {useTransition: true, scrollbars: true, 
+				mouseWheel:false,
+				fadeScrollbars:true,
+				interactiveScrollbars:false
+				});
 				/*
 favorites_list_scroll = new iScroll('favorites_menu_content', {useTransition: true});
 	
@@ -4751,32 +5042,50 @@ $.mobile.loading( 'show', {
 			});
 */
 	
-
-			// store a variable on this stop's name in case we need to retrieve it later...
-			notInRangeStopID = $(this).data('stopid'); // this will need to be edited to figure out if the stop is rail...
-			notInRangeStopName = $(this).data('stopname');
-			notInRangeStopLat = $(this).data('lat');
-			notInRangeStopLon = $(this).data('lon');
-	
-			// if we click a favorite, get the stop and populate the stops array really quick, so we can view all the data about the predictions
-			favoriteBtnClickedFlag = true;
-			if ((/Metro Bus Stop #/).test(notInRangeStopID)) {
-				//console.log('getbus');
-				getStops(notInRangeStopLat, notInRangeStopLon, '50');
-			} else if ((/Metro Rail Station #/).test(notInRangeStopID)) {
-				//console.log('getrail');
-				getRailStops(notInRangeStopLat, notInRangeStopLon, '500');
-			} else if ((/Circulator Stop #/).test(notInRangeStopID)) {
-				//console.log('getcirc');
-				//console.log('marker circ stops from favorite button');
-				markerCirculatorStops(notInRangeStopLat,notInRangeStopLon,.01,.01);
-			} else if (isNaN(notInRangeStopID)) {
-				notInRangeStopID = 'Metro Rail Station #' + notInRangeStopID;
-				getRailStops(notInRangeStopLat, notInRangeStopLon, '500');
+			if (
+				typeof($(this).data('lat')) == "undefined" 
+				|| $(this).data('lat') == '' 
+				|| typeof($(this).data('lon')) == "undefined" 
+				|| $(this).data('lon') == '' 
+				|| typeof($(this).data('stopid')) == "undefined" 
+				|| $(this).data('stopid') == '' 
+				|| typeof($(this).data('stopname')) == "undefined" 
+				|| $(this).data('stopname') == ''
+			) {
+				navigator.notification.alert(
+				    'This favorite is broken. (This sometimes happens when WMATA changes stop names.) To get it back, remove it and re-add it.',  // message
+				    undefined,         // callback
+				    "Woops! This favorite is broken."            // title
+			    ); 
 			} else {
-				notInRangeStopID = 'Metro Bus Stop #' + notInRangeStopID;
-				getStops(notInRangeStopLat, notInRangeStopLon, '50');
+				// store a variable on this stop's name in case we need to retrieve it later...
+				notInRangeStopID = $(this).data('stopid'); // this will need to be edited to figure out if the stop is rail...
+				notInRangeStopName = $(this).data('stopname');
+				notInRangeStopLat = $(this).data('lat');
+				notInRangeStopLon = $(this).data('lon');
+		
+				// if we click a favorite, get the stop and populate the stops array really quick, so we can view all the data about the predictions
+				favoriteBtnClickedFlag = true;
+				if ((/Metro Bus Stop #/).test(notInRangeStopID)) {
+					//console.log('getbus');
+					getStops(notInRangeStopLat, notInRangeStopLon, '50');
+				} else if ((/Metro Rail Station #/).test(notInRangeStopID)) {
+					//console.log('getrail');
+					getRailStops(notInRangeStopLat, notInRangeStopLon, '500');
+				} else if ((/Circulator Stop #/).test(notInRangeStopID)) {
+					//console.log('getcirc');
+					//console.log('marker circ stops from favorite button');
+					markerCirculatorStops(notInRangeStopLat,notInRangeStopLon,.01,.01);
+				} else if (isNaN(notInRangeStopID)) {
+					notInRangeStopID = 'Metro Rail Station #' + notInRangeStopID;
+					getRailStops(notInRangeStopLat, notInRangeStopLon, '500');
+				} else {
+					notInRangeStopID = 'Metro Bus Stop #' + notInRangeStopID;
+					getStops(notInRangeStopLat, notInRangeStopLon, '50');
+				}
 			}
+
+			
 			
 
 		});
@@ -4937,7 +5246,7 @@ $(document).on('pagebeforeshow', '#route_map', function() {
 	
 	if (routeClicked == 'RD' || routeClicked == 'BL' || routeClicked == 'OR' || routeClicked == 'YL' || routeClicked == 'GR' || routeClicked == 'SV') {
 		getRailStopsForRoute(routeClicked);
-	} else if (routeClicked == 'yellow' || routeClicked == 'gtownpm' || routeClicked == 'green' || routeClicked == 'blue' || routeClicked == 'rosslyn' || routeClicked == 'potomac') {
+	} else if (routeClicked == 'yellow' || routeClicked == 'gtownpm' || routeClicked == 'green' || routeClicked == 'blue' || routeClicked == 'rosslyn' || routeClicked == 'potomac' || routeClicked == 'mall')  {
 		getCirculatorStopsForRoute(routeClicked);
 	} else {
 		getStopsForRoute(routeClicked);
@@ -5014,7 +5323,10 @@ $(document).on('pagebeforeshow', '#directions', function() {
 });
 
 $(document).on('pageinit', '#directions', function() {	
-	directions_scroll = new iScroll('directions_autocomplete', {useTransition: true});
+	directions_scroll = new IScroll('#directions_autocomplete', {useTransition: true, scrollbars: true, 
+				mouseWheel:false,
+				fadeScrollbars:true,
+				interactiveScrollbars:false });
 	
 	$('#directions .header .center.half').click(function() {
 	    directions_routes_scroll.scrollTo(0,0,100);
