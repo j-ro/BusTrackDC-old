@@ -1,2 +1,2 @@
 dependencies: \
-  /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/ios/BusTrackDC/main.m
+  /Users/levya/Repositories/BusTrackDC-AL/bustrackdc/platforms/ios/BusTrackDC/main.m

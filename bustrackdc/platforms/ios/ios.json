@@ -1,0 +1,175 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {
+            "config.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<feature name=\"UniversalAnalytics\"><param name=\"ios-package\" value=\"UniversalAnalyticsPlugin\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"AdmobPlugin\"><param name=\"ios-package\" value=\"AdmobAdPlugin\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Keyboard\"><param name=\"ios-package\" onload=\"true\" value=\"IonicKeyboard\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"SplashScreen\"><param name=\"ios-package\" value=\"CDVSplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Device\"><param name=\"ios-package\" value=\"CDVDevice\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Notification\"><param name=\"ios-package\" value=\"CDVNotification\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Geolocation\"><param name=\"ios-package\" value=\"CDVLocation\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"MapKit\"><param name=\"ios-package\" value=\"MapKitView\" /></feature>",
+                            "count": 1
+                        }
+                    ]
+                }
+            },
+            "*-Info.plist": {
+                "parents": {
+                    "NSLocationWhenInUseUsageDescription": [
+                        {
+                            "xml": "<string />",
+                            "count": 1
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "installed_plugins": {
+        "com.danielcwilson.plugins.googleanalytics": {
+            "PACKAGE_NAME": "org.JasonRosenbaum.WheresTheBusDC"
+        },
+        "com.google.google-play-services": {
+            "PACKAGE_NAME": "org.JasonRosenbaum.WheresTheBusDC"
+        },
+        "com.ionic.keyboard": {
+            "PACKAGE_NAME": "org.JasonRosenbaum.WheresTheBusDC"
+        },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "org.JasonRosenbaum.WheresTheBusDC"
+        },
+        "org.apache.cordova.device": {
+            "PACKAGE_NAME": "org.JasonRosenbaum.WheresTheBusDC"
+        },
+        "org.apache.cordova.dialogs": {
+            "PACKAGE_NAME": "org.JasonRosenbaum.WheresTheBusDC"
+        },
+        "org.apache.cordova.geolocation": {
+            "PACKAGE_NAME": "org.JasonRosenbaum.WheresTheBusDC"
+        },
+        "com.phonegap.plugins.mapkit": {
+            "PACKAGE_NAME": "org.JasonRosenbaum.WheresTheBusDC"
+        }
+    },
+    "dependent_plugins": {},
+    "modules": [
+        {
+            "file": "plugins/com.danielcwilson.plugins.googleanalytics/www/analytics.js",
+            "id": "com.danielcwilson.plugins.googleanalytics.UniversalAnalytics",
+            "pluginId": "com.danielcwilson.plugins.googleanalytics",
+            "clobbers": [
+                "analytics"
+            ]
+        },
+        {
+            "file": "plugins/com.google.google-play-services/www/AdmobPlugin.js",
+            "id": "com.google.google-play-services.AdmobAd",
+            "pluginId": "com.google.google-play-services",
+            "clobbers": [
+                "window.admobAd"
+            ]
+        },
+        {
+            "file": "plugins/com.ionic.keyboard/www/keyboard.js",
+            "id": "com.ionic.keyboard.keyboard",
+            "pluginId": "com.ionic.keyboard",
+            "clobbers": [
+                "cordova.plugins.Keyboard"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
+            "id": "cordova-plugin-splashscreen.SplashScreen",
+            "pluginId": "cordova-plugin-splashscreen",
+            "clobbers": [
+                "navigator.splashscreen"
+            ]
+        },
+        {
+            "file": "plugins/org.apache.cordova.device/www/device.js",
+            "id": "org.apache.cordova.device.device",
+            "pluginId": "org.apache.cordova.device",
+            "clobbers": [
+                "device"
+            ]
+        },
+        {
+            "file": "plugins/org.apache.cordova.dialogs/www/notification.js",
+            "id": "org.apache.cordova.dialogs.notification",
+            "pluginId": "org.apache.cordova.dialogs",
+            "merges": [
+                "navigator.notification"
+            ]
+        },
+        {
+            "file": "plugins/org.apache.cordova.geolocation/www/Coordinates.js",
+            "id": "org.apache.cordova.geolocation.Coordinates",
+            "pluginId": "org.apache.cordova.geolocation",
+            "clobbers": [
+                "Coordinates"
+            ]
+        },
+        {
+            "file": "plugins/org.apache.cordova.geolocation/www/PositionError.js",
+            "id": "org.apache.cordova.geolocation.PositionError",
+            "pluginId": "org.apache.cordova.geolocation",
+            "clobbers": [
+                "PositionError"
+            ]
+        },
+        {
+            "file": "plugins/org.apache.cordova.geolocation/www/Position.js",
+            "id": "org.apache.cordova.geolocation.Position",
+            "pluginId": "org.apache.cordova.geolocation",
+            "clobbers": [
+                "Position"
+            ]
+        },
+        {
+            "file": "plugins/org.apache.cordova.geolocation/www/geolocation.js",
+            "id": "org.apache.cordova.geolocation.geolocation",
+            "pluginId": "org.apache.cordova.geolocation",
+            "clobbers": [
+                "navigator.geolocation"
+            ]
+        },
+        {
+            "file": "plugins/com.phonegap.plugins.mapkit/www/MapKit.js",
+            "id": "com.phonegap.plugins.mapkit.mapkit",
+            "pluginId": "com.phonegap.plugins.mapkit",
+            "clobbers": [
+                "plugin.mapKit"
+            ]
+        }
+    ]
+}

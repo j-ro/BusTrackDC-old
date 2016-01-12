@@ -117,10 +117,6 @@
         "org.apache.cordova.device": {
             "PACKAGE_NAME": "com.jasonrosenbaum.bustrackdc"
         },
-        "com.phonegap.plugins.mapkit": {
-            "API_KEY": "AIzaSyDuCPNQz4hvMThLzR--to8qQhg4SNAAtTs",
-            "PACKAGE_NAME": "com.jasonrosenbaum.bustrackdc"
-        },
         "com.google.google-play-services": {
             "PACKAGE_NAME": "com.jasonrosenbaum.bustrackdc"
         },
@@ -136,8 +132,12 @@
         "com.ionic.keyboard": {
             "PACKAGE_NAME": "org.JasonRosenbaum.WheresTheBusDC"
         },
-        "org.apache.cordova.splashscreen": {
-            "PACKAGE_NAME": "org.JasonRosenbaum.WheresTheBusDC"
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "com.JasonRosenbaum.BusTrackDC"
+        },
+        "com.phonegap.plugins.mapkit": {
+            "API_KEY": "AIzaSyAV1yjQx8dRkJq6qwrRYf_IXnCruDGZnHY",
+            "PACKAGE_NAME": "com.JasonRosenbaum.BusTrackDC"
         }
     },
     "dependent_plugins": {}
