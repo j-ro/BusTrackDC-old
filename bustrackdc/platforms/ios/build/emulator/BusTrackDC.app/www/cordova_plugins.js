@@ -3,6 +3,7 @@ module.exports = [
     {
         "file": "plugins/com.danielcwilson.plugins.googleanalytics/www/analytics.js",
         "id": "com.danielcwilson.plugins.googleanalytics.UniversalAnalytics",
+        "pluginId": "com.danielcwilson.plugins.googleanalytics",
         "clobbers": [
             "analytics"
         ]
@@ -10,6 +11,7 @@ module.exports = [
     {
         "file": "plugins/com.google.google-play-services/www/AdmobPlugin.js",
         "id": "com.google.google-play-services.AdmobAd",
+        "pluginId": "com.google.google-play-services",
         "clobbers": [
             "window.admobAd"
         ]
@@ -17,20 +19,23 @@ module.exports = [
     {
         "file": "plugins/com.ionic.keyboard/www/keyboard.js",
         "id": "com.ionic.keyboard.keyboard",
+        "pluginId": "com.ionic.keyboard",
         "clobbers": [
             "cordova.plugins.Keyboard"
         ]
     },
     {
-        "file": "plugins/com.phonegap.plugins.mapkit/www/MapKit.js",
-        "id": "com.phonegap.plugins.mapkit.mapkit",
+        "file": "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
+        "id": "cordova-plugin-splashscreen.SplashScreen",
+        "pluginId": "cordova-plugin-splashscreen",
         "clobbers": [
-            "plugin.mapKit"
+            "navigator.splashscreen"
         ]
     },
     {
         "file": "plugins/org.apache.cordova.device/www/device.js",
         "id": "org.apache.cordova.device.device",
+        "pluginId": "org.apache.cordova.device",
         "clobbers": [
             "device"
         ]
@@ -38,6 +43,7 @@ module.exports = [
     {
         "file": "plugins/org.apache.cordova.dialogs/www/notification.js",
         "id": "org.apache.cordova.dialogs.notification",
+        "pluginId": "org.apache.cordova.dialogs",
         "merges": [
             "navigator.notification"
         ]
@@ -45,6 +51,7 @@ module.exports = [
     {
         "file": "plugins/org.apache.cordova.geolocation/www/Coordinates.js",
         "id": "org.apache.cordova.geolocation.Coordinates",
+        "pluginId": "org.apache.cordova.geolocation",
         "clobbers": [
             "Coordinates"
         ]
@@ -52,6 +59,7 @@ module.exports = [
     {
         "file": "plugins/org.apache.cordova.geolocation/www/PositionError.js",
         "id": "org.apache.cordova.geolocation.PositionError",
+        "pluginId": "org.apache.cordova.geolocation",
         "clobbers": [
             "PositionError"
         ]
@@ -59,6 +67,7 @@ module.exports = [
     {
         "file": "plugins/org.apache.cordova.geolocation/www/Position.js",
         "id": "org.apache.cordova.geolocation.Position",
+        "pluginId": "org.apache.cordova.geolocation",
         "clobbers": [
             "Position"
         ]
@@ -66,29 +75,22 @@ module.exports = [
     {
         "file": "plugins/org.apache.cordova.geolocation/www/geolocation.js",
         "id": "org.apache.cordova.geolocation.geolocation",
+        "pluginId": "org.apache.cordova.geolocation",
         "clobbers": [
             "navigator.geolocation"
         ]
     },
     {
-        "file": "plugins/org.apache.cordova.splashscreen/www/splashscreen.js",
-        "id": "org.apache.cordova.splashscreen.SplashScreen",
+        "file": "plugins/com.phonegap.plugins.mapkit/www/MapKit.js",
+        "id": "com.phonegap.plugins.mapkit.mapkit",
+        "pluginId": "com.phonegap.plugins.mapkit",
         "clobbers": [
-            "navigator.splashscreen"
+            "plugin.mapKit"
         ]
     }
 ];
 module.exports.metadata = 
 // TOP OF METADATA
-{
-    "com.danielcwilson.plugins.googleanalytics": "0.6.0",
-    "com.google.google-play-services": "1.0.0",
-    "com.ionic.keyboard": "1.0.3",
-    "com.phonegap.plugins.mapkit": "0.9.3",
-    "org.apache.cordova.device": "0.2.12",
-    "org.apache.cordova.dialogs": "0.2.10",
-    "org.apache.cordova.geolocation": "0.3.10",
-    "org.apache.cordova.splashscreen": "0.3.4"
-}
+{}
 // BOTTOM OF METADATA
 });

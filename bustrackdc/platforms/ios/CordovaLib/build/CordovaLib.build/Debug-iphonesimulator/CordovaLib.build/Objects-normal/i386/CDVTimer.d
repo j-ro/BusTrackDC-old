@@ -1,3 +1,3 @@
 dependencies: \
-  /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/ios/CordovaLib/Classes/CDVTimer.m \
-  /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/ios/CordovaLib/Classes/CDVTimer.h
+  /Users/levya/Repositories/BusTrackDC-AL/bustrackdc/platforms/ios/CordovaLib/Classes/CDVTimer.m \
+  /Users/levya/Repositories/BusTrackDC-AL/bustrackdc/platforms/ios/CordovaLib/Classes/CDVTimer.h

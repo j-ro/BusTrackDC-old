@@ -1,3 +1,3 @@
 dependencies: \
-  /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/ios/BusTrackDC/Plugins/com.ionic.keyboard/UIWebViewExtension.m \
-  /Users/jasonrosenbaum/xcode/BusTrackDC/bustrackdc/platforms/ios/BusTrackDC/Plugins/com.ionic.keyboard/UIWebViewExtension.h
+  /Users/levya/Repositories/BusTrackDC-AL/bustrackdc/platforms/ios/BusTrackDC/Plugins/com.ionic.keyboard/UIWebViewExtension.m \
+  /Users/levya/Repositories/BusTrackDC-AL/bustrackdc/platforms/ios/BusTrackDC/Plugins/com.ionic.keyboard/UIWebViewExtension.h

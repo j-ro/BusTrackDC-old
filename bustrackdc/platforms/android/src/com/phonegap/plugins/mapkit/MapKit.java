@@ -45,7 +45,7 @@ public class MapKit extends CordovaPlugin {
     int height = 460;
     boolean atBottom = false;
     int offsetTop = 0;
-    int zoomLevel = 15;
+    int zoomLevel = 0;
     boolean infoWindowOpen = false;
 
     @Override
@@ -59,162 +59,160 @@ public class MapKit extends CordovaPlugin {
             cordova.getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (mapView != null) {
-                        mapView.setVisibility(mapView.VISIBLE);
-                    } else {
-                        //LOG.e(TAG, "hello world");
-                        //LOG.e(TAG, options.toString());
+                	if (mapView != null) {
+                		mapView.setVisibility(mapView.VISIBLE);
+                	} else {
+                        LOG.e(TAG, "hello world");
+                        LOG.e(TAG, options);
                         try {
-                            height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,options.getInt("height"), cordova.getActivity().getResources().getDisplayMetrics());
+                            height = options.getInt("height");
                             latitude = options.getDouble("lat");
                             longitude = options.getDouble("lon");
                             offsetTop = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, options.getInt("offsetTop"), cordova.getActivity().getResources().getDisplayMetrics());
-                            zoomLevel = options.getInt("zoomLevel");
+    						zoomLevel = options.getInt("zoomLevel");
                             atBottom = options.getBoolean("atBottom");
-                            //LOG.e(height);
+                            LOG.e(height);
                         } catch (JSONException e) {
                             LOG.e(TAG, "Error reading options");
                         }
 
-                        //only allow one map to be shown instead of many overlapping...
-                        if (mapView == null) {
+                        final int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(cordova.getActivity());
+                        if (resultCode == ConnectionResult.SUCCESS) {
+                            mapView = new MapView(cordova.getActivity(),
+                                    new GoogleMapOptions());
+                            root = (ViewGroup) webView.getParent();
+                            root.removeView(webView);
+                            main.addView(webView);
 
-                            final int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(cordova.getActivity());
-                            if (resultCode == ConnectionResult.SUCCESS) {
-                                mapView = new MapView(cordova.getActivity(),
-                                        new GoogleMapOptions());
-                                root = (ViewGroup) webView.getParent();
-                                root.removeView(webView);
-                                main.addView(webView);
+                            cordova.getActivity().setContentView(main);
 
-                                cordova.getActivity().setContentView(main);
+                            MapsInitializer.initialize(cordova.getActivity());
 
-                                MapsInitializer.initialize(cordova.getActivity());
-
-                                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                                        LayoutParams.MATCH_PARENT, height);
-                                if (atBottom) {
-                                    params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM,
-                                            RelativeLayout.TRUE);
-                                    mapView.setPadding(0, offsetTop, 0, 0);
-                                } else {
-                                    params.addRule(RelativeLayout.ALIGN_PARENT_TOP,
-                                            RelativeLayout.TRUE);
-                                    mapView.setPadding(0, offsetTop, 0, 0);
-                                }
-                                params.addRule(RelativeLayout.CENTER_HORIZONTAL,
+                            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                                    LayoutParams.MATCH_PARENT, height);
+                            if (atBottom) {
+                                params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM,
                                         RelativeLayout.TRUE);
+                                mapView.setPadding(0, offsetTop, 0, 0);
+                            } else {
+                                params.addRule(RelativeLayout.ALIGN_PARENT_TOP,
+                                        RelativeLayout.TRUE);
+                                mapView.setPadding(0, offsetTop, 0, 0);
+                            }
+                            params.addRule(RelativeLayout.CENTER_HORIZONTAL,
+                                    RelativeLayout.TRUE);
 
-                                mapView.setLayoutParams(params);
-                                mapView.onCreate(null);
-                                mapView.onResume(); // FIXME: I wish there was a better way
-                                // than this...
-                                main.addView(mapView);
+                            mapView.setLayoutParams(params);
+                            mapView.onCreate(null);
+                            mapView.onResume(); // FIXME: I wish there was a better way
+                                                // than this...
+                            main.addView(mapView);
+                            
+                            mapView.getMap().setMyLocationEnabled(true);
+							mapView.getMap().getUiSettings().setMyLocationButtonEnabled(false);
 
-                                mapView.getMap().setMyLocationEnabled(true);
-                                mapView.getMap().getUiSettings().setMyLocationButtonEnabled(false);
+                            // Moving the map to lot, lon
+                            mapView.getMap().moveCamera(
+                                    CameraUpdateFactory.newLatLngZoom(new LatLng(
+                                            latitude, longitude), 15));
+                            cCtx.success();
+                            
+                            mapView.getMap().setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+								@Override
+						        public boolean onMarkerClick(final Marker marker) {
+									webView.loadUrl(
+											"javascript:annotationTap('" + 
+													marker.getSnippet() + 
+											"'.toString(), " + 
+													marker.getPosition().latitude + 
+											", " + 
+													marker.getPosition().longitude + 
+											");");
+							        
+							        //set variable so we can close it later
+							        lastClicked = marker;
+//									Log.d("MYTAG", "on Marker click: " + marker.getSnippet());
+//									Log.d("MYTAG", "on Marker click: " +  marker.getPosition().latitude);
+//									Log.d("MYTAG", "on Marker click: " +  marker.getPosition().longitude);
+						            return false;
+						        }
+                            });
+                            
+                            mapView.getMap().setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+								@Override
+						        public void onCameraChange(CameraPosition position) {
+									VisibleRegion vr = mapView.getMap().getProjection().getVisibleRegion();
+									double left = vr.latLngBounds.southwest.longitude;
+									double top = vr.latLngBounds.northeast.latitude;
+									double right = vr.latLngBounds.northeast.longitude;
+									double bottom = vr.latLngBounds.southwest.latitude;
+									double longDelta = left - right;
+									double latDelta = top - bottom;
+									
+									webView.loadUrl(
+											"javascript:geo.onMapMove(" +
+												position.target.latitude + 
+											"," + 
+												position.target.longitude + 
+											"," + 
+												latDelta +
+											"," +
+												longDelta +
+											");");
+//									Log.d("MYTAG", "on Marker click: " + marker.getSnippet());
+//									Log.d("MYTAG", "on Marker click: " +  marker.getPosition().latitude);
+//									Log.d("MYTAG", "on Marker click: " +  marker.getPosition().longitude);
+						            return;
+						        }
+							});
+                            
+                            // set variables when infoWindows open, so we can tell when they close
+							mapView.getMap().setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+								@Override
+								public View getInfoWindow(final Marker marker) {
+//									Log.d("MYTAG", "on infowindow: " + marker);
+									if (infoWindowOpen == false) {
+										infoWindowOpen = true;
+									}
 
-                                // Moving the map to lot, lon
-                                mapView.getMap().moveCamera(
-                                        CameraUpdateFactory.newLatLngZoom(new LatLng(
-                                                latitude, longitude), 15));
-                                cCtx.success();
+									return null;
+						        }
 
-                                mapView.getMap().setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                                    @Override
-                                    public boolean onMarkerClick(final Marker marker) {
-                                        webView.loadUrl(
-                                                "javascript:annotationTap('" +
-                                                        marker.getSnippet() +
-                                                        "'.toString(), " +
-                                                        marker.getPosition().latitude +
-                                                        ", " +
-                                                        marker.getPosition().longitude +
-                                                        ");");
-                                        //									Log.d("MYTAG", "on Marker click: " + marker.getSnippet());
-                                        //									Log.d("MYTAG", "on Marker click: " +  marker.getPosition().latitude);
-                                        //									Log.d("MYTAG", "on Marker click: " +  marker.getPosition().longitude);
-                                        lastClicked = marker;
-                                        return false;
-                                    }
-                                });
+								@Override
+								public View getInfoContents(Marker marker) {
+									return null;
+								}
+							});
+							
+							// when the map is clicked (not a pin or an infowindow), 
+							// find out if we just closed an infowindow and if so, call a javascript function
+							mapView.getMap().setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+								@Override
+						        public void onMapClick(final LatLng latlng) {
+									
+									if (infoWindowOpen == true) {
+										//Log.d("MYTAG", "on infowindow close: " + latlng.latitude);
+										infoWindowOpen = false;
+										webView.loadUrl("javascript:annotationDeselect();");
+									}
+						        }
+							});
 
-                                mapView.getMap().setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-                                    @Override
-                                    public void onCameraChange(CameraPosition position) {
-                                        VisibleRegion vr = mapView.getMap().getProjection().getVisibleRegion();
-                                        double left = vr.latLngBounds.southwest.longitude;
-                                        double top = vr.latLngBounds.northeast.latitude;
-                                        double right = vr.latLngBounds.northeast.longitude;
-                                        double bottom = vr.latLngBounds.southwest.latitude;
-                                        double longDelta = left - right;
-                                        double latDelta = top - bottom;
-
-                                        webView.loadUrl(
-                                                "javascript:geo.onMapMove(" +
-                                                        position.target.latitude +
-                                                        "," +
-                                                        position.target.longitude +
-                                                        "," +
-                                                        latDelta +
-                                                        "," +
-                                                        longDelta +
-                                                        ");");
-                                        //									Log.d("MYTAG", "on Marker click: " + marker.getSnippet());
-                                        //									Log.d("MYTAG", "on Marker click: " +  marker.getPosition().latitude);
-                                        //									Log.d("MYTAG", "on Marker click: " +  marker.getPosition().longitude);
-                                        return;
-                                    }
-                                });
-
-                                // set variables when infoWindows open, so we can tell when they close
-                                mapView.getMap().setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-                                    @Override
-                                    public View getInfoWindow(final Marker marker) {
-                                        //									Log.d("MYTAG", "on infowindow: " + marker);
-                                        if (infoWindowOpen == false) {
-                                            infoWindowOpen = true;
-                                        }
-
-                                        return null;
-                                    }
-
-                                    @Override
-                                    public View getInfoContents(Marker marker) {
-                                        return null;
-                                    }
-                                });
-
-                                // when the map is clicked (not a pin or an infowindow),
-                                // find out if we just closed an infowindow and if so, call a javascript function
-                                mapView.getMap().setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-                                    @Override
-                                    public void onMapClick(final LatLng latlng) {
-
-                                        if (infoWindowOpen == true) {
-                                            //Log.d("MYTAG", "on infowindow close: " + latlng.latitude);
-                                            infoWindowOpen = false;
-                                            webView.loadUrl("javascript:annotationDeselect();");
-                                        }
-                                    }
-                                });
-
-                            } else if (resultCode == ConnectionResult.SERVICE_MISSING ||
-                                    resultCode == ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED ||
-                                    resultCode == ConnectionResult.SERVICE_DISABLED) {
-                                Dialog dialog = GooglePlayServicesUtil.getErrorDialog(resultCode, cordova.getActivity(), 1,
+                        } else if (resultCode == ConnectionResult.SERVICE_MISSING ||
+                                   resultCode == ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED ||
+                                   resultCode == ConnectionResult.SERVICE_DISABLED) {
+                            Dialog dialog = GooglePlayServicesUtil.getErrorDialog(resultCode, cordova.getActivity(), 1,
                                         new DialogInterface.OnCancelListener() {
                                             @Override
                                             public void onCancel(DialogInterface dialog) {
                                                 cCtx.error("com.google.android.gms.common.ConnectionResult " + resultCode);
                                             }
                                         }
-                                );
-                                dialog.show();
-                            }
+                                    );
+                            dialog.show();
                         }
-                    }
-
+                	}
+                    
 
                 }
             });
@@ -223,50 +221,50 @@ public class MapKit extends CordovaPlugin {
             cCtx.error("MapKitPlugin::showMap(): An exception occured");
         }
     }
-
+    
     public void setMapData(final JSONObject options) {
-        LOG.e("TAG", "setMapData2");
-        try {
-            cordova.getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,options.getInt("height"), cordova.getActivity().getResources().getDisplayMetrics());
-                        latitude = options.getDouble("lat");
-                        longitude = options.getDouble("lon");
-                        offsetTop = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,options.getInt("offsetTop"), cordova.getActivity().getResources().getDisplayMetrics());
-                        zoomLevel = options.getInt("zoomLevel");
-                        atBottom = options.getBoolean("atBottom");
-                    } catch (JSONException e) {
-                        LOG.e(TAG, "Error reading options");
-                    }
+		//Log.d("MYTAG", "setMapData");
+		try {
+			cordova.getActivity().runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,options.getInt("height"), cordova.getActivity().getResources().getDisplayMetrics());
+						latitude = options.getDouble("lat");
+						longitude = options.getDouble("lon");
+						offsetTop = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,options.getInt("offsetTop"), cordova.getActivity().getResources().getDisplayMetrics());
+						zoomLevel = options.getInt("zoomLevel");
+						atBottom = options.getBoolean("atBottom");
+					} catch (JSONException e) {
+						LOG.e(TAG, "Error reading options");
+					}
 
-                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                            LayoutParams.MATCH_PARENT, height + offsetTop);
-                    if (atBottom) {
-                        params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM,
-                                RelativeLayout.TRUE);
-                        mapView.setPadding(0, offsetTop, 0, 0);
-                    } else {
-                        params.addRule(RelativeLayout.ALIGN_PARENT_TOP,
-                                RelativeLayout.TRUE);
-                        mapView.setPadding(0, offsetTop, 0, 0);
-                    }
-                    params.addRule(RelativeLayout.CENTER_HORIZONTAL,
-                            RelativeLayout.TRUE);
+					RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+							LayoutParams.MATCH_PARENT, height + offsetTop);
+					if (atBottom) {
+						params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM,
+								RelativeLayout.TRUE);
+						mapView.setPadding(0, offsetTop, 0, 0);
+					} else {
+						params.addRule(RelativeLayout.ALIGN_PARENT_TOP,
+								RelativeLayout.TRUE);
+						mapView.setPadding(0, offsetTop, 0, 0);
+					}
+					params.addRule(RelativeLayout.CENTER_HORIZONTAL,
+							RelativeLayout.TRUE);
 
-                    mapView.setLayoutParams(params);
+					mapView.setLayoutParams(params);
 
-                    mapView.getMap().animateCamera(
-                            CameraUpdateFactory.newLatLngZoom(new LatLng(
-                                    latitude, longitude), zoomLevel));
-                    cCtx.success();
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-            cCtx.error("MapKitPlugin::showMap(): An exception occured");
-        }
+					mapView.getMap().animateCamera(
+							CameraUpdateFactory.newLatLngZoom(new LatLng(
+									latitude, longitude), zoomLevel));
+					cCtx.success();
+				}
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+			cCtx.error("MapKitPlugin::showMap(): An exception occured");
+		}
     }
 
     private void hideMap() {
@@ -275,27 +273,27 @@ public class MapKit extends CordovaPlugin {
                 @Override
                 public void run() {
                     String hideMethod = "";
-                    // if we're not destroying the map, then just hide it...
-                    if (mapView != null && !hideMethod.equals("destroy")) {
-                        //Log.d("MYTAG", "true");
+                	// if we're not destroying the map, then just hide it...
+					if (mapView != null && !hideMethod.equals("destroy")) {
+						//Log.d("MYTAG", "true");
 //						AlphaAnimation animation2 = new AlphaAnimation(1.0f, 0.0f);
 //						animation2.setDuration(1000);
 //						mapView.startAnimation(animation2);
 						if (lastClicked != null) {
 							lastClicked.hideInfoWindow();
 						}
-                        mapView.setVisibility(mapView.GONE);
-                        cCtx.success();
-                    } else {
-                        //Log.d("MYTAG", "false");
-                        mapView.onDestroy();
-                        main.removeView(webView);
-                        main.removeView(mapView);
-                        root.addView(webView);
-                        cordova.getActivity().setContentView(root);
-                        mapView = null;
-                        cCtx.success();
-                    }
+						mapView.setVisibility(mapView.GONE);
+						cCtx.success();
+					} else {
+						//Log.d("MYTAG", "false");
+						mapView.onDestroy();
+						main.removeView(webView);
+						main.removeView(mapView);
+						root.addView(webView);
+						cordova.getActivity().setContentView(root);
+						mapView = null;
+						cCtx.success();
+					}
                 }
             });
         } catch (Exception e) {
@@ -313,7 +311,7 @@ public class MapKit extends CordovaPlugin {
                         try {
                             for (int i = 0, j = pins.length(); i < j; i++) {
                                 double latitude = 0, longitude = 0;
-
+                                
                                 JSONObject options = pins.getJSONObject(i);
                                 latitude = options.getDouble("lat");
                                 longitude = options.getDouble("lon");
@@ -321,7 +319,7 @@ public class MapKit extends CordovaPlugin {
                                 MarkerOptions mOptions = new MarkerOptions();
 
                                 mOptions.position(new LatLng(latitude,
-                                        longitude));
+                                                             longitude));
                                 if(options.has("title")) {
                                     mOptions.title(options.getString("title"));
                                 }
@@ -331,7 +329,7 @@ public class MapKit extends CordovaPlugin {
                                 if(options.has("icon")) {
                                     BitmapDescriptor bDesc = getBitmapDescriptor(options);
                                     if(bDesc != null) {
-                                        mOptions.icon(bDesc);
+                                      mOptions.icon(bDesc);
                                     }
                                 }
 
@@ -428,12 +426,10 @@ public class MapKit extends CordovaPlugin {
     }
 
     public boolean execute(String action, JSONArray args,
-                           CallbackContext callbackContext) throws JSONException {
+            CallbackContext callbackContext) throws JSONException {
         cCtx = callbackContext;
         if (action.compareTo("showMap") == 0) {
             showMap(args.getJSONObject(0));
-        } else if (action.compareTo("setMapData") == 0) {
-            setMapData(args.getJSONObject(0));
         } else if (action.compareTo("hideMap") == 0) {
             hideMap();
         } else if (action.compareTo("addMapPins") == 0) {

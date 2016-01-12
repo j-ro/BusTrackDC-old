@@ -1,0 +1,82 @@
+{
+    "cordova-plugin-splashscreen": {
+        "source": {
+            "type": "git",
+            "url": "https://github.com/apache/cordova-plugin-splashscreen.git",
+            "subdir": "."
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "com.danielcwilson.plugins.googleanalytics": {
+        "source": {
+            "type": "local",
+            "path": "/Users/jasonrosenbaum/.plugman/cache/com.danielcwilson.plugins.googleanalytics/0.6.0/package"
+        }
+    },
+    "com.google.google-play-services": {
+        "source": {
+            "type": "local",
+            "path": "/Users/jasonrosenbaum/.plugman/cache/com.google.google-play-services/1.0.0/package"
+        }
+    },
+    "com.ionic.keyboard": {
+        "source": {
+            "type": "registry",
+            "id": "com.ionic.keyboard"
+        }
+    },
+    "org.apache.cordova.device": {
+        "source": {
+            "type": "local",
+            "path": "/Users/jasonrosenbaum/.plugman/cache/org.apache.cordova.device/0.2.12/package"
+        }
+    },
+    "cordova-plugin-device": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-device"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "org.apache.cordova.dialogs": {
+        "source": {
+            "type": "registry",
+            "id": "org.apache.cordova.dialogs"
+        }
+    },
+    "cordova-plugin-dialogs": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-dialogs"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "org.apache.cordova.geolocation": {
+        "source": {
+            "type": "registry",
+            "id": "org.apache.cordova.geolocation"
+        }
+    },
+    "cordova-plugin-geolocation": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-geolocation"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "com.phonegap.plugins.mapkit": {
+        "source": {
+            "type": "git",
+            "url": "https://github.com/imhotep/MapKit.git",
+            "subdir": "."
+        },
+        "is_top_level": true,
+        "variables": {
+            "API_KEY": "AIzaSyAV1yjQx8dRkJq6qwrRYf_IXnCruDGZnHY"
+        }
+    }
+}

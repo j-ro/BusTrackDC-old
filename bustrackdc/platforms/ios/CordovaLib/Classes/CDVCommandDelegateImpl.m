@@ -18,7 +18,7 @@
  */
 
 #import "CDVCommandDelegateImpl.h"
-#import "CDVJSON.h"
+#import "CDVJSON_private.h"
 #import "CDVCommandQueue.h"
 #import "CDVPluginResult.h"
 #import "CDVViewController.h"
@@ -31,7 +31,14 @@
     if (self != nil) {
         _viewController = viewController;
         _commandQueue = _viewController.commandQueue;
-        _callbackIdPattern = nil;
+
+        NSError* err = nil;
+        _callbackIdPattern = [NSRegularExpression regularExpressionWithPattern:@"[^A-Za-z0-9._-]" options:0 error:&err];
+        if (err != nil) {
+            // Couldn't initialize Regex
+            NSLog(@"Error: Couldn't initialize regex");
+            _callbackIdPattern = nil;
+        }
     }
     return self;
 }
@@ -97,21 +104,10 @@
 
 - (BOOL)isValidCallbackId:(NSString*)callbackId
 {
-    NSError* err = nil;
-
-    if (callbackId == nil) {
+    if ((callbackId == nil) || (_callbackIdPattern == nil)) {
         return NO;
     }
 
-    // Initialize on first use
-    if (_callbackIdPattern == nil) {
-        // Catch any invalid characters in the callback id.
-        _callbackIdPattern = [NSRegularExpression regularExpressionWithPattern:@"[^A-Za-z0-9._-]" options:0 error:&err];
-        if (err != nil) {
-            // Couldn't initialize Regex; No is safer than Yes.
-            return NO;
-        }
-    }
     // Disallow if too long or if any invalid characters were found.
     if (([callbackId length] > 100) || [_callbackIdPattern firstMatchInString:callbackId options:0 range:NSMakeRange(0, [callbackId length])]) {
         return NO;
@@ -147,7 +143,7 @@
 
 - (void)evalJs:(NSString*)js scheduledOnRunLoop:(BOOL)scheduledOnRunLoop
 {
-    js = [NSString stringWithFormat:@"cordova.require('cordova/exec').nativeEvalAndFetch(function(){%@})", js];
+    js = [NSString stringWithFormat:@"try{cordova.require('cordova/exec').nativeEvalAndFetch(function(){%@})}catch(e){console.log('exeption nativeEvalAndFetch : '+e);};", js];
     if (scheduledOnRunLoop) {
         [self evalJsHelper:js];
     } else {

@@ -41,23 +41,34 @@
 @property (nonatomic, readonly, strong) NSDictionary* pluginsMap;
 @property (nonatomic, readonly, strong) NSMutableDictionary* settings;
 @property (nonatomic, readonly, strong) NSXMLParser* configParser;
-@property (nonatomic, readonly, strong) CDVWhitelist* whitelist; // readonly for public
-@property (nonatomic, readonly, assign) BOOL loadFromString;
+@property (nonatomic, readonly, strong) CDVWhitelist* whitelist CDV_DEPRECATED(3.9.2, "Use URLisAllowed to check specific URL. This will be removed in 4.0.0"); // readonly for public
+@property (nonatomic, readonly, assign) BOOL loadFromString CDV_DEPRECATED(3.9.2, "This will be removed in 4.0.0");
 
 @property (nonatomic, readwrite, copy) NSString* wwwFolderName;
 @property (nonatomic, readwrite, copy) NSString* startPage;
 @property (nonatomic, readonly, strong) CDVCommandQueue* commandQueue;
 @property (nonatomic, readonly, strong) id <CDVCommandDelegate> commandDelegate;
+
+/**
+ The complete user agent that Cordova will use when sending web requests.
+ */
 @property (nonatomic, readonly) NSString* userAgent;
 
-+ (NSDictionary*)getBundlePlist:(NSString*)plistName;
-+ (NSString*)applicationDocumentsDirectory;
+/**
+ The base user agent data that Cordova will use to build its user agent.  If this
+ property isn't set, Cordova will use the standard web view user agent as its
+ base.
+ */
+@property (nonatomic, readwrite, copy) NSString* baseUserAgent;
 
-- (void)printMultitaskingInfo;
-- (void)createGapView;
++ (NSDictionary*)getBundlePlist:(NSString*)plistName CDV_DEPRECATED(3.9.2, "This will be removed in 4.0.0");
++ (NSString*)applicationDocumentsDirectory CDV_DEPRECATED(3.9.2, "This will be removed in 4.0.0");
+
+- (void)printMultitaskingInfo CDV_DEPRECATED(3.9.2, "This will be removed in 4.0.0");
+- (void)createGapView CDV_DEPRECATED(3.9.2, "This will be removed in 4.0.0");
 - (UIWebView*)newCordovaViewWithFrame:(CGRect)bounds;
 
-- (void)javascriptAlert:(NSString*)text;
+- (void)javascriptAlert:(NSString*)text CDV_DEPRECATED(3.9.2, "Use the CDVCommandDelegate evalJs: directly. This will be removed in 4.0.0");
 - (NSString*)appURLScheme;
 
 - (NSArray*)parseInterfaceOrientations:(NSArray*)orientations;
@@ -68,5 +79,6 @@
 - (void)registerPlugin:(CDVPlugin*)plugin withPluginName:(NSString*)pluginName;
 
 - (BOOL)URLisAllowed:(NSURL*)url;
+- (void)processOpenUrl:(NSURL*)url;
 
 @end
